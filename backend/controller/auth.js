@@ -91,20 +91,68 @@ exports.signup = async (req, res, next) => {
     await UserDietExecution.save();
 
     const payload = { userId: savedUser._id.toString() };
-    const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2h" });
-    console.log("DONE");
+    const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
+
     res
       .status(200)
       .cookie("jon", token, {
         sameSite: "strict",
         path: "/",
-        expires: new Date(new Date().getTime() + 7200 * 1000),
+        expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
         httpOnly: true,
       })
-      .send(`${name} Sign In Successfully`);
+      .send(`${name} Sign Up Successfully`);
     //
   } catch (err) {
-    console.log(err);
+    process.env.Node_ENV !== "test" && console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+    return err;
+  }
+};
+
+exports.login = async (req, res, next) => {
+  try {
+    const errors = expressValidator.validationResult(req);
+
+    if (!errors.isEmpty()) {
+      console.log("dfjsdakjfniusbngiusagiusbng");
+      const err = new Error("Validation Error");
+      err.statusCode = 422;
+      err.data = errors.array();
+      throw err;
+    }
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+      return res.status(401).send("User not find");
+    }
+
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (!isCorrectPassword) {
+      return res.status(401).send("Password is invalid");
+    }
+
+    const payload = { userId: user._id };
+    const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
+
+    res
+      .status(200)
+      .cookie("joh", token, {
+        sameSite: "strict",
+        path: "/",
+        expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
+        httpOnly: true,
+      })
+      .send(`${user.name} Logged In Successfully!`);
+  } catch (err) {
+    process.env.Node_ENV !== "test" && console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }

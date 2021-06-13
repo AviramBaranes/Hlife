@@ -17,7 +17,7 @@ router.post(
     body("email", "please enter a correct emil").isEmail().normalizeEmail(),
     body(
       ["password", "passwordConfirmation"],
-      "password be atleast 6 characters"
+      "password need to be atleast 6 characters"
     )
       .isLength({ min: 6 })
       .isAlphanumeric(), //isStrongPassword
@@ -46,6 +46,18 @@ router.post(
     }),
   ],
   authController.signup
+);
+
+router.post(
+  "/login",
+  [
+    body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
+    body(
+      ["password"],
+      "Invalid password, At least 6 characters for a password"
+    ).isLength({ min: 6 }),
+  ],
+  authController.login
 );
 
 module.exports = router;
