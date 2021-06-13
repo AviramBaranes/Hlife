@@ -19,6 +19,8 @@ const DietExecution = require("../models/DietExecution");
 const Program = require("../models/Program");
 const ProgramExecution = require("../models/ProgramExecution");
 
+const afterTests = require("../utils/forTests/afterDefaultFunction");
+
 describe("signup Controller error handling", function () {
   let req, res;
   beforeEach(function (done) {
@@ -233,13 +235,7 @@ describe("signup Controller creating the correct models", function () {
   });
 
   after(async () => {
-    await User.deleteMany();
-    await Diet.deleteMany();
-    await DietExecution.deleteMany();
-    await PhysicalStats.deleteMany();
-    await Program.deleteMany();
-    await ProgramExecution.deleteMany();
-    await disconnectDb();
+    await afterTests();
   });
 });
 
@@ -324,12 +320,6 @@ describe("signup controller testing respones", function () {
   });
 
   after(async () => {
-    await User.deleteMany();
-    await Diet.deleteMany();
-    await DietExecution.deleteMany();
-    await PhysicalStats.deleteMany();
-    await Program.deleteMany();
-    await ProgramExecution.deleteMany();
-    await disconnectDb();
+    await afterTests();
   });
 });

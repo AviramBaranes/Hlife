@@ -21,6 +21,10 @@ const UserSchema = new Schema({
   },
 
   grade: { type: Number, required: true, default: 0 },
+
+  resetToken: { type: String },
+
+  tokenExpiration: { type: Date },
 });
 
 //TODO add goals

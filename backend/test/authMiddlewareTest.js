@@ -1,4 +1,7 @@
+require("dotenv").config({ path: "./config.env" });
+
 const { expect } = require("chai");
+
 const authMiddleware = require("../middleware/authMiddleware");
 
 const jwt = require("jsonwebtoken");

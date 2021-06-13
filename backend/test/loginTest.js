@@ -12,13 +12,10 @@ const bcrypt = require("bcryptjs");
 const authController = require("../controller/auth");
 
 //models and connections
-const { connectDb, disconnectDb } = require("../utils/databaseForTest");
+const { connectDb } = require("../utils/databaseForTest");
 const User = require("../models/User");
-const PhysicalStats = require("../models/PhysicalStats");
-const Diet = require("../models/Diet");
-const DietExecution = require("../models/DietExecution");
-const Program = require("../models/Program");
-const ProgramExecution = require("../models/ProgramExecution");
+
+const afterTests = require("../utils/forTests/afterDefaultFunction");
 
 describe("login controller error handling tests", function () {
   let req, res;
@@ -99,13 +96,7 @@ describe("login controller error handling tests", function () {
   });
 
   after(async () => {
-    await User.deleteMany();
-    await Diet.deleteMany();
-    await DietExecution.deleteMany();
-    await PhysicalStats.deleteMany();
-    await Program.deleteMany();
-    await ProgramExecution.deleteMany();
-    await disconnectDb();
+    await afterTests();
   });
 });
 
@@ -186,12 +177,6 @@ describe("login controller testing response", function () {
   });
 
   after(async () => {
-    await User.deleteMany();
-    await Diet.deleteMany();
-    await DietExecution.deleteMany();
-    await PhysicalStats.deleteMany();
-    await Program.deleteMany();
-    await ProgramExecution.deleteMany();
-    await disconnectDb();
+    await afterTests();
   });
 });

@@ -8,6 +8,7 @@ const ProgramExecution = require("../models/ProgramExecution");
 const expressValidator = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 exports.signup = async (req, res, next) => {
   try {
@@ -118,7 +119,6 @@ exports.login = async (req, res, next) => {
     const errors = expressValidator.validationResult(req);
 
     if (!errors.isEmpty()) {
-      console.log("dfjsdakjfniusbngiusagiusbng");
       const err = new Error("Validation Error");
       err.statusCode = 422;
       err.data = errors.array();
@@ -153,6 +153,53 @@ exports.login = async (req, res, next) => {
       .send(`${user.name} Logged In Successfully!`);
   } catch (err) {
     process.env.Node_ENV !== "test" && console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+    return err;
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const errors = expressValidator.validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const err = new Error("Validation Error");
+      err.statusCode = 422;
+      err.data = errors.array();
+      throw err;
+    }
+
+    const { userId, currentPassword, newPassword, newPasswordConfirmation } =
+      req.body;
+
+    const user = await User.findById(userId).select("+password");
+
+    if (!user) return res.status(403).send("Unauthorized");
+
+    const isMatch = newPassword === newPasswordConfirmation;
+
+    if (!isMatch) return res.status(403).send("Passwords do not match");
+
+    const isCorrectPassword = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!isCorrectPassword) return res.status(403).send("Password is invalid");
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+
+    user.password = hashedNewPassword;
+
+    await user.save();
+
+    res.status(200).send("password reseted successfully!");
+  } catch (err) {
+    // process.env.Node_ENV !== "test" &&
+    console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;
     }

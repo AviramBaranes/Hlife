@@ -54,15 +54,20 @@ router.post(
   [
     body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
     body(
-      ["password"],
+      "password",
       "Invalid password, At least 6 characters for a password"
     ).isLength({ min: 6 }),
   ],
   authController.login
 );
 
-router.get("/test", authMiddleware, (req, res, next) => {
-  res.send("tested");
-});
+router.post(
+  "settings/password-reset",
+  authMiddleware,
+  body(["currentPassword", "newPassword", "newPasswordConfirmation"])
+    .isLength({ min: 6 })
+    .withMessage("Invalid password, At least 6 characters for a password"),
+  authController.resetPassword
+);
 
 module.exports = router;
