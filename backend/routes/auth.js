@@ -4,6 +4,7 @@ const { body } = require("express-validator");
 const router = express.Router();
 
 const authController = require("../controller/auth");
+const authMiddleware = require("../middleware/authMiddleware");
 
 router.post(
   "/signup",
@@ -59,5 +60,9 @@ router.post(
   ],
   authController.login
 );
+
+router.get("/test", authMiddleware, (req, res, next) => {
+  res.send("tested");
+});
 
 module.exports = router;
