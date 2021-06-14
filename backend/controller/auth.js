@@ -5,21 +5,16 @@ const DietExecution = require("../models/DietExecution");
 const Program = require("../models/Program");
 const ProgramExecution = require("../models/ProgramExecution");
 
-const expressValidator = require("express-validator");
+const validationErrorsHandler = require("../utils/helpers/valdiationErrors");
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 exports.signup = async (req, res, next) => {
   try {
-    const errors = expressValidator.validationResult(req);
-
-    if (!errors.isEmpty()) {
-      const error = new Error("Validation Failed");
-      error.statusCode = 422;
-      error.data = errors.array();
-      throw error;
-    }
+    validationErrorsHandler(req);
 
     const {
       name,
@@ -116,14 +111,7 @@ exports.signup = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const errors = expressValidator.validationResult(req);
-
-    if (!errors.isEmpty()) {
-      const err = new Error("Validation Error");
-      err.statusCode = 422;
-      err.data = errors.array();
-      throw err;
-    }
+    validationErrorsHandler(req);
 
     const { email, password } = req.body;
 
@@ -163,14 +151,7 @@ exports.login = async (req, res, next) => {
 
 exports.resetPassword = async (req, res, next) => {
   try {
-    const errors = expressValidator.validationResult(req);
-
-    if (!errors.isEmpty()) {
-      const err = new Error("Validation Error");
-      err.statusCode = 422;
-      err.data = errors.array();
-      throw err;
-    }
+    validationErrorsHandler(req);
 
     const { userId, currentPassword, newPassword, newPasswordConfirmation } =
       req.body;
@@ -199,6 +180,110 @@ exports.resetPassword = async (req, res, next) => {
     res.status(200).send("password reseted successfully!");
   } catch (err) {
     // process.env.Node_ENV !== "test" &&
+    console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+    return err;
+  }
+};
+
+exports.sentResetEmail = async (req, res, next) => {
+  try {
+    validationErrorsHandler(req);
+
+    const { email } = req.body;
+
+    const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
+
+    if (tokenSlice.length < 2) return res.status(403).send("CSRF ERROR");
+
+    const csrfToken = tokenSlice[1].substring(0, 36);
+
+    const user = await User.findOne({ email });
+
+    if (!user) return res.status(403).send("User does not exist");
+
+    const transporter = nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        user: process.env.OUTLOOK_USER,
+        pass: process.env.OUTLOOK_PASSWORD,
+      },
+    });
+
+    const token = crypto.randomBytes(32).toString("hex");
+
+    user.resetToken = token;
+    user.tokenExpiration = Date.now() + 3600000;
+
+    await user.save();
+
+    const href = `http://localhost:3000/reset-password/${token}/?ct=${csrfToken}`;
+
+    const mailOptions = {
+      from: process.env.OUTLOOK_USER,
+      to: `${email}`,
+      subject: "Reset Password Hlife account",
+      html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${href}>link</a> in order to reset your Hlife account Password.
+            
+            </p>
+            <p>This token is valid for only 1 hour.</p>`,
+    };
+
+    process.env.Node_ENV !== "test" &&
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+          throw error;
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+    res.status(200).send("Reset Email Sent!");
+
+    //
+  } catch (err) {
+    console.log(err);
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    next(err);
+    return err;
+  }
+};
+
+exports.resetPasswordViaToken = async (req, res, next) => {
+  try {
+    validationErrorsHandler(req);
+
+    const { resetToken } = req.params;
+
+    const { password, passwordConfirmation } = req.body;
+
+    const isMatch = password === passwordConfirmation;
+
+    if (!isMatch) return res.status(403).send("Passwords do not match");
+
+    const user = await User.findOne({ resetToken });
+
+    if (!user) return res.status(403).send("Invalid Token");
+
+    const isExpired = Date.now() > user.tokenExpiration;
+
+    if (isExpired) return res.status(403).send("Token Expired");
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    user.password = hashedPassword;
+    user.resetToken = "";
+    user.tokenExpiration = undefined;
+
+    await user.save();
+
+    res.status(200).send(`${user.name}'s password successfully changed!`);
+  } catch (err) {
     console.log(err);
     if (!err.statusCode) {
       err.statusCode = 500;

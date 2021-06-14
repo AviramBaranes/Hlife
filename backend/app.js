@@ -59,4 +59,4 @@ app.use((error, req, res, next) => {
   res.status(statusCode).json({ message, data });
 });
 
-app.listen(3001);
+app.listen(3000);

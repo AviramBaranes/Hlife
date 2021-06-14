@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, check } = require("express-validator");
 
 const router = express.Router();
 
@@ -62,12 +62,26 @@ router.post(
 );
 
 router.post(
-  "settings/password-reset",
+  "/settings/password-reset",
   authMiddleware,
   body(["currentPassword", "newPassword", "newPasswordConfirmation"])
     .isLength({ min: 6 })
     .withMessage("Invalid password, At least 6 characters for a password"),
   authController.resetPassword
+);
+
+router.post(
+  "/password/send-token",
+  body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
+  authController.sentResetEmail
+);
+
+router.put(
+  "/reset/:resetToken",
+  body(["password", "passwordConfirmation"])
+    .isLength({ min: 6 })
+    .withMessage("Invalid password, At least 6 characters for a password"),
+  authController.resetPasswordViaToken
 );
 
 module.exports = router;
