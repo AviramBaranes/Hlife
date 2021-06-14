@@ -1,9 +1,4 @@
 const User = require("../models/User");
-const PhysicalStats = require("../models/PhysicalStats");
-const Diet = require("../models/Diet");
-const DietExecution = require("../models/DietExecution");
-const Program = require("../models/Program");
-const ProgramExecution = require("../models/ProgramExecution");
 
 const validationErrorsHandler = require("../utils/helpers/valdiationErrors");
 
@@ -11,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const createModels = require("../utils/helpers/createModels");
 
 exports.signup = async (req, res, next) => {
   try {
@@ -50,41 +46,7 @@ exports.signup = async (req, res, next) => {
 
     const savedUser = await newUser.save();
 
-    //age of the user:
-    const now = new Date(Date.now());
-    const birth = new Date(newUser.dateOfBirth);
-    const age = now.getFullYear() - birth.getFullYear();
-
-    const UserPhysicalStats = new PhysicalStats({
-      user: savedUser._id,
-      age,
-      stats: [],
-    });
-
-    const UserDiet = new Diet({ user: savedUser._id, ingredients: [] });
-    const UserProgram = new Program({
-      user: savedUser._id,
-      goals: {},
-      program: [],
-    });
-
-    const UserProgramExecution = new ProgramExecution({
-      user: savedUser._id,
-      executions: [],
-    });
-
-    const UserDietSaved = await UserDiet.save();
-    await UserPhysicalStats.save();
-    await UserProgram.save();
-    await UserProgramExecution.save();
-
-    const UserDietExecution = new DietExecution({
-      user: savedUser._id,
-      diet: UserDietSaved._id,
-      executions: [],
-    });
-
-    await UserDietExecution.save();
+    await createModels(savedUser, newUser);
 
     const payload = { userId: savedUser._id.toString() };
     const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
