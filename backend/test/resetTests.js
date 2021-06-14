@@ -10,6 +10,7 @@ const { connectDb } = require("../utils/databaseForTest");
 const User = require("../models/User");
 
 const afterTests = require("../utils/forTests/afterDefaultFunction");
+const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
 
 describe("resetPassword in settings tests", function () {
   let userForTests, req, res;
@@ -52,17 +53,7 @@ describe("resetPassword in settings tests", function () {
       },
     };
 
-    res = {
-      statusCode: null,
-      msg: null,
-      status(code) {
-        this.statusCode = code;
-        return this;
-      },
-      send(msg) {
-        this.msg = msg;
-      },
-    };
+    res = fakeResponseObj;
 
     await authController.resetPassword(req, res, () => {});
 
@@ -106,17 +97,8 @@ describe("sentResetEmail tests", function () {
     headers: { cookie: "not a csrf cookie" },
   };
 
-  res = {
-    statusCode: null,
-    msg: null,
-    status(code) {
-      this.statusCode = code;
-      return this;
-    },
-    send(msg) {
-      this.msg = msg;
-    },
-  };
+  res = fakeResponseObj;
+
   before((done) => {
     connectDb()
       .then((_) => {

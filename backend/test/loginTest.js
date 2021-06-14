@@ -15,32 +15,17 @@ const authController = require("../controller/auth");
 const { connectDb } = require("../utils/databaseForTest");
 const User = require("../models/User");
 
+//utils
 const afterTests = require("../utils/forTests/afterDefaultFunction");
+const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
+const fakeUserCreation = require("../utils/forTests/createTempUser");
 
 describe("login controller error handling tests", function () {
   let req, res;
   before((done) => {
-    connectDb()
+    fakeUserCreation()
       .then((_) => {
-        return bcrypt.hash("testpass123", 10);
-      })
-      .then((hashedPassword) => {
-        const user = new User({
-          name: "tester",
-          username: "tester",
-          email: "test@test.com",
-          password: hashedPassword,
-          gender: "male",
-          dateOfBirth: "02/01/2000",
-        });
-        user
-          .save()
-          .then((_) => {
-            done();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        done();
       })
       .catch((err) => {
         console.log(err);
@@ -52,17 +37,7 @@ describe("login controller error handling tests", function () {
       body: { email: "fakeEmail@fake.com", password: "123456" },
     };
 
-    res = {
-      statusCode: null,
-      msg: null,
-      status(code) {
-        this.statusCode = code;
-        return this;
-      },
-      send(msg) {
-        this.msg = msg;
-      },
-    };
+    res = fakeResponseObj;
 
     await authController.login(req, res, () => {});
 
@@ -126,26 +101,8 @@ describe("login controller testing response", function () {
             password: "testpass123",
           },
         };
-        res = {
-          statusCode: null,
-          cookieName: null,
-          cookieToken: null,
-          cookieConfig: {},
-          msg: "",
-          status(code) {
-            this.statusCode = code;
-            return this;
-          },
-          cookie(name, token, config) {
-            this.cookieName = name;
-            this.cookieToken = token;
-            this.cookieConfig = config;
-            return this;
-          },
-          send(msg) {
-            this.msg = msg;
-          },
-        };
+        res = fakeResponseObj;
+
         return authController.login(req, res, () => {});
       })
       .then((_) => {

@@ -20,6 +20,7 @@ const Program = require("../models/Program");
 const ProgramExecution = require("../models/ProgramExecution");
 
 const afterTests = require("../utils/forTests/afterDefaultFunction");
+const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
 
 describe("signup Controller error handling", function () {
   let req, res;
@@ -62,22 +63,12 @@ describe("signup Controller error handling", function () {
       },
     };
 
-    res = {
-      statusCode: 500,
-      message: "",
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      send: function (message) {
-        this.message = message;
-      },
-    };
+    res = fakeResponseObj;
 
     await authController.signup(req, res, () => {});
 
     expect(res.statusCode).equal(401);
-    expect(res.message).equal("user already exist with this email!");
+    expect(res.msg).equal("user already exist with this email!");
   });
 
   it("should throw an error if password do not match", async function () {
@@ -93,22 +84,12 @@ describe("signup Controller error handling", function () {
       },
     };
 
-    res = {
-      statusCode: 500,
-      message: "",
-      status: function (code) {
-        this.statusCode = code;
-        return this;
-      },
-      send: function (message) {
-        this.message = message;
-      },
-    };
+    res = fakeResponseObj;
 
     await authController.signup(req, res, () => {});
 
     expect(res.statusCode).equal(401);
-    expect(res.message).equal("passwords do not match");
+    expect(res.msg).equal("passwords do not match");
   });
 
   it("should throw a default error", async function () {
@@ -135,20 +116,7 @@ describe("signup Controller creating the correct models", function () {
   before(function (done) {
     connectDb()
       .then((_) => {
-        const res = {
-          statusCode: 500,
-          message: "",
-          status: function (code) {
-            this.statusCode = code;
-            return this;
-          },
-          send: function (message) {
-            this.message = message;
-          },
-          cookie: function () {
-            return this;
-          },
-        };
+        const res = fakeResponseObj;
         const req = {
           body: {
             name: "Avirambr",
@@ -256,26 +224,7 @@ describe("signup controller testing respones", function () {
           },
         };
 
-        res = {
-          statusCode: null,
-          cookieName: null,
-          cookieToken: null,
-          cookieConfig: {},
-          message: "",
-          status(code) {
-            this.statusCode = code;
-            return this;
-          },
-          cookie(name, token, config) {
-            this.cookieName = name;
-            this.cookieToken = token;
-            this.cookieConfig = config;
-            return this;
-          },
-          send(msg) {
-            this.message = msg;
-          },
-        };
+        res = fakeResponseObj;
 
         authController
           .signup(req, res, () => {})
@@ -316,7 +265,7 @@ describe("signup controller testing respones", function () {
   });
 
   it("should send the correct message", function () {
-    expect(res.message).equal("Avirambr Sign Up Successfully");
+    expect(res.msg).equal("Avirambr Sign Up Successfully");
   });
 
   after(async () => {
