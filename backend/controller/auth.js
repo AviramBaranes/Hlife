@@ -182,7 +182,7 @@ exports.sentResetEmail = async (req, res, next) => {
 
     await user.save();
 
-    const href = `http://localhost:3000/reset-password/${token}/?ct=${csrfToken}`;
+    const href = `http://localhost:3000/auth/reset-password/${token}/?ct=${csrfToken}`;
 
     const mailOptions = {
       from: process.env.OUTLOOK_USER,

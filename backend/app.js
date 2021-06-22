@@ -44,7 +44,7 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 app.get("/", csrfProtection, function (req, res) {
   res.cookie("XSRF-TOKEN", req.csrfToken());
-  res.send("csrf");
+  res.send("SET");
 });
 
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
@@ -59,4 +59,4 @@ app.use((error, req, res, next) => {
   res.status(statusCode).json({ message, data });
 });
 
-app.listen(3000);
+app.listen(8080);
