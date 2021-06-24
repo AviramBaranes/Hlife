@@ -22,6 +22,10 @@ const UserSchema = new Schema({
 
   grade: { type: Number, required: true, default: 0 },
 
+  hasProgram: { type: Boolean, default: false },
+
+  hasDiet: { type: Boolean, default: false },
+
   resetToken: { type: String },
 
   tokenExpiration: { type: Date },

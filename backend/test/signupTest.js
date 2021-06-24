@@ -264,8 +264,9 @@ describe("signup controller testing respones", function () {
     expect(res.cookieConfig.httpOnly).equal(true);
   });
 
-  it("should send the correct message", function () {
-    expect(res.msg).equal("Avirambr Sign Up Successfully");
+  it("should send the correct message and data", function () {
+    expect(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
+    expect(res.jsonObj.username).equal("aviramSport2");
   });
 
   after(async () => {

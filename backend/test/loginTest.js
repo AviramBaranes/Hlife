@@ -90,6 +90,7 @@ describe("login controller testing response", function () {
           password: hashedPassword,
           gender: "male",
           dateOfBirth: "02/01/2000",
+          hasProgram: true,
         });
         return user.save();
       })
@@ -132,7 +133,12 @@ describe("login controller testing response", function () {
     expect(cookieExperetionTime).below(currentTime);
     expect(res.cookieConfig.httpOnly).equal(true);
   });
-
+  it("should send the correct message and data", function () {
+    expect(res.jsonObj.message).equal("tester Logged In Successfully!");
+    expect(res.jsonObj.username).equal("tester");
+    expect(res.jsonObj.hasProgram).equal(true);
+    expect(res.jsonObj.hasDiet).equal(false);
+  });
   after(async () => {
     await afterTests();
   });

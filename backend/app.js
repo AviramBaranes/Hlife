@@ -47,11 +47,17 @@ app.get("/", csrfProtection, function (req, res) {
   res.send("SET");
 });
 
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
+
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 
 app.use("/auth", authRoute);
 
 app.use((error, req, res, next) => {
+  console.log(error);
   const { statusCode, message, data } = error;
   if (!statusCode || !message || !data) {
     return res.status(500).send("Server Error");

@@ -51,6 +51,8 @@ exports.signup = async (req, res, next) => {
     const payload = { userId: savedUser._id.toString() };
     const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
 
+    const message = `${name} Sign Up Successfully`;
+
     res
       .status(200)
       .cookie("jon", token, {
@@ -59,7 +61,7 @@ exports.signup = async (req, res, next) => {
         expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
         httpOnly: true,
       })
-      .send(`${name} Sign Up Successfully`);
+      .json({ message, username });
     //
   } catch (err) {
     process.env.Node_ENV !== "test" && console.log(err);
@@ -92,6 +94,8 @@ exports.login = async (req, res, next) => {
     const payload = { userId: user._id };
     const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
 
+    const message = `${user.name} Logged In Successfully!`;
+
     res
       .status(200)
       .cookie("joh", token, {
@@ -100,7 +104,12 @@ exports.login = async (req, res, next) => {
         expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
         httpOnly: true,
       })
-      .send(`${user.name} Logged In Successfully!`);
+      .json({
+        message,
+        username: user.username,
+        hasProgram: user.hasProgram,
+        hasDiet: user.hasDiet,
+      });
   } catch (err) {
     process.env.Node_ENV !== "test" && console.log(err);
     if (!err.statusCode) {

@@ -1,4 +1,5 @@
 module.exports = res = {
+  jsonObj: {},
   statusCode: null,
   cookieName: null,
   cookieToken: null,
@@ -16,5 +17,8 @@ module.exports = res = {
   },
   send(msg) {
     this.msg = msg;
+  },
+  json(obj) {
+    this.jsonObj = obj;
   },
 };

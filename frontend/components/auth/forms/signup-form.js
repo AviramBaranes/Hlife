@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Router from "next/router";
+import { useDispatch } from "react-redux";
 
 import Input from "../../UI/Input";
+import { createInputListForSignup } from "../../../utils/formsHelpers/signupHelpers";
+import { getCsrfToken } from "../../../utils/formsHelpers/csrfTokenHelpers";
+import { signupUserAction } from "../../../Redux/Slices/auth";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-function signupForm({ signupSubmitHandler }) {
+function signupForm() {
+  const dispatch = useDispatch();
+
   const [userFields, setUserFields] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
     passwordConfirmation: "",
-    gender: "",
-    dateOfBirth: null,
+    gender: "male",
+    dateOfBirth: "",
   });
 
   const { name, username, email, password, passwordConfirmation, dateOfBirth } =
@@ -23,50 +31,20 @@ function signupForm({ signupSubmitHandler }) {
     setUserFields((prevState) => ({ ...prevState, [name]: value }));
   }
 
-  const ALL_INPUTS = [
-    {
-      label: "Name",
-      htmlFor: "name",
-      type: "text",
-      value: name,
-    },
-    {
-      label: "Username",
-      htmlFor: "username",
-      type: "text",
-      value: username,
-    },
-    {
-      label: "Email",
-      htmlFor: "email",
-      type: "email",
-      value: email,
-    },
-    {
-      label: "Password",
-      htmlFor: "password",
-      type: "password",
-      value: password,
-    },
-    {
-      label: "Password Confirmation",
-      htmlFor: "passwordConfirmation",
-      type: "password",
-      value: passwordConfirmation,
-    },
-  ];
+  const ALL_INPUTS = createInputListForSignup(
+    name,
+    username,
+    email,
+    password,
+    passwordConfirmation
+  );
 
   async function signupSubmitHandler(e) {
     e.preventDefault();
-    console.log(userFields);
-    try {
-      const res = await axios.post("http://localhost:8080/auth/signup", {
-        userFields,
-      });
-      console.log(res.data);
-    } catch (err) {
-      console.log(err);
-    }
+
+    dispatch(signupUserAction({ ...userFields }))
+      .then(unwrapResult)
+      .then(Router.push("/"));
   }
 
   return (
@@ -74,6 +52,7 @@ function signupForm({ signupSubmitHandler }) {
       {ALL_INPUTS.map((field) => {
         return (
           <Input
+            key={field.htmlFor}
             htmlFor={field.htmlFor}
             label={field.label}
             value={field.value}

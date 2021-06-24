@@ -6,6 +6,7 @@ const router = express.Router();
 const authController = require("../controller/auth");
 const authMiddleware = require("../middleware/authMiddleware");
 
+//sugnup
 router.post(
   "/signup",
   [
@@ -49,6 +50,7 @@ router.post(
   authController.signup
 );
 
+//login
 router.post(
   "/login",
   [
@@ -61,6 +63,7 @@ router.post(
   authController.login
 );
 
+//reset via settings
 router.post(
   "/settings/password-reset",
   authMiddleware,
@@ -70,12 +73,14 @@ router.post(
   authController.resetPassword
 );
 
+//send email reset token
 router.post(
   "/password/send-token",
   body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
   authController.sentResetEmail
 );
 
+//reset via email
 router.put(
   "/reset/:resetToken",
   body(["password", "passwordConfirmation"])
