@@ -67,3 +67,8 @@
 .Icon svg {
   margin: 2rem;
 }
+
+.Active {
+  color: rgb(0, 175, 0);
+  background: rgb(32, 30, 30);
+}

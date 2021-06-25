@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Router from "next/router";
 import { useDispatch } from "react-redux";
 
 import Input from "../../UI/Input";
 import { createInputListForSignup } from "../../../utils/formsHelpers/signupHelpers";
-import { getCsrfToken } from "../../../utils/formsHelpers/csrfTokenHelpers";
 import { signupUserAction } from "../../../Redux/Slices/auth";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Button from "../../UI/Button";
 
 function signupForm() {
   const dispatch = useDispatch();
@@ -78,7 +77,7 @@ function signupForm() {
           max: "2005-01-01",
         }}
       />
-      <button type="submit">Create User</button>
+      <Button type="submit">Create User</Button>
     </form>
   );
 }

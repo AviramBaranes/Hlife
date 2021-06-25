@@ -7,6 +7,7 @@ import { createInputListForLogin } from "../../../utils/formsHelpers/loginHelper
 import Input from "../../UI/Input";
 import { loginUserAction } from "../../../Redux/Slices/auth";
 import { unwrapResult } from "@reduxjs/toolkit";
+import Button from "../../UI/Button";
 
 function loginForm() {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ function loginForm() {
           />
         );
       })}
-      <button type="submit">Login</button>
+      <Button type="submit">Login</Button>
     </form>
   );
 }

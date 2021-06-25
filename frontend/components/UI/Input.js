@@ -1,8 +1,13 @@
+import classes from "./Input.module.css";
+
 function Input(props) {
   return (
     <>
-      <label htmlFor={props.htmlFor}>{props.label}</label>
+      <label className={classes.Label} htmlFor={props.htmlFor}>
+        {props.label}
+      </label>
       <input
+        className={classes.Input}
         required
         name={props.htmlFor}
         type={props.type}

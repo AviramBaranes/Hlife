@@ -2,3 +2,7 @@
   display: flex;
   height: 100vh;
 }
+
+.Layout main {
+  width: 75%;
+}
