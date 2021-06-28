@@ -4,12 +4,12 @@
 .Navbar {
   background: black;
   border: white 1px solid;
-  height: 100%;
-  width: 25%;
+  height: 100vh;
+  width: 25vw;
 }
 
 .Navbar nav {
-  height: 100%;
+  height: 100vh;
   color: rgb(0, 175, 0);
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@
 }
 
 .Navbar ul {
-  height: 80%;
+  height: 80vh;
   color: white;
   width: 100%;
   margin: auto;
@@ -35,6 +35,7 @@
 .Logo {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 
 .Logo h1 {
@@ -45,8 +46,8 @@
 
 .Logo h5 {
   font-family: "Lobster", cursive;
-  margin-right: 11rem;
-  margin-bottom: 0.6rem;
+  /* margin-right: 11rem;
+  margin-bottom: 0.6rem; */
 }
 
 .Header {
@@ -67,8 +68,89 @@
 .Icon svg {
   margin: 2rem;
 }
+.Icon h1 {
+  font-size: calc(0.7rem + 1.5vw);
+}
 
 .Active {
   color: rgb(0, 175, 0);
   background: rgb(32, 30, 30);
+}
+
+@media (max-width: 978px) {
+  .Icon h1 {
+    font-size: calc(0.6rem + 0.5vw);
+  }
+}
+
+@media (max-width: 736px) {
+  .Navbar {
+    background: black;
+    border-bottom: white 1px solid;
+    height: 13vh;
+    width: 100vw;
+  }
+
+  .Navbar nav {
+    height: 10vh;
+    color: rgb(0, 175, 0);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 50rem;
+    align-items: center;
+  }
+
+  .Header {
+    width: 40%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .Navbar ul {
+    width: 40%;
+    height: 13vh;
+    color: white;
+    /* width: 100%; */
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .Navbar ul li {
+    width: 10%;
+    height: 15%;
+    cursor: pointer;
+    border: none;
+  }
+
+  .Icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .Icon svg {
+    margin: 0.5rem;
+    font-size: 2rem;
+  }
+  .Icon h1 {
+    display: none;
+  }
+}
+@media (max-width: 434px) {
+  .Header svg {
+    display: none;
+  }
+  .Icon svg {
+    margin: 0.5rem;
+    font-size: 1.5rem;
+  }
+  .Logo h5 {
+    font-family: "Lobster", cursive;
+    font-size: 0.5rem;
+  }
 }

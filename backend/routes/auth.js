@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, check } = require("express-validator");
+const { body } = require("express-validator");
 
 const router = express.Router();
 
@@ -88,5 +88,7 @@ router.put(
     .withMessage("Invalid password, At least 6 characters for a password"),
   authController.resetPasswordViaToken
 );
+
+router.get("/isUser", authMiddleware, authController.validateUser);
 
 module.exports = router;

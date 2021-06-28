@@ -47,10 +47,10 @@ app.get("/", csrfProtection, function (req, res) {
   res.send("SET");
 });
 
-app.use((req, res, next) => {
-  console.log(req.cookies);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(req.cookies);
+//   next();
+// });
 
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 

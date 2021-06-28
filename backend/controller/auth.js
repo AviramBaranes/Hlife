@@ -64,12 +64,7 @@ exports.signup = async (req, res, next) => {
       .json({ message, username });
     //
   } catch (err) {
-    process.env.Node_ENV !== "test" && console.log(err);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-    return err;
+    return catchErrorHandler(err, next);
   }
 };
 
@@ -111,12 +106,7 @@ exports.login = async (req, res, next) => {
         hasDiet: user.hasDiet,
       });
   } catch (err) {
-    process.env.Node_ENV !== "test" && console.log(err);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-    return err;
+    return catchErrorHandler(err, next);
   }
 };
 
@@ -150,13 +140,7 @@ exports.resetPassword = async (req, res, next) => {
 
     res.status(200).send("password reseted successfully!");
   } catch (err) {
-    // process.env.Node_ENV !== "test" &&
-    console.log(err);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-    return err;
+    return catchErrorHandler(err, next);
   }
 };
 
@@ -216,12 +200,7 @@ exports.sentResetEmail = async (req, res, next) => {
 
     //
   } catch (err) {
-    console.log(err);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-    return err;
+    return catchErrorHandler(err, next);
   }
 };
 
@@ -255,11 +234,34 @@ exports.resetPasswordViaToken = async (req, res, next) => {
 
     res.status(200).send(`${user.name}'s password successfully changed!`);
   } catch (err) {
-    console.log(err);
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-    return err;
+    return catchErrorHandler(err, next);
   }
+};
+
+exports.validateUser = async (req, res, next) => {
+  try {
+    console.log("HERE");
+    const { userId } = req;
+
+    const user = await User.findById(userId);
+
+    res.status(200).json({
+      isAuthenticated: true,
+      username: user.username,
+      hasProgram: user.hasProgram,
+      hasDiet: user.hasDiet,
+      userId,
+    });
+  } catch (err) {
+    return catchErrorHandler(err, next);
+  }
+};
+
+const catchErrorHandler = (err, next) => {
+  process.env.Node_ENV !== "test" && console.log(err);
+  if (!err.statusCode) {
+    err.statusCode = 500;
+  }
+  next(err);
+  return err;
 };

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../../utils/Axios/axiosInstance";
 
 const initialState = {
   csrfToken: null,
@@ -9,9 +9,7 @@ const initialState = {
 export const getCsrfToken = createAsyncThunk(
   "csrf/getCsrfToken",
   async () => {
-    await axios.get("http://localhost:8080/", {
-      withCredentials: true,
-    });
+    await axios.get("/");
 
     const csrf = document.cookie.split("XSRF-TOKEN=")[1].substring(0, 36);
 

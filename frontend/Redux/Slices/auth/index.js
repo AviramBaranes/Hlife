@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../../utils/Axios/axiosInstance";
 
 const initialState = {
   username: "",
@@ -7,7 +7,7 @@ const initialState = {
   hasDiet: undefined,
   loading: false,
   error: null,
-  isAuthenticate: false,
+  isAuthenticated: undefined,
 };
 
 export const signupUserAction = createAsyncThunk(
@@ -19,11 +19,7 @@ export const signupUserAction = createAsyncThunk(
       ...userFields,
     };
 
-    const res = await axios.post(
-      "http://localhost:8080/auth/signup",
-      bodyRequest,
-      { withCredentials: true }
-    );
+    const res = await axios.post("/auth/signup", bodyRequest);
 
     return res.data;
   }
@@ -38,11 +34,19 @@ export const loginUserAction = createAsyncThunk(
       ...userFields,
     };
 
-    const res = await axios.post(
-      "http://localhost:8080/auth/login",
-      bodyRequest,
-      { withCredentials: true }
-    );
+    const res = await axios.post("/auth/login", bodyRequest);
+
+    return res.data;
+  }
+);
+
+export const validateAuthentication = createAsyncThunk(
+  "authentication/validateAuthentication",
+  async (_, { getState }) => {
+    const _csrf = getState().tokensReducer.csrfToken;
+    const bodyRequest = { _csrf };
+
+    const res = await axios.get("/auth/isUser", bodyRequest);
 
     return res.data;
   }
@@ -51,13 +55,7 @@ export const loginUserAction = createAsyncThunk(
 const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    checkAuthentication() {
-      const jwtToken = document.cookie;
-      console.log(jwtToken);
-      state.isAuthenticate = true;
-    },
-  },
+  reducers: {},
   extraReducers: {
     [signupUserAction.pending](state) {
       state.loading = true;
@@ -67,10 +65,12 @@ const usersSlice = createSlice({
       state.username = payload.username;
       state.hasProgram = false;
       state.hasDiet = false;
+      state.isAuthenticated = true;
     },
     [signupUserAction.rejected](state, { error }) {
       state.loading = false;
       state.error = error;
+      state.isAuthenticated = false;
     },
     [loginUserAction.pending](state) {
       state.loading = true;
@@ -80,12 +80,29 @@ const usersSlice = createSlice({
       state.username = payload.username;
       state.hasProgram = payload.hasProgram;
       state.hasDiet = payload.hasDiet;
+      state.isAuthenticated = true;
     },
     [loginUserAction.rejected](state, { error }) {
       state.loading = false;
       state.error = error;
+      state.isAuthenticated = false;
+    },
+    [validateAuthentication.pending](state) {
+      state.loading = true;
+    },
+    [validateAuthentication.fulfilled](state, { payload }) {
+      state.loading = false;
+      state.username = payload.username;
+      state.isAuthenticated = true;
+      state.hasProgram = payload.hasProgram;
+      state.hasDiet = payload.hasProgram;
+    },
+    [validateAuthentication.rejected](state, { error }) {
+      state.loading = false;
+      state.error = error;
+      state.isAuthenticated = false;
     },
   },
 });
 
-export default usersSlice;
+export default usersSlice.reducer;
