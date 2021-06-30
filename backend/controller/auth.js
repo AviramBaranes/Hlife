@@ -110,6 +110,19 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.logout = (req, res, next) => {
+  try {
+    res
+      .status(201)
+      .clearCookie("joh", {
+        path: "/",
+      })
+      .send("success");
+  } catch (err) {
+    return catchErrorHandler(err, next);
+  }
+};
+
 exports.resetPassword = async (req, res, next) => {
   try {
     validationErrorsHandler(req);
@@ -240,7 +253,6 @@ exports.resetPasswordViaToken = async (req, res, next) => {
 
 exports.validateUser = async (req, res, next) => {
   try {
-    console.log("HERE");
     const { userId } = req;
 
     const user = await User.findById(userId);

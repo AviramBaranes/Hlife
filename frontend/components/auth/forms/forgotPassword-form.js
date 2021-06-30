@@ -1,15 +1,13 @@
-import axios from "axios";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
-import Input from "../../UI/Input";
+import axiosInstance from "../../../utils/Axios/axiosInstance";
+import Button from "../../UI/Button/Button";
+import Input from "../../UI/Input/Input";
 
 function forgotPasswordForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const _csrf = useSelector((state) => state.tokensReducer.csrfToken);
 
   function inputChangeHandler(e) {
     setEmail(e.target.value);
@@ -19,16 +17,8 @@ function forgotPasswordForm() {
     e.preventDefault();
     try {
       setLoading(true);
-      await axios.post(
-        "http://localhost:8080/auth/password/send-token",
-        {
-          _csrf,
-          email,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      const boduRequest = { email };
+      await axiosInstance.post("/auth/password/send-token", boduRequest);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -53,7 +43,7 @@ function forgotPasswordForm() {
         type="email"
         inputChangeHandler={inputChangeHandler}
       />
-      <button type="submit">Send</button>
+      <Button type="submit">Send</Button>
     </form>
   );
 }

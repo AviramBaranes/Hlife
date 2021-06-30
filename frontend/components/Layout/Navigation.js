@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCalculator,
@@ -8,11 +9,17 @@ import {
   faCog,
   faSearch,
   faCheckCircle,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./Navigation.module.css";
+import Modal from "../UI/Modal/Modal";
+import Logout from "../auth/logout/Logout";
 
 function Navigation() {
+  const { isAuthenticated } = useSelector((state) => state.usersReducer);
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <>
       <div className={classes.Navbar}>
@@ -52,8 +59,24 @@ function Navigation() {
                 <h1>Settings</h1>
               </div>
             </li>
+            {isAuthenticated && (
+              <li>
+                <div
+                  onClick={() => setShowModal(true)}
+                  className={classes.Icon}
+                >
+                  <FontAwesomeIcon size="3x" icon={faSignOutAlt} />
+                  <h1>Log Out</h1>
+                </div>
+              </li>
+            )}
           </ul>
         </nav>
+        {showModal && (
+          <Modal onClose={() => setShowModal(false)}>
+            <Logout setShowModal={setShowModal} />
+          </Modal>
+        )}
       </div>
     </>
   );

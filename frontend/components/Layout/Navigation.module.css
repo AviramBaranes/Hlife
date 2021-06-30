@@ -2,15 +2,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 
 .Navbar {
-  background: black;
-  border: white 1px solid;
+  background: var(--secondary-background);
+  border: var(--secondary-color) 1px solid;
   height: 100vh;
   width: 25vw;
 }
 
 .Navbar nav {
   height: 100vh;
-  color: rgb(0, 175, 0);
+  color: var(--primary-color);
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -19,16 +19,16 @@
 
 .Navbar ul {
   height: 80vh;
-  color: white;
+  color: var(--secondary-color);
   width: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.Navbar ul li {
+.Navbar li {
   width: 100%;
-  border: 1px solid white;
+  border: 1px solid var(--secondary-color);
   height: 15%;
   cursor: pointer;
 }
@@ -73,8 +73,8 @@
 }
 
 .Active {
-  color: rgb(0, 175, 0);
-  background: rgb(32, 30, 30);
+  color: var(--primary-color);
+  background: var(--primary-background);
 }
 
 @media (max-width: 978px) {
@@ -85,51 +85,33 @@
 
 @media (max-width: 736px) {
   .Navbar {
-    background: black;
-    border-bottom: white 1px solid;
     height: 13vh;
     width: 100vw;
   }
 
   .Navbar nav {
     height: 10vh;
-    color: rgb(0, 175, 0);
-    display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    flex: 1 1 50rem;
     align-items: center;
   }
 
   .Header {
     width: 40%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
   .Navbar ul {
     width: 40%;
     height: 13vh;
-    color: white;
-    /* width: 100%; */
-    margin: auto;
-    display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
   }
 
-  .Navbar ul li {
+  .Navbar li {
     width: 10%;
     height: 15%;
-    cursor: pointer;
     border: none;
   }
 
   .Icon {
-    display: flex;
-    align-items: center;
     justify-content: space-around;
   }
 

@@ -14,7 +14,6 @@ const withAuth = (WrappedComponent) => {
     const { isAuthenitcated } = useSelector((state) => state.usersReducer);
 
     useEffect(() => {
-      console.log("here!!!!!!!!!!!!");
       if (isAuthenitcated === undefined) {
         dispatch(validateAuthentication())
           .then(unwrapResult)

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Router from "next/router";
 import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-import Input from "../../UI/Input";
 import { createInputListForSignup } from "../../../utils/formsHelpers/signupHelpers";
 import { signupUserAction } from "../../../Redux/Slices/auth";
-import { unwrapResult } from "@reduxjs/toolkit";
-import Button from "../../UI/Button";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 
 function signupForm() {
   const dispatch = useDispatch();
@@ -23,6 +23,13 @@ function signupForm() {
 
   const { name, username, email, password, passwordConfirmation, dateOfBirth } =
     userFields;
+
+  // function validationTester(value,rules){
+  //   let isValid = true;
+  //   if (rules.minLength) {
+  //     isValid = value.length >= rules.minLength && isValid;
+  //   }
+  // }
 
   function inputChangeHandler(e) {
     const { name, value } = e.target;

@@ -63,6 +63,9 @@ router.post(
   authController.login
 );
 
+//logout
+router.post("/logout", authMiddleware, authController.logout);
+
 //reset via settings
 router.post(
   "/settings/password-reset",

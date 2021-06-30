@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import LoginForm from "../../components/auth/forms/login-form";
-import Card from "../../components/UI/Card";
+import Card from "../../components/UI/Card/Card";
 
 function Login() {
   return (

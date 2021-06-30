@@ -11,6 +11,9 @@ export function createInputListForSignup(
       htmlFor: "name",
       type: "text",
       value: name,
+      // rules: {
+      //   minLength: 3,
+      // },
     },
     {
       label: "Username",

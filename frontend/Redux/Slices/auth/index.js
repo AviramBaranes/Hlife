@@ -12,10 +12,8 @@ const initialState = {
 
 export const signupUserAction = createAsyncThunk(
   "signup/signupUserAction",
-  async (userFields, { getState }) => {
-    const _csrf = getState().tokensReducer.csrfToken;
+  async (userFields) => {
     const bodyRequest = {
-      _csrf,
       ...userFields,
     };
 
@@ -27,10 +25,8 @@ export const signupUserAction = createAsyncThunk(
 
 export const loginUserAction = createAsyncThunk(
   "login/loginUserAction",
-  async (userFields, { getState }) => {
-    const _csrf = getState().tokensReducer.csrfToken;
+  async (userFields) => {
     const bodyRequest = {
-      _csrf,
       ...userFields,
     };
 
@@ -42,12 +38,8 @@ export const loginUserAction = createAsyncThunk(
 
 export const validateAuthentication = createAsyncThunk(
   "authentication/validateAuthentication",
-  async (_, { getState }) => {
-    const _csrf = getState().tokensReducer.csrfToken;
-    const bodyRequest = { _csrf };
-
-    const res = await axios.get("/auth/isUser", bodyRequest);
-
+  async () => {
+    const res = await axios.get("/auth/isUser");
     return res.data;
   }
 );

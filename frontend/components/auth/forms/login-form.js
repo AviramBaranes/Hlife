@@ -1,13 +1,12 @@
-import axios from "axios";
 import React, { useState } from "react";
 import Router from "next/router";
 import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 import { createInputListForLogin } from "../../../utils/formsHelpers/loginHelpers";
-import Input from "../../UI/Input";
 import { loginUserAction } from "../../../Redux/Slices/auth";
-import { unwrapResult } from "@reduxjs/toolkit";
-import Button from "../../UI/Button";
+import Input from "../../UI/Input/Input";
+import Button from "../../UI/Button/Button";
 
 function loginForm() {
   const dispatch = useDispatch();
