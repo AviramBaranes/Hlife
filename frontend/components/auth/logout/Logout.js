@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import classes from "./Logout.module.css";
+import classes from "./Logout.module.scss";
 import axiosInstance from "../../../utils/Axios/axiosInstance";
 
 function Logout({ setShowModal }) {

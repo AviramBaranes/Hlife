@@ -1,4 +1,4 @@
-import classes from "./Input.module.css";
+import classes from "./Input.module.scss";
 
 function Input(props) {
   const inputClasses = [classes.Input];

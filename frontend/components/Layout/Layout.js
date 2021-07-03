@@ -4,7 +4,7 @@ import { getCsrfToken } from "../../Redux/Slices/tokens";
 
 import Navigation from "./Navigation";
 import LoadingSpinner from "../UI/Spinner/Spinner";
-import classes from "./Layout.module.css";
+import classes from "./Layout.module.scss";
 
 function Layout({ children }) {
   const dispatch = useDispatch();

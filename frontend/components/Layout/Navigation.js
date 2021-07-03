@@ -12,7 +12,7 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-import classes from "./Navigation.module.css";
+import classes from "./Navigation.module.scss";
 import Modal from "../UI/Modal/Modal";
 import Logout from "../auth/logout/Logout";
 

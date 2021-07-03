@@ -14,17 +14,13 @@
   width: 75%;
   text-align: left;
   padding: 0.25rem;
-}
 
-.Input:focus {
-  background-color: black;
+  &:focus {
+    background-color: black;
+  }
 }
 
 .InValid {
   border: 1px red solid;
   background: red;
-}
-
-.Input:focus {
-  border: 1px red solid;
 }
