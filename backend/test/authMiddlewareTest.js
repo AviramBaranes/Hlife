@@ -7,7 +7,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const jwt = require("jsonwebtoken");
 
 describe("auth middleware tests", function () {
-  it("should throw error if no `joh` cookie", function () {
+  it("should throw error if no `jon` cookie", function () {
     const req = {
       headers: {
         cookie: "",
@@ -18,10 +18,10 @@ describe("auth middleware tests", function () {
     expect(error.statusCode).equal(401);
     expect(error.message).equal("Unauthorized Couldnt find cookie");
   });
-  it("should throw error if no cookie is invalid", function () {
+  it("should throw error if cookie is invalid", function () {
     const req = {
       headers: {
-        cookie: "joh=fake", //it splits at 'joh='
+        cookie: "jon=fake", //it splits at 'joh='
       },
     };
     const error = authMiddleware(req, {}, () => {});
@@ -35,7 +35,7 @@ describe("auth middleware tests", function () {
     const testToken = jwt.sign(payload, process.env.jwtSecret);
     const req = {
       headers: {
-        cookie: `joh=${testToken}`,
+        cookie: `jon=${testToken}`,
       },
     };
 

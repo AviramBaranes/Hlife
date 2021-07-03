@@ -2,33 +2,42 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { validateAuthentication } from "../../Redux/Slices/auth";
+import { validateAuthenticationAction } from "../../Redux/Slices/auth";
 
-const withAuth = (WrappedComponent) => {
+const ProtectedRoute = (WrappedComponent) => {
   return (props) => {
     const Router = useRouter();
     const dispatch = useDispatch();
 
-    const [verified, setVerified] = useState(false);
+    const { isAuthenticated, loading } = useSelector(
+      (state) => state.usersReducer
+    );
 
-    const { isAuthenitcated } = useSelector((state) => state.usersReducer);
+    const [verified, setVerified] = useState(isAuthenticated);
 
     useEffect(() => {
-      if (isAuthenitcated === undefined) {
-        dispatch(validateAuthentication())
-          .then(unwrapResult)
-          .then((_) => {
-            setVerified(true);
-          })
-          .catch((err) => {
-            setVerified(false);
-            Router.replace("/auth/login");
-          });
-      } else if (isAuthenitcated === false) {
-        setVerified(false);
-        Router.replace("/auth/login");
+      let unmounted = false;
+
+      if (!loading && !unmounted) {
+        setVerified(isAuthenticated);
+        if (!isAuthenticated) {
+          dispatch(validateAuthenticationAction())
+            .then(unwrapResult)
+            .then((_) => {
+              !unmounted && setVerified(true);
+            })
+            .catch((err) => {
+              !unmounted && setVerified(false);
+              Router.replace("/auth/login");
+            });
+        }
+
+        return () => {
+          unmounted = true;
+        };
       }
-    }, [isAuthenitcated]);
+      return;
+    }, [isAuthenticated, loading]);
 
     if (verified) {
       return <WrappedComponent {...props} />;
@@ -38,4 +47,4 @@ const withAuth = (WrappedComponent) => {
   };
 };
 
-export default withAuth;
+export default ProtectedRoute;

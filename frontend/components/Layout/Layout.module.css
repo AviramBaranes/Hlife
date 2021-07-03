@@ -4,6 +4,7 @@
 }
 
 .Layout main {
+  position: relative;
   width: 75%;
 }
 

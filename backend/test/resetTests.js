@@ -137,7 +137,7 @@ describe("sentResetEmail tests", function () {
     await authController.sentResetEmail(req, res, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("User does not exist");
+    expect(res.msg).equal("User not found, Make sure the email is correct");
   });
 
   it("should set a reset token", async function () {
@@ -215,7 +215,11 @@ describe("resetPasswordViaToken tests", function () {
   });
 
   it("should send error response for wrong token", async function () {
-    req.body = { password: "they match", passwordConfirmation: "they match" };
+    req.body = {
+      password: "they match",
+      passwordConfirmation: "they match",
+      resetToken: "fake token",
+    };
 
     await authController.resetPasswordViaToken(req, res, () => {});
 
@@ -223,9 +227,12 @@ describe("resetPasswordViaToken tests", function () {
     expect(res.msg).equal("Invalid Token");
   });
 
-  it("should send error response for wrong token", async function () {
-    req.body = { password: "they match", passwordConfirmation: "they match" };
-    req.params = { resetToken: "123456" };
+  it("should send error response for expired token", async function () {
+    req.body = {
+      password: "they match",
+      passwordConfirmation: "they match",
+      resetToken: "123456",
+    };
 
     await authController.resetPasswordViaToken(req, res, () => {});
 
@@ -267,6 +274,85 @@ describe("resetPasswordViaToken tests", function () {
     expect(res.msg).equal(
       `${updatedUserForTests.name}'s password successfully changed!`
     );
+  });
+
+  after(async () => {
+    await afterTests();
+  });
+});
+
+describe("verifyToken tests", function () {
+  let req, res;
+  res = {
+    statusCode: null,
+    msg: null,
+    status(code) {
+      this.statusCode = code;
+      return this;
+    },
+    send(msg) {
+      this.msg = msg;
+    },
+  };
+  before((done) => {
+    connectDb()
+      .then((_) => {
+        const user = new User({
+          name: "tester",
+          username: "tester",
+          email: "test@test.com",
+          password: "123456",
+          gender: "male",
+          dateOfBirth: "02/01/2000",
+          resetToken: "123456",
+          tokenExpiration: Date.now() - 3600000, //expired
+        });
+        user
+          .save()
+          .then((savedUser) => {
+            userForTests = savedUser;
+            done();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  it("should send error response for invalid token", async function () {
+    req = {
+      params: { token: "not match" },
+    };
+
+    await authController.validateResetToken(req, res, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("Invalid Token");
+  });
+
+  it("should send error response for expired token", async function () {
+    req = {
+      params: { token: "123456" },
+    };
+
+    await authController.validateResetToken(req, res, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("Token Expired");
+  });
+
+  it("should return a 200 response", async function () {
+    const stubedDate = sinon.stub(Date, "now");
+    stubedDate.returns(-Infinity); //'isExpired' will be false
+
+    await authController.validateResetToken(req, res, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.msg).equal("Token Verified Successfully");
+    stubedDate.restore();
   });
 
   after(async () => {

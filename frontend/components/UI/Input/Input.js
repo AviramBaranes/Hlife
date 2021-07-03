@@ -2,6 +2,7 @@ import classes from "./Input.module.css";
 
 function Input(props) {
   const inputClasses = [classes.Input];
+
   if (props.touched && props.inValid) {
     inputClasses.push(classes.InValid);
   }

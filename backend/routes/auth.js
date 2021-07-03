@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, param } = require("express-validator");
 
 const router = express.Router();
 
@@ -85,13 +85,21 @@ router.post(
 
 //reset via email
 router.put(
-  "/reset/:resetToken",
+  "/reset/password-reset",
   body(["password", "passwordConfirmation"])
     .isLength({ min: 6 })
     .withMessage("Invalid password, At least 6 characters for a password"),
   authController.resetPasswordViaToken
 );
 
+//validate token
+router.get(
+  "/reset/validate-token/:token",
+  param("resetToken").isLength(64).withMessage("Invalid Token, too short"),
+  authController.validateResetToken
+);
+
+//validate auth
 router.get("/isUser", authMiddleware, authController.validateUser);
 
 module.exports = router;

@@ -42,7 +42,7 @@ describe("login controller error handling tests", function () {
     await authController.login(req, res, () => {});
 
     expect(res.statusCode).equal(401);
-    expect(res.msg).equal("User not find");
+    expect(res.msg).equal("User not found, Make sure the email is correct");
   });
 
   it("should return an error response if password is incorrect", async function () {
@@ -120,7 +120,7 @@ describe("login controller testing response", function () {
 
   it("should return the correct cookie", () => {
     const { userId } = jwt.verify(res.cookieToken, process.env.jwtSecret);
-    expect(res.cookieName).equal("joh");
+    expect(res.cookieName).equal("jon");
     expect(userId).equal(user._id.toString());
   });
 

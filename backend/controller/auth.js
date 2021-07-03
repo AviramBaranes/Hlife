@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const createModels = require("../utils/helpers/createModels");
+const sendGridMail = require("@sendgrid/mail");
 
 exports.signup = async (req, res, next) => {
   try {
@@ -77,7 +78,9 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return res.status(401).send("User not find");
+      return res
+        .status(401)
+        .send("User not found, Make sure the email is correct");
     }
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
@@ -93,7 +96,7 @@ exports.login = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("joh", token, {
+      .cookie("jon", token, {
         sameSite: "strict",
         path: "/",
         expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
@@ -114,7 +117,7 @@ exports.logout = (req, res, next) => {
   try {
     res
       .status(201)
-      .clearCookie("joh", {
+      .clearCookie("jon", {
         path: "/",
       })
       .send("success");
@@ -167,19 +170,15 @@ exports.sentResetEmail = async (req, res, next) => {
 
     if (tokenSlice.length < 2) return res.status(403).send("CSRF ERROR");
 
-    const csrfToken = tokenSlice[1].substring(0, 36);
+    const csrfToken = tokenSlice[1].split(";")[0];
 
     const user = await User.findOne({ email });
 
-    if (!user) return res.status(403).send("User does not exist");
-
-    const transporter = nodemailer.createTransport({
-      service: "hotmail",
-      auth: {
-        user: process.env.OUTLOOK_USER,
-        pass: process.env.OUTLOOK_PASSWORD,
-      },
-    });
+    if (!user) {
+      return res
+        .status(403)
+        .send("User not found, Make sure the email is correct");
+    }
 
     const token = crypto.randomBytes(32).toString("hex");
 
@@ -188,30 +187,28 @@ exports.sentResetEmail = async (req, res, next) => {
 
     await user.save();
 
-    const href = `http://localhost:3000/auth/reset-password/${token}/?ct=${csrfToken}`;
+    sendGridMail.setApiKey(process.env.sendGrid_api);
 
-    const mailOptions = {
-      from: process.env.OUTLOOK_USER,
-      to: `${email}`,
-      subject: "Reset Password Hlife account",
-      html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${href}>link</a> in order to reset your Hlife account Password.
+    const link = `http://localhost:3000/auth/reset-password/${token}`;
+
+    const message = {
+      from: process.env.WALLA_USER,
+      to: email,
+      subject: "Hlife reset password",
+      html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.
             
             </p>
             <p>This token is valid for only 1 hour.</p>`,
     };
 
-    process.env.Node_ENV !== "test" &&
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-          throw error;
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
-    res.status(200).send("Reset Email Sent!");
-
-    //
+    try {
+      await sendGridMail.send(message);
+      res.status(200).send("Reset Email Sent!");
+      console.log("Success!");
+    } catch (err) {
+      process.env.Node_ENV !== "test" && console.log(error);
+      throw error;
+    }
   } catch (err) {
     return catchErrorHandler(err, next);
   }
@@ -221,9 +218,7 @@ exports.resetPasswordViaToken = async (req, res, next) => {
   try {
     validationErrorsHandler(req);
 
-    const { resetToken } = req.params;
-
-    const { password, passwordConfirmation } = req.body;
+    const { password, passwordConfirmation, resetToken } = req.body;
 
     const isMatch = password === passwordConfirmation;
 
@@ -246,6 +241,24 @@ exports.resetPasswordViaToken = async (req, res, next) => {
     await user.save();
 
     res.status(200).send(`${user.name}'s password successfully changed!`);
+  } catch (err) {
+    return catchErrorHandler(err, next);
+  }
+};
+
+exports.validateResetToken = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+
+    const user = await User.findOne({ resetToken: token });
+
+    if (!user) return res.status(403).send("Invalid Token");
+
+    const isExpired = Date.now() > user.tokenExpiration;
+
+    if (isExpired) return res.status(403).send("Token Expired");
+
+    return res.status(200).send("Token Verified Successfully");
   } catch (err) {
     return catchErrorHandler(err, next);
   }

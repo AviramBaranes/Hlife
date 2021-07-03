@@ -1,53 +1,96 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "../../../utils/Axios/axiosInstance";
+import axiosInstance from "../../../utils/Axios/axiosInstance";
 
 const initialState = {
   username: "",
   hasProgram: undefined,
   hasDiet: undefined,
-  loading: false,
+  loading: undefined,
   error: null,
-  isAuthenticated: undefined,
+  isAuthenticated: false,
 };
+
+export const sendPasswordResetEmailAction = createAsyncThunk(
+  "sendResetEmail/sendPasswordResetEmailAction",
+
+  async (email, { rejectWithValue }) => {
+    try {
+      const boduRequest = { email };
+      const res = await axiosInstance.post(
+        "/auth/password/send-token",
+        boduRequest
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      const { data, status } = err.response;
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
+  }
+);
 
 export const signupUserAction = createAsyncThunk(
   "signup/signupUserAction",
-  async (userFields) => {
+  async (userFields, { rejectWithValue }) => {
     const bodyRequest = {
       ...userFields,
     };
 
-    const res = await axios.post("/auth/signup", bodyRequest);
+    try {
+      const res = await axiosInstance.post("/auth/signup", bodyRequest);
 
-    return res.data;
+      return res.data;
+    } catch (err) {
+      const { data, status } = err.response;
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
   }
 );
 
 export const loginUserAction = createAsyncThunk(
   "login/loginUserAction",
-  async (userFields) => {
+  async (userFields, { rejectWithValue }) => {
     const bodyRequest = {
       ...userFields,
     };
+    try {
+      const res = await axiosInstance.post("/auth/login", bodyRequest);
 
-    const res = await axios.post("/auth/login", bodyRequest);
-
-    return res.data;
+      return res.data;
+    } catch (err) {
+      const { data, status } = err.response;
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
   }
 );
 
-export const validateAuthentication = createAsyncThunk(
-  "authentication/validateAuthentication",
+export const validateAuthenticationAction = createAsyncThunk(
+  "authentication/validateAuthenticationAction",
   async () => {
-    const res = await axios.get("/auth/isUser");
+    const res = await axiosInstance.get("/auth/isUser");
     return res.data;
+  },
+  {
+    condition(_, { getState }) {
+      const { loading } = getState().usersReducer;
+      if (loading === false || loading === true) {
+        return false;
+      }
+    },
   }
 );
 
 const usersSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {},
+  reducers: {
+    changeLoadingState(state, { payload }) {
+      state.loading = payload.loading;
+    },
+  },
   extraReducers: {
     [signupUserAction.pending](state) {
       state.loading = true;
@@ -79,22 +122,34 @@ const usersSlice = createSlice({
       state.error = error;
       state.isAuthenticated = false;
     },
-    [validateAuthentication.pending](state) {
+    [validateAuthenticationAction.pending](state) {
       state.loading = true;
     },
-    [validateAuthentication.fulfilled](state, { payload }) {
+    [validateAuthenticationAction.fulfilled](state, { payload }) {
       state.loading = false;
       state.username = payload.username;
       state.isAuthenticated = true;
       state.hasProgram = payload.hasProgram;
       state.hasDiet = payload.hasProgram;
     },
-    [validateAuthentication.rejected](state, { error }) {
+    [validateAuthenticationAction.rejected](state, { error }) {
       state.loading = false;
       state.error = error;
       state.isAuthenticated = false;
+    },
+    [sendPasswordResetEmailAction.pending](state) {
+      state.loading = true;
+    },
+    [sendPasswordResetEmailAction.fulfilled](state) {
+      state.loading = false;
+    },
+    [sendPasswordResetEmailAction.rejected](state, { error }) {
+      state.loading = false;
+      state.error = error;
     },
   },
 });
 
 export default usersSlice.reducer;
+
+export const usersActions = usersSlice.actions;

@@ -4,12 +4,13 @@
   "description": "Hlife backend",
   "main": "app.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --timeout 5000",
+    "test": "cross-env NODE_ENV=test mocha --timeout 6000",
     "start": "nodemon app.js"
   },
   "author": "Aviram",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^7.4.5",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",

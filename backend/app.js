@@ -57,11 +57,12 @@ app.use(csrfProtection); //in frontend in the requests body put the token under 
 app.use("/auth", authRoute);
 
 app.use((error, req, res, next) => {
-  console.log(error);
-  const { statusCode, message, data } = error;
-  if (!statusCode || !message || !data) {
-    return res.status(500).send("Server Error");
-  }
+  let { statusCode, message, data } = error;
+
+  if (!statusCode) statusCode = 500;
+  if (!message) message = "Server Error";
+  if (!data) data = null;
+
   res.status(statusCode).json({ message, data });
 });
 

@@ -17,8 +17,9 @@ export const getCsrfToken = createAsyncThunk(
   },
   {
     condition: (_, { getState }) => {
-      const csrfToken = getState();
-      if (!csrfToken) {
+      const { csrfToken } = getState().tokensReducer;
+
+      if (csrfToken) {
         return false;
       }
     },

@@ -1,0 +1,42 @@
+.ErrorModal {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  margin-top: 5vh;
+  height: 12vh;
+  border: red solid 2px;
+  background: salmon;
+  h3,
+  p {
+    margin: 1rem 0rem;
+    text-align: center;
+    color: black;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+
+.Button {
+  position: absolute;
+  right: 0%;
+  top: 0%;
+  border: none;
+  background: salmon;
+  font-size: 1.5rem;
+  color: black;
+  margin: 0.2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 436px) {
+  .ErrorModal {
+    h3,
+    p {
+      margin: 1rem 0rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+  }
+}

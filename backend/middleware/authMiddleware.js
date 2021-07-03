@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
   try {
     let authToken;
     try {
-      authToken = req.headers.cookie.split("joh=")[1].split(";")[0];
+      authToken = req.headers.cookie.split("jon=")[1].split(";")[0];
     } catch (err) {
       errorHandler("Unauthorized Couldnt find cookie");
     }
@@ -19,7 +19,6 @@ module.exports = (req, res, next) => {
     try {
       decodedToken = jwt.verify(authToken, process.env.jwtSecret);
     } catch (err) {
-      process.env.NODE_ENV !== "test" && console.log(err);
       errorHandler("Unauthorized cookie is invalid");
     }
 

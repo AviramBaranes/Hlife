@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCsrfToken } from "../../Redux/Slices/tokens";
 
 import Navigation from "./Navigation";
+import LoadingSpinner from "../UI/Spinner/Spinner";
 import classes from "./Layout.module.css";
 
 function Layout({ children }) {
   const dispatch = useDispatch();
 
   const { error } = useSelector((state) => state.tokensReducer);
+  const { loading } = useSelector((state) => state.usersReducer);
 
   useEffect(() => {
     dispatch(getCsrfToken());
@@ -21,7 +23,7 @@ function Layout({ children }) {
       ) : (
         <div className={classes.Layout}>
           <Navigation />
-          <main>{children}</main>
+          <main>{loading ? <LoadingSpinner /> : children}</main>
         </div>
       )}
     </>
