@@ -1,17 +1,13 @@
 import React, { useState } from "react";
-import Router from "next/router";
 import { useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 import {
   createInputListForLogin,
   inputChangeHandler,
+  loginSubmitFormHandler,
 } from "../../../utils/formsHelpers/authHelpers";
-import { loginUserAction } from "../../../Redux/Slices/auth";
-import { errorsActions } from "../../../Redux/Slices/errors";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
-import { messagesActions } from "../../../Redux/Slices/messages";
 
 function loginForm() {
   const dispatch = useDispatch();
@@ -28,36 +24,12 @@ function loginForm() {
   const [formValidity, setFormValidity] = useState(false);
   const [inputsList, setInputList] = useState(ALL_INPUTS);
 
-  async function signupSubmitHandler(e) {
-    e.preventDefault();
-
-    dispatch(errorsActions.errorConfirmed());
-    dispatch(loginUserAction({ ...userFields }))
-      .then(unwrapResult)
-      .then(({ message }) => {
-        console.log("here", message);
-        dispatch(
-          messagesActions.newMessage({
-            messageTitle: "Logged In",
-            message,
-          })
-        );
-        Router.push("/");
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(
-          errorsActions.newError({
-            errorTitle: "Login Failed",
-            errorMessage: err.data,
-            errorStatusCode: err.status,
-          })
-        );
-      });
+  function loginSubmitHandler(e) {
+    loginSubmitFormHandler(e, dispatch, userFields);
   }
 
   return (
-    <form onSubmit={signupSubmitHandler}>
+    <form onSubmit={loginSubmitHandler}>
       {inputsList.map((field, index) => {
         return (
           <Input

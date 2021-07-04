@@ -6,9 +6,8 @@
   border: 3px solid $primary-color;
   padding: 10px;
   text-align: center;
-  margin: auto;
   width: 60%;
-  margin-top: 15%;
+  margin: 5vh auto;
 
   h2 {
     padding: 1rem;
@@ -36,5 +35,11 @@
 
   p {
     margin: 1rem;
+  }
+}
+
+@media (max-width: 732px) {
+  .Card {
+    width: 80%;
   }
 }

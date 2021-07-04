@@ -1,7 +1,17 @@
+import Router from "next/router";
 import isAlpha from "validator/lib/isAlpha";
 import isAlphanumeric from "validator/lib/isAlphanumeric";
 import isEmail from "validator/lib/isEmail";
 import isLength from "validator/lib/isLength";
+import { unwrapResult } from "@reduxjs/toolkit";
+
+import { errorsActions } from "../../Redux/Slices/errors";
+import { messagesActions } from "../../Redux/Slices/messages";
+import {
+  loginUserAction,
+  sendPasswordResetEmailAction,
+  signupUserAction,
+} from "../../Redux/Slices/auth";
 
 export function createInputListForSignup(
   name,
@@ -194,4 +204,91 @@ export function inputChangeHandler(
   setUserFields((prevState) => ({ ...prevState, [name]: value }));
 
   setFormValidity(isFormValid);
+}
+
+export async function submitSendEmailFormHandler(e, dispatch, email) {
+  e.preventDefault();
+
+  dispatch(errorsActions.errorConfirmed());
+  dispatch(sendPasswordResetEmailAction(email))
+    .then(unwrapResult)
+    .then((message) => {
+      dispatch(
+        messagesActions.newMessage({
+          messageTitle: "Email Sent!",
+          message,
+        })
+      );
+      Router.push("/auth/login");
+    })
+    .catch((err) => {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Sending email failed",
+          errorMessage: err.data,
+          errorStatusCode: err.status,
+        })
+      );
+    });
+}
+
+export async function loginSubmitFormHandler(e, dispatch, userFields) {
+  e.preventDefault();
+
+  dispatch(errorsActions.errorConfirmed());
+  dispatch(loginUserAction({ ...userFields }))
+    .then(unwrapResult)
+    .then(({ message }) => {
+      dispatch(
+        messagesActions.newMessage({
+          messageTitle: "Logged In",
+          message,
+        })
+      );
+      Router.push("/");
+    })
+    .catch((err) => {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Login Failed",
+          errorMessage: err.data,
+          errorStatusCode: err.status,
+        })
+      );
+    });
+}
+
+export async function signupSubmitFormHandler(e, dispatch, userFields) {
+  e.preventDefault();
+
+  if (userFields.password !== userFields.passwordConfirmation) {
+    return dispatch(
+      errorsActions.newError({
+        errorTitle: "Sign Up Failed",
+        errorMessage: "Password need to be a match",
+      })
+    );
+  }
+
+  dispatch(errorsActions.errorConfirmed());
+  dispatch(signupUserAction({ ...userFields }))
+    .then(unwrapResult)
+    .then(({ message }) => {
+      dispatch(
+        messagesActions.newMessage({
+          messageTitle: "Signed Up!",
+          message,
+        })
+      );
+      Router.push("/");
+    })
+    .catch((err) => {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Sign Up Failed",
+          errorMessage: err.data,
+          errorStatusCode: err.status,
+        })
+      );
+    });
 }

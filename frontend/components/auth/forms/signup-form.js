@@ -6,6 +6,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import {
   createInputListForSignup,
   inputChangeHandler,
+  signupSubmitFormHandler,
 } from "../../../utils/formsHelpers/authHelpers";
 import { signupUserAction } from "../../../Redux/Slices/auth";
 import Input from "../../UI/Input/Input";
@@ -40,30 +41,8 @@ function signupForm() {
   const [formValidity, setFormValidity] = useState(false);
   const [inputsList, setInputList] = useState(ALL_INPUTS);
 
-  async function signupSubmitHandler(e) {
-    e.preventDefault();
-
-    dispatch(errorsActions.errorConfirmed());
-    dispatch(signupUserAction({ ...userFields }))
-      .then(unwrapResult)
-      .then(({ message }) => {
-        dispatch(
-          messagesActions.newMessage({
-            messageTitle: "Signed Up!",
-            message,
-          })
-        );
-        Router.push("/");
-      })
-      .catch((err) => {
-        dispatch(
-          errorsActions.newError({
-            errorTitle: "Sign Up Failed",
-            errorMessage: err.data,
-            errorStatusCode: err.status,
-          })
-        );
-      });
+  function signupSubmitHandler(e) {
+    signupSubmitFormHandler(e, dispatch, userFields);
   }
 
   return (

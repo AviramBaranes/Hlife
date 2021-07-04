@@ -87,12 +87,14 @@
 
 @media (max-width: 736px) {
   .Navbar {
-    height: 13vh;
+    height: 15vh;
     width: 100vw;
+    display: flex;
+    align-items: center;
   }
 
   .Navbar nav {
-    height: 10vh;
+    height: 15vh;
     flex-direction: row;
     align-items: center;
   }
@@ -119,7 +121,7 @@
 
   .Icon svg {
     margin: 0.5rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   .Icon h1 {
     display: none;
