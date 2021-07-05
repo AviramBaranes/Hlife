@@ -27,6 +27,7 @@ function forgotPasswordForm() {
 
   return (
     <form
+      aria-label="form"
       onSubmit={(e) => submitSendEmailFormHandler(e, dispatch, email.email)}
     >
       <Input
