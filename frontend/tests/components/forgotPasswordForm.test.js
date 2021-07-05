@@ -4,12 +4,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
+import router from "next/router";
 import store from "../../Redux/store";
 import ForgotPasswordForm from "../../components/auth/forms/forgotPassword-form";
 import ErrorContainer from "../../components/UI/ErrorContainer/ErrorContainer";
 import MessageContainer from "../../components/UI/MessageContainer/MessageContainer";
 
 jest.mock("../../Redux/Slices/auth");
+jest.mock("next/router");
 
 describe("ForgotPasswordForm", () => {
   test("should render the correct dom elements", () => {
@@ -86,7 +88,6 @@ describe("ForgotPasswordForm", () => {
   });
 
   test("should desplay success message if form submition failed ", async () => {
-    console.log();
     render(
       <Provider store={store}>
         <MessageContainer />
@@ -105,5 +106,6 @@ describe("ForgotPasswordForm", () => {
 
     expect(titleElement).toBeInTheDocument();
     expect(messageElement).toBeInTheDocument();
+    expect(window.location.routerPushedValue).toBe("/auth/login");
   });
 });
