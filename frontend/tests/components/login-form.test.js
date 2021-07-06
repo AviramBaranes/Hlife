@@ -134,7 +134,7 @@ describe("LoginForm", () => {
     expect(messageElement).toBeInTheDocument();
   });
 
-  test("should desplay success message if form submition failed ", async () => {
+  test("should desplay success message if form submition succeed ", async () => {
     render(
       <Provider store={store}>
         <MessageContainer />
@@ -151,7 +151,9 @@ describe("LoginForm", () => {
     userEvent.click(buttonElement);
 
     const titleElement = await screen.findByText("Logged In!");
-    const messageElement = await screen.findByText("success message");
+    const messageElement = await screen.findByText(
+      "your email is email@email.com"
+    );
 
     expect(titleElement).toBeInTheDocument();
     expect(messageElement).toBeInTheDocument();

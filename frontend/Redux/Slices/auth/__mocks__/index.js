@@ -8,10 +8,9 @@ sendPasswordResetEmailAction
     throw error;
   })
   .mockReturnValueOnce(async () => {
-    return { payload: "success message" };
+    const email = sendPasswordResetEmailAction.mock.calls[0][0];
+    return { payload: `email sent to ${email}` };
   });
-
-exports.sendPasswordResetEmailAction = sendPasswordResetEmailAction;
 
 const loginUserAction = jest.fn();
 
@@ -23,7 +22,24 @@ loginUserAction
     throw error;
   })
   .mockReturnValueOnce(async () => {
-    return { payload: { message: "success message" } };
+    const { email } = loginUserAction.mock.calls[0][0];
+    return { payload: { message: `your email is ${email}` } };
   });
 
+const signupUserAction = jest.fn();
+
+signupUserAction
+  .mockReturnValueOnce(async () => {
+    const error = new Error();
+    error.data = "error data";
+    error.statue = "error status code";
+    throw error;
+  })
+  .mockReturnValueOnce(async () => {
+    const { name } = signupUserAction.mock.calls[0][0];
+    return { payload: { message: `${name} signed in` } };
+  });
+
+exports.sendPasswordResetEmailAction = sendPasswordResetEmailAction;
 exports.loginUserAction = loginUserAction;
+exports.signupUserAction = signupUserAction;

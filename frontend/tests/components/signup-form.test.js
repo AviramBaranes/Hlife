@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/extend-expect";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
@@ -13,14 +13,13 @@ jest.mock("../../Redux/Slices/auth");
 jest.mock("next/router");
 
 describe("SignupForm", () => {
-  test("should render the correct dom elements", async () => {
+  test("should render the correct dom elements (only labels)", async () => {
     render(
       <Provider store={store}>
         <SignupForm />
       </Provider>
     );
 
-    const formElement = screen.getByRole("form");
     const nameLabelElement = screen.getByLabelText("Name");
     const usernameLabelElement = screen.getByLabelText("Username");
     const emailLabelElement = screen.getByLabelText("Email");
@@ -30,18 +29,7 @@ describe("SignupForm", () => {
     );
     const genderLabelElement = screen.getByLabelText("Gender");
     const dateLabelElement = screen.getByLabelText("Date Of Birth");
-    const inputList = screen.getAllByRole("textbox");
-    // const nameInputElement = screen.getByPlaceholderText("name");
-    // const usernameInputElement = screen.getByPlaceholderText("username");
-    // const emailInputElement = screen.getByPlaceholderText("email");
-    // const passwordInputElement = screen.getByPlaceholderText("password");
-    // const passwordConfirmationInputElement = screen.getByPlaceholderText(
-    //   "passwordConfirmation"
-    // );
-    // const dateInputElement = screen.getByPlaceholderText("dateOfBirth");
-    const buttonElement = screen.getByRole("button");
 
-    expect(formElement).toBeInTheDocument();
     expect(nameLabelElement).toBeInTheDocument();
     expect(usernameLabelElement).toBeInTheDocument();
     expect(emailLabelElement).toBeInTheDocument();
@@ -49,130 +37,301 @@ describe("SignupForm", () => {
     expect(passwordConfirmationLabelElement).toBeInTheDocument();
     expect(genderLabelElement).toBeInTheDocument();
     expect(dateLabelElement).toBeInTheDocument();
+  });
+
+  test("should render the correct dom elements (rest of the elements)", async () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const formElement = screen.getByRole("form");
+    const selectElement = screen.getByRole("listbox");
+    const inputList = screen.getAllByRole("textbox");
+    const buttonElement = screen.getByRole("button");
+
+    expect(formElement).toBeInTheDocument();
+    expect(selectElement).toBeInTheDocument();
     expect(inputList.length).toBe(6);
     expect(buttonElement).toBeInTheDocument();
   });
 
-  //   test("should add 'invalid' class to input if inputs are invalid and disable the button", () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+  test("should be invalid (name invalid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("name");
 
-  //     userEvent.type(emailInputElement, "not an email");
-  //     userEvent.type(passwordInputElement, "123");
+    expect(inputElement.classList[1]).toBe(undefined);
 
-  //     expect(emailInputElement.classList[1]).toEqual("InValid");
-  //     expect(passwordInputElement.classList[1]).toEqual("InValid");
-  //     expect(buttonElement).toBeDisabled();
-  //   });
+    userEvent.type(inputElement, "av");
 
-  //   test("should add 'invalid' class if email is not an email", () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+    expect(inputElement.classList[1]).toBe("InValid");
+    expect(buttonElement).toBeDisabled();
+  });
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+  test("should be invalid (username invalid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //     userEvent.type(emailInputElement, "not an email");
-  //     userEvent.type(passwordInputElement, "123456");
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("username");
 
-  //     expect(emailInputElement.classList[1]).toEqual("InValid");
-  //     expect(passwordInputElement.classList[1]).toEqual(undefined);
-  //     expect(buttonElement).toBeDisabled();
-  //   });
+    expect(inputElement.classList[1]).toBe(undefined);
 
-  //   test("should add 'invalid' class to input if password to short", () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+    userEvent.type(inputElement, "av");
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+    expect(inputElement.classList[1]).toBe("InValid");
+    expect(buttonElement).toBeDisabled();
+  });
 
-  //     userEvent.type(emailInputElement, "email@email.com");
-  //     userEvent.type(passwordInputElement, "123");
+  test("should be invalid (email invalid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //     expect(emailInputElement.classList[1]).toEqual(undefined);
-  //     expect(passwordInputElement.classList[1]).toEqual("InValid");
-  //     expect(buttonElement).toBeDisabled();
-  //   });
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("email");
 
-  //   test("should behave approprialy if inputs are valid", () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+    expect(inputElement.classList[1]).toBe(undefined);
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+    userEvent.type(inputElement, "not an email");
 
-  //     userEvent.type(emailInputElement, "email@email.com");
-  //     userEvent.type(passwordInputElement, "123456");
+    expect(inputElement.classList[1]).toBe("InValid");
+    expect(buttonElement).toBeDisabled();
+  });
 
-  //     expect(emailInputElement.classList[1]).toEqual(undefined);
-  //     expect(passwordInputElement.classList[1]).toEqual(undefined);
-  //     expect(buttonElement).not.toBeDisabled();
-  //   });
+  test("should be invalid (password 1 invalid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //   test("should desplay error message if form submition failed ", async () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <ErrorContainer />
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("password");
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+    expect(inputElement.classList[1]).toBe(undefined);
 
-  //     userEvent.type(emailInputElement, "email@email.com");
-  //     userEvent.type(passwordInputElement, "123456");
-  //     userEvent.click(buttonElement);
+    userEvent.type(inputElement, "12345");
 
-  //     const titleElement = await screen.findByText("Login Failed");
-  //     const messageElement = await screen.findByText("error data");
+    expect(inputElement.classList[1]).toBe("InValid");
+    expect(buttonElement).toBeDisabled();
+  });
 
-  //     expect(titleElement).toBeInTheDocument();
-  //     expect(messageElement).toBeInTheDocument();
-  //   });
+  test("should be invalid (password 2 invalid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //   test("should desplay success message if form submition failed ", async () => {
-  //     render(
-  //       <Provider store={store}>
-  //         <MessageContainer />
-  //         <SignupForm />
-  //       </Provider>
-  //     );
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("passwordConfirmation");
 
-  //     const emailInputElement = screen.getByPlaceholderText("email");
-  //     const passwordInputElement = screen.getByPlaceholderText("password");
-  //     const buttonElement = screen.getByRole("button");
+    expect(inputElement.classList[1]).toBe(undefined);
 
-  //     userEvent.type(emailInputElement, "email@email.com");
-  //     userEvent.type(passwordInputElement, "123456");
-  //     userEvent.click(buttonElement);
+    userEvent.type(inputElement, "12345");
 
-  //     const titleElement = await screen.findByText("Logged In!");
-  //     const messageElement = await screen.findByText("success message");
+    expect(inputElement.classList[1]).toBe("InValid");
+    expect(buttonElement).toBeDisabled();
+  });
 
-  //     expect(titleElement).toBeInTheDocument();
-  //     expect(messageElement).toBeInTheDocument();
-  //     expect(window.location.routerPushedValue).toBe("/");
-  //   });
+  test("should be valid (name valid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("name");
+
+    userEvent.type(inputElement, "avi");
+
+    expect(inputElement.classList[1]).toBe(undefined);
+    expect(buttonElement).toBeDisabled();
+  });
+
+  test("should be valid (username valid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("username");
+
+    userEvent.type(inputElement, "avi123");
+    expect(inputElement.classList[1]).toBe(undefined);
+    expect(buttonElement).toBeDisabled();
+  });
+
+  test("should be valid (email valid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("email");
+
+    userEvent.type(inputElement, "email@email.com");
+
+    expect(inputElement.classList[1]).toBe(undefined);
+    expect(buttonElement).toBeDisabled();
+  });
+
+  test("should be valid (password 1 valid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("password");
+
+    userEvent.type(inputElement, "123456");
+
+    expect(inputElement.classList[1]).toBe(undefined);
+    expect(buttonElement).toBeDisabled();
+  });
+
+  test("should be valid (password 2 valid)", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputElement = screen.getByPlaceholderText("passwordConfirmation");
+
+    userEvent.type(inputElement, "123456");
+
+    expect(inputElement.classList[1]).toBe(undefined);
+    expect(buttonElement).toBeDisabled();
+  });
+
+  test("should be valid if all valid", () => {
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputs = screen.getAllByRole("textbox");
+
+    userEvent.type(inputs[0], "avi");
+    userEvent.type(inputs[1], "avi123");
+    userEvent.type(inputs[2], "email@email.com");
+    userEvent.type(inputs[3], "123456");
+    userEvent.type(inputs[4], "123456");
+    userEvent.type(inputs[5], "2004-01-01");
+
+    expect(buttonElement).not.toBeDisabled();
+  });
+
+  test("should desplay error message if passwords do not match ", async () => {
+    render(
+      <Provider store={store}>
+        <ErrorContainer />
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+    const inputs = screen.getAllByRole("textbox");
+
+    userEvent.type(inputs[0], "avi");
+    userEvent.type(inputs[1], "avi123");
+    userEvent.type(inputs[2], "email@email.com");
+    userEvent.type(inputs[3], "theyNot");
+    userEvent.type(inputs[4], "aMatch");
+
+    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
+
+    userEvent.click(buttonElement);
+
+    const titleElement = await screen.findByText("Sign Up Failed");
+    const messageElement = await screen.findByText(
+      "Password need to be a match"
+    );
+
+    expect(titleElement).toBeInTheDocument();
+    expect(messageElement).toBeInTheDocument();
+  });
+
+  test("should desplay error message if form submition failed ", async () => {
+    render(
+      <Provider store={store}>
+        <ErrorContainer />
+        <SignupForm />
+      </Provider>
+    );
+
+    const [errorButton, submitButton] = screen.getAllByRole("button");
+    userEvent.click(errorButton);
+    const inputs = screen.getAllByRole("textbox");
+
+    userEvent.type(inputs[0], "avi");
+    userEvent.type(inputs[1], "avi123");
+    userEvent.type(inputs[2], "email@email.com");
+    userEvent.type(inputs[3], "theyMatch");
+    userEvent.type(inputs[4], "theyMatch");
+
+    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
+
+    userEvent.click(submitButton);
+
+    const titleElement = await screen.findByText("Sign Up Failed");
+    const messageElement = await screen.findByText("error data");
+
+    expect(titleElement).toBeInTheDocument();
+    expect(messageElement).toBeInTheDocument();
+  });
+
+  test("should desplay success message if form submition succeed ", async () => {
+    render(
+      <Provider store={store}>
+        <MessageContainer />
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    const inputs = screen.getAllByRole("textbox");
+
+    userEvent.type(inputs[0], "avi");
+    userEvent.type(inputs[1], "avi123");
+    userEvent.type(inputs[2], "email@email.com");
+    userEvent.type(inputs[3], "theyMatch");
+    userEvent.type(inputs[4], "theyMatch");
+
+    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
+
+    userEvent.click(buttonElement);
+
+    const titleElement = await screen.findByText("Signed Up!");
+    const messageElement = await screen.findByText("avi signed in");
+
+    expect(titleElement).toBeInTheDocument();
+    expect(messageElement).toBeInTheDocument();
+    expect(window.location.routerPushedValue).toBe("/");
+  });
 });

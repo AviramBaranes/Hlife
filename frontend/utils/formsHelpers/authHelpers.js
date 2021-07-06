@@ -260,7 +260,6 @@ export async function loginSubmitFormHandler(e, dispatch, userFields) {
 
 export async function signupSubmitFormHandler(e, dispatch, userFields) {
   e.preventDefault();
-
   if (userFields.password !== userFields.passwordConfirmation) {
     return dispatch(
       errorsActions.newError({

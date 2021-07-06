@@ -67,18 +67,25 @@ function signupForm() {
         );
       })}
       <label htmlFor="gender">Gender</label>
-      <select id="gender" name="gender" onChange={inputChangeHandler}>
+      <select
+        required
+        role="listbox"
+        id="gender"
+        name="gender"
+        onChange={inputChangeHandler}
+      >
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
       <br />
       <Input
-        inputChangeHandler={(e) =>
+        inputChangeHandler={(e) => {
+          const value = e.target.value;
           setUserFields((prevState) => ({
             ...prevState,
-            [e.target.name]: e.target.value,
-          }))
-        }
+            dateOfBirth: value,
+          }));
+        }}
         htmlFor="dateOfBirth"
         type="date"
         label="Date Of Birth"

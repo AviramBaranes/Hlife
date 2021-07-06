@@ -84,7 +84,7 @@ describe("ForgotPasswordForm", () => {
     expect(messageElement).toBeInTheDocument();
   });
 
-  test("should desplay success message if form submition failed ", async () => {
+  test("should desplay success message if form submition succeed ", async () => {
     render(
       <Provider store={store}>
         <MessageContainer />
@@ -99,7 +99,9 @@ describe("ForgotPasswordForm", () => {
     userEvent.click(buttonElement);
 
     const titleElement = await screen.findByText("Email Sent!");
-    const messageElement = await screen.findByText("success message");
+    const messageElement = await screen.findByText(
+      "email sent to email@email.com"
+    );
 
     expect(titleElement).toBeInTheDocument();
     expect(messageElement).toBeInTheDocument();
