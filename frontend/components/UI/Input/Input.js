@@ -12,6 +12,7 @@ function Input(props) {
         {props.label}
       </label>
       <input
+        role="textbox"
         id={props.htmlFor}
         className={inputClasses.join(" ")}
         required

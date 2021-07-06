@@ -241,7 +241,7 @@ export async function loginSubmitFormHandler(e, dispatch, userFields) {
     .then(({ message }) => {
       dispatch(
         messagesActions.newMessage({
-          messageTitle: "Logged In",
+          messageTitle: "Logged In!",
           message,
         })
       );

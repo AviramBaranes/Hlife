@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import Router from "next/router";
 import { useDispatch } from "react-redux";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 import {
   createInputListForSignup,
   inputChangeHandler,
   signupSubmitFormHandler,
 } from "../../../utils/formsHelpers/authHelpers";
-import { signupUserAction } from "../../../Redux/Slices/auth";
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
-import { errorsActions } from "../../../Redux/Slices/errors";
-import { messagesActions } from "../../../Redux/Slices/messages";
 
 function signupForm() {
   const dispatch = useDispatch();
@@ -46,7 +42,7 @@ function signupForm() {
   }
 
   return (
-    <form onSubmit={signupSubmitHandler}>
+    <form aria-label="form" onSubmit={signupSubmitHandler}>
       {inputsList.map((field, index) => {
         return (
           <Input
@@ -70,8 +66,8 @@ function signupForm() {
           />
         );
       })}
-      <label>Gender</label>
-      <select name="gender" onChange={inputChangeHandler}>
+      <label htmlFor="gender">Gender</label>
+      <select id="gender" name="gender" onChange={inputChangeHandler}>
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>

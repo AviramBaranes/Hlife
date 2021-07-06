@@ -29,7 +29,7 @@ function loginForm() {
   }
 
   return (
-    <form onSubmit={loginSubmitHandler}>
+    <form aria-label="form" onSubmit={loginSubmitHandler}>
       {inputsList.map((field, index) => {
         return (
           <Input

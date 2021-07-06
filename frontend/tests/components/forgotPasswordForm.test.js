@@ -4,7 +4,6 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
-import router from "next/router";
 import store from "../../Redux/store";
 import ForgotPasswordForm from "../../components/auth/forms/forgotPassword-form";
 import ErrorContainer from "../../components/UI/ErrorContainer/ErrorContainer";
@@ -22,15 +21,13 @@ describe("ForgotPasswordForm", () => {
     );
 
     const formElement = screen.getByRole("form");
-    expect(formElement).toBeInTheDocument();
-
     const labelElement = screen.getByLabelText("Email");
-    expect(labelElement).toBeInTheDocument();
-
     const inputElement = screen.getByPlaceholderText("email");
-    expect(inputElement).toBeInTheDocument();
-
     const buttonElement = screen.getByRole("button");
+
+    expect(formElement).toBeInTheDocument();
+    expect(labelElement).toBeInTheDocument();
+    expect(inputElement).toBeInTheDocument();
     expect(buttonElement).toBeInTheDocument();
   });
 
