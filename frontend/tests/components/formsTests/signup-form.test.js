@@ -4,15 +4,15 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
-import store from "../../Redux/store";
-import SignupForm from "../../components/auth/forms/signup-form";
-import ErrorContainer from "../../components/UI/ErrorContainer/ErrorContainer";
-import MessageContainer from "../../components/UI/MessageContainer/MessageContainer";
+import store from "../../../Redux/store";
+import SignupForm from "../../../components/auth/forms/signup-form";
+import ErrorContainer from "../../../components/UI/ErrorContainer/ErrorContainer";
+import MessageContainer from "../../../components/UI/MessageContainer/MessageContainer";
 
-jest.mock("../../Redux/Slices/auth");
+jest.mock("../../../Redux/Slices/auth");
 jest.mock("next/router");
 
-describe("SignupForm", () => {
+describe("SignupForm Dom Renders Tests", () => {
   test("should render the correct dom elements (only labels)", async () => {
     render(
       <Provider store={store}>
@@ -56,7 +56,9 @@ describe("SignupForm", () => {
     expect(inputList.length).toBe(6);
     expect(buttonElement).toBeInTheDocument();
   });
+});
 
+describe("SignupForm Validity Handle Test", () => {
   test("should be invalid (name invalid)", () => {
     render(
       <Provider store={store}>
@@ -245,7 +247,9 @@ describe("SignupForm", () => {
 
     expect(buttonElement).not.toBeDisabled();
   });
+});
 
+describe("SignupForm Submit Handle Test", () => {
   test("should desplay error message if passwords do not match ", async () => {
     render(
       <Provider store={store}>

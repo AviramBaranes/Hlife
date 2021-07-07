@@ -83,6 +83,19 @@ export const validateAuthenticationAction = createAsyncThunk(
   }
 );
 
+export const logoutAction = createAsyncThunk(
+  "logout/logoutAction",
+  async (_, { rejectWithValue }) => {
+    try {
+      await axiosInstance.post("/auth/logout");
+    } catch (err) {
+      const { data, status } = err.response;
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
+  }
+);
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -146,6 +159,17 @@ const usersSlice = createSlice({
     [sendPasswordResetEmailAction.rejected](state, { error }) {
       state.loading = false;
       state.error = error;
+    },
+    [logoutAction.fulfilled](state) {
+      state.username = "";
+      state.hasProgram = undefined;
+      state.hasDiet = undefined;
+      state.loading = undefined;
+      state.error = null;
+      state.isAuthenticated = false;
+    },
+    [logoutAction.pending](state) {
+      state.loading = true;
     },
   },
 });

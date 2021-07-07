@@ -4,12 +4,12 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
-import store from "../../Redux/store";
-import ForgotPasswordForm from "../../components/auth/forms/forgotPassword-form";
-import ErrorContainer from "../../components/UI/ErrorContainer/ErrorContainer";
-import MessageContainer from "../../components/UI/MessageContainer/MessageContainer";
+import store from "../../../Redux/store";
+import ForgotPasswordForm from "../../../components/auth/forms/forgotPassword-form";
+import ErrorContainer from "../../../components/UI/ErrorContainer/ErrorContainer";
+import MessageContainer from "../../../components/UI/MessageContainer/MessageContainer";
 
-jest.mock("../../Redux/Slices/auth");
+jest.mock("../../../Redux/Slices/auth");
 jest.mock("next/router");
 
 describe("ForgotPasswordForm", () => {

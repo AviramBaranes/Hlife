@@ -1,28 +1,21 @@
 import React from "react";
-import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 
 import classes from "./Logout.module.scss";
-import axiosInstance from "../../../utils/Axios/axiosInstance";
+import { logoutHandler } from "../../../utils/formsHelpers/authHelpers";
 
 function Logout({ setShowModal }) {
-  const router = useRouter();
+  const dispatch = useDispatch();
 
-  const logoutHandler = async () => {
-    try {
-      await axiosInstance.post("/auth/logout");
-
-      setShowModal(false);
-      router.reload(window.location.pathname);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
     <div className={classes.Logout}>
       <h1>Log Out</h1>
       <p>Are you sure you want to logout?</p>
       <div className={classes.Buttons}>
-        <button className={classes.Red} onClick={logoutHandler}>
+        <button
+          className={classes.Red}
+          onClick={() => logoutHandler(dispatch, setShowModal)}
+        >
           Logout
         </button>
         <button onClick={() => setShowModal(false)} className={classes.Green}>

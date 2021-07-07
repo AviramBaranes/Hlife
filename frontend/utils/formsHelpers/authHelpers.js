@@ -9,6 +9,7 @@ import { errorsActions } from "../../Redux/Slices/errors";
 import { messagesActions } from "../../Redux/Slices/messages";
 import {
   loginUserAction,
+  logoutAction,
   sendPasswordResetEmailAction,
   signupUserAction,
 } from "../../Redux/Slices/auth";
@@ -285,6 +286,24 @@ export async function signupSubmitFormHandler(e, dispatch, userFields) {
       dispatch(
         errorsActions.newError({
           errorTitle: "Sign Up Failed",
+          errorMessage: err.data,
+          errorStatusCode: err.status,
+        })
+      );
+    });
+}
+
+export async function logoutHandler(dispatch, setShowModal) {
+  dispatch(logoutAction())
+    .then(unwrapResult)
+    .then(() => {
+      setShowModal(false);
+      console.log(setShowModal);
+    })
+    .catch((err) => {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Logout failed",
           errorMessage: err.data,
           errorStatusCode: err.status,
         })
