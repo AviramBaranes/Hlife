@@ -11,6 +11,7 @@ import MessageContainer from "../../../components/UI/MessageContainer/MessageCon
 
 jest.mock("../../../Redux/Slices/auth");
 jest.mock("next/router");
+jest.unmock("react-redux");
 
 describe("ForgotPasswordForm", () => {
   test("should render the correct dom elements", () => {
@@ -108,3 +109,5 @@ describe("ForgotPasswordForm", () => {
     expect(window.location.routerPushedValue).toBe("/auth/login");
   });
 });
+
+//5 tests

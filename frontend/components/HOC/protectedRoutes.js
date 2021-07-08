@@ -31,7 +31,6 @@ const ProtectedRoute = (WrappedComponent) => {
               Router.replace("/auth/login");
             });
         }
-
         return () => {
           unmounted = true;
         };

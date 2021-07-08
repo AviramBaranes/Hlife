@@ -11,6 +11,7 @@ import MessageContainer from "../../../components/UI/MessageContainer/MessageCon
 
 jest.mock("../../../Redux/Slices/auth");
 jest.mock("next/router");
+jest.unmock("react-redux");
 
 describe("SignupForm Dom Renders Tests", () => {
   test("should render the correct dom elements (only labels)", async () => {
@@ -339,3 +340,5 @@ describe("SignupForm Submit Handle Test", () => {
     expect(window.location.routerPushedValue).toBe("/");
   });
 });
+
+//16 test

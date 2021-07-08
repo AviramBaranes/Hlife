@@ -136,9 +136,11 @@ const usersSlice = createSlice({
       state.isAuthenticated = false;
     },
     [validateAuthenticationAction.pending](state) {
+      console.log("here2");
       state.loading = true;
     },
     [validateAuthenticationAction.fulfilled](state, { payload }) {
+      console.log("here1");
       state.loading = false;
       state.username = payload.username;
       state.isAuthenticated = true;
@@ -146,6 +148,7 @@ const usersSlice = createSlice({
       state.hasDiet = payload.hasProgram;
     },
     [validateAuthenticationAction.rejected](state, { error }) {
+      console.log("here3");
       state.loading = false;
       state.error = error;
       state.isAuthenticated = false;

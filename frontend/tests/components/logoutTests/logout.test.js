@@ -9,6 +9,7 @@ import Logout from "../../../components/auth/logout/Logout";
 import ErrorContainer from "../../../components/UI/ErrorContainer/ErrorContainer";
 
 jest.mock("../../../Redux/Slices/auth");
+jest.unmock("react-redux");
 
 describe("Logout", () => {
   test("should render the dom correctly (tags roles)", () => {
@@ -115,3 +116,5 @@ describe("Logout", () => {
     userEvent.click(LogoutButton);
   });
 });
+
+//5 tests

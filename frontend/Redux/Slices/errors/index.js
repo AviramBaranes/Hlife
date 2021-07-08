@@ -12,11 +12,10 @@ const errorSlice = createSlice({
   initialState,
   reducers: {
     newError(state, { payload }) {
-      // console.log("here3");
       state.newError = true;
       state.errorTitle = payload.errorTitle;
       state.errorMessage = payload.errorMessage;
-      state.errorStatusCode = payload.errorStatusCode;
+      state.errorStatusCode = payload.errorStatusCode || null;
     },
     errorConfirmed(state) {
       state.newError = false;
