@@ -21,14 +21,15 @@ function Layout({ children }) {
     dispatch(
       errorsActions.newError({
         errorTitle: "Server Error",
-        errorMessage: error,
+        errorMessage: `${error.message}, try to refresh`,
       })
     );
   }
-
   return (
     <>
-      {error ? null : (
+      {error ? (
+        children[0]
+      ) : (
         <div className={classes.Layout}>
           <Navigation />
           <main>{loading ? <LoadingSpinner /> : children}</main>

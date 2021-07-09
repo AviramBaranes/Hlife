@@ -3,45 +3,74 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
 import Layout from "../../../components/Layout/Layout";
-import LoadingSpinner from "../../../components/UI/Spinner/Spinner";
-import ErrorContainer from "../../../components/UI/ErrorContainer/ErrorContainer";
 
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
 
-jest.mock("../../../Redux/Slices/tokens");
-
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
 
+jest.mock("../../../Redux/Slices/tokens");
+
 describe("Layout component", () => {
-  test("should render error container", () => {
+  test("should render loading spinner", () => {
     const initialState = {
-      tokensReducer: {
-        error: "Getting token failed",
-      },
       usersReducer: {
-        loading: false,
+        loading: true,
       },
-      errorsReducer: {},
+      tokensReducer: {
+        error: null,
+      },
     };
+
     const store = mockStore(initialState);
+
+    const children = [<h1>not here</h1>];
 
     render(
       <Provider store={store}>
-        <ErrorContainer />
-        <Layout children={"not important"} />
+        <Layout children={children} />
       </Provider>
     );
-    const errorTitle = screen.getByText("Server Error");
 
-    expect(errorTitle).toBeInTheDocument();
+    const loadingDiv = screen.getByText("Loading...");
+
+    const aChildren = screen.queryByText("not here");
+    const navigationText = screen.queryByText("Hlife");
+
+    expect(loadingDiv).toBeInTheDocument();
+    expect(navigationText).toBeInTheDocument();
+    expect(aChildren).not.toBeInTheDocument();
+  });
+
+  test("should render loading spinner", () => {
+    const initialState = {
+      usersReducer: {
+        loading: false,
+      },
+      tokensReducer: {
+        error: null,
+      },
+    };
+
+    const store = mockStore(initialState);
+
+    const children = <h1>I'm here!</h1>;
+
+    render(
+      <Provider store={store}>
+        <Layout children={children} />
+      </Provider>
+    );
+
+    const loadingDiv = screen.queryByText("Loading...");
+
+    const aChildren = screen.getByText("I'm here!");
+    const navigationText = screen.getByText("Hlife");
+
+    expect(loadingDiv).not.toBeInTheDocument();
+    expect(navigationText).toBeInTheDocument();
+    expect(aChildren).toBeInTheDocument();
   });
 });
-
-//tests:
-
-//1- useSelector returned an error
-//2- useSelector returned loading state set to true
-//3- no error and no loading
