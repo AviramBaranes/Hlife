@@ -11,7 +11,7 @@ import { getDefaultMiddleware } from "@reduxjs/toolkit";
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
 
-jest.mock("../../../Redux/Slices/tokens");
+// jest.mock("../../../Redux/Slices/tokens");
 
 describe("Layout component", () => {
   test("should render loading spinner", () => {
@@ -44,7 +44,7 @@ describe("Layout component", () => {
     expect(aChildren).not.toBeInTheDocument();
   });
 
-  test("should render loading spinner", () => {
+  test("should render children", () => {
     const initialState = {
       usersReducer: {
         loading: false,
@@ -72,5 +72,33 @@ describe("Layout component", () => {
     expect(loadingDiv).not.toBeInTheDocument();
     expect(navigationText).toBeInTheDocument();
     expect(aChildren).toBeInTheDocument();
+  });
+  test("should dispatch an error", () => {
+    const children = [<h1>first child</h1>, <h1>second child</h1>];
+    const message = "this is an error";
+    const initialState = {
+      usersReducer: {
+        loading: false,
+      },
+      tokensReducer: {
+        error: { message },
+      },
+    };
+
+    const store = mockStore(initialState);
+
+    render(
+      <Provider store={store}>
+        <Layout children={children} />
+      </Provider>
+    );
+
+    const action = store.getActions()[0];
+
+    expect(action.type).toBe("errors/newError");
+    expect(action.payload.errorTitle).toBe("Server Error");
+    expect(action.payload.errorMessage).toBe(`${message}, try to refresh`);
+    expect(screen.queryByText("second child")).not.toBeInTheDocument();
+    expect(screen.queryByText("first child")).toBeInTheDocument();
   });
 });

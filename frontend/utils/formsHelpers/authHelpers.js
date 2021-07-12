@@ -12,7 +12,9 @@ import {
   logoutAction,
   sendPasswordResetEmailAction,
   signupUserAction,
+  usersActions,
 } from "../../Redux/Slices/auth";
+import axiosInstance from "../Axios/axiosInstance";
 
 export function createInputListForSignup(
   name,
@@ -309,4 +311,52 @@ export async function logoutHandler(dispatch, setShowModal) {
         })
       );
     });
+}
+
+export async function submitChangePasswordHandler(
+  e,
+  dispatch,
+  passwordsFields,
+  token
+) {
+  e.preventDefault();
+
+  if (passwordsFields.password !== passwordsFields.passwordConfirmation) {
+    dispatch(
+      errorsActions.newError({
+        errorTitle: "Reset Failed",
+        errorMessage: "Passwords need to be a match",
+      })
+    );
+    return;
+  }
+
+  try {
+    dispatch(usersActions.changeLoadingState(true));
+    const bodyRequest = { ...passwordsFields, resetToken: token };
+    const res = await axiosInstance.put(
+      "/auth/reset/password-reset",
+      bodyRequest
+    );
+    dispatch(usersActions.changeLoadingState(false));
+    dispatch(errorsActions.errorConfirmed());
+    dispatch(
+      messagesActions.newMessage({
+        messageTitle: "Success!",
+        message: res.data,
+      })
+    );
+
+    Router.push("/auth/login");
+  } catch (err) {
+    dispatch(usersActions.changeLoadingState(false));
+
+    dispatch(
+      errorsActions.newError({
+        errorTitle: "Reset Failed",
+        errorMessage: err.response.data,
+        errorStatusCode: err.response.status,
+      })
+    );
+  }
 }

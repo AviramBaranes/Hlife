@@ -36,28 +36,36 @@ function Navigation() {
           </div>
           <ul>
             <li>
-              <div className={classes.Icon}>
-                <FontAwesomeIcon size="3x" icon={faUser} />
-                <h1>Profile</h1>
-              </div>
+              <Link href="/profile">
+                <div className={classes.Icon}>
+                  <FontAwesomeIcon size="3x" icon={faUser} />
+                  <h1>Profile</h1>
+                </div>
+              </Link>
             </li>
             <li>
-              <div className={classes.Icon}>
-                <FontAwesomeIcon size="3x" icon={faChartBar} />
-                <h1>Activity</h1>
-              </div>
+              <Link href="/activity">
+                <div className={classes.Icon}>
+                  <FontAwesomeIcon size="3x" icon={faChartBar} />
+                  <h1>Activity</h1>
+                </div>
+              </Link>
             </li>
             <li>
-              <div className={classes.Icon}>
-                <FontAwesomeIcon size="3x" icon={faCalculator} />
-                <h1>Calculators</h1>
-              </div>
+              <Link href="/calculators">
+                <div className={classes.Icon}>
+                  <FontAwesomeIcon size="3x" icon={faCalculator} />
+                  <h1>Calculators</h1>
+                </div>
+              </Link>
             </li>
             <li>
-              <div className={classes.Icon}>
-                <FontAwesomeIcon size="3x" icon={faCog} />
-                <h1>Settings</h1>
-              </div>
+              <Link href="/settings">
+                <div className={classes.Icon}>
+                  <FontAwesomeIcon size="3x" icon={faCog} />
+                  <h1>Settings</h1>
+                </div>
+              </Link>
             </li>
             {isAuthenticated && (
               <li>

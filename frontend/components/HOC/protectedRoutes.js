@@ -12,8 +12,7 @@ const ProtectedRoute = (WrappedComponent) => {
     const { isAuthenticated, loading } = useSelector(
       (state) => state.usersReducer
     );
-
-    const [verified, setVerified] = useState(isAuthenticated);
+    const [verified, setVerified] = useState(false);
 
     useEffect(() => {
       let unmounted = false;

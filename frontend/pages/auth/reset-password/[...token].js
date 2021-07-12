@@ -1,18 +1,16 @@
 import React, { useState } from "react";
-import router from "next/router";
 
 import axiosInstance from "../../../utils/Axios/axiosInstance";
 import {
   createInputListForPasswordReset,
   inputChangeHandler,
+  submitChangePasswordHandler,
 } from "../../../utils/formsHelpers/authHelpers";
 import Card from "../../../components/UI/Card/Card";
 import Button from "../../../components/UI/Button/Button";
 import Input from "../../../components/UI/Input/Input";
 import { useDispatch } from "react-redux";
 import { errorsActions } from "../../../Redux/Slices/errors";
-import { messagesActions } from "../../../Redux/Slices/messages";
-import { usersActions } from "../../../Redux/Slices/auth";
 
 function ResetPassword({ token, withError }) {
   const dispatch = useDispatch();
@@ -37,46 +35,16 @@ function ResetPassword({ token, withError }) {
   const [inputs, setInputs] = useState(ALL_INPUTS);
   const [formValidity, setFormValidity] = useState(false);
 
-  async function submitChangePasswordHandler(e) {
-    e.preventDefault();
-
-    try {
-      dispatch(usersActions.changeLoadingState(true));
-
-      const bodyRequest = { ...passwordsFields, resetToken: token };
-      const res = await axiosInstance.put(
-        "/auth/reset/password-reset",
-        bodyRequest
-      );
-      dispatch(usersActions.changeLoadingState(false));
-      dispatch(errorsActions.errorConfirmed());
-      dispatch(
-        messagesActions.newMessage({
-          messageTitle: "Success!",
-          message: res.data,
-        })
-      );
-
-      router.push("/auth/login");
-    } catch (err) {
-      dispatch(usersActions.changeLoadingState(false));
-
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Reset Failed",
-          errorMessage: err.response.data,
-          errorStatusCode: err.response.status,
-        })
-      );
-    }
-  }
-
   return (
     <Card>
       {withError ? null : (
         <>
-          <h2>Change Password </h2>
-          <form onSubmit={submitChangePasswordHandler}>
+          <h2>Change Password</h2>
+          <form
+            onSubmit={(e) =>
+              submitChangePasswordHandler(e, dispatch, passwordsFields, token)
+            }
+          >
             {inputs.map((input, index) => {
               return (
                 <Input

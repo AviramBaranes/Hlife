@@ -116,5 +116,3 @@ describe("Logout", () => {
     userEvent.click(LogoutButton);
   });
 });
-
-//5 tests

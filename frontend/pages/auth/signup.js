@@ -10,7 +10,7 @@ function signup() {
       <h2>Sign Up</h2>
       <SignupForm />
       <p>
-        Have an account ? <Link href="/auth/login">login</Link>
+        Already have an account? <Link href="/auth/login">login</Link>
       </p>
     </Card>
   );

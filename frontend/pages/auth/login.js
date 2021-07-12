@@ -10,7 +10,7 @@ function Login() {
       <h2>Log In</h2>
       <LoginForm />
       <p>
-        Dont own an account? <Link href="/auth/signup">signup</Link>
+        Dont have an account? <Link href="/auth/signup">signup</Link>
       </p>
       <p>
         Forgot your password ? <Link href="/auth/forgotPassword">go here</Link>

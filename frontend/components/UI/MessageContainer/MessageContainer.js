@@ -26,7 +26,7 @@ function MessageContainer() {
 
 export default MessageContainer;
 
-const MessageModal = ({ messageTitle, message, closeMessageHandler }) => {
+const MessageModal = ({ messageTitle, message }) => {
   return (
     <div className={classes.ErrorModal}>
       <h3>{messageTitle}</h3>

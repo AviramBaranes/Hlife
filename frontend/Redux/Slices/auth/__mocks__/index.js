@@ -1,4 +1,8 @@
 const sendPasswordResetEmailAction = jest.fn();
+const loginUserAction = jest.fn();
+const signupUserAction = jest.fn();
+const logoutAction = jest.fn();
+const validateAuthenticationAction = jest.fn();
 
 sendPasswordResetEmailAction
   .mockReturnValueOnce(async () => {
@@ -12,8 +16,6 @@ sendPasswordResetEmailAction
     return { payload: `email sent to ${email}` };
   });
 
-const loginUserAction = jest.fn();
-
 loginUserAction
   .mockReturnValueOnce(async () => {
     const error = new Error();
@@ -25,8 +27,6 @@ loginUserAction
     const { email } = loginUserAction.mock.calls[0][0];
     return { payload: { message: `your email is ${email}` } };
   });
-
-const signupUserAction = jest.fn();
 
 signupUserAction
   .mockReturnValueOnce(async () => {
@@ -40,8 +40,6 @@ signupUserAction
     return { payload: { message: `${name} signed in` } };
   });
 
-const logoutAction = jest.fn();
-
 logoutAction
   .mockReturnValueOnce(async () => {
     const error = new Error();
@@ -53,7 +51,6 @@ logoutAction
     return { payload: null };
   });
 
-const validateAuthenticationAction = jest.fn();
 validateAuthenticationAction
   .mockReturnValueOnce(async () => {
     return { payload: null };

@@ -86,6 +86,7 @@ export const validateAuthenticationAction = createAsyncThunk(
 export const logoutAction = createAsyncThunk(
   "logout/logoutAction",
   async (_, { rejectWithValue }) => {
+    console.log("herefsdsdfsdfsdfsdfsf");
     try {
       await axiosInstance.post("/auth/logout");
     } catch (err) {
