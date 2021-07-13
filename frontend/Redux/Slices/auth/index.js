@@ -22,7 +22,6 @@ export const sendPasswordResetEmailAction = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      console.log(err);
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);

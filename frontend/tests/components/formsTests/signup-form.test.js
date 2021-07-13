@@ -319,7 +319,6 @@ describe("SignupForm Submit Handle Test", () => {
     );
 
     const buttonElement = screen.getByRole("button");
-
     const inputs = screen.getAllByRole("textbox");
 
     userEvent.type(inputs[0], "avi");

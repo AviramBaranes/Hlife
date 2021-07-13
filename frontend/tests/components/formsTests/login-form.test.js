@@ -9,10 +9,9 @@ import LoginForm from "../../../components/auth/forms/login-form";
 import ErrorContainer from "../../../components/UI/ErrorContainer/ErrorContainer";
 import MessageContainer from "../../../components/UI/MessageContainer/MessageContainer";
 
-jest.mock("../../../Redux/Slices/auth");
 jest.mock("next/router");
 jest.unmock("react-redux");
-
+jest.mock("../../../Redux/Slices/auth");
 describe("LoginForm", () => {
   test("should render the correct dom elements", async () => {
     render(
