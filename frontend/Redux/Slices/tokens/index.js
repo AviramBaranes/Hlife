@@ -8,12 +8,16 @@ const initialState = {
 
 export const getCsrfToken = createAsyncThunk(
   "csrf/getCsrfToken",
-  async () => {
-    await axios.get("/");
+  async (_, { rejectWithValue }) => {
+    try {
+      await axios.get("/");
 
-    const csrf = document.cookie.split("XSRF-TOKEN=")[1].substring(0, 36);
+      const csrf = document.cookie.split("XSRF-TOKEN=")[1].substring(0, 36);
 
-    return csrf;
+      return csrf;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
   },
   {
     condition: (_, { getState }) => {

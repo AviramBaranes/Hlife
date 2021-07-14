@@ -15,10 +15,10 @@ export const sendPasswordResetEmailAction = createAsyncThunk(
 
   async (email, { rejectWithValue }) => {
     try {
-      const boduRequest = { email };
+      const bodyRequest = { email };
       const res = await axiosInstance.post(
         "/auth/password/send-token",
-        boduRequest
+        bodyRequest
       );
       return res.data;
     } catch (err) {
@@ -68,9 +68,15 @@ export const loginUserAction = createAsyncThunk(
 
 export const validateAuthenticationAction = createAsyncThunk(
   "authentication/validateAuthenticationAction",
-  async () => {
-    const res = await axiosInstance.get("/auth/isUser");
-    return res.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/auth/isUser");
+      return res.data;
+    } catch (err) {
+      const { data, status } = err.response;
+      const customError = { data, status };
+      return rejectWithValue(customError);
+    }
   },
   {
     condition(_, { getState }) {
@@ -85,7 +91,6 @@ export const validateAuthenticationAction = createAsyncThunk(
 export const logoutAction = createAsyncThunk(
   "logout/logoutAction",
   async (_, { rejectWithValue }) => {
-    console.log("herefsdsdfsdfsdfsdfsf");
     try {
       await axiosInstance.post("/auth/logout");
     } catch (err) {
@@ -101,7 +106,10 @@ const usersSlice = createSlice({
   initialState,
   reducers: {
     changeLoadingState(state, { payload }) {
-      state.loading = payload.loading;
+      const { loading } = payload;
+      if (loading === false || loading === true || loading === undefined) {
+        state.loading = loading;
+      }
     },
   },
   extraReducers: {
@@ -136,19 +144,16 @@ const usersSlice = createSlice({
       state.isAuthenticated = false;
     },
     [validateAuthenticationAction.pending](state) {
-      console.log("here2");
       state.loading = true;
     },
     [validateAuthenticationAction.fulfilled](state, { payload }) {
-      console.log("here1");
       state.loading = false;
       state.username = payload.username;
       state.isAuthenticated = true;
       state.hasProgram = payload.hasProgram;
-      state.hasDiet = payload.hasProgram;
+      state.hasDiet = payload.hasDiet;
     },
     [validateAuthenticationAction.rejected](state, { error }) {
-      console.log("here3");
       state.loading = false;
       state.error = error;
       state.isAuthenticated = false;

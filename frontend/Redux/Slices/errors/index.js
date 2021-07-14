@@ -19,9 +19,9 @@ const errorSlice = createSlice({
     },
     errorConfirmed(state) {
       state.newError = false;
+      state.errorTitle = null;
       state.errorMessage = null;
       state.errorStatusCode = null;
-      state.errorPath = null;
     },
   },
 });

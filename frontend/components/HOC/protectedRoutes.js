@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { validateAuthenticationAction } from "../../Redux/Slices/auth";
+import { errorsActions } from "../../Redux/Slices/errors";
 
 const ProtectedRoute = (WrappedComponent) => {
   return (props) => {
@@ -26,6 +27,13 @@ const ProtectedRoute = (WrappedComponent) => {
               !unmounted && setVerified(true);
             })
             .catch((err) => {
+              dispatch(
+                errorsActions.newError({
+                  errorTitle: "Unauthorized",
+                  errorMessage: err.data,
+                  errorStatusCode: err.status,
+                })
+              );
               !unmounted && setVerified(false);
               Router.replace("/auth/login");
             });

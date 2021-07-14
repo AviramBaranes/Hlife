@@ -18,7 +18,6 @@ describe("protected route", () => {
       usersReducer: { isAuthenticated: true, loading: false },
     };
     const store = mockStore(initialState);
-
     const dummyComponent = jest.fn((props) => props.props);
     const Component = ProtectedRoute(dummyComponent);
     render(
