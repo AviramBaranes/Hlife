@@ -22,27 +22,25 @@ const fakeUserCreation = require("../utils/forTests/createTempUser");
 
 describe("login controller error handling tests", function () {
   let req, res;
-  before((done) => {
-    fakeUserCreation()
-      .then((_) => {
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
   it("should return an error response if email not exist", async function () {
     req = {
       body: { email: "fakeEmail@fake.com", password: "123456" },
     };
 
-    res = fakeResponseObj;
+    res = fakeResponseObj();
+
+    const stubedUser = sinon.stub(User, "findOne");
+
+    stubedUser.returns({
+      select: sinon.stub().returns(false),
+    });
 
     await authController.login(req, res, () => {});
 
     expect(res.statusCode).equal(401);
     expect(res.msg).equal("User not found, Make sure the email is correct");
+
+    stubedUser.restore();
   });
 
   it("should return an error response if password is incorrect", async function () {
@@ -53,10 +51,21 @@ describe("login controller error handling tests", function () {
       },
     };
 
+    const stubedUser = sinon.stub(User, "findOne");
+    const stubedBcrypt = sinon.stub(bcrypt, "compare");
+
+    stubedUser.returns({
+      select: sinon.stub().returns(true),
+    });
+    stubedBcrypt.returns(false);
+
     await authController.login(req, res, () => {});
 
     expect(res.statusCode).equal(401);
     expect(res.msg).equal("Password is invalid");
+
+    stubedUser.restore();
+    stubedBcrypt.restore();
   });
 
   it("should throw a default error", async function () {
@@ -69,59 +78,46 @@ describe("login controller error handling tests", function () {
 
     stubedUser.restore();
   });
-
-  after(async () => {
-    await afterTests();
-  });
 });
 
 describe("login controller testing response", function () {
-  let res, req, user;
-  before((done) => {
-    connectDb()
-      .then((_) => {
-        return bcrypt.hash("testpass123", 10);
-      })
-      .then((hashedPassword) => {
-        const user = new User({
-          name: "tester",
-          username: "tester",
-          email: "test@test.com",
-          password: hashedPassword,
-          gender: "male",
-          dateOfBirth: "02/01/2000",
-          hasProgram: true,
-        });
-        return user.save();
-      })
-      .then((savedUser) => {
-        user = savedUser;
-        req = {
-          body: {
-            email: "test@test.com",
-            password: "testpass123",
-          },
-        };
-        res = fakeResponseObj;
+  let res, req;
 
-        return authController.login(req, res, () => {});
-      })
-      .then((_) => {
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
+  it("should return 200 status code", async () => {
+    req = {
+      body: {
+        email: "test@test.com",
+        password: "123456",
+      },
+    };
+    res = fakeResponseObj();
 
-  it("should return 200 status code", () => {
+    const stubedUser = sinon.stub(User, "findOne");
+    const stubedBcrypt = sinon.stub(bcrypt, "compare");
+
+    stubedUser.returns({
+      select: sinon.stub().returns({
+        name: "aviram",
+        _id: 1,
+        username: "avi123",
+        hasProgram: true,
+        hasDiet: false,
+      }),
+    });
+    stubedBcrypt.returns(true);
+
+    await authController.login(req, res, () => {});
+
     expect(res.statusCode).equal(200);
+
+    stubedUser.restore();
+    stubedBcrypt.restore();
   });
 
   it("should return the correct cookie", () => {
     const { userId } = jwt.verify(res.cookieToken, process.env.jwtSecret);
     expect(res.cookieName).equal("jon");
-    expect(userId).equal(user._id.toString());
+    expect(userId).equal(1);
   });
 
   it("should return the correct cookie settings", function () {
@@ -134,12 +130,9 @@ describe("login controller testing response", function () {
     expect(res.cookieConfig.httpOnly).equal(true);
   });
   it("should send the correct message and data", function () {
-    expect(res.jsonObj.message).equal("tester Logged In Successfully!");
-    expect(res.jsonObj.username).equal("tester");
+    expect(res.jsonObj.message).equal("aviram Logged In Successfully!");
+    expect(res.jsonObj.username).equal("avi123");
     expect(res.jsonObj.hasProgram).equal(true);
     expect(res.jsonObj.hasDiet).equal(false);
-  });
-  after(async () => {
-    await afterTests();
   });
 });

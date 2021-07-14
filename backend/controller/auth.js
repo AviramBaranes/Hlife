@@ -5,7 +5,6 @@ const validationErrorsHandler = require("../utils/helpers/valdiationErrors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
 const createModels = require("../utils/helpers/createModels");
 const sendGridMail = require("@sendgrid/mail");
 
@@ -160,7 +159,7 @@ exports.resetPassword = async (req, res, next) => {
   }
 };
 
-exports.sentResetEmail = async (req, res, next) => {
+exports.sendResetEmail = async (req, res, next) => {
   try {
     validationErrorsHandler(req);
 
@@ -169,8 +168,6 @@ exports.sentResetEmail = async (req, res, next) => {
     const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
 
     if (tokenSlice.length < 2) return res.status(403).send("CSRF ERROR");
-
-    const csrfToken = tokenSlice[1].split(";")[0];
 
     const user = await User.findOne({ email });
 
@@ -195,10 +192,7 @@ exports.sentResetEmail = async (req, res, next) => {
       from: process.env.WALLA_USER,
       to: email,
       subject: "Hlife reset password",
-      html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.
-            
-            </p>
-            <p>This token is valid for only 1 hour.</p>`,
+      html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.</p><p>This token is valid for only 1 hour.</p>`,
     };
 
     try {

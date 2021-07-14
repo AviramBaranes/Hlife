@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["csrf", "middlewares", "reduxjs", "token", "xsrf"]
+  "cSpell.words": [
+    "csrf",
+    "middlewares",
+    "reduxjs",
+    "stubed",
+    "token",
+    "user",
+    "xsrf"
+  ]
 }

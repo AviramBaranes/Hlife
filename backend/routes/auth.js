@@ -80,7 +80,7 @@ router.post(
 router.post(
   "/password/send-token",
   body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
-  authController.sentResetEmail
+  authController.sendResetEmail
 );
 
 //reset via email

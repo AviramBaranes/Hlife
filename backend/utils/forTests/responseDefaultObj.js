@@ -1,4 +1,4 @@
-module.exports = res = {
+module.exports = () => ({
   jsonObj: {},
   statusCode: null,
   cookieName: null,
@@ -21,4 +21,4 @@ module.exports = res = {
   json(obj) {
     this.jsonObj = obj;
   },
-};
+});
