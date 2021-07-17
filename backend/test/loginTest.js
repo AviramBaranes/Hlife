@@ -12,24 +12,20 @@ const bcrypt = require("bcryptjs");
 const authController = require("../controller/auth");
 
 //models and connections
-const { connectDb } = require("../utils/databaseForTest");
 const User = require("../models/User");
 
 //utils
-const afterTests = require("../utils/forTests/afterDefaultFunction");
 const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
-const fakeUserCreation = require("../utils/forTests/createTempUser");
 
 describe("login controller error handling tests", function () {
-  let req, res;
+  let req, stubedUser;
+  const res = fakeResponseObj();
   it("should return an error response if email not exist", async function () {
     req = {
       body: { email: "fakeEmail@fake.com", password: "123456" },
     };
 
-    res = fakeResponseObj();
-
-    const stubedUser = sinon.stub(User, "findOne");
+    stubedUser = sinon.stub(User, "findOne");
 
     stubedUser.returns({
       select: sinon.stub().returns(false),
@@ -39,8 +35,6 @@ describe("login controller error handling tests", function () {
 
     expect(res.statusCode).equal(401);
     expect(res.msg).equal("User not found, Make sure the email is correct");
-
-    stubedUser.restore();
   });
 
   it("should return an error response if password is incorrect", async function () {
@@ -51,7 +45,6 @@ describe("login controller error handling tests", function () {
       },
     };
 
-    const stubedUser = sinon.stub(User, "findOne");
     const stubedBcrypt = sinon.stub(bcrypt, "compare");
 
     stubedUser.returns({
@@ -64,12 +57,10 @@ describe("login controller error handling tests", function () {
     expect(res.statusCode).equal(401);
     expect(res.msg).equal("Password is invalid");
 
-    stubedUser.restore();
     stubedBcrypt.restore();
   });
 
   it("should throw a default error", async function () {
-    const stubedUser = sinon.stub(User, "findOne");
     stubedUser.throws();
 
     const error = await authController.login(req, {}, () => {});
@@ -81,7 +72,8 @@ describe("login controller error handling tests", function () {
 });
 
 describe("login controller testing response", function () {
-  let res, req;
+  let stubedUser, req;
+  const res = fakeResponseObj();
 
   it("should return 200 status code", async () => {
     req = {
@@ -90,9 +82,7 @@ describe("login controller testing response", function () {
         password: "123456",
       },
     };
-    res = fakeResponseObj();
-
-    const stubedUser = sinon.stub(User, "findOne");
+    stubedUser = sinon.stub(User, "findOne");
     const stubedBcrypt = sinon.stub(bcrypt, "compare");
 
     stubedUser.returns({

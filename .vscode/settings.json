@@ -1,11 +1,23 @@
 {
   "cSpell.words": [
+    "aviram",
     "csrf",
     "middlewares",
     "reduxjs",
+    "sendgrid",
     "stubed",
     "token",
     "user",
     "xsrf"
+  ],
+  "cSpell.ignoreWords": [
+    "avirambr",
+    "experetion",
+    "hlife",
+    "musceles",
+    "reseted",
+    "respones",
+    "testpass",
+    "valdiation"
   ]
 }

@@ -6,7 +6,7 @@ const DietExecution = require("../../models/DietExecution");
 const Program = require("../../models/Program");
 const ProgramExecution = require("../../models/ProgramExecution");
 
-module.exports = createModelsWhenSignup = async (savedUser, newUser) => {
+module.exports = createModelsWhenSignup = async (newUser) => {
   //age of the user:
   try {
     const now = new Date(Date.now());
@@ -14,31 +14,31 @@ module.exports = createModelsWhenSignup = async (savedUser, newUser) => {
     const age = now.getFullYear() - birth.getFullYear();
 
     const UserPhysicalStats = new PhysicalStats({
-      user: savedUser._id,
+      user: newUser._id,
       age,
       stats: [],
     });
 
-    const UserDiet = new Diet({ user: savedUser._id, ingredients: [] });
+    const UserDiet = new Diet({ user: newUser._id, ingredients: [] });
     const UserProgram = new Program({
-      user: savedUser._id,
+      user: newUser._id,
       goals: {},
       program: [],
     });
 
     const UserProgramExecution = new ProgramExecution({
-      user: savedUser._id,
+      user: newUser._id,
       executions: [],
     });
 
-    const UserDietSaved = await UserDiet.save();
+    await UserDiet.save();
     await UserPhysicalStats.save();
     await UserProgram.save();
     await UserProgramExecution.save();
 
     const UserDietExecution = new DietExecution({
-      user: savedUser._id,
-      diet: UserDietSaved._id,
+      user: newUser._id,
+      diet: UserDiet._id,
       executions: [],
     });
 

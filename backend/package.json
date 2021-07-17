@@ -4,7 +4,7 @@
   "description": "Hlife backend",
   "main": "app.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test mocha --timeout 6000",
+    "test": "cross-env NODE_ENV=test mocha",
     "start": "nodemon app.js"
   },
   "author": "Aviram",

@@ -1,275 +1,236 @@
-// require("dotenv").config({ path: "./config.env" });
+require("dotenv").config({ path: "./config.env" });
 
-// //test tools
-// const { expect } = require("chai");
-// const sinon = require("sinon");
+//test tools
+const { expect } = require("chai");
+const sinon = require("sinon");
+const bcrypt = require("bcryptjs");
 
-// //packages
-// const jwt = require("jsonwebtoken");
+//packages
+const jwt = require("jsonwebtoken");
 
-// //controller to test
-// const authController = require("../controller/auth");
+//controller to test
+const authController = require("../controller/auth");
 
-// //models and connections
-// const { connectDb, disconnectDb } = require("../utils/databaseForTest");
-// const User = require("../models/User");
-// const PhysicalStats = require("../models/PhysicalStats");
-// const Diet = require("../models/Diet");
-// const DietExecution = require("../models/DietExecution");
-// const Program = require("../models/Program");
-// const ProgramExecution = require("../models/ProgramExecution");
+//models and connections
+const User = require("../models/User");
+const PhysicalStats = require("../models/PhysicalStats");
+const Diet = require("../models/Diet");
+const DietExecution = require("../models/DietExecution");
+const Program = require("../models/Program");
+const ProgramExecution = require("../models/ProgramExecution");
 
-// const afterTests = require("../utils/forTests/afterDefaultFunction");
-// const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
+const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
 
-// describe("signup Controller error handling", function () {
-//   let req, res;
-//   beforeEach(function (done) {
-//     connectDb()
-//       .then((_) => {
-//         const user = new User({
-//           name: "tester",
-//           username: "tester",
-//           email: "test@test.com",
-//           password: "testpass123",
-//           passwordConfirmation: "testpass123",
-//           gender: "male",
-//           dateOfBirth: "02/01/2000",
-//         });
-//         user
-//           .save()
-//           .then((_) => {
-//             done();
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//           });
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
+let stubedPhysicalStats,
+  stubedDietExecution,
+  stubedProgramExecution,
+  stubedProgram,
+  stubedBcrypt,
+  stubedDietModel;
 
-//   it("should throw an error if user exist", async function () {
-//     req = {
-//       body: {
-//         name: "Avirambr",
-//         username: "aviramSport2",
-//         email: "test@test.com",
-//         password: "testpass123",
-//         passwordConfirmation: "testpass123",
-//         gender: "male",
-//         dateOfBirth: "02/01/2000",
-//       },
-//     };
+describe("signup Controller error handling", function () {
+  let req, stubedUser;
+  const res = fakeResponseObj();
 
-//     res = fakeResponseObj;
+  it("should throw an error if user exist", async function () {
+    req = {
+      body: {
+        name: "Avirambr",
+        username: "aviramSport2",
+        email: "test@test.com",
+        password: "testpass123",
+        passwordConfirmation: "testpass12",
+        gender: "male",
+        dateOfBirth: "02/01/2000",
+      },
+    };
 
-//     await authController.signup(req, res, () => {});
+    stubedUser = sinon.stub(User, "findOne");
+    stubedUser.returns(true);
 
-//     expect(res.statusCode).equal(401);
-//     expect(res.msg).equal("user already exist with this email!");
-//   });
+    await authController.signup(req, res, () => {});
 
-//   it("should throw an error if password do not match", async function () {
-//     req = {
-//       body: {
-//         name: "Avirambr",
-//         username: "aviramSport2",
-//         email: "test2@test.com",
-//         password: "testpass1234",
-//         passwordConfirmation: "testpass123",
-//         gender: "male",
-//         dateOfBirth: "02/01/2000",
-//       },
-//     };
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("user already exist with this email!");
+  });
 
-//     res = fakeResponseObj;
+  it("should throw an error if password do not match", async function () {
+    stubedUser.returns(false);
 
-//     await authController.signup(req, res, () => {});
+    await authController.signup(req, res, () => {});
 
-//     expect(res.statusCode).equal(401);
-//     expect(res.msg).equal("passwords do not match");
-//   });
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("passwords do not match");
+  });
 
-//   it("should throw a default error", async function () {
-//     const stub = sinon.stub(User, "findOne");
+  it("should throw a default error", async function () {
+    const error = await authController.signup({}, {}, () => {});
 
-//     stub.throws("Server Error");
+    expect(error.statusCode).equal(500);
 
-//     const error = await authController.signup(req, {}, () => {});
+    stubedUser.restore();
+  });
+});
 
-//     expect(error.statusCode).equal(500);
+describe("signup Controller creating the correct models", function () {
+  let stubedUser, stubedUserPrototype;
+  let createdUserArgs,
+    createdPhysicalStatsArgs,
+    createdDietArgs,
+    createdProgramArgs,
+    createdProgramExecutionArgs,
+    createdDietExecutionArgs;
+  before(async () => {
+    const res = fakeResponseObj();
+    const req = {
+      body: {
+        name: "Avirambr",
+        username: "aviramSport2",
+        email: "test2@test.com",
+        password: "testpass123",
+        passwordConfirmation: "testpass123",
+        gender: "male",
+        dateOfBirth: "02/01/2000",
+      },
+    };
 
-//     stub.restore();
-//   });
+    stubedPhysicalStats = sinon.stub(PhysicalStats.prototype, "save");
+    stubedDietExecution = sinon.stub(DietExecution.prototype, "save");
+    stubedProgramExecution = sinon.stub(ProgramExecution.prototype, "save");
+    stubedProgram = sinon.stub(Program.prototype, "save");
+    stubedBcrypt = sinon.stub(bcrypt, "hash");
+    stubedDietModel = sinon.stub(Diet.prototype, "save");
 
-//   afterEach(async function () {
-//     await User.deleteMany({});
-//     await disconnectDb();
-//   });
-// });
+    stubedUser = sinon.stub(User, "findOne");
+    stubedUserPrototype = sinon.stub(User.prototype, "save");
 
-// describe("signup Controller creating the correct models", function () {
-//   let mainUser;
-//   let dietModel;
-//   before(function (done) {
-//     connectDb()
-//       .then((_) => {
-//         const res = fakeResponseObj;
-//         const req = {
-//           body: {
-//             name: "Avirambr",
-//             username: "aviramSport2",
-//             email: "test2@test.com",
-//             password: "testpass123",
-//             passwordConfirmation: "testpass123",
-//             gender: "male",
-//             dateOfBirth: "02/01/2000",
-//           },
-//         };
+    stubedBcrypt.returns("123456");
+    stubedUser.returns(false);
+    stubedUserPrototype.returns({ _id: 1 });
+    stubedDietModel.returns({ _id: 1 });
 
-//         authController
-//           .signup(req, res, () => {})
-//           .then(() => {
-//             done();
-//           });
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
+    await authController.signup(req, res, () => {});
 
-//   it("should create a user model", async () => {
-//     mainUser = await User.findOne({ email: "test2@test.com" });
+    createdUserArgs = stubedUserPrototype.firstCall.thisValue;
+    createdPhysicalStatsArgs = stubedPhysicalStats.firstCall.thisValue;
+    createdDietArgs = stubedDietModel.firstCall.thisValue;
+    createdProgramArgs = stubedProgram.firstCall.thisValue;
+    createdProgramExecutionArgs = stubedProgramExecution.firstCall.thisValue;
+    createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
+  });
 
-//     expect(mainUser._id).to.be.an("object");
-//     expect(mainUser.name).equal("Avirambr");
-//     expect(mainUser.username).equal("aviramSport2");
-//     expect(mainUser.email).equal("test2@test.com");
-//     expect(mainUser.gender).equal("male");
-//     expect(mainUser.grade).equal(0);
-//     expect(mainUser.dateOfBirth).eql(new Date("02/01/2000"));
-//   });
+  it("should create a user model with the right arguments", async () => {
+    expect(createdUserArgs._id).to.be.an("object");
+    expect(createdUserArgs.name).equal("Avirambr");
+    expect(createdUserArgs.username).equal("aviramSport2");
+    expect(createdUserArgs.email).equal("test2@test.com");
+    expect(createdUserArgs.gender).equal("male");
+    expect(createdUserArgs.grade).equal(0);
+    expect(createdUserArgs.dateOfBirth).eql(new Date("02/01/2000"));
+  });
 
-//   it("should create a PhysicalStats model", async () => {
-//     const physicalStats = await PhysicalStats.findOne({ user: mainUser._id });
+  it("should create a PhysicalStats model", async () => {
+    expect(createdPhysicalStatsArgs._id).to.be.an("object");
+    expect(createdPhysicalStatsArgs.user).eql(createdUserArgs._id);
+    expect(createdPhysicalStatsArgs.age).equal(2021 - 2000);
+    expect(createdPhysicalStatsArgs.stats).eql([]);
+  });
 
-//     expect(physicalStats._id).to.be.an("object");
-//     expect(physicalStats.user).eql(mainUser._id);
-//     expect(physicalStats.age).equal(2021 - 2000);
-//     expect(physicalStats.stats).eql([]);
-//   });
+  it("should create a Diet model", async () => {
+    expect(createdDietArgs._id).to.be.an("object");
+    expect(createdDietArgs.user).eql(createdUserArgs._id);
+    expect(createdDietArgs.ingredients).eql([]);
+  });
 
-//   it("should create a Diet model", async () => {
-//     dietModel = await Diet.findOne({ user: mainUser._id });
+  it("should create a Program model", async () => {
+    expect(createdProgramArgs._id).to.be.an("object");
+    expect(createdProgramArgs.user).eql(createdUserArgs._id);
+    expect(createdProgramArgs.goals).haveOwnProperty("weight");
+    expect(createdProgramArgs.goals).haveOwnProperty("muscelesMass");
+    expect(createdProgramArgs.goals).haveOwnProperty("fatPercentage");
+    expect(createdProgramArgs.goals).haveOwnProperty("date");
+    expect(createdProgramArgs.program).eql([]);
+  });
 
-//     expect(dietModel._id).to.be.an("object");
-//     expect(dietModel.user).eql(mainUser._id);
-//     expect(dietModel.ingredients).eql([]);
-//   });
+  it("should create a ProgramExecution model", async () => {
+    expect(createdProgramExecutionArgs._id).to.be.an("object");
+    expect(createdProgramExecutionArgs.user).eql(createdUserArgs._id);
+    expect(createdProgramExecutionArgs.executions).eql([]);
+  });
 
-//   it("should create a Program model", async () => {
-//     const program = await Program.findOne({ user: mainUser._id });
+  it("should create a UserDietExecution model", async () => {
+    expect(createdDietExecutionArgs._id).to.be.an("object");
+    expect(createdDietExecutionArgs.user).eql(createdUserArgs._id);
+    expect(createdDietExecutionArgs.diet).eql(createdDietArgs._id);
+    expect(createdDietExecutionArgs.executions).eql([]);
+  });
 
-//     expect(program._id).to.be.an("object");
-//     expect(program.user).eql(mainUser._id);
-//     expect(program.goals).haveOwnProperty("weight");
-//     expect(program.goals).haveOwnProperty("muscelesMass");
-//     expect(program.goals).haveOwnProperty("fatPercentage");
-//     expect(program.goals).haveOwnProperty("date");
-//     expect(program.program).eql([]);
-//   });
+  after(() => {
+    stubedUser.restore();
+    stubedUserPrototype.restore();
+  });
+});
 
-//   it("should create a ProgramExecution model", async () => {
-//     const programExecution = await ProgramExecution.findOne({
-//       user: mainUser._id,
-//     });
+describe("signup controller testing respones", function () {
+  let stubedUser, stubedUserPrototype;
+  const req = {
+    body: {
+      name: "Avirambr",
+      username: "aviramSport2",
+      email: "test@test.com",
+      password: "testpass123",
+      passwordConfirmation: "testpass123",
+      gender: "male",
+      dateOfBirth: "02/01/2000",
+    },
+  };
 
-//     expect(programExecution._id).to.be.an("object");
-//     expect(programExecution.user).eql(mainUser._id);
-//     expect(programExecution.executions).eql([]);
-//   });
+  const res = fakeResponseObj();
 
-//   it("should create a UserDietExecution model", async () => {
-//     const userDietExecution = await DietExecution.findOne({
-//       user: mainUser._id,
-//     });
+  before(async () => {
+    stubedUser = sinon.stub(User, "findOne");
+    stubedUserPrototype = sinon.stub(User.prototype, "save");
+    stubedUser.returns(false);
+    stubedUserPrototype.returns({ _id: 1 });
+    await authController.signup(req, res, () => {});
+  });
 
-//     expect(userDietExecution._id).to.be.an("object");
-//     expect(userDietExecution.user).eql(mainUser._id);
-//     expect(userDietExecution.diet).eql(dietModel._id);
-//     expect(userDietExecution.executions).eql([]);
-//   });
+  it("should send the correct response", function () {
+    expect(res.statusCode).equal(200);
+  });
 
-//   after(async () => {
-//     await afterTests();
-//   });
-// });
+  it("should set the correct cookie name", function () {
+    expect(res.cookieName).equal("jon");
+  });
 
-// describe("signup controller testing respones", function () {
-//   let res, req;
-//   before((done) => {
-//     connectDb()
-//       .then((_) => {
-//         req = {
-//           body: {
-//             name: "Avirambr",
-//             username: "aviramSport2",
-//             email: "test@test.com",
-//             password: "testpass123",
-//             passwordConfirmation: "testpass123",
-//             gender: "male",
-//             dateOfBirth: "02/01/2000",
-//           },
-//         };
+  it("should set the correct token", async function () {
+    const userData = stubedUserPrototype.firstCall.thisValue;
+    const tokenTester = jwt.verify(res.cookieToken, process.env.jwtSecret);
 
-//         res = fakeResponseObj;
+    expect(tokenTester.userId).equal(userData._id.toString());
+  });
 
-//         authController
-//           .signup(req, res, () => {})
-//           .then((_) => {
-//             done();
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//           });
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
+  it("should set the correct cookie configs", function () {
+    expect(res.cookieConfig.sameSite).equal("strict");
+    expect(res.cookieConfig.path).equal("/");
+    const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
+    const currentTime = currentDate.getTime();
+    const cookieExperetionTime = res.cookieConfig.expires.getTime();
+    expect(cookieExperetionTime).below(currentTime);
+    expect(res.cookieConfig.httpOnly).equal(true);
+  });
 
-//   it("should send the correct response", function () {
-//     expect(res.statusCode).equal(200);
-//   });
+  it("should send the correct message and data", function () {
+    expect(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
+    expect(res.jsonObj.username).equal("aviramSport2");
+  });
 
-//   it("should set the correct cookie name", function () {
-//     expect(res.cookieName).equal("jon");
-//   });
-
-//   it("should set the correct token", async function () {
-//     const user = await User.findOne({ name: "Avirambr" });
-//     const tokenTester = jwt.verify(res.cookieToken, process.env.jwtSecret);
-//     expect(tokenTester.userId).equal(user._id.toString());
-//   });
-
-//   it("should set the correct cookie configs", function () {
-//     expect(res.cookieConfig.sameSite).equal("strict");
-//     expect(res.cookieConfig.path).equal("/");
-//     const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
-//     const currentTime = currentDate.getTime();
-//     const cookieExperetionTime = res.cookieConfig.expires.getTime();
-//     expect(cookieExperetionTime).below(currentTime);
-//     expect(res.cookieConfig.httpOnly).equal(true);
-//   });
-
-//   it("should send the correct message and data", function () {
-//     expect(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
-//     expect(res.jsonObj.username).equal("aviramSport2");
-//   });
-
-//   after(async () => {
-//     await afterTests();
-//   });
-// });
+  after(() => {
+    stubedPhysicalStats.restore();
+    stubedDietExecution.restore();
+    stubedProgramExecution.restore();
+    stubedProgram.restore();
+    stubedBcrypt.restore();
+    stubedDietModel.restore();
+  });
+});

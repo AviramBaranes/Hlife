@@ -44,11 +44,11 @@ exports.signup = async (req, res, next) => {
       grade: 0,
     });
 
-    const savedUser = await newUser.save();
+    await newUser.save();
 
-    await createModels(savedUser, newUser);
+    await createModels(newUser);
 
-    const payload = { userId: savedUser._id.toString() };
+    const payload = { userId: newUser._id.toString() };
     const token = jwt.sign(payload, process.env.jwtSecret, { expiresIn: "2d" });
 
     const message = `${name} Sign Up Successfully`;

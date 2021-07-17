@@ -13,6 +13,7 @@ const fakeResponseObj = require("../utils/forTests/responseDefaultObj");
 
 describe("resetPassword in settings tests", function () {
   let req, res;
+  let stubedUser;
   it("should response with 403 if user not found", async function () {
     req = {
       body: {
@@ -25,7 +26,7 @@ describe("resetPassword in settings tests", function () {
 
     res = fakeResponseObj();
 
-    const stubedUser = sinon.stub(User, "findOne");
+    stubedUser = sinon.stub(User, "findOne");
 
     stubedUser.returns({
       select: sinon.stub().returns(false),
@@ -35,13 +36,9 @@ describe("resetPassword in settings tests", function () {
 
     expect(res.statusCode).equal(403);
     expect(res.msg).equal("Unauthorized");
-
-    stubedUser.restore();
   });
 
   it("should response with 403 if passwords do not match", async function () {
-    const stubedUser = sinon.stub(User, "findOne");
-
     stubedUser.returns({
       select: sinon.stub().returns(true),
     });
@@ -50,14 +47,11 @@ describe("resetPassword in settings tests", function () {
 
     expect(res.statusCode).equal(403);
     expect(res.msg).equal("Passwords do not match");
-
-    stubedUser.restore();
   });
 
   it("should fail to compare passwords", async function () {
     req.body.newPasswordConfirmation = "1234567";
 
-    const stubedUser = sinon.stub(User, "findOne");
     const stubedBcrypt = sinon.stub(bcrypt, "compare");
     stubedBcrypt.returns(false);
     stubedUser.returns({
@@ -69,14 +63,12 @@ describe("resetPassword in settings tests", function () {
     expect(res.statusCode).equal(403);
     expect(res.msg).equal("Password is invalid");
 
-    stubedUser.restore();
     stubedBcrypt.restore();
   });
 
   it("should change user password and send correct response", async function () {
     req.body.newPasswordConfirmation = "1234567";
 
-    const stubedUser = sinon.stub(User, "findOne");
     const stubedBcryptCompare = sinon.stub(bcrypt, "compare");
     const stubedBcryptHash = sinon.stub(bcrypt, "hash");
 
@@ -105,13 +97,14 @@ describe("resetPassword in settings tests", function () {
 describe("sendResetEmail tests", function () {
   let user;
   let req, res;
+  let stubedUser;
   let stubedSendGridSend;
   req = {
     body: { email: "fakeEmail@fake.com" },
     headers: { cookie: "not a csrf cookie" },
   };
-
   res = fakeResponseObj();
+
   it("should send a csrf error if cant find token in cookie", async function () {
     await authController.sendResetEmail(req, res, () => {});
 
@@ -122,7 +115,7 @@ describe("sendResetEmail tests", function () {
   it("should send a User not found error if user not found", async function () {
     req.headers.cookie = "XSRF-TOKEN=123";
 
-    const stubedUser = sinon.stub(User, "findOne");
+    stubedUser = sinon.stub(User, "findOne");
 
     stubedUser.returns(false);
 
@@ -130,14 +123,11 @@ describe("sendResetEmail tests", function () {
 
     expect(res.statusCode).equal(403);
     expect(res.msg).equal("User not found, Make sure the email is correct");
-
-    stubedUser.restore();
   });
 
   it("should set a reset token", async function () {
     sinon.stub(sendGridMail, "setApiKey");
     stubedSendGridSend = sinon.stub(sendGridMail, "send");
-    const stubedUser = sinon.stub(User, "findOne");
 
     stubedUser.returns({ name: "aviram", save: sinon.stub() });
 
@@ -145,9 +135,9 @@ describe("sendResetEmail tests", function () {
 
     user = await User.findOne();
 
-    stubedUser.restore();
     expect(user.resetToken.length).equal(64);
     expect(user.tokenExpiration).below(Number(new Date(Date.now() + 36000000)));
+    stubedUser.restore();
   });
 
   it("should call sendgrid.send with the right message", async () => {
@@ -169,6 +159,8 @@ describe("sendResetEmail tests", function () {
 
 describe("resetPasswordViaToken tests", function () {
   let req;
+  let user;
+  let stubedUser;
   const res = fakeResponseObj();
 
   it("should send error response for not matching passwords", async function () {
@@ -193,7 +185,7 @@ describe("resetPasswordViaToken tests", function () {
       resetToken: "token",
     };
 
-    const stubedUser = sinon.stub(User, "findOne");
+    stubedUser = sinon.stub(User, "findOne");
 
     stubedUser.returns(false);
 
@@ -201,13 +193,9 @@ describe("resetPasswordViaToken tests", function () {
 
     expect(res.statusCode).equal(403);
     expect(res.msg).equal("Invalid Token");
-
-    stubedUser.restore();
   });
 
   it("should send error response for expired token", async function () {
-    const stubedUser = sinon.stub(User, "findOne");
-
     stubedUser.returns({ tokenExpiration: -Infinity });
 
     await authController.resetPasswordViaToken(req, res, () => {});
@@ -216,122 +204,76 @@ describe("resetPasswordViaToken tests", function () {
     expect(res.msg).equal("Token Expired");
   });
 
-  // it("should update the user token", async function () {
-  //   const stubedDate = sinon.stub(Date, "now");
-  //   stubedDate.returns(-Infinity); //'isExpired' will be false
+  it("should update the user's token", async function () {
+    const stubedDate = sinon.stub(Date, "now");
+    const stubedBcrypt = sinon.stub(bcrypt, "hash");
 
-  //   await authController.resetPasswordViaToken(req, res, () => {});
-  //   updatedUserForTests = await User.findById(userForTests._id).select(
-  //     "+password"
-  //   );
+    stubedDate.returns(-Infinity); //'isExpired' will be false
+    stubedUser.returns({ save: sinon.stub(), name: "aviram" });
+    stubedBcrypt.returns("123456");
 
-  //   expect(updatedUserForTests.resetToken).equal("");
-  //   expect(updatedUserForTests.tokenExpiration).equal(undefined);
+    await authController.resetPasswordViaToken(req, res, () => {});
 
-  //   stubedDate.restore();
-  // });
+    user = User.findOne();
 
-  //   it("should update the user password", async function () {
-  //     const stubedDate = sinon.stub(Date, "now");
-  //     stubedDate.returns(-Infinity); //'isExpired' will be false
+    expect(user.resetToken).equal("");
+    expect(user.tokenExpiration).equal(undefined);
 
-  //     const diiUpdateCorrectly = await bcrypt.compare(
-  //       "they match",
-  //       updatedUserForTests.password
-  //     );
+    stubedDate.restore();
+    stubedUser.restore();
+    stubedBcrypt.restore();
+  });
 
-  //     expect(diiUpdateCorrectly).equal(true);
+  it("should update the user password", async function () {
+    expect(user.password).equal("123456");
+  });
 
-  //     stubedDate.restore();
-  //   });
-
-  //   it("should return a 200 response", async function () {
-  //     expect(res.statusCode).equal(200);
-  //     expect(res.msg).equal(
-  //       `${updatedUserForTests.name}'s password successfully changed!`
-  //     );
-  //   });
-
-  //   after(async () => {
-  //     await afterTests();
-  //   });
+  it("should return a 200 response", async function () {
+    expect(res.statusCode).equal(200);
+    expect(res.msg).equal(`${user.name}'s password successfully changed!`);
+  });
 });
 
-// describe("verifyToken tests", function () {
-//   let req, res;
-//   res = {
-//     statusCode: null,
-//     msg: null,
-//     status(code) {
-//       this.statusCode = code;
-//       return this;
-//     },
-//     send(msg) {
-//       this.msg = msg;
-//     },
-//   };
-//   before((done) => {
-//     connectDb()
-//       .then((_) => {
-//         const user = new User({
-//           name: "tester",
-//           username: "tester",
-//           email: "test@test.com",
-//           password: "123456",
-//           gender: "male",
-//           dateOfBirth: "02/01/2000",
-//           resetToken: "123456",
-//           tokenExpiration: Date.now() - 3600000, //expired
-//         });
-//         user
-//           .save()
-//           .then((savedUser) => {
-//             userForTests = savedUser;
-//             done();
-//           })
-//           .catch((err) => {
-//             console.log(err);
-//           });
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
+describe("verifyToken tests", function () {
+  let req;
+  const res = fakeResponseObj();
+  let stubedUser;
 
-//   it("should send error response for invalid token", async function () {
-//     req = {
-//       params: { token: "not match" },
-//     };
+  it("should send error response for invalid token", async function () {
+    req = {
+      params: { token: "not match" },
+    };
 
-//     await authController.validateResetToken(req, res, () => {});
+    stubedUser = sinon.stub(User, "findOne");
 
-//     expect(res.statusCode).equal(403);
-//     expect(res.msg).equal("Invalid Token");
-//   });
+    stubedUser.returns(false);
 
-//   it("should send error response for expired token", async function () {
-//     req = {
-//       params: { token: "123456" },
-//     };
+    await authController.validateResetToken(req, res, () => {});
 
-//     await authController.validateResetToken(req, res, () => {});
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("Invalid Token");
+  });
 
-//     expect(res.statusCode).equal(403);
-//     expect(res.msg).equal("Token Expired");
-//   });
+  it("should send error response for expired token", async function () {
+    req = {
+      params: { token: "123456" },
+    };
 
-//   it("should return a 200 response", async function () {
-//     const stubedDate = sinon.stub(Date, "now");
-//     stubedDate.returns(-Infinity); //'isExpired' will be false
+    stubedUser.returns({ tokenExpiration: -Infinity });
 
-//     await authController.validateResetToken(req, res, () => {});
+    await authController.validateResetToken(req, res, () => {});
 
-//     expect(res.statusCode).equal(200);
-//     expect(res.msg).equal("Token Verified Successfully");
-//     stubedDate.restore();
-//   });
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("Token Expired");
+  });
 
-//   after(async () => {
-//     await afterTests();
-//   });
-// });
+  it("should return a 200 response", async function () {
+    stubedUser.returns(Infinity);
+
+    await authController.validateResetToken(req, res, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.msg).equal("Token Verified Successfully");
+    stubedUser.restore();
+  });
+});
