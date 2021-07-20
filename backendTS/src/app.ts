@@ -1,23 +1,33 @@
-require("dotenv").config({ path: "./config.env" });
+import dotenv from "dotenv";
+dotenv.config({ path: "./config.env" });
 
-const cors = require("cors");
-const hpp = require("hpp");
-const helmet = require("helmet");
-const cookieParser = require("cookie-parser");
-const csrf = require("csurf");
-const mongoSanitize = require("express-mongo-sanitize");
-const RateLimiter = require("express-rate-limit");
-const connectDb = require("./utils/database");
-const express = require("express");
+import cors from "cors";
+import hpp from "hpp";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import csrf from "csurf";
+import mongoSanitize from "express-mongo-sanitize";
+import RateLimiter from "express-rate-limit";
+import express, { Request, Response, NextFunction } from "express";
 
-const authRoute = require("./routes/auth");
+import connectDb from "./utils/database";
+import authRoute from "./routes/auth";
+import { CustomError } from "./types/error";
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId: any;
+    }
+  }
+}
 
 const csrfProtection = csrf({ cookie: true });
 const app = express();
 
 connectDb();
 
-const limiter = new RateLimiter({
+const limiter = new (RateLimiter as any)({
   max: 100,
   windowMs: 15 * 60 * 1000,
 });
@@ -48,14 +58,16 @@ app.use(csrfProtection); //in frontend in the requests body put the token under 
 
 app.use("/auth", authRoute);
 
-app.use((error, req, res, next) => {
-  let { statusCode, message, data } = error;
+app.use(
+  (error: CustomError, req: Request, res: Response, next: NextFunction) => {
+    let { statusCode, message, data } = error;
 
-  if (!statusCode) statusCode = 500;
-  if (!message) message = "Server Error";
-  if (!data) data = null;
+    if (!statusCode) statusCode = 500;
+    if (!message) message = "Server Error";
+    if (!data) data = null;
 
-  res.status(statusCode).json({ message, data });
-});
+    res.status(statusCode).json({ message, data });
+  }
+);
 
 app.listen(8080);
