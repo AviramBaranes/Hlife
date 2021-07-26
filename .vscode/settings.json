@@ -7,17 +7,22 @@
     "sendgrid",
     "stubed",
     "token",
+    "unmock",
     "user",
     "xsrf"
   ],
   "cSpell.ignoreWords": [
     "avirambr",
     "experetion",
+    "fontawesome",
+    "fortawesome",
     "hlife",
+    "jsxdev",
     "musceles",
     "reseted",
     "respones",
     "testpass",
-    "valdiation"
+    "valdiation",
+    "wojtekmaj"
   ]
 }
