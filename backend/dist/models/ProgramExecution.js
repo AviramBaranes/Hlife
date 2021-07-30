@@ -6,10 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const ProgramExecutionSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     executions: [
         {
-            program: { type: Schema.Types.ObjectId, ref: "Program.program" },
+            program: {
+                type: Schema.Types.ObjectId,
+                ref: "Program.program",
+                required: true,
+            },
             date: { type: Date, required: true },
             executionRate: { type: Number, required: true, min: 0, max: 100 },
             grade: { type: Number, required: true, default: 0, min: 0, max: 10 },

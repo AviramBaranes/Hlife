@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const DietExecutionSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-  diet: { type: Schema.Types.ObjectId, ref: "Diet" },
+  diet: { type: Schema.Types.ObjectId, ref: "Diet", required: true },
 
   executions: [
     {

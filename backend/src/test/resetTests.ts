@@ -12,7 +12,7 @@ import sendGridMail from "@sendgrid/mail";
 import * as authController from "../controller/auth";
 import User from "../models/User";
 
-import createCustomResponseObj from "../utils/forTests/responseDefaultObj";
+import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
 
 interface UserForTest {
   name: string;

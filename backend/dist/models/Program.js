@@ -6,13 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const ProgramSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-    goals: {
-        weight: { type: Number },
-        fatPercentage: { type: Number },
-        muscelesMass: { type: Number },
-        date: { type: Date },
-    },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     program: [
         {
             day: {

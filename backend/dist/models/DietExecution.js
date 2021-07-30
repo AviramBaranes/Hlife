@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const DietExecutionSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User" },
-    diet: { type: Schema.Types.ObjectId, ref: "Diet" },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    diet: { type: Schema.Types.ObjectId, ref: "Diet", required: true },
     executions: [
         {
             date: { type: Date, required: true },

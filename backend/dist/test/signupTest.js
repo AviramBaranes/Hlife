@@ -39,7 +39,7 @@ const Diet_1 = __importDefault(require("../models/Diet"));
 const DietExecution_1 = __importDefault(require("../models/DietExecution"));
 const Program_1 = __importDefault(require("../models/Program"));
 const ProgramExecution_1 = __importDefault(require("../models/ProgramExecution"));
-const responseDefaultObj_1 = __importDefault(require("../utils/forTests/responseDefaultObj"));
+const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
 let stubedPhysicalStats, stubedDietExecution, stubedProgramExecution, stubedProgram, stubedBcrypt, stubedDietModel;
 describe("signup Controller error handling", () => {
     let stubedUser;
@@ -133,10 +133,6 @@ describe("signup Controller creating the correct models", () => {
     it("should create a Program model", async () => {
         chai_1.expect(createdProgramArgs._id).to.be.an("object");
         chai_1.expect(createdProgramArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdProgramArgs.goals).haveOwnProperty("weight");
-        chai_1.expect(createdProgramArgs.goals).haveOwnProperty("muscelesMass");
-        chai_1.expect(createdProgramArgs.goals).haveOwnProperty("fatPercentage");
-        chai_1.expect(createdProgramArgs.goals).haveOwnProperty("date");
         chai_1.expect(createdProgramArgs.program).eql([]);
     });
     it("should create a ProgramExecution model", async () => {

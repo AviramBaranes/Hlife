@@ -12,6 +12,8 @@ import express, { Request, Response, NextFunction } from "express";
 
 import connectDb from "./utils/database";
 import authRoute from "./routes/auth";
+import statsRoute from "./routes/stats";
+import goalsRoute from "./routes/goals";
 import { CustomError } from "./types/error";
 
 declare global {
@@ -57,6 +59,8 @@ app.get("/", csrfProtection, function (req, res) {
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 
 app.use("/auth", authRoute);
+app.use("/goals", goalsRoute);
+app.use("/stats", statsRoute);
 
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {

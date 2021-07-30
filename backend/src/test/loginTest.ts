@@ -16,7 +16,7 @@ import * as authController from "../controller/auth";
 import User from "../models/User";
 
 //utils
-import createCustomResponseObj from "../utils/forTests/responseDefaultObj";
+import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
 import { CustomError } from "../types/error";
 
 describe("login controller error handling tests", () => {

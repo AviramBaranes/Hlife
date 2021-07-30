@@ -30,7 +30,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const authController = __importStar(require("../controller/auth"));
 const User_1 = __importDefault(require("../models/User"));
-const responseDefaultObj_1 = __importDefault(require("../utils/forTests/responseDefaultObj"));
+const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
 describe("resetPassword in settings tests", () => {
     const req = {
         body: {

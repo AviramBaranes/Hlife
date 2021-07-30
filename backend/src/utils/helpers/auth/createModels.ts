@@ -3,11 +3,11 @@ dotenv.config({ path: "./config.env" });
 
 import { ObjectId } from "mongoose";
 
-import PhysicalStats from "../../models/PhysicalStats";
-import Diet from "../../models/Diet";
-import DietExecution from "../../models/DietExecution";
-import Program from "../../models/Program";
-import ProgramExecution from "../../models/ProgramExecution";
+import PhysicalStats from "../../../models/PhysicalStats";
+import Diet from "../../../models/Diet";
+import DietExecution from "../../../models/DietExecution";
+import Program from "../../../models/Program";
+import ProgramExecution from "../../../models/ProgramExecution";
 
 interface NewUser {
   _id: ObjectId;

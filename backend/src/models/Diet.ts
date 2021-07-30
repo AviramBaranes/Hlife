@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const DietSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-  descreption: { type: String },
+  description: { type: String },
 
   cheatsPerMonth: { type: Number, default: 0, min: 0, max: 31 },
 

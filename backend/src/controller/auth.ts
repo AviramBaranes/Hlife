@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response, RequestHandler } from "express";
 import User from "../models/User";
-import validationErrorsHandler from "../utils/helpers/valdiationErrors";
-import createModels from "../utils/helpers/createModels";
+import { validationErrorsHandler } from "../utils/helpers/Errors/valdiationErrors";
+import createModels from "../utils/helpers/auth/createModels";
+import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -289,13 +290,4 @@ export const validateUser: RequestHandler = async (req, res, next) => {
   } catch (err) {
     return catchErrorHandler(err, next);
   }
-};
-
-const catchErrorHandler = (err: CustomError, next: NextFunction) => {
-  process.env.Node_ENV !== "test" && console.log(err);
-  if (!err.statusCode) {
-    err.statusCode = 500;
-  }
-  next(err);
-  return err;
 };

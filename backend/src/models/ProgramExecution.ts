@@ -3,11 +3,15 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ProgramExecutionSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
   executions: [
     {
-      program: { type: Schema.Types.ObjectId, ref: "Program.program" },
+      program: {
+        type: Schema.Types.ObjectId,
+        ref: "Program.program",
+        required: true,
+      },
 
       date: { type: Date, required: true },
 

@@ -35,7 +35,7 @@ const authController = __importStar(require("../controller/auth"));
 //models and connections
 const User_1 = __importDefault(require("../models/User"));
 //utils
-const responseDefaultObj_1 = __importDefault(require("../utils/forTests/responseDefaultObj"));
+const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
 describe("login controller error handling tests", () => {
     let stubedUser;
     const req = {

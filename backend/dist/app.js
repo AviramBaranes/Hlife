@@ -15,6 +15,8 @@ const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const express_1 = __importDefault(require("express"));
 const database_1 = __importDefault(require("./utils/database"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const stats_1 = __importDefault(require("./routes/stats"));
+const goals_1 = __importDefault(require("./routes/goals"));
 const csrfProtection = csurf_1.default({ cookie: true });
 const app = express_1.default();
 database_1.default();
@@ -42,6 +44,8 @@ app.get("/", csrfProtection, function (req, res) {
 // });
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 app.use("/auth", auth_1.default);
+app.use("/goals", goals_1.default);
+app.use("/stats", stats_1.default);
 app.use((error, req, res, next) => {
     let { statusCode, message, data } = error;
     if (!statusCode)

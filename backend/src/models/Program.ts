@@ -3,17 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const ProgramSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User" },
-
-  goals: {
-    weight: { type: Number },
-
-    fatPercentage: { type: Number },
-
-    muscelesMass: { type: Number },
-
-    date: { type: Date },
-  },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
   program: [
     {

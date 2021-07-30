@@ -26,34 +26,31 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./config.env" });
 const chai_1 = require("chai");
 const sinon_1 = __importDefault(require("sinon"));
-const authController = __importStar(require("../controller/auth"));
-const User_1 = __importDefault(require("../models/User"));
+const Goals_1 = __importDefault(require("../models/Goals"));
+const goalsController = __importStar(require("../controller/goals"));
 const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
-describe("validateUser tests", () => {
-    const req = { userId: 1 };
+describe("Goals controller tests", () => {
+    const req = {
+        body: {
+            basicGoal: "goal",
+            weight: 1,
+            fatPercentage: 2,
+            muscelesMass: 3,
+        },
+    };
     const res = responseDefaultObj_1.default();
-    let stubedUser;
-    before(async () => {
-        stubedUser = sinon_1.default.stub(User_1.default, "findById");
-        stubedUser.returns({
-            username: "aviram",
-            hasProgram: true,
-            hasDiet: false,
-        });
-        await authController.validateUser(req, res, () => { });
+    it("create the right goals model", async () => {
+        const stubedGoalsModel = sinon_1.default.stub(Goals_1.default.prototype, "save");
+        await goalsController.createGoal(req, res, () => { });
+        const argumentForConstructor = stubedGoalsModel.firstCall.thisValue;
+        chai_1.expect(argumentForConstructor.basicGoal).equal("goal");
+        chai_1.expect(argumentForConstructor.detailGoals.weight).equal(1);
+        chai_1.expect(argumentForConstructor.detailGoals.fatPercentage).equal(2);
+        chai_1.expect(argumentForConstructor.detailGoals.muscelesMass).equal(3);
+        stubedGoalsModel.restore();
     });
-    it("should set the right status code in res", () => {
-        chai_1.expect(res.statusCode).equal(200);
-    });
-    it("should set the right json data in res", () => {
-        chai_1.expect(res.jsonObj.isAuthenticated).equal(true);
-        chai_1.expect(res.jsonObj.username).equal("aviram");
-        chai_1.expect(res.jsonObj.hasProgram).equal(true);
-        chai_1.expect(res.jsonObj.hasDiet).equal(false);
-        chai_1.expect(res.jsonObj.userId).equal(1);
-    });
-    after(() => {
-        stubedUser.restore();
+    it("should return with success response", () => {
+        chai_1.expect(res.statusCode).equal(201);
+        chai_1.expect(res.msg).equal("Goals created successfully");
     });
 });
-//2 tests

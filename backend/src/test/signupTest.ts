@@ -20,7 +20,7 @@ import DietExecution from "../models/DietExecution";
 import Program from "../models/Program";
 import ProgramExecution from "../models/ProgramExecution";
 
-import createCustomResponseObj from "../utils/forTests/responseDefaultObj";
+import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
 import { CustomError } from "../types/error";
 
 interface CreatedModelsArgs {
@@ -168,10 +168,6 @@ describe("signup Controller creating the correct models", () => {
   it("should create a Program model", async () => {
     expect(createdProgramArgs._id).to.be.an("object");
     expect(createdProgramArgs.user).eql(createdUserArgs._id);
-    expect(createdProgramArgs.goals).haveOwnProperty("weight");
-    expect(createdProgramArgs.goals).haveOwnProperty("muscelesMass");
-    expect(createdProgramArgs.goals).haveOwnProperty("fatPercentage");
-    expect(createdProgramArgs.goals).haveOwnProperty("date");
     expect(createdProgramArgs.program).eql([]);
   });
 

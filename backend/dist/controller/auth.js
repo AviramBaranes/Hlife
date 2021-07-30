@@ -5,15 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateUser = exports.validateResetToken = exports.resetPasswordViaToken = exports.sendResetEmail = exports.resetPassword = exports.logout = exports.login = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
-const valdiationErrors_1 = __importDefault(require("../utils/helpers/valdiationErrors"));
-const createModels_1 = __importDefault(require("../utils/helpers/createModels"));
+const valdiationErrors_1 = require("../utils/helpers/Errors/valdiationErrors");
+const createModels_1 = __importDefault(require("../utils/helpers/auth/createModels"));
+const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const signup = async (req, res, next) => {
     try {
-        valdiationErrors_1.default(req);
+        valdiationErrors_1.validationErrorsHandler(req);
         const { name, username, email, password, passwordConfirmation, gender, dateOfBirth, } = req.body;
         const user = await User_1.default.findOne({ email });
         if (user) {
@@ -53,13 +54,13 @@ const signup = async (req, res, next) => {
         //
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.signup = signup;
 const login = async (req, res, next) => {
     try {
-        valdiationErrors_1.default(req);
+        valdiationErrors_1.validationErrorsHandler(req);
         const { email, password } = req.body;
         const user = await User_1.default.findOne({ email }).select("+password");
         if (!user) {
@@ -92,7 +93,7 @@ const login = async (req, res, next) => {
         });
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.login = login;
@@ -106,13 +107,13 @@ const logout = (req, res, next) => {
             .send("success");
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.logout = logout;
 const resetPassword = async (req, res, next) => {
     try {
-        valdiationErrors_1.default(req);
+        valdiationErrors_1.validationErrorsHandler(req);
         const { userId, currentPassword, newPassword, newPasswordConfirmation } = req.body;
         const user = await User_1.default.findById(userId).select("+password");
         if (!user)
@@ -129,13 +130,13 @@ const resetPassword = async (req, res, next) => {
         res.status(200).send("password reseted successfully!");
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.resetPassword = resetPassword;
 const sendResetEmail = async (req, res, next) => {
     try {
-        valdiationErrors_1.default(req);
+        valdiationErrors_1.validationErrorsHandler(req);
         const { email } = req.body;
         const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
         if (tokenSlice.length < 2)
@@ -169,13 +170,13 @@ const sendResetEmail = async (req, res, next) => {
         }
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.sendResetEmail = sendResetEmail;
 const resetPasswordViaToken = async (req, res, next) => {
     try {
-        valdiationErrors_1.default(req);
+        valdiationErrors_1.validationErrorsHandler(req);
         const { password, passwordConfirmation, resetToken } = req.body;
         const isMatch = password === passwordConfirmation;
         if (!isMatch)
@@ -194,7 +195,7 @@ const resetPasswordViaToken = async (req, res, next) => {
         res.status(200).send(`${user.name}'s password successfully changed!`);
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.resetPasswordViaToken = resetPasswordViaToken;
@@ -210,7 +211,7 @@ const validateResetToken = async (req, res, next) => {
         return res.status(200).send("Token Verified Successfully");
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.validateResetToken = validateResetToken;
@@ -227,15 +228,7 @@ const validateUser = async (req, res, next) => {
         });
     }
     catch (err) {
-        return catchErrorHandler(err, next);
+        return catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.validateUser = validateUser;
-const catchErrorHandler = (err, next) => {
-    process.env.Node_ENV !== "test" && console.log(err);
-    if (!err.statusCode) {
-        err.statusCode = 500;
-    }
-    next(err);
-    return err;
-};
