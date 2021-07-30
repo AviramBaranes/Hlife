@@ -27,4 +27,21 @@ router.post(
   goalsController.createGoal
 );
 
+router.put("/basicGoal", authMiddleware, goalsController.changeBasicGoal);
+
+router.put(
+  "/",
+  authMiddleware,
+  [
+    body("weight", "Weight must be a number").optional().isFloat(),
+    body("fatPercentage", "Fat percentage must be a number")
+      .optional()
+      .isFloat(),
+    body("muscelesMass", "Musceles mass must be a number").optional().isFloat(),
+  ],
+  goalsController.changeGoals
+);
+
+router.get("/", authMiddleware, goalsController.getGoals);
+
 export default router;

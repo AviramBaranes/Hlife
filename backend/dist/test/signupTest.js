@@ -197,6 +197,7 @@ describe("signup controller testing respones", () => {
         chai_1.expect(res.jsonObj.username).equal("aviramSport2");
     });
     after(() => {
+        stubedUserPrototype.restore();
         stubedPhysicalStats.restore();
         stubedDietExecution.restore();
         stubedProgramExecution.restore();

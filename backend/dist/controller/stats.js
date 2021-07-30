@@ -29,7 +29,7 @@ const addStats = async (req, res, next) => {
             const lastStatsIndex = userStats.stats.length - 1;
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
-            const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, muscelesMass, userGoals.basicGoals, userGoals.detailGoals, weight);
+            const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, muscelesMass, userGoals.basicGoals, userGoals.detailGoals, weight, messages);
             grade += calculatedGrade;
             messages = [...failureMessages];
             accomplishments = { ...goalsAchieved };
@@ -45,8 +45,8 @@ const addStats = async (req, res, next) => {
         };
         user.grade += grade;
         userStats.stats.push(newStatsEntry);
-        await user.save();
         await userStats.save();
+        await user.save();
         res
             .status(201)
             .json({ messages, currentGrade: user.grade, accomplishments });

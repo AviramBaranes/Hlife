@@ -17,7 +17,6 @@ export const addStats: RequestHandler = async (req, res, next) => {
 
     const { weight, height, fatPercentage, muscelesMass, bodyImageUrl } =
       req.body;
-
     const userGoals = await Goals.findOne({ user: userId });
 
     if (!userGoals) {
@@ -36,7 +35,6 @@ export const addStats: RequestHandler = async (req, res, next) => {
       const lastStatsIndex = userStats.stats.length - 1;
       const lastStatsRecord = userStats.stats[lastStatsIndex];
       const lastWeightRecord = lastStatsRecord.weight;
-
       const { failureMessages, goalsAchieved, calculatedGrade } =
         calculateGrade(
           lastWeightRecord,
@@ -45,9 +43,9 @@ export const addStats: RequestHandler = async (req, res, next) => {
           muscelesMass,
           userGoals.basicGoals,
           userGoals.detailGoals,
-          weight
+          weight,
+          messages
         );
-
       grade += calculatedGrade;
       messages = [...failureMessages];
       accomplishments = { ...goalsAchieved };
@@ -66,8 +64,8 @@ export const addStats: RequestHandler = async (req, res, next) => {
     user.grade += grade;
     userStats.stats.push(newStatsEntry);
 
-    await user.save();
     await userStats.save();
+    await user.save();
 
     res
       .status(201)

@@ -40,4 +40,13 @@ router.post("/", authMiddleware_1.default, [
         .isFloat(),
     express_validator_1.body("muscelesMass", "Musceles mass must be a number").optional().isFloat(),
 ], goalsController.createGoal);
+router.put("/basicGoal", authMiddleware_1.default, goalsController.changeBasicGoal);
+router.put("/", authMiddleware_1.default, [
+    express_validator_1.body("weight", "Weight must be a number").optional().isFloat(),
+    express_validator_1.body("fatPercentage", "Fat percentage must be a number")
+        .optional()
+        .isFloat(),
+    express_validator_1.body("muscelesMass", "Musceles mass must be a number").optional().isFloat(),
+], goalsController.changeGoals);
+router.get("/", authMiddleware_1.default, goalsController.getGoals);
 exports.default = router;

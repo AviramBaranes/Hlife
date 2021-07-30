@@ -10,7 +10,6 @@ export interface GoalsAchieved {
   weight: boolean;
 }
 
-let failureMessages: string[] = [];
 let goalsAchieved = <GoalsAchieved>{};
 
 export const calculateGrade = (
@@ -20,13 +19,26 @@ export const calculateGrade = (
   muscelesMass: number,
   basicGoals: string,
   detailedGoals: GoalsAndStatsObj,
-  weight: number
+  weight: number,
+  failureMessages: string[]
 ) => {
   let calculatedGrade = 0;
 
-  if (fatPercentage < lastStatsRecord.fatPercentage) {
+  const fatPercentageImproved = fatPercentage < lastStatsRecord.fatPercentage;
+  const fatPercentageReachGoal = fatPercentage <= detailedGoals.fatPercentage;
+
+  const muscelesMassImproved = muscelesMass > lastStatsRecord.muscelesMass;
+  const muscelesMassReachGoal = muscelesMass >= detailedGoals.muscelesMass;
+
+  const loseWeightGoal = basicGoals === "lose weight";
+  const WeightDecrease = lastWeightRecord > weight;
+  const loseWeightGoalAchieved = weight <= detailedGoals.weight!;
+  const gainWeightGoalAchieved = weight >= detailedGoals.weight!;
+
+  //FatPercentage
+  if (fatPercentageImproved) {
     calculatedGrade += 5;
-    if (fatPercentage < detailedGoals.fatPercentage) {
+    if (fatPercentageReachGoal) {
       calculatedGrade += 5;
       goalsAchieved.fatPercentage = true;
     }
@@ -36,9 +48,10 @@ export const calculateGrade = (
     );
   }
 
-  if (muscelesMass > lastStatsRecord.muscelesMass) {
+  //MuscelesMass
+  if (muscelesMassImproved) {
     calculatedGrade += 5;
-    if (muscelesMass > detailedGoals.muscelesMass) {
+    if (muscelesMassReachGoal) {
       calculatedGrade += 5;
       goalsAchieved.muscelesMass = true;
     }
@@ -48,35 +61,28 @@ export const calculateGrade = (
     );
   }
 
-  switch (basicGoals) {
-    case "lose weight":
-      calculatedGrade += calcWeightChangeGrade(
-        lastWeightRecord,
-        weight,
-        "lose"
-      );
-      break;
-    case "gain weight":
-      calculatedGrade += calcWeightChangeGrade(
-        weight,
-        lastWeightRecord,
-        "gain"
-      );
-      break;
+  //Weight
+  if (loseWeightGoal) {
+    if (WeightDecrease) {
+      calculatedGrade += 5;
+      if (loseWeightGoalAchieved) {
+        calculatedGrade += 5;
+        goalsAchieved.weight = true;
+      }
+    } else {
+      failureMessages.push("You failed to lose weight");
+    }
+  } else {
+    if (!WeightDecrease) {
+      calculatedGrade += 5;
+      if (gainWeightGoalAchieved) {
+        calculatedGrade += 5;
+        goalsAchieved.weight = true;
+      }
+    } else {
+      failureMessages.push("You failed to lose weight");
+    }
   }
 
   return { failureMessages, calculatedGrade, goalsAchieved };
-};
-
-const calcWeightChangeGrade = (
-  weight1: number,
-  weight2: number,
-  messageVerb: string
-) => {
-  if (weight1 > weight2) {
-    goalsAchieved.weight = true;
-    return 5;
-  }
-  failureMessages.push(`You failed to ${messageVerb} weight`);
-  return 0;
 };

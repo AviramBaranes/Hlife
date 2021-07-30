@@ -1,14 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const createCustomResponseObj = () => ({
-    jsonObj: {
-        message: "",
-        username: "",
-        userId: "",
-        hasProgram: false,
-        hasDiet: false,
-        isAuthenticated: false,
-    },
+    jsonObj: {},
     statusCode: 0,
     cookieName: "",
     cookieToken: "",
@@ -28,7 +21,7 @@ const createCustomResponseObj = () => ({
         this.msg = msg;
     },
     json(obj) {
-        this.jsonObj = obj;
+        this.jsonObj = { ...obj };
     },
 });
 exports.default = createCustomResponseObj;

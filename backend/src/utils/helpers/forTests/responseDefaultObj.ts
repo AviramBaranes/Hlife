@@ -5,24 +5,8 @@ interface CookieConfig {
   httpOnly: string;
 }
 
-interface JsonObj {
-  message: string;
-  username: string;
-  userId: string;
-  hasProgram: boolean;
-  hasDiet: boolean;
-  isAuthenticated: boolean;
-}
-
 const createCustomResponseObj = () => ({
-  jsonObj: {
-    message: "",
-    username: "",
-    userId: "",
-    hasProgram: false,
-    hasDiet: false,
-    isAuthenticated: false,
-  },
+  jsonObj: <any>{},
   statusCode: 0,
   cookieName: "",
   cookieToken: "",
@@ -41,8 +25,8 @@ const createCustomResponseObj = () => ({
   send(msg: string) {
     this.msg = msg;
   },
-  json(obj: JsonObj) {
-    this.jsonObj = obj;
+  json(obj: any) {
+    this.jsonObj = { ...obj };
   },
 });
 

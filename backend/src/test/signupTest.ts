@@ -247,6 +247,7 @@ describe("signup controller testing respones", () => {
   });
 
   after(() => {
+    stubedUserPrototype.restore();
     stubedPhysicalStats.restore();
     stubedDietExecution.restore();
     stubedProgramExecution.restore();
