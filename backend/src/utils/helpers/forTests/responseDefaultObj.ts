@@ -30,4 +30,17 @@ const createCustomResponseObj = () => ({
   },
 });
 
+export interface ResponseCustomObject {
+  jsonObj: any;
+  statusCode: number;
+  cookieName: string;
+  cookieToken: string;
+  cookieConfig: {
+    sameSite: string;
+    path: string;
+    expires: Date;
+    httpOnly: string;
+  };
+  msg: string;
+}
 export default createCustomResponseObj;

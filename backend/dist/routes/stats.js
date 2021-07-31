@@ -53,4 +53,35 @@ router.post("/", authMiddleware_1.default, [
     }),
     express_validator_1.body("bodyImageUrl", "Image is invalid").optional().isURL(),
 ], statsController.addStats);
+router.get("/all-stats-dates", authMiddleware_1.default, statsController.getAllStatsDates);
+router.get("/:date", authMiddleware_1.default, express_validator_1.param("date", "invalid param").isDate(), statsController.getStatsByDate);
+router.get("/", authMiddleware_1.default, statsController.getAllStats);
+router.put("/", authMiddleware_1.default, [
+    express_validator_1.body("weight", "Weight needs to be in range 35kg-250kg")
+        .optional()
+        .isFloat({
+        min: 35,
+        max: 250,
+    }),
+    express_validator_1.body("height", "Height needs to be in a range of 100cm-250cm")
+        .optional()
+        .isInt({
+        min: 100,
+        max: 250,
+    }),
+    express_validator_1.body("fatPercentage", "Fat Percentage needs to be lower than 80%")
+        .optional()
+        .isInt({
+        min: 0,
+        max: 80,
+    }),
+    express_validator_1.body("muscelesMass", "Musceles mass needs to be in a range of 10kg-200kg")
+        .optional()
+        .isInt({
+        min: 0,
+        max: 80,
+    }),
+    express_validator_1.body("bodyImageUrl", "Image is invalid").optional().isURL(),
+], statsController.changeLastStats);
+router.delete("/", authMiddleware_1.default, statsController.deleteLastStats);
 exports.default = router;

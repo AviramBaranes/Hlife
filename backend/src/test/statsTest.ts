@@ -5,12 +5,14 @@ import { expect } from "chai";
 import sinon, { SinonStub } from "sinon";
 
 import * as statsController from "../controller/stats";
-import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
+import createCustomResponseObj, {
+  ResponseCustomObject,
+} from "../utils/helpers/forTests/responseDefaultObj";
 import PhysicalStats from "../models/PhysicalStats";
 import Goals from "../models/Goals";
 import User from "../models/User";
 
-describe("Stats controller general tests", () => {
+describe("addStats endpoint general tests", () => {
   const res = createCustomResponseObj();
   const req = {
     userId: "123",
@@ -78,7 +80,7 @@ describe("Stats controller general tests", () => {
   });
 });
 
-describe("Stats controller deeply tests", () => {
+describe("addStats endpoint deeply tests", () => {
   const res = createCustomResponseObj();
   const req = {
     userId: "123",
@@ -326,5 +328,342 @@ describe("Stats controller deeply tests", () => {
     stubedUserModel.restore();
     stubedStatsModel.restore();
     stubedGoalsModel.restore();
+  });
+});
+
+describe("getAllStatsDates endpoint tests", () => {
+  const req = {
+    userId: "123",
+  };
+
+  let res: ResponseCustomObject;
+  let stubedStatsModel: SinonStub;
+
+  beforeEach(() => {
+    res = createCustomResponseObj();
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send error response if no userStats found", async () => {
+    stubedStatsModel.returns(false);
+
+    await statsController.getAllStatsDates(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were found for this user");
+  });
+
+  it("should send error response if no stats were yet to be created", async () => {
+    stubedStatsModel.returns({
+      stats: [],
+    });
+
+    await statsController.getAllStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were created yet");
+  });
+
+  it("should send success response with all the stats", async () => {
+    const stats = [
+      { data: "data1", moreData: "moreData1", date: 1 },
+      { data: "data2", moreData: "moreData2", date: 2 },
+      { data: "data3", moreData: "moreData3", date: 3 },
+    ];
+    stubedStatsModel.returns({
+      stats,
+    });
+
+    const expectedData = [1, 2, 3];
+
+    await statsController.getAllStatsDates(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj.statsDates).eql(expectedData);
+  });
+
+  afterEach(() => {
+    stubedStatsModel.restore();
+  });
+});
+
+describe("getStatsByDate endpoint tests", () => {
+  const req = {
+    userId: "123",
+    params: <{ date?: string }>{},
+  };
+
+  let res: ResponseCustomObject;
+
+  let stubedStatsModel: SinonStub;
+
+  beforeEach(() => {
+    res = createCustomResponseObj();
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send error response if no userStats found", async () => {
+    stubedStatsModel.returns(false);
+
+    await statsController.getStatsByDate(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were found for this user");
+  });
+
+  it("should send error response if no stats found by date", async () => {
+    stubedStatsModel.returns({
+      stats: [{ date: "" }, { date: "11/11/1999" }, { date: "" }],
+    });
+
+    req.params.date = "11/11/2001";
+
+    await statsController.getStatsByDate(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("Invalid date, no stats were entered at this date");
+  });
+
+  it("should send success response with the requested stats", async () => {
+    stubedStatsModel.returns({
+      stats: [
+        { date: "" },
+        { moreData: "data", date: "11/11/2001" },
+        { date: "" },
+      ],
+    });
+
+    await statsController.getStatsByDate(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj.moreData).equal("data");
+    expect(res.jsonObj.date).equal("11/11/2001");
+  });
+
+  afterEach(() => {
+    stubedStatsModel.restore();
+  });
+});
+
+describe("getAllStats endpoint tests", () => {
+  const req = {
+    userId: "123",
+  };
+
+  let res: ResponseCustomObject;
+  let stubedStatsModel: SinonStub;
+
+  beforeEach(() => {
+    res = createCustomResponseObj();
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send error response if no userStats found", async () => {
+    stubedStatsModel.returns(false);
+
+    await statsController.getAllStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were found for this user");
+  });
+
+  it("should send error response if no stats were yet to be created", async () => {
+    stubedStatsModel.returns({
+      stats: [],
+    });
+
+    await statsController.getAllStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were created yet");
+  });
+
+  it("should send success response with all the stats", async () => {
+    const stats = [
+      { data: "data1", moreData: "moreData1" },
+      { data: "data2", moreData: "moreData2" },
+      { data: "data3", moreData: "moreData3" },
+    ];
+    stubedStatsModel.returns({
+      stats,
+    });
+
+    await statsController.getAllStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj.stats).eql(stats);
+  });
+
+  afterEach(() => {
+    stubedStatsModel.restore();
+  });
+});
+
+describe("deleteLastStats endpoint tests", () => {
+  const req = {
+    userId: "123",
+  };
+
+  let res: ResponseCustomObject;
+  let stubedStatsModel: SinonStub;
+
+  beforeEach(() => {
+    res = createCustomResponseObj();
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send error response if no userStats found", async () => {
+    stubedStatsModel.returns(false);
+
+    await statsController.deleteLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were found for this user");
+  });
+
+  it("should send error response if no stats were yet to be created", async () => {
+    stubedStatsModel.returns({
+      stats: [],
+    });
+
+    await statsController.deleteLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were created yet");
+  });
+
+  it("should send error response if stats were created over 24 hours ago", async () => {
+    stubedStatsModel.returns({
+      stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
+    });
+
+    await statsController.deleteLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal(
+      "It's been over 24 hours since the last stats were created, You can't delete them"
+    );
+  });
+
+  it("should send success response and delete the last stats", async () => {
+    stubedStatsModel.returns({
+      save: sinon.spy(),
+      stats: [{ data: "first data" }, { data: "last data", date: new Date() }],
+    });
+
+    await statsController.deleteLastStats(req as any, res as any, () => {});
+
+    const userStats = PhysicalStats.findOne();
+    const lastStatsIndex = userStats.stats.length - 1;
+    const lastStats = userStats.stats[lastStatsIndex];
+
+    expect(lastStats.data).equal("first data");
+    expect(userStats.save.called).equal(true);
+    expect(res.statusCode).equal(200);
+    expect(res.msg).equal("The last stats were deleted");
+  });
+
+  afterEach(() => {
+    stubedStatsModel.restore();
+  });
+});
+
+describe("changeLastStats endpoint tests", () => {
+  const req = {
+    userId: "123",
+    body: <any>{},
+  };
+
+  let res: ResponseCustomObject;
+  let stubedStatsModel: SinonStub;
+
+  beforeEach(() => {
+    res = createCustomResponseObj();
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send error response if no userStats found", async () => {
+    stubedStatsModel.returns(false);
+
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were found for this user");
+  });
+
+  it("should send error response if no stats were yet to be created", async () => {
+    stubedStatsModel.returns({
+      stats: [],
+    });
+
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No stats were created yet");
+  });
+
+  it("should send error response if stats were created over 24 hours ago", async () => {
+    stubedStatsModel.returns({
+      stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
+    });
+
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal(
+      "It's been over 24 hours since the last stats were created, You can't change them"
+    );
+  });
+
+  it("should send error response if no data was sent", async () => {
+    stubedStatsModel.returns({
+      stats: [{ date: new Date() }],
+    });
+
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal("No data was provided");
+  });
+
+  it("should change the last stats and send success response", async () => {
+    stubedStatsModel.returns({
+      save: sinon.spy(),
+      stats: [{ data: "data" }, { date: new Date() }],
+    });
+    req.body.weight = 1;
+    req.body.height = 2;
+    req.body.fatPercentage = 3;
+    req.body.muscelesMass = 4;
+    req.body.bodyImageUrl = "image";
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    const userStats = PhysicalStats.findOne();
+    const lastStatsIndex = userStats.stats.length - 1;
+    const lastStats = userStats.stats[lastStatsIndex];
+
+    expect(lastStats.weight).equal(1);
+    expect(lastStats.height).equal(2);
+    expect(lastStats.fatPercentage).equal(3);
+    expect(lastStats.muscelesMass).equal(4);
+    expect(lastStats.bodyImageUrl).equal("image");
+    expect(userStats.save.called).equal(true);
+  });
+
+  it("should send success response and change the last stats", async () => {
+    stubedStatsModel.returns({
+      save: sinon.spy(),
+      stats: [{ data: "data" }, { date: new Date() }],
+    });
+    req.body.weight = 1;
+
+    await statsController.changeLastStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(200);
+    expect(res.msg).equal("The last stats were updated");
+  });
+
+  afterEach(() => {
+    stubedStatsModel.restore();
   });
 });
