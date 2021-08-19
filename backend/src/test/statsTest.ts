@@ -19,7 +19,7 @@ describe("addStats endpoint general tests", () => {
     body: {
       weight: 100,
       fatPercentage: 20,
-      muscelesMass: 30,
+      musclesMass: 30,
       height: 180,
       bodyImageUrl: "image",
     },
@@ -57,7 +57,7 @@ describe("addStats endpoint general tests", () => {
     expect(newStats.weight).equal(100);
     expect(newStats.height).equal(180);
     expect(newStats.fatPercentage).equal(20);
-    expect(newStats.muscelesMass).equal(30);
+    expect(newStats.musclesMass).equal(30);
     expect(newStats.bodyImageUrl).equal("image");
     expect(user.grade).equal(15);
     expect(user.save.called).equal(true);
@@ -87,7 +87,7 @@ describe("addStats endpoint deeply tests", () => {
     body: {
       weight: 100,
       fatPercentage: 20,
-      muscelesMass: 30,
+      musclesMass: 30,
       height: 180,
       bodyImageUrl: "image",
     } as any,
@@ -100,8 +100,8 @@ describe("addStats endpoint deeply tests", () => {
     stubedUserModel = sinon.stub(User, "findById");
     stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
     stubedGoalsModel.returns({
-      basicGoals: "lose weight",
-      detailGoals: { weight: 30, fatPercentage: 5, muscelesMass: 100 },
+      basicGoals: "lose fat",
+      detailGoals: { weight: 30, fatPercentage: 5, musclesMass: 100 },
     });
   });
 
@@ -117,7 +117,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 110,
       fatPercentage: 25,
-      muscelesMass: 25,
+      musclesMass: 25,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -134,7 +134,7 @@ describe("addStats endpoint deeply tests", () => {
       "Unfortunately you didn't reduced your fat percentage this time"
     );
     expect(res.jsonObj.messages[1]).equal(
-      "Unfortunately you didn't gain more musceles mass this time"
+      "Unfortunately you didn't gain more muscles mass this time"
     );
     expect(res.jsonObj.messages[2]).equal("You failed to lose weight");
     expect(res.jsonObj.accomplishments).eql({});
@@ -152,7 +152,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 100,
       fatPercentage: 25,
-      muscelesMass: 25,
+      musclesMass: 25,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -169,13 +169,13 @@ describe("addStats endpoint deeply tests", () => {
       "Unfortunately you didn't reduced your fat percentage this time"
     );
     expect(res.jsonObj.messages[1]).equal(
-      "Unfortunately you didn't gain more musceles mass this time"
+      "Unfortunately you didn't gain more muscles mass this time"
     );
     expect(res.jsonObj.messages.length).equal(2);
     expect(res.jsonObj.accomplishments).eql({});
   });
 
-  it("should add the grade and send messages (muscelesMass improved)", async () => {
+  it("should add the grade and send messages (musclesMass improved)", async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -187,7 +187,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 90,
       fatPercentage: 25,
-      muscelesMass: 30,
+      musclesMass: 30,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -218,7 +218,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 88,
       fatPercentage: 20,
-      muscelesMass: 31,
+      musclesMass: 31,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -246,7 +246,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 30,
       fatPercentage: 19,
-      muscelesMass: 32,
+      musclesMass: 32,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -261,7 +261,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.messages.length).equal(0);
     expect(res.jsonObj.accomplishments.weight).equal(true);
     expect(res.jsonObj.accomplishments.fatPercentage).equal(undefined);
-    expect(res.jsonObj.accomplishments.muscelesMass).equal(undefined);
+    expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
   });
 
   it("should add the grade and send messages (fatPercentage reached goal)", async () => {
@@ -276,7 +276,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 29,
       fatPercentage: 5,
-      muscelesMass: 33,
+      musclesMass: 33,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -291,7 +291,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.messages.length).equal(0);
     expect(res.jsonObj.accomplishments.weight).equal(true);
     expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-    expect(res.jsonObj.accomplishments.muscelesMass).equal(undefined);
+    expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
   });
 
   it("should add the grade and send messages (fatPercentage reached goal)", async () => {
@@ -306,7 +306,7 @@ describe("addStats endpoint deeply tests", () => {
       bodyImageUrl: "",
       weight: 28,
       fatPercentage: 4,
-      muscelesMass: 100,
+      musclesMass: 100,
     };
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -321,7 +321,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.messages.length).equal(0);
     expect(res.jsonObj.accomplishments.weight).equal(true);
     expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-    expect(res.jsonObj.accomplishments.muscelesMass).equal(true);
+    expect(res.jsonObj.accomplishments.musclesMass).equal(true);
   });
 
   afterEach(() => {
@@ -634,7 +634,7 @@ describe("changeLastStats endpoint tests", () => {
     req.body.weight = 1;
     req.body.height = 2;
     req.body.fatPercentage = 3;
-    req.body.muscelesMass = 4;
+    req.body.musclesMass = 4;
     req.body.bodyImageUrl = "image";
     await statsController.changeLastStats(req as any, res as any, () => {});
 
@@ -645,7 +645,7 @@ describe("changeLastStats endpoint tests", () => {
     expect(lastStats.weight).equal(1);
     expect(lastStats.height).equal(2);
     expect(lastStats.fatPercentage).equal(3);
-    expect(lastStats.muscelesMass).equal(4);
+    expect(lastStats.musclesMass).equal(4);
     expect(lastStats.bodyImageUrl).equal("image");
     expect(userStats.save.called).equal(true);
   });
@@ -665,5 +665,46 @@ describe("changeLastStats endpoint tests", () => {
 
   afterEach(() => {
     stubedStatsModel.restore();
+  });
+});
+
+describe("set ranks tests", () => {
+  const req = { userId: "123", body: { selfRank: "new rank" } as any };
+  const res = createCustomResponseObj();
+  let stubedStats: SinonStub;
+
+  before(() => {
+    stubedStats = sinon.stub(PhysicalStats, "findOne");
+  });
+
+  it("should send an error response if physical stats was not found", async () => {
+    stubedStats.returns(false);
+
+    await statsController.setRanking(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(401);
+    expect(res.msg).equal(
+      "Something went wrong... Couldn't find stats that match the user"
+    );
+  });
+
+  it("should save the new rank", async () => {
+    stubedStats.returns({ save: sinon.spy() });
+
+    await statsController.setRanking(req as any, res as any, () => {});
+
+    const stats = await PhysicalStats.findOne();
+
+    expect(stats.rank).equal("new rank");
+    expect(stats.save.called).equal(true);
+  });
+
+  it("should send a success response", () => {
+    expect(res.statusCode).equal(201);
+    expect(res.msg).equal("Ranking the user successfully");
+  });
+
+  after(() => {
+    stubedStats.restore();
   });
 });

@@ -30,7 +30,6 @@ const createModelsWhenSignup = async (newUser: NewUser) => {
     const UserDiet = new Diet({ user: newUser._id, ingredients: [] });
     const UserProgram = new Program({
       user: newUser._id,
-      goals: {},
       program: [],
     });
 

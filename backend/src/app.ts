@@ -11,10 +11,12 @@ import RateLimiter from "express-rate-limit";
 import express, { Request, Response, NextFunction } from "express";
 
 import connectDb from "./utils/database";
+import { CustomError } from "./types/error";
 import authRoute from "./routes/auth";
 import statsRoute from "./routes/stats";
 import goalsRoute from "./routes/goals";
-import { CustomError } from "./types/error";
+import workoutRoute from "./routes/workout";
+import programRoute from "./routes/program";
 
 declare global {
   namespace Express {
@@ -61,6 +63,8 @@ app.use(csrfProtection); //in frontend in the requests body put the token under 
 app.use("/auth", authRoute);
 app.use("/goals", goalsRoute);
 app.use("/stats", statsRoute);
+app.use("/workout", workoutRoute);
+app.use("/program", programRoute);
 
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {

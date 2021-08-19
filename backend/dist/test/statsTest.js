@@ -38,7 +38,7 @@ describe("addStats endpoint general tests", () => {
         body: {
             weight: 100,
             fatPercentage: 20,
-            muscelesMass: 30,
+            musclesMass: 30,
             height: 180,
             bodyImageUrl: "image",
         },
@@ -70,7 +70,7 @@ describe("addStats endpoint general tests", () => {
         chai_1.expect(newStats.weight).equal(100);
         chai_1.expect(newStats.height).equal(180);
         chai_1.expect(newStats.fatPercentage).equal(20);
-        chai_1.expect(newStats.muscelesMass).equal(30);
+        chai_1.expect(newStats.musclesMass).equal(30);
         chai_1.expect(newStats.bodyImageUrl).equal("image");
         chai_1.expect(user.grade).equal(15);
         chai_1.expect(user.save.called).equal(true);
@@ -98,7 +98,7 @@ describe("addStats endpoint deeply tests", () => {
         body: {
             weight: 100,
             fatPercentage: 20,
-            muscelesMass: 30,
+            musclesMass: 30,
             height: 180,
             bodyImageUrl: "image",
         },
@@ -111,8 +111,8 @@ describe("addStats endpoint deeply tests", () => {
         stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
         stubedGoalsModel.returns({
-            basicGoals: "lose weight",
-            detailGoals: { weight: 30, fatPercentage: 5, muscelesMass: 100 },
+            basicGoals: "lose fat",
+            detailGoals: { weight: 30, fatPercentage: 5, musclesMass: 100 },
         });
     });
     it("should add the grade and send messages", async () => {
@@ -125,7 +125,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 110,
             fatPercentage: 25,
-            muscelesMass: 25,
+            musclesMass: 25,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -136,7 +136,7 @@ describe("addStats endpoint deeply tests", () => {
         chai_1.expect(stats.stats.length).equal(2);
         chai_1.expect(stats.save.called).equal(true);
         chai_1.expect(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
-        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more musceles mass this time");
+        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
         chai_1.expect(res.jsonObj.messages[2]).equal("You failed to lose weight");
         chai_1.expect(res.jsonObj.accomplishments).eql({});
     });
@@ -150,7 +150,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 100,
             fatPercentage: 25,
-            muscelesMass: 25,
+            musclesMass: 25,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -161,11 +161,11 @@ describe("addStats endpoint deeply tests", () => {
         chai_1.expect(stats.stats.length).equal(2);
         chai_1.expect(stats.save.called).equal(true);
         chai_1.expect(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
-        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more musceles mass this time");
+        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
         chai_1.expect(res.jsonObj.messages.length).equal(2);
         chai_1.expect(res.jsonObj.accomplishments).eql({});
     });
-    it("should add the grade and send messages (muscelesMass improved)", async () => {
+    it("should add the grade and send messages (musclesMass improved)", async () => {
         const statsArray = [];
         stubedUserModel.returns({ grade: 0, save: sinon_1.default.spy() });
         stubedStatsModel.returns({ stats: statsArray, save: sinon_1.default.spy() });
@@ -175,7 +175,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 90,
             fatPercentage: 25,
-            muscelesMass: 30,
+            musclesMass: 30,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -198,7 +198,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 88,
             fatPercentage: 20,
-            muscelesMass: 31,
+            musclesMass: 31,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -220,7 +220,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 30,
             fatPercentage: 19,
-            muscelesMass: 32,
+            musclesMass: 32,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -232,7 +232,7 @@ describe("addStats endpoint deeply tests", () => {
         chai_1.expect(res.jsonObj.messages.length).equal(0);
         chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
         chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(undefined);
-        chai_1.expect(res.jsonObj.accomplishments.muscelesMass).equal(undefined);
+        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
     });
     it("should add the grade and send messages (fatPercentage reached goal)", async () => {
         const statsArray = [];
@@ -244,7 +244,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 29,
             fatPercentage: 5,
-            muscelesMass: 33,
+            musclesMass: 33,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -256,7 +256,7 @@ describe("addStats endpoint deeply tests", () => {
         chai_1.expect(res.jsonObj.messages.length).equal(0);
         chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
         chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.muscelesMass).equal(undefined);
+        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
     });
     it("should add the grade and send messages (fatPercentage reached goal)", async () => {
         const statsArray = [];
@@ -268,7 +268,7 @@ describe("addStats endpoint deeply tests", () => {
             bodyImageUrl: "",
             weight: 28,
             fatPercentage: 4,
-            muscelesMass: 100,
+            musclesMass: 100,
         };
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
@@ -280,7 +280,7 @@ describe("addStats endpoint deeply tests", () => {
         chai_1.expect(res.jsonObj.messages.length).equal(0);
         chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
         chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.muscelesMass).equal(true);
+        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(true);
     });
     afterEach(() => {
         stubedUserModel.restore();
@@ -513,7 +513,7 @@ describe("changeLastStats endpoint tests", () => {
         req.body.weight = 1;
         req.body.height = 2;
         req.body.fatPercentage = 3;
-        req.body.muscelesMass = 4;
+        req.body.musclesMass = 4;
         req.body.bodyImageUrl = "image";
         await statsController.changeLastStats(req, res, () => { });
         const userStats = PhysicalStats_1.default.findOne();
@@ -522,7 +522,7 @@ describe("changeLastStats endpoint tests", () => {
         chai_1.expect(lastStats.weight).equal(1);
         chai_1.expect(lastStats.height).equal(2);
         chai_1.expect(lastStats.fatPercentage).equal(3);
-        chai_1.expect(lastStats.muscelesMass).equal(4);
+        chai_1.expect(lastStats.musclesMass).equal(4);
         chai_1.expect(lastStats.bodyImageUrl).equal("image");
         chai_1.expect(userStats.save.called).equal(true);
     });
@@ -538,5 +538,33 @@ describe("changeLastStats endpoint tests", () => {
     });
     afterEach(() => {
         stubedStatsModel.restore();
+    });
+});
+describe("set ranks tests", () => {
+    const req = { userId: "123", body: { selfRank: "new rank" } };
+    const res = responseDefaultObj_1.default();
+    let stubedStats;
+    before(() => {
+        stubedStats = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
+    });
+    it("should send an error response if physical stats was not found", async () => {
+        stubedStats.returns(false);
+        await statsController.setRanking(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.msg).equal("Something went wrong... Couldn't find stats that match the user");
+    });
+    it("should save the new rank", async () => {
+        stubedStats.returns({ save: sinon_1.default.spy() });
+        await statsController.setRanking(req, res, () => { });
+        const stats = await PhysicalStats_1.default.findOne();
+        chai_1.expect(stats.rank).equal("new rank");
+        chai_1.expect(stats.save.called).equal(true);
+    });
+    it("should send a success response", () => {
+        chai_1.expect(res.statusCode).equal(201);
+        chai_1.expect(res.msg).equal("Ranking the user successfully");
+    });
+    after(() => {
+        stubedStats.restore();
     });
 });

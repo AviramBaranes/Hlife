@@ -14,46 +14,16 @@ const ProgramSchema = new Schema({
           "Sunday",
           "Monday",
           "Tuesday",
-          "Regular",
+          "Wednesday",
           "Thursday",
           "Friday",
           "Saturday",
         ],
       },
 
-      rest: { type: Boolean, required: true },
+      restDay: { type: Boolean },
 
-      name: { type: String, requried: true },
-
-      description: { type: String },
-
-      aerobic: { type: Boolean, required: true },
-
-      muscles: [
-        {
-          muscle: {
-            type: String,
-            enum: [
-              "Traps",
-              "Shoulders",
-              "Chest",
-              "Upper back",
-              "Lats", //כנפיים
-              "Lower back",
-              "Triceps",
-              "Biceps",
-              "Forearm",
-              "Abs",
-              "Gluteus", //עכוז
-              "Quads", //ארבעראשי
-              "Hamstrings",
-              "Claves", //תאומים
-            ],
-          },
-        },
-      ],
-
-      time: { type: Number, min: 10, max: 300 },
+      workout: { type: Schema.Types.ObjectId, ref: "Workout" },
     },
   ],
 });

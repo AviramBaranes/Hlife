@@ -29,24 +29,37 @@ const goalsController = __importStar(require("../controller/goals"));
 const router = express_1.default.Router();
 router.post("/", authMiddleware_1.default, [
     express_validator_1.body("basicGoal").custom((value) => {
-        if (value === "lose weight" || value === "gain weight") {
+        if (value === "lose fat" || value === "increase muscles mass") {
             return true;
         }
-        throw new Error("basic goal can be either 'lose weight' or 'gain weight'");
+        throw new Error("basic goal can be either 'lose fat' or 'increase muscles mass'");
     }),
-    express_validator_1.body("weight", "Weight must be a number").isFloat(),
+    express_validator_1.body("weight", "Weight must be a number").isFloat({ min: 30, max: 225 }),
     express_validator_1.body("fatPercentage", "Fat percentage must be a number")
         .optional()
-        .isFloat(),
-    express_validator_1.body("muscelesMass", "Musceles mass must be a number").optional().isFloat(),
+        .isFloat({ min: 0, max: 50 }),
+    express_validator_1.body("musclesMass", "Muscles mass must be a number")
+        .optional()
+        .isFloat({ min: 25, max: 100 }),
 ], goalsController.createGoal);
-router.put("/basicGoal", authMiddleware_1.default, goalsController.changeBasicGoal);
-router.put("/", authMiddleware_1.default, [
-    express_validator_1.body("weight", "Weight must be a number").optional().isFloat(),
+router.put("/basicGoal", authMiddleware_1.default, [
     express_validator_1.body("fatPercentage", "Fat percentage must be a number")
         .optional()
-        .isFloat(),
-    express_validator_1.body("muscelesMass", "Musceles mass must be a number").optional().isFloat(),
+        .isFloat({ min: 0, max: 50 }),
+    express_validator_1.body("musclesMass", "Muscles mass must be a number")
+        .optional()
+        .isFloat({ min: 25, max: 100 }),
+], goalsController.changeBasicGoal);
+router.put("/", authMiddleware_1.default, [
+    express_validator_1.body("weight", "Weight must be a number")
+        .optional()
+        .isFloat({ min: 30, max: 225 }),
+    express_validator_1.body("fatPercentage", "Fat percentage must be a number")
+        .optional()
+        .isFloat({ min: 0, max: 50 }),
+    express_validator_1.body("musclesMass", "Muscles mass must be a number")
+        .optional()
+        .isFloat({ min: 25, max: 100 }),
 ], goalsController.changeGoals);
 router.get("/", authMiddleware_1.default, goalsController.getGoals);
 exports.default = router;

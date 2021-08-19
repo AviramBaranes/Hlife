@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 
-import { validationErrorsHandler } from "../utils/helpers/Errors/valdiationErrors";
+import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import PhysicalStats from "../models/PhysicalStats";
 import Goals from "../models/Goals";
@@ -15,7 +15,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
     validationErrorsHandler(req);
     const { userId } = req;
 
-    const { weight, height, fatPercentage, muscelesMass, bodyImageUrl } =
+    const { weight, height, fatPercentage, musclesMass, bodyImageUrl } =
       req.body;
     const userGoals = await Goals.findOne({ user: userId });
 
@@ -40,7 +40,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
           lastWeightRecord,
           fatPercentage,
           lastStatsRecord,
-          muscelesMass,
+          musclesMass,
           userGoals.basicGoals,
           userGoals.detailGoals,
           weight,
@@ -57,7 +57,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
       weight,
       height,
       fatPercentage,
-      muscelesMass,
+      musclesMass,
       bodyImageUrl,
     };
 
@@ -195,7 +195,7 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
 export const changeLastStats: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
-    const { weight, height, fatPercentage, muscelesMass, bodyImageUrl } =
+    const { weight, height, fatPercentage, musclesMass, bodyImageUrl } =
       req.body;
 
     const userStats = await PhysicalStats.findOne({ user: userId });
@@ -228,7 +228,7 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     }
 
     const noData =
-      !weight && !height && !fatPercentage && !muscelesMass && !bodyImageUrl;
+      !weight && !height && !fatPercentage && !musclesMass && !bodyImageUrl;
 
     if (noData) {
       res.status(401).send("No data was provided");
@@ -238,12 +238,40 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     if (weight) lastStats.weight = weight;
     if (height) lastStats.height = height;
     if (fatPercentage) lastStats.fatPercentage = fatPercentage;
-    if (muscelesMass) lastStats.muscelesMass = muscelesMass;
+    if (musclesMass) lastStats.musclesMass = musclesMass;
     if (bodyImageUrl) lastStats.bodyImageUrl = bodyImageUrl;
 
     await userStats.save();
 
     res.status(200).send("The last stats were updated");
+  } catch (err) {
+    catchErrorHandler(err, next);
+  }
+};
+
+export const setRanking: RequestHandler = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const { selfRank } = req.body;
+
+    validationErrorsHandler(req);
+
+    const physicalStats = await PhysicalStats.findOne({ user: userId });
+
+    if (!physicalStats) {
+      res
+        .status(401)
+        .send(
+          "Something went wrong... Couldn't find stats that match the user"
+        );
+      return;
+    }
+
+    physicalStats.rank = selfRank;
+    await physicalStats.save();
+
+    res.status(201).send("Ranking the user successfully");
+    return;
   } catch (err) {
     catchErrorHandler(err, next);
   }

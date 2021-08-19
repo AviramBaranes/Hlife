@@ -9,13 +9,13 @@ const GoalsSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     basicGoal: {
         type: String,
-        enum: ["lose weight", "gain weight"],
+        enum: ["lose fat", "increase muscles mass"],
         required: true,
     },
     detailGoals: {
         weight: { type: Number, required: true },
         fatPercentage: { type: Number },
-        muscelesMass: { type: Number },
+        musclesMass: { type: Number },
         date: { type: Date },
     },
 });

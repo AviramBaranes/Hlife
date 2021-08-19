@@ -7,6 +7,12 @@ const PhysicalStatsSchema = new Schema({
 
   age: { type: Number, required: true, min: 16, max: 100 },
 
+  rank: {
+    type: String,
+    default: "Beginner",
+    enum: ["Beginner", "Intermediate", "Advanced", "Pro"],
+  },
+
   stats: [
     {
       date: { type: Date, required: true },
@@ -17,7 +23,7 @@ const PhysicalStatsSchema = new Schema({
 
       fatPercentage: { type: Number, min: 0, max: 80 },
 
-      muscelesMass: { type: Number, min: 10, max: 200 },
+      musclesMass: { type: Number, min: 10, max: 200 },
 
       bodyImageUrl: { type: String },
 

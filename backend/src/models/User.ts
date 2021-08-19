@@ -26,6 +26,17 @@ const UserSchema = new Schema({
 
   hasDiet: { type: Boolean, default: false },
 
+  workouts: [
+    {
+      trainingDayName: {
+        type: String,
+        enum: ["A", "B", "C", "D", "FB", "aerobic"],
+        required: true,
+      },
+      name: { type: String, required: true },
+    },
+  ],
+
   resetToken: { type: String },
 
   tokenExpiration: { type: Date },

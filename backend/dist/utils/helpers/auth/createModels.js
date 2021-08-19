@@ -24,7 +24,6 @@ const createModelsWhenSignup = async (newUser) => {
         const UserDiet = new Diet_1.default({ user: newUser._id, ingredients: [] });
         const UserProgram = new Program_1.default({
             user: newUser._id,
-            goals: {},
             program: [],
         });
         const UserProgramExecution = new ProgramExecution_1.default({

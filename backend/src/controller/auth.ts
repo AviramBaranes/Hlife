@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, RequestHandler } from "express";
 import User from "../models/User";
-import { validationErrorsHandler } from "../utils/helpers/Errors/valdiationErrors";
+import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 import createModels from "../utils/helpers/auth/createModels";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 
@@ -8,7 +8,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import sendGridMail from "@sendgrid/mail";
-import { CustomError } from "../types/error";
 
 export const signup = async (
   req: Request,
@@ -50,6 +49,7 @@ export const signup = async (
       gender,
       dateOfBirth,
       grade: 0,
+      workouts: [],
     });
 
     await newUser.save();
@@ -214,7 +214,6 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
     try {
       await sendGridMail.send(message);
       res.status(200).send("Reset Email Sent!");
-      console.log("Success!");
     } catch (error) {
       process.env.Node_ENV !== "test" && console.log(error);
       throw error;

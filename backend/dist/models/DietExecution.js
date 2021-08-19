@@ -17,7 +17,7 @@ const DietExecutionSchema = new Schema({
             proteinsConsumption: { type: Number },
             carbohydratesConsumption: { type: Number },
             dietaryFibresConsumption: { type: Number },
-            successRate: { type: Number, reqiured: true, min: 0, max: 100 },
+            successRate: { type: Number, required: true, min: 0, max: 100 },
             grade: { type: Number, required: true, min: 0, max: 10 },
         },
     ],

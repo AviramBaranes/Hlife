@@ -7,7 +7,7 @@ const GoalsSchema = new Schema({
 
   basicGoal: {
     type: String,
-    enum: ["lose weight", "gain weight"],
+    enum: ["lose fat", "increase muscles mass"],
     required: true,
   },
 
@@ -16,7 +16,7 @@ const GoalsSchema = new Schema({
 
     fatPercentage: { type: Number },
 
-    muscelesMass: { type: Number },
+    musclesMass: { type: Number },
 
     date: { type: Date },
   },

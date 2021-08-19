@@ -9,7 +9,7 @@ const ProgramExecutionSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     executions: [
         {
-            program: {
+            programId: {
                 type: Schema.Types.ObjectId,
                 ref: "Program.program",
                 required: true,

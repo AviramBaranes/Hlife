@@ -17,6 +17,8 @@ const database_1 = __importDefault(require("./utils/database"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const stats_1 = __importDefault(require("./routes/stats"));
 const goals_1 = __importDefault(require("./routes/goals"));
+const workout_1 = __importDefault(require("./routes/workout"));
+const program_1 = __importDefault(require("./routes/program"));
 const csrfProtection = csurf_1.default({ cookie: true });
 const app = express_1.default();
 database_1.default();
@@ -46,6 +48,8 @@ app.use(csrfProtection); //in frontend in the requests body put the token under 
 app.use("/auth", auth_1.default);
 app.use("/goals", goals_1.default);
 app.use("/stats", stats_1.default);
+app.use("/workout", workout_1.default);
+app.use("/program", program_1.default);
 app.use((error, req, res, next) => {
     let { statusCode, message, data } = error;
     if (!statusCode)

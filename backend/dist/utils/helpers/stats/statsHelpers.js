@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateGrade = void 0;
 let goalsAchieved = {};
-const calculateGrade = (lastWeightRecord, fatPercentage, lastStatsRecord, muscelesMass, basicGoals, detailedGoals, weight, failureMessages) => {
+const calculateGrade = (lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, basicGoals, detailedGoals, weight, failureMessages) => {
     let calculatedGrade = 0;
     const fatPercentageImproved = fatPercentage < lastStatsRecord.fatPercentage;
     const fatPercentageReachGoal = fatPercentage <= detailedGoals.fatPercentage;
-    const muscelesMassImproved = muscelesMass > lastStatsRecord.muscelesMass;
-    const muscelesMassReachGoal = muscelesMass >= detailedGoals.muscelesMass;
-    const loseWeightGoal = basicGoals === "lose weight";
+    const musclesMassImproved = musclesMass > lastStatsRecord.musclesMass;
+    const musclesMassReachGoal = musclesMass >= detailedGoals.musclesMass;
+    const loseFatGoal = basicGoals === "lose fat";
     const WeightDecrease = lastWeightRecord > weight;
     const loseWeightGoalAchieved = weight <= detailedGoals.weight;
     const gainWeightGoalAchieved = weight >= detailedGoals.weight;
@@ -23,19 +23,19 @@ const calculateGrade = (lastWeightRecord, fatPercentage, lastStatsRecord, muscel
     else {
         failureMessages.push("Unfortunately you didn't reduced your fat percentage this time");
     }
-    //MuscelesMass
-    if (muscelesMassImproved) {
+    //MusclesMass
+    if (musclesMassImproved) {
         calculatedGrade += 5;
-        if (muscelesMassReachGoal) {
+        if (musclesMassReachGoal) {
             calculatedGrade += 5;
-            goalsAchieved.muscelesMass = true;
+            goalsAchieved.musclesMass = true;
         }
     }
     else {
-        failureMessages.push("Unfortunately you didn't gain more musceles mass this time");
+        failureMessages.push("Unfortunately you didn't gain more muscles mass this time");
     }
     //Weight
-    if (loseWeightGoal) {
+    if (loseFatGoal) {
         if (WeightDecrease) {
             calculatedGrade += 5;
             if (loseWeightGoalAchieved) {

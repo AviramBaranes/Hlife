@@ -3,8 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.changeLastStats = exports.deleteLastStats = exports.getAllStats = exports.getStatsByDate = exports.getAllStatsDates = exports.addStats = void 0;
-const valdiationErrors_1 = require("../utils/helpers/Errors/valdiationErrors");
+exports.setRanking = exports.changeLastStats = exports.deleteLastStats = exports.getAllStats = exports.getStatsByDate = exports.getAllStatsDates = exports.addStats = void 0;
+const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
 const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
 const Goals_1 = __importDefault(require("../models/Goals"));
@@ -12,9 +12,9 @@ const User_1 = __importDefault(require("../models/User"));
 const statsHelpers_1 = require("../utils/helpers/stats/statsHelpers");
 const addStats = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { userId } = req;
-        const { weight, height, fatPercentage, muscelesMass, bodyImageUrl } = req.body;
+        const { weight, height, fatPercentage, musclesMass, bodyImageUrl } = req.body;
         const userGoals = await Goals_1.default.findOne({ user: userId });
         if (!userGoals) {
             res.status(401).send("User's goals not found");
@@ -29,7 +29,7 @@ const addStats = async (req, res, next) => {
             const lastStatsIndex = userStats.stats.length - 1;
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
-            const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, muscelesMass, userGoals.basicGoals, userGoals.detailGoals, weight, messages);
+            const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoals, userGoals.detailGoals, weight, messages);
             grade += calculatedGrade;
             messages = [...failureMessages];
             accomplishments = { ...goalsAchieved };
@@ -40,7 +40,7 @@ const addStats = async (req, res, next) => {
             weight,
             height,
             fatPercentage,
-            muscelesMass,
+            musclesMass,
             bodyImageUrl,
         };
         user.grade += grade;
@@ -152,7 +152,7 @@ exports.deleteLastStats = deleteLastStats;
 const changeLastStats = async (req, res, next) => {
     try {
         const { userId } = req;
-        const { weight, height, fatPercentage, muscelesMass, bodyImageUrl } = req.body;
+        const { weight, height, fatPercentage, musclesMass, bodyImageUrl } = req.body;
         const userStats = await PhysicalStats_1.default.findOne({ user: userId });
         if (!userStats) {
             res.status(401).send("No stats were found for this user");
@@ -174,7 +174,7 @@ const changeLastStats = async (req, res, next) => {
                 .send("It's been over 24 hours since the last stats were created, You can't change them");
             return;
         }
-        const noData = !weight && !height && !fatPercentage && !muscelesMass && !bodyImageUrl;
+        const noData = !weight && !height && !fatPercentage && !musclesMass && !bodyImageUrl;
         if (noData) {
             res.status(401).send("No data was provided");
             return;
@@ -185,8 +185,8 @@ const changeLastStats = async (req, res, next) => {
             lastStats.height = height;
         if (fatPercentage)
             lastStats.fatPercentage = fatPercentage;
-        if (muscelesMass)
-            lastStats.muscelesMass = muscelesMass;
+        if (musclesMass)
+            lastStats.musclesMass = musclesMass;
         if (bodyImageUrl)
             lastStats.bodyImageUrl = bodyImageUrl;
         await userStats.save();
@@ -197,3 +197,25 @@ const changeLastStats = async (req, res, next) => {
     }
 };
 exports.changeLastStats = changeLastStats;
+const setRanking = async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const { selfRank } = req.body;
+        validationErrors_1.validationErrorsHandler(req);
+        const physicalStats = await PhysicalStats_1.default.findOne({ user: userId });
+        if (!physicalStats) {
+            res
+                .status(401)
+                .send("Something went wrong... Couldn't find stats that match the user");
+            return;
+        }
+        physicalStats.rank = selfRank;
+        await physicalStats.save();
+        res.status(201).send("Ranking the user successfully");
+        return;
+    }
+    catch (err) {
+        catchErrorsHandler_1.catchErrorHandler(err, next);
+    }
+};
+exports.setRanking = setRanking;

@@ -1,12 +1,12 @@
 interface GoalsAndStatsObj {
   fatPercentage: number;
-  muscelesMass: number;
+  musclesMass: number;
   weight?: number;
 }
 
 export interface GoalsAchieved {
   fatPercentage: boolean;
-  muscelesMass: boolean;
+  musclesMass: boolean;
   weight: boolean;
 }
 
@@ -16,7 +16,7 @@ export const calculateGrade = (
   lastWeightRecord: number,
   fatPercentage: number,
   lastStatsRecord: GoalsAndStatsObj,
-  muscelesMass: number,
+  musclesMass: number,
   basicGoals: string,
   detailedGoals: GoalsAndStatsObj,
   weight: number,
@@ -27,10 +27,10 @@ export const calculateGrade = (
   const fatPercentageImproved = fatPercentage < lastStatsRecord.fatPercentage;
   const fatPercentageReachGoal = fatPercentage <= detailedGoals.fatPercentage;
 
-  const muscelesMassImproved = muscelesMass > lastStatsRecord.muscelesMass;
-  const muscelesMassReachGoal = muscelesMass >= detailedGoals.muscelesMass;
+  const musclesMassImproved = musclesMass > lastStatsRecord.musclesMass;
+  const musclesMassReachGoal = musclesMass >= detailedGoals.musclesMass;
 
-  const loseWeightGoal = basicGoals === "lose weight";
+  const loseFatGoal = basicGoals === "lose fat";
   const WeightDecrease = lastWeightRecord > weight;
   const loseWeightGoalAchieved = weight <= detailedGoals.weight!;
   const gainWeightGoalAchieved = weight >= detailedGoals.weight!;
@@ -48,21 +48,21 @@ export const calculateGrade = (
     );
   }
 
-  //MuscelesMass
-  if (muscelesMassImproved) {
+  //MusclesMass
+  if (musclesMassImproved) {
     calculatedGrade += 5;
-    if (muscelesMassReachGoal) {
+    if (musclesMassReachGoal) {
       calculatedGrade += 5;
-      goalsAchieved.muscelesMass = true;
+      goalsAchieved.musclesMass = true;
     }
   } else {
     failureMessages.push(
-      "Unfortunately you didn't gain more musceles mass this time"
+      "Unfortunately you didn't gain more muscles mass this time"
     );
   }
 
   //Weight
-  if (loseWeightGoal) {
+  if (loseFatGoal) {
     if (WeightDecrease) {
       calculatedGrade += 5;
       if (loseWeightGoalAchieved) {

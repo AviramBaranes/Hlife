@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateUser = exports.validateResetToken = exports.resetPasswordViaToken = exports.sendResetEmail = exports.resetPassword = exports.logout = exports.login = exports.signup = void 0;
 const User_1 = __importDefault(require("../models/User"));
-const valdiationErrors_1 = require("../utils/helpers/Errors/valdiationErrors");
+const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
 const createModels_1 = __importDefault(require("../utils/helpers/auth/createModels"));
 const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -14,7 +14,7 @@ const crypto_1 = __importDefault(require("crypto"));
 const mail_1 = __importDefault(require("@sendgrid/mail"));
 const signup = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { name, username, email, password, passwordConfirmation, gender, dateOfBirth, } = req.body;
         const user = await User_1.default.findOne({ email });
         if (user) {
@@ -34,6 +34,7 @@ const signup = async (req, res, next) => {
             gender,
             dateOfBirth,
             grade: 0,
+            workouts: [],
         });
         await newUser.save();
         await createModels_1.default(newUser);
@@ -60,7 +61,7 @@ const signup = async (req, res, next) => {
 exports.signup = signup;
 const login = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { email, password } = req.body;
         const user = await User_1.default.findOne({ email }).select("+password");
         if (!user) {
@@ -113,7 +114,7 @@ const logout = (req, res, next) => {
 exports.logout = logout;
 const resetPassword = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { userId, currentPassword, newPassword, newPasswordConfirmation } = req.body;
         const user = await User_1.default.findById(userId).select("+password");
         if (!user)
@@ -136,7 +137,7 @@ const resetPassword = async (req, res, next) => {
 exports.resetPassword = resetPassword;
 const sendResetEmail = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { email } = req.body;
         const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
         if (tokenSlice.length < 2)
@@ -162,7 +163,6 @@ const sendResetEmail = async (req, res, next) => {
         try {
             await mail_1.default.send(message);
             res.status(200).send("Reset Email Sent!");
-            console.log("Success!");
         }
         catch (error) {
             process.env.Node_ENV !== "test" && console.log(error);
@@ -176,7 +176,7 @@ const sendResetEmail = async (req, res, next) => {
 exports.sendResetEmail = sendResetEmail;
 const resetPasswordViaToken = async (req, res, next) => {
     try {
-        valdiationErrors_1.validationErrorsHandler(req);
+        validationErrors_1.validationErrorsHandler(req);
         const { password, passwordConfirmation, resetToken } = req.body;
         const isMatch = password === passwordConfirmation;
         if (!isMatch)
