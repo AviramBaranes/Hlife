@@ -13,7 +13,7 @@ export const getExecutionsOfWeek = async (
   if (noExecutions) return [];
 
   programExecutions.executions.forEach((execution: { date: Date }) => {
-    if (dates.includes(execution.date)) {
+    if (dates.includes(execution.date.toISOString())) {
       executionsOfWeek.push(execution);
     }
   });
@@ -74,10 +74,10 @@ export const getAllExecutions = async (userId: string): Promise<any[]> => {
 
 function getWeekDates(date: Date) {
   const sunday = new Date(date.setDate(date.getDate() - date.getDay()));
-  const result = [new Date(sunday)];
+  const result = [new Date(sunday).toISOString()];
 
   while (sunday.setDate(sunday.getDate() + 1) && sunday.getDay() !== 0) {
-    result.push(new Date(sunday));
+    result.push(new Date(sunday).toISOString());
   }
   return result;
 }

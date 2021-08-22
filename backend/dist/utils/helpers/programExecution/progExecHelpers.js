@@ -13,7 +13,7 @@ const getExecutionsOfWeek = async (date, userId) => {
     if (noExecutions)
         return [];
     programExecutions.executions.forEach((execution) => {
-        if (dates.includes(execution.date)) {
+        if (dates.includes(execution.date.toISOString())) {
             executionsOfWeek.push(execution);
         }
     });
@@ -60,9 +60,9 @@ const getAllExecutions = async (userId) => {
 exports.getAllExecutions = getAllExecutions;
 function getWeekDates(date) {
     const sunday = new Date(date.setDate(date.getDate() - date.getDay()));
-    const result = [new Date(sunday)];
+    const result = [new Date(sunday).toISOString()];
     while (sunday.setDate(sunday.getDate() + 1) && sunday.getDay() !== 0) {
-        result.push(new Date(sunday));
+        result.push(new Date(sunday).toISOString());
     }
     return result;
 }

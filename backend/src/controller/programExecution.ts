@@ -31,7 +31,6 @@ export const getExercisesByDate: RequestHandler = async (req, res, next) => {
     const user = await User.findById(userId);
 
     //TODO add program logic to program endpoints
-    console.log(1);
     if (!user.hasProgram) {
       res
         .status(401)
@@ -42,22 +41,18 @@ export const getExercisesByDate: RequestHandler = async (req, res, next) => {
     }
 
     const program = await Program.findOne({ user: userId });
-    console.log(2);
 
     const programOfDay = program.program.find(
       (program: ProgramType) => program.day === day
     ) as ProgramType;
 
-    console.log(day);
     if (programOfDay.restDay) {
       res
         .status(200)
         .send("This is a rest day, You have no exercises to complete!");
       return;
     }
-    console.log(4);
     const workout = await Workout.findById(programOfDay.workout);
-    console.log(5);
 
     const exercises = workout.exercises.map(
       (exercise: { name: string }) => exercise.name
@@ -74,7 +69,7 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
     const { exercises } = req.body;
-    const { date } = req.params || new Date();
+    const date = req.params.date || new Date();
 
     validationErrorsHandler(req);
 
@@ -103,42 +98,37 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
 
     if (programOfDay.restDay) {
       const currentExecution = {
-        programId: program.program._id,
+        programId: programOfDay._id,
         date,
         executionRate: 100,
         grade: 10,
       };
       programExecution.executions.push(currentExecution);
       user.grade += currentExecution.grade;
-      await user.save();
-      await programExecution.save();
-      res.status(200).send("Wonderful! Your execution has been declared");
-      return;
+    } else {
+      const numberOfExercises = Object.keys(exercises).length;
+      const valueOfEachExercise = 100 / numberOfExercises;
+      let numberOfExercisesDone = 0;
+
+      for (let exercise in exercises) {
+        if (exercises[exercise] === true) numberOfExercisesDone++;
+      }
+
+      const executionRate = Math.ceil(
+        valueOfEachExercise * numberOfExercisesDone
+      );
+      const grade = Math.ceil(executionRate / 10);
+
+      const execution = {
+        programId: programOfDay._id,
+        date,
+        executionRate,
+        grade,
+      };
+
+      programExecution.executions.push(execution);
+      user.grade += grade;
     }
-
-    const numberOfExercises = Object.keys(exercises).length;
-    const valueOfEachExercise = 100 / numberOfExercises;
-    let numberOfExercisesDone = 0;
-
-    for (let exercise in exercises) {
-      if (exercises[exercise] === true) numberOfExercisesDone++;
-    }
-
-    const executionRate = Math.ceil(
-      valueOfEachExercise * numberOfExercisesDone
-    );
-    const grade = Math.ceil(executionRate / 10);
-
-    const execution = {
-      programId: program.program._id,
-      date,
-      executionRate,
-      grade,
-    };
-
-    programExecution.executions.push(execution);
-    user.grade += grade;
-
     await programExecution.save();
     await user.save();
 
@@ -164,7 +154,8 @@ export const getSingleExecution: RequestHandler = async (req, res, next) => {
     const date = new Date(stringDate);
 
     const requestedExecution = programExecution.executions.find(
-      (execution: { date: Date }) => execution.date === date
+      (execution: { date: Date }) =>
+        execution.date.toISOString() === date.toISOString()
     );
 
     if (!requestedExecution) {

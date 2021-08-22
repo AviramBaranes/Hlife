@@ -1,16 +1,16 @@
-function getMonthDates(date) {
-  date.setDate(1);
-  const currentMonth = date.getMonth();
-  const result = [date.toISOString()];
+// function getMonthDates(date) {
+//   date.setDate(1);
+//   const currentMonth = date.getMonth();
+//   const result = [date.toISOString()];
 
-  while (
-    date.setDate(date.getDate() + 1) &&
-    new Date(date).getMonth() === currentMonth
-  ) {
-    result.push(date.toISOString());
-  }
-  return result;
-}
+//   while (
+//     date.setDate(date.getDate() + 1) &&
+//     new Date(date).getMonth() === currentMonth
+//   ) {
+//     result.push(date.toISOString());
+//   }
+//   return result;
+// }
 // function getYearDates(date:Date) {
 //     const year = date.getFullYear();
 //     date.setMonth(0);
@@ -24,4 +24,6 @@ function getMonthDates(date) {
 //     return result;
 //   }
 
-console.log(getMonthDates(new Date()));
+// const date = new Date(2021, 0, 2, 0, 0, 0);
+// date.setDate(date.getDate() + 1);
+// console.log(date);

@@ -1,6 +1,4 @@
-test postExecution
 test getAllExecution
-test getExecution
 
 test routes
 test models

@@ -8,6 +8,7 @@ import { validationErrorsHandler } from "../utils/helpers/Errors/validationError
 import User from "../models/User";
 
 export interface Program {
+  _id: Schema.Types.ObjectId;
   day: string;
   restDay: boolean;
   workout?: Schema.Types.ObjectId;
