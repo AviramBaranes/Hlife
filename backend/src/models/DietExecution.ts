@@ -1,34 +1,34 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
-const DietExecutionSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+// const DietExecutionSchema = new Schema({
+//   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-  diet: { type: Schema.Types.ObjectId, ref: "Diet", required: true },
+//   diet: { type: Schema.Types.ObjectId, ref: "Diet", required: true },
 
-  executions: [
-    {
-      date: { type: Date, required: true },
+//   executions: [
+//     {
+//       date: { type: Date, required: true },
 
-      isCheatDay: { type: Boolean, required: true },
+//       isCheatDay: { type: Boolean, required: true },
 
-      caloriesConsumption: { type: Number },
+//       caloriesConsumption: { type: Number },
 
-      fatsConsumption: { type: Number },
+//       fatsConsumption: { type: Number },
 
-      proteinsConsumption: { type: Number },
+//       proteinsConsumption: { type: Number },
 
-      carbohydratesConsumption: { type: Number },
+//       carbohydratesConsumption: { type: Number },
 
-      dietaryFibresConsumption: { type: Number },
+//       dietaryFibresConsumption: { type: Number },
 
-      successRate: { type: Number, required: true, min: 0, max: 100 },
+//       successRate: { type: Number, required: true, min: 0, max: 100 },
 
-      grade: { type: Number, required: true, min: 0, max: 10 },
-    },
-  ],
-});
+//       grade: { type: Number, required: true, min: 0, max: 10 },
+//     },
+//   ],
+// });
 
-const DietExecution = mongoose.model("DietExecution", DietExecutionSchema);
-export default DietExecution;
+// const DietExecution = mongoose.model("DietExecution", DietExecutionSchema);
+// export default DietExecution;

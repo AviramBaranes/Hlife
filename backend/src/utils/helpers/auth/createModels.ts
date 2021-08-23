@@ -4,8 +4,8 @@ dotenv.config({ path: "./config.env" });
 import { ObjectId } from "mongoose";
 
 import PhysicalStats from "../../../models/PhysicalStats";
-import Diet from "../../../models/Diet";
-import DietExecution from "../../../models/DietExecution";
+// import Diet from "../../../models/Diet";
+// import DietExecution from "../../../models/DietExecution";
 import Program from "../../../models/Program";
 import ProgramExecution from "../../../models/ProgramExecution";
 
@@ -27,7 +27,7 @@ const createModelsWhenSignup = async (newUser: NewUser) => {
       stats: [],
     });
 
-    const UserDiet = new Diet({ user: newUser._id, ingredients: [] });
+    // const UserDiet = new Diet({ user: newUser._id, ingredients: [] });
     const UserProgram = new Program({
       user: newUser._id,
       program: [],
@@ -38,18 +38,18 @@ const createModelsWhenSignup = async (newUser: NewUser) => {
       executions: [],
     });
 
-    await UserDiet.save();
+    // await UserDiet.save();
     await UserPhysicalStats.save();
     await UserProgram.save();
     await UserProgramExecution.save();
 
-    const UserDietExecution = new DietExecution({
-      user: newUser._id,
-      diet: UserDiet._id,
-      executions: [],
-    });
+    // const UserDietExecution = new DietExecution({
+    //   user: newUser._id,
+    //   diet: UserDiet._id,
+    //   executions: [],
+    // });
 
-    await UserDietExecution.save();
+    // await UserDietExecution.save();
   } catch (err) {
     console.log(err);
     throw err;

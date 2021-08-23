@@ -35,12 +35,13 @@ const authController = __importStar(require("../controller/auth"));
 //models and connections
 const User_1 = __importDefault(require("../models/User"));
 const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
-const Diet_1 = __importDefault(require("../models/Diet"));
-const DietExecution_1 = __importDefault(require("../models/DietExecution"));
+// import Diet from "../models/Diet";
+// import DietExecution from "../models/DietExecution";
 const Program_1 = __importDefault(require("../models/Program"));
 const ProgramExecution_1 = __importDefault(require("../models/ProgramExecution"));
 const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
-let stubedPhysicalStats, stubedDietExecution, stubedProgramExecution, stubedProgram, stubedBcrypt, stubedDietModel;
+let stubedPhysicalStats, stubedDietExecution, stubedProgramExecution, stubedProgram, stubedBcrypt;
+// stubedDietModel: SinonStub;
 describe("signup Controller error handling", () => {
     let stubedUser;
     const req = {
@@ -76,7 +77,10 @@ describe("signup Controller error handling", () => {
 });
 describe("signup Controller creating the correct models", () => {
     let stubedUser, stubedUserPrototype;
-    let createdUserArgs, createdPhysicalStatsArgs, createdDietArgs, createdProgramArgs, createdProgramExecutionArgs, createdDietExecutionArgs;
+    let createdUserArgs, createdPhysicalStatsArgs, 
+    // createdDietArgs: CreatedModelsArgs,
+    createdProgramArgs, createdProgramExecutionArgs;
+    // createdDietExecutionArgs: CreatedModelsArgs;
     before(async () => {
         const res = responseDefaultObj_1.default();
         const req = {
@@ -91,24 +95,24 @@ describe("signup Controller creating the correct models", () => {
             },
         };
         stubedPhysicalStats = sinon_1.default.stub(PhysicalStats_1.default.prototype, "save");
-        stubedDietExecution = sinon_1.default.stub(DietExecution_1.default.prototype, "save");
+        // stubedDietExecution = sinon.stub(DietExecution.prototype, "save");
         stubedProgramExecution = sinon_1.default.stub(ProgramExecution_1.default.prototype, "save");
         stubedProgram = sinon_1.default.stub(Program_1.default.prototype, "save");
         stubedBcrypt = sinon_1.default.stub(bcryptjs_1.default, "hash");
-        stubedDietModel = sinon_1.default.stub(Diet_1.default.prototype, "save");
+        // stubedDietModel = sinon.stub(Diet.prototype, "save");
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
         stubedUserPrototype = sinon_1.default.stub(User_1.default.prototype, "save");
         stubedBcrypt.returns("123456");
         stubedUser.returns(false);
         stubedUserPrototype.returns({ _id: 1 });
-        stubedDietModel.returns({ _id: 1 });
+        // stubedDietModel.returns({ _id: 1 });
         await authController.signup(req, res, () => { });
         createdUserArgs = stubedUserPrototype.firstCall.thisValue;
         createdPhysicalStatsArgs = stubedPhysicalStats.firstCall.thisValue;
-        createdDietArgs = stubedDietModel.firstCall.thisValue;
+        // createdDietArgs = stubedDietModel.firstCall.thisValue;
         createdProgramArgs = stubedProgram.firstCall.thisValue;
         createdProgramExecutionArgs = stubedProgramExecution.firstCall.thisValue;
-        createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
+        // createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
     });
     it("should create a user model with the right arguments", async () => {
         chai_1.expect(createdUserArgs._id).to.be.an("object");
@@ -125,11 +129,11 @@ describe("signup Controller creating the correct models", () => {
         chai_1.expect(createdPhysicalStatsArgs.age).equal(2021 - 2000);
         chai_1.expect(createdPhysicalStatsArgs.stats).eql([]);
     });
-    it("should create a Diet model", async () => {
-        chai_1.expect(createdDietArgs._id).to.be.an("object");
-        chai_1.expect(createdDietArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdDietArgs.ingredients).eql([]);
-    });
+    // it("should create a Diet model", async () => {
+    //   expect(createdDietArgs._id).to.be.an("object");
+    //   expect(createdDietArgs.user).eql(createdUserArgs._id);
+    //   expect(createdDietArgs.ingredients).eql([]);
+    // });
     it("should create a Program model", async () => {
         chai_1.expect(createdProgramArgs._id).to.be.an("object");
         chai_1.expect(createdProgramArgs.user).eql(createdUserArgs._id);
@@ -140,12 +144,12 @@ describe("signup Controller creating the correct models", () => {
         chai_1.expect(createdProgramExecutionArgs.user).eql(createdUserArgs._id);
         chai_1.expect(createdProgramExecutionArgs.executions).eql([]);
     });
-    it("should create a UserDietExecution model", async () => {
-        chai_1.expect(createdDietExecutionArgs._id).to.be.an("object");
-        chai_1.expect(createdDietExecutionArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdDietExecutionArgs.diet).eql(createdDietArgs._id);
-        chai_1.expect(createdDietExecutionArgs.executions).eql([]);
-    });
+    // it("should create a UserDietExecution model", async () => {
+    //   expect(createdDietExecutionArgs._id).to.be.an("object");
+    //   expect(createdDietExecutionArgs.user).eql(createdUserArgs._id);
+    //   expect(createdDietExecutionArgs.diet).eql(createdDietArgs._id);
+    //   expect(createdDietExecutionArgs.executions).eql([]);
+    // });
     after(() => {
         stubedUser.restore();
         stubedUserPrototype.restore();
@@ -199,11 +203,11 @@ describe("signup controller testing respones", () => {
     after(() => {
         stubedUserPrototype.restore();
         stubedPhysicalStats.restore();
-        stubedDietExecution.restore();
+        // stubedDietExecution.restore();
         stubedProgramExecution.restore();
         stubedProgram.restore();
         stubedBcrypt.restore();
-        stubedDietModel.restore();
+        // stubedDietModel.restore();
     });
 });
 //14

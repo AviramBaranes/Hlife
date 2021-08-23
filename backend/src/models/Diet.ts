@@ -1,53 +1,53 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
+// const Schema = mongoose.Schema;
 
-const DietSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+// const DietSchema = new Schema({
+//   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
-  description: { type: String },
+//   description: { type: String },
 
-  cheatsPerMonth: { type: Number, default: 0, min: 0, max: 31 },
+//   cheatsPerMonth: { type: Number, default: 0, min: 0, max: 31 },
 
-  ingredients: [
-    {
-      name: { type: String, required: true },
+//   ingredients: [
+//     {
+//       name: { type: String, required: true },
 
-      amount: { type: Number, required: true },
+//       amount: { type: Number, required: true },
 
-      calories: { type: Number },
+//       calories: { type: Number },
 
-      fat: { type: Number },
+//       fat: { type: Number },
 
-      protein: { type: Number },
+//       protein: { type: Number },
 
-      carbohydrate: { type: Number },
+//       carbohydrate: { type: Number },
 
-      dietaryFibre: { type: Number },
-    },
-  ],
+//       dietaryFibre: { type: Number },
+//     },
+//   ],
 
-  totalCalories: { type: Number },
+//   totalCalories: { type: Number },
 
-  totalFat: { type: Number },
+//   totalFat: { type: Number },
 
-  totalProtein: { type: Number },
+//   totalProtein: { type: Number },
 
-  totalCarbohydrate: { type: Number },
+//   totalCarbohydrate: { type: Number },
 
-  totalDietaryFibres: { type: Number },
+//   totalDietaryFibres: { type: Number },
 
-  allowOverCalories: { type: Boolean },
+//   allowOverCalories: { type: Boolean },
 
-  allowOverFat: { type: Boolean },
+//   allowOverFat: { type: Boolean },
 
-  allowOverProtein: { type: Boolean },
+//   allowOverProtein: { type: Boolean },
 
-  allowOverCarbohydrate: { type: Boolean },
+//   allowOverCarbohydrate: { type: Boolean },
 
-  allowOverDietaryFibres: { type: Boolean },
-});
+//   allowOverDietaryFibres: { type: Boolean },
+// });
 
-const Diet = mongoose.model("Diet", DietSchema);
+// const Diet = mongoose.model("Diet", DietSchema);
 
-export default Diet;
+// export default Diet;

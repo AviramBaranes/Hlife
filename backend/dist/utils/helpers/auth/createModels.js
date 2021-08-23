@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: "./config.env" });
 const PhysicalStats_1 = __importDefault(require("../../../models/PhysicalStats"));
-const Diet_1 = __importDefault(require("../../../models/Diet"));
-const DietExecution_1 = __importDefault(require("../../../models/DietExecution"));
+// import Diet from "../../../models/Diet";
+// import DietExecution from "../../../models/DietExecution";
 const Program_1 = __importDefault(require("../../../models/Program"));
 const ProgramExecution_1 = __importDefault(require("../../../models/ProgramExecution"));
 const createModelsWhenSignup = async (newUser) => {
@@ -21,7 +21,7 @@ const createModelsWhenSignup = async (newUser) => {
             age,
             stats: [],
         });
-        const UserDiet = new Diet_1.default({ user: newUser._id, ingredients: [] });
+        // const UserDiet = new Diet({ user: newUser._id, ingredients: [] });
         const UserProgram = new Program_1.default({
             user: newUser._id,
             program: [],
@@ -30,16 +30,16 @@ const createModelsWhenSignup = async (newUser) => {
             user: newUser._id,
             executions: [],
         });
-        await UserDiet.save();
+        // await UserDiet.save();
         await UserPhysicalStats.save();
         await UserProgram.save();
         await UserProgramExecution.save();
-        const UserDietExecution = new DietExecution_1.default({
-            user: newUser._id,
-            diet: UserDiet._id,
-            executions: [],
-        });
-        await UserDietExecution.save();
+        // const UserDietExecution = new DietExecution({
+        //   user: newUser._id,
+        //   diet: UserDiet._id,
+        //   executions: [],
+        // });
+        // await UserDietExecution.save();
     }
     catch (err) {
         console.log(err);

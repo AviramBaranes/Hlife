@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response, RequestHandler } from "express";
-import User from "../models/User";
-import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
-import createModels from "../utils/helpers/auth/createModels";
-import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
-
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import sendGridMail from "@sendgrid/mail";
+
+import User from "../models/User";
+import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
+import createModels from "../utils/helpers/auth/createModels";
+import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 
 export const signup = async (
   req: Request,

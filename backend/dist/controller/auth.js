@@ -4,14 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateUser = exports.validateResetToken = exports.resetPasswordViaToken = exports.sendResetEmail = exports.resetPassword = exports.logout = exports.login = exports.signup = void 0;
-const User_1 = __importDefault(require("../models/User"));
-const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
-const createModels_1 = __importDefault(require("../utils/helpers/auth/createModels"));
-const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
 const mail_1 = __importDefault(require("@sendgrid/mail"));
+const User_1 = __importDefault(require("../models/User"));
+const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
+const createModels_1 = __importDefault(require("../utils/helpers/auth/createModels"));
+const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const signup = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);

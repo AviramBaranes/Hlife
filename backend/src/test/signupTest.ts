@@ -15,8 +15,8 @@ import * as authController from "../controller/auth";
 //models and connections
 import User from "../models/User";
 import PhysicalStats from "../models/PhysicalStats";
-import Diet from "../models/Diet";
-import DietExecution from "../models/DietExecution";
+// import Diet from "../models/Diet";
+// import DietExecution from "../models/DietExecution";
 import Program from "../models/Program";
 import ProgramExecution from "../models/ProgramExecution";
 
@@ -45,8 +45,8 @@ let stubedPhysicalStats: SinonStub,
   stubedDietExecution: SinonStub,
   stubedProgramExecution: SinonStub,
   stubedProgram: SinonStub,
-  stubedBcrypt: SinonStub,
-  stubedDietModel: SinonStub;
+  stubedBcrypt: SinonStub;
+// stubedDietModel: SinonStub;
 
 describe("signup Controller error handling", () => {
   let stubedUser: SinonStub;
@@ -99,10 +99,10 @@ describe("signup Controller creating the correct models", () => {
   let stubedUser: SinonStub, stubedUserPrototype: SinonStub;
   let createdUserArgs: CreatedModelsArgs,
     createdPhysicalStatsArgs: CreatedModelsArgs,
-    createdDietArgs: CreatedModelsArgs,
+    // createdDietArgs: CreatedModelsArgs,
     createdProgramArgs: CreatedModelsArgs,
-    createdProgramExecutionArgs: CreatedModelsArgs,
-    createdDietExecutionArgs: CreatedModelsArgs;
+    createdProgramExecutionArgs: CreatedModelsArgs;
+  // createdDietExecutionArgs: CreatedModelsArgs;
   before(async () => {
     const res = createCustomResponseObj();
     const req = {
@@ -118,11 +118,11 @@ describe("signup Controller creating the correct models", () => {
     };
 
     stubedPhysicalStats = sinon.stub(PhysicalStats.prototype, "save");
-    stubedDietExecution = sinon.stub(DietExecution.prototype, "save");
+    // stubedDietExecution = sinon.stub(DietExecution.prototype, "save");
     stubedProgramExecution = sinon.stub(ProgramExecution.prototype, "save");
     stubedProgram = sinon.stub(Program.prototype, "save");
     stubedBcrypt = sinon.stub(bcrypt, "hash");
-    stubedDietModel = sinon.stub(Diet.prototype, "save");
+    // stubedDietModel = sinon.stub(Diet.prototype, "save");
 
     stubedUser = sinon.stub(User, "findOne");
     stubedUserPrototype = sinon.stub(User.prototype, "save");
@@ -130,16 +130,16 @@ describe("signup Controller creating the correct models", () => {
     stubedBcrypt.returns("123456");
     stubedUser.returns(false);
     stubedUserPrototype.returns({ _id: 1 });
-    stubedDietModel.returns({ _id: 1 });
+    // stubedDietModel.returns({ _id: 1 });
 
     await authController.signup(req as any, res as any, () => {});
 
     createdUserArgs = stubedUserPrototype.firstCall.thisValue;
     createdPhysicalStatsArgs = stubedPhysicalStats.firstCall.thisValue;
-    createdDietArgs = stubedDietModel.firstCall.thisValue;
+    // createdDietArgs = stubedDietModel.firstCall.thisValue;
     createdProgramArgs = stubedProgram.firstCall.thisValue;
     createdProgramExecutionArgs = stubedProgramExecution.firstCall.thisValue;
-    createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
+    // createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
   });
 
   it("should create a user model with the right arguments", async () => {
@@ -159,11 +159,11 @@ describe("signup Controller creating the correct models", () => {
     expect(createdPhysicalStatsArgs.stats).eql([]);
   });
 
-  it("should create a Diet model", async () => {
-    expect(createdDietArgs._id).to.be.an("object");
-    expect(createdDietArgs.user).eql(createdUserArgs._id);
-    expect(createdDietArgs.ingredients).eql([]);
-  });
+  // it("should create a Diet model", async () => {
+  //   expect(createdDietArgs._id).to.be.an("object");
+  //   expect(createdDietArgs.user).eql(createdUserArgs._id);
+  //   expect(createdDietArgs.ingredients).eql([]);
+  // });
 
   it("should create a Program model", async () => {
     expect(createdProgramArgs._id).to.be.an("object");
@@ -177,12 +177,12 @@ describe("signup Controller creating the correct models", () => {
     expect(createdProgramExecutionArgs.executions).eql([]);
   });
 
-  it("should create a UserDietExecution model", async () => {
-    expect(createdDietExecutionArgs._id).to.be.an("object");
-    expect(createdDietExecutionArgs.user).eql(createdUserArgs._id);
-    expect(createdDietExecutionArgs.diet).eql(createdDietArgs._id);
-    expect(createdDietExecutionArgs.executions).eql([]);
-  });
+  // it("should create a UserDietExecution model", async () => {
+  //   expect(createdDietExecutionArgs._id).to.be.an("object");
+  //   expect(createdDietExecutionArgs.user).eql(createdUserArgs._id);
+  //   expect(createdDietExecutionArgs.diet).eql(createdDietArgs._id);
+  //   expect(createdDietExecutionArgs.executions).eql([]);
+  // });
 
   after(() => {
     stubedUser.restore();
@@ -249,11 +249,11 @@ describe("signup controller testing respones", () => {
   after(() => {
     stubedUserPrototype.restore();
     stubedPhysicalStats.restore();
-    stubedDietExecution.restore();
+    // stubedDietExecution.restore();
     stubedProgramExecution.restore();
     stubedProgram.restore();
     stubedBcrypt.restore();
-    stubedDietModel.restore();
+    // stubedDietModel.restore();
   });
 });
 //14
