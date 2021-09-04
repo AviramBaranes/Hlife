@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -30,3 +30,22 @@ const ProgramSchema = new Schema({
 
 const Program = mongoose.model("Program", ProgramSchema);
 export default Program;
+
+export interface ProgramObj {
+  _id: ObjectId;
+  day:
+    | "Sunday"
+    | "Monday"
+    | "Tuesday"
+    | "Wednesday"
+    | "Thursday"
+    | "Friday"
+    | "Saturday";
+  restDay: boolean | undefined;
+  workout: ObjectId | undefined;
+}
+
+export interface ProgramType extends Document {
+  user: ObjectId;
+  program: ProgramObj[];
+}

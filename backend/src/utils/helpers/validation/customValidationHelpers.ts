@@ -11,8 +11,5 @@ export const validateEnums = (
       return;
     }
   });
-  if (isValid) {
-    return true;
-  }
-  throw new Error("Invalid value");
+  return isValid;
 };

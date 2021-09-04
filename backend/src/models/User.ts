@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -24,7 +24,7 @@ const UserSchema = new Schema({
 
   hasProgram: { type: Boolean, default: false },
 
-  hasDiet: { type: Boolean, default: false },
+  // hasDiet: { type: Boolean, default: false },
 
   workouts: [
     {
@@ -46,3 +46,22 @@ const UserSchema = new Schema({
 
 const User = mongoose.model("User", UserSchema);
 export default User;
+
+interface Workout {
+  trainingDayName: "A" | "B" | "C" | "D" | "FB" | "aerobic";
+  name: string;
+}
+
+export interface UserType extends Document {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  gender: "male" | "female";
+  dateOfBirth: Date;
+  grade: number;
+  hasProgram: boolean;
+  workouts: Workout[] | undefined;
+  resetToken: string | undefined;
+  tokenExpiration: Date | undefined;
+}

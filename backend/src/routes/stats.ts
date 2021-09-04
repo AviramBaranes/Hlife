@@ -51,7 +51,7 @@ router.get(
 router.get(
   "/:date",
   authMiddleware,
-  param("date", "invalid param").isDate(),
+  param("date", "invalid date").isDate({ format: "DD-MM-YYYY" }),
   statsController.getStatsByDate
 );
 

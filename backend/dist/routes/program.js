@@ -38,19 +38,20 @@ const days = [
     "Friday",
     "Saturday",
 ];
+router.get("/recommendation", authMiddleware_1.default, programController.getRecommendationProgram);
 router.post("/:day", authMiddleware_1.default, [
-    express_validator_1.param("day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
-    express_validator_1.body("trainingDayName")
+    express_validator_1.param("day", "Invalid day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
+    express_validator_1.body("trainingDayName", "Training day is invalid")
         .optional()
         .custom((value) => customValidationHelpers_1.validateEnums(value, trainingDayNames)),
 ], programController.createProgram);
 router.get("/", authMiddleware_1.default, programController.getAllPrograms);
-router.get("/:day", authMiddleware_1.default, express_validator_1.param("day").custom((value) => customValidationHelpers_1.validateEnums(value, days)), programController.getProgram);
+router.get("/:day", authMiddleware_1.default, express_validator_1.param("day", "Day is invalid").custom((value) => customValidationHelpers_1.validateEnums(value, days)), programController.getProgram);
 router.put("/:day", authMiddleware_1.default, [
-    express_validator_1.param("day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
-    express_validator_1.body("trainingDayName")
+    express_validator_1.param("day", "Invalid day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
+    express_validator_1.body("trainingDayName", "Training day is invalid")
         .optional()
         .custom((value) => customValidationHelpers_1.validateEnums(value, trainingDayNames)),
-    express_validator_1.body("restDay").isBoolean(),
+    express_validator_1.body("restDay", "rest day needs to be a boolean").isBoolean(),
 ], programController.changeProgram);
 exports.default = router;

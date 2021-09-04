@@ -39,7 +39,7 @@ describe("getExercisesByDate endpoint test", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "You need to create a full program before you declare about execution"
     );
@@ -161,7 +161,7 @@ describe("declareAnExecution endpoint test", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "You need to create a full program before you declare about execution"
     );
@@ -354,7 +354,7 @@ describe("getSingleExecution endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("User doesn't has any declared executions");
   });
 
@@ -369,7 +369,7 @@ describe("getSingleExecution endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No execution was found at this date");
   });
 
@@ -418,7 +418,7 @@ describe("getExecutionsByRange endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("This user doesn't has a full program yet");
   });
 
@@ -436,7 +436,7 @@ describe("getExecutionsByRange endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No Executions were found in this dates");
   });
 
@@ -481,7 +481,7 @@ describe("getExecutionsByRange endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No Executions were found in this dates");
   });
 
@@ -526,7 +526,7 @@ describe("getExecutionsByRange endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No Executions were found in this dates");
   });
 
@@ -569,7 +569,7 @@ describe("getExecutionsByRange endpoint tests", () => {
       () => {}
     );
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No Executions were found in this dates");
   });
 

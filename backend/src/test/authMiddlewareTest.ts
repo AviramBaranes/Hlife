@@ -21,7 +21,7 @@ describe("auth middleware tests", function () {
     ) as CustomError;
 
     expect(error.statusCode).equal(401);
-    expect(error.message).equal("Unauthorized Couldnt find cookie");
+    expect(error.message).equal("Unauthorized Couldn't find cookie");
   });
   it("should throw error if cookie is invalid", function () {
     const req = {

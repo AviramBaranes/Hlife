@@ -28,11 +28,11 @@ const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware")
 const goalsController = __importStar(require("../controller/goals"));
 const router = express_1.default.Router();
 router.post("/", authMiddleware_1.default, [
-    express_validator_1.body("basicGoal").custom((value) => {
+    express_validator_1.body("basicGoal", "basic goal can be either 'lose fat' or 'increase muscles mass'").custom((value) => {
         if (value === "lose fat" || value === "increase muscles mass") {
             return true;
         }
-        throw new Error("basic goal can be either 'lose fat' or 'increase muscles mass'");
+        return false;
     }),
     express_validator_1.body("weight", "Weight must be a number").isFloat({ min: 30, max: 225 }),
     express_validator_1.body("fatPercentage", "Fat percentage must be a number")

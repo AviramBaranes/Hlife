@@ -29,7 +29,6 @@ describe("ProgramExecution model tests", () => {
         const workout = new Workout_1.default(workoutFields);
         workout.validate((err) => {
             chai_1.expect(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
-            console.log(err.errors.trainingDayName.properties.message, err.errors["exercises.0.sets"].properties.message, err.errors["exercises.0.reps"].properties.message);
             chai_1.expect(err.errors.trainingDayName.properties.message).equal("`-` is not a valid enum value for path `trainingDayName`.");
             chai_1.expect(err.errors["exercises.0.sets"].properties.message).equal("Path `sets` (0) is less than minimum allowed value (1).");
             chai_1.expect(err.errors["exercises.0.reps"].properties.message).equal("Path `reps` (0) is less than minimum allowed value (1).");

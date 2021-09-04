@@ -17,7 +17,7 @@ describe("auth middleware tests", function () {
         };
         const error = authMiddleware_1.default(req, {}, () => { });
         chai_1.expect(error.statusCode).equal(401);
-        chai_1.expect(error.message).equal("Unauthorized Couldnt find cookie");
+        chai_1.expect(error.message).equal("Unauthorized Couldn't find cookie");
     });
     it("should throw error if cookie is invalid", function () {
         const req = {

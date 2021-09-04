@@ -42,7 +42,6 @@ const createModelsWhenSignup = async (newUser) => {
         // await UserDietExecution.save();
     }
     catch (err) {
-        console.log(err);
         throw err;
     }
 };

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -28,5 +28,31 @@ const WorkoutSchema = new Schema({
   time: { type: Number, min: 10, max: 300 },
 });
 
-const Program = mongoose.model("Workout", WorkoutSchema);
-export default Program;
+const Workout = mongoose.model("Workout", WorkoutSchema);
+export default Workout;
+
+enum TrainingDayName {
+  "A",
+  "B",
+  "C",
+  "D",
+  "FB",
+  "aerobic",
+}
+
+interface Exercises {
+  muscles: string[] | undefined;
+  name: string;
+  description: string | undefined;
+  sets: number;
+  reps: number;
+}
+
+export interface WorkoutType extends Document {
+  user: ObjectId;
+  trainingDayName: TrainingDayName;
+  name: string;
+  description: string | undefined;
+  exercises: Exercises[];
+  time: number;
+}

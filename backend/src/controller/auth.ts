@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import sendGridMail from "@sendgrid/mail";
 
-import User from "../models/User";
+import User, { UserType } from "../models/User";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 import createModels from "../utils/helpers/auth/createModels";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
@@ -27,15 +27,15 @@ export const signup = async (
       dateOfBirth,
     } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = (await User.findOne({ email })) as UserType;
 
     if (user) {
-      res.status(401).send("user already exist with this email!");
+      res.status(403).send("user already exist with this email!");
       return;
     }
 
     if (password !== passwordConfirmation) {
-      res.status(401).send("passwords do not match");
+      res.status(403).send("passwords do not match");
       return;
     }
 
@@ -50,7 +50,7 @@ export const signup = async (
       dateOfBirth,
       grade: 0,
       workouts: [],
-    });
+    }) as UserType;
 
     await newUser.save();
 
@@ -88,17 +88,19 @@ export const login = async (
 
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = (await User.findOne({ email }).select(
+      "+password"
+    )) as UserType;
 
     if (!user) {
-      res.status(401).send("User not found, Make sure the email is correct");
+      res.status(403).send("User not found, Make sure the email is correct");
       return;
     }
 
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (!isCorrectPassword) {
-      res.status(401).send("Password is invalid");
+      res.status(403).send("Password is invalid");
       return;
     }
 
@@ -121,7 +123,6 @@ export const login = async (
         message,
         username: user.username,
         hasProgram: user.hasProgram,
-        hasDiet: user.hasDiet,
       });
   } catch (err) {
     return catchErrorHandler(err, next);
@@ -148,9 +149,9 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
     const { userId, currentPassword, newPassword, newPasswordConfirmation } =
       req.body;
 
-    const user = await User.findById(userId).select("+password");
+    const user = (await User.findById(userId).select("+password")) as UserType;
 
-    if (!user) return res.status(403).send("Unauthorized");
+    if (!user) return res.status(401).send("Unauthorized");
 
     const isMatch = newPassword === newPasswordConfirmation;
 
@@ -185,7 +186,7 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
 
     if (tokenSlice!.length < 2) return res.status(403).send("CSRF ERROR");
 
-    const user = await User.findOne({ email });
+    const user = (await User.findOne({ email })) as UserType;
 
     if (!user) {
       return res
@@ -196,7 +197,7 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
     const token = crypto.randomBytes(32).toString("hex");
 
     user.resetToken = token;
-    user.tokenExpiration = Date.now() + 3600000;
+    user.tokenExpiration = new Date(Date.now() + 3600000);
 
     await user.save();
 
@@ -233,11 +234,11 @@ export const resetPasswordViaToken: RequestHandler = async (req, res, next) => {
 
     if (!isMatch) return res.status(403).send("Passwords do not match");
 
-    const user = await User.findOne({ resetToken });
+    const user = (await User.findOne({ resetToken })) as UserType;
 
     if (!user) return res.status(403).send("Invalid Token");
 
-    const isExpired = Date.now() > user.tokenExpiration;
+    const isExpired = Date.now() > user.tokenExpiration!.getTime();
 
     if (isExpired) return res.status(403).send("Token Expired");
 
@@ -259,11 +260,13 @@ export const validateResetToken: RequestHandler = async (req, res, next) => {
   try {
     const { token } = req.params;
 
-    const user = await User.findOne({ resetToken: token });
+    validationErrorsHandler(req);
+
+    const user = (await User.findOne({ resetToken: token })) as UserType;
 
     if (!user) return res.status(403).send("Invalid Token");
 
-    const isExpired = Date.now() > user.tokenExpiration;
+    const isExpired = Date.now() > user.tokenExpiration!.getTime();
 
     if (isExpired) return res.status(403).send("Token Expired");
 
@@ -277,13 +280,12 @@ export const validateUser: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const user = await User.findById(userId);
+    const user = (await User.findById(userId)) as UserType;
 
     res.status(200).json({
       isAuthenticated: true,
       username: user.username,
       hasProgram: user.hasProgram,
-      hasDiet: user.hasDiet,
       userId,
     });
   } catch (err) {

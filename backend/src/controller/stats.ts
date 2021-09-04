@@ -2,9 +2,9 @@ import { RequestHandler } from "express";
 
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
-import PhysicalStats from "../models/PhysicalStats";
-import Goals from "../models/Goals";
-import User from "../models/User";
+import PhysicalStats, { PhysicalStatsType } from "../models/PhysicalStats";
+import Goals, { GoalsType } from "../models/Goals";
+import User, { UserType } from "../models/User";
 import {
   calculateGrade,
   GoalsAchieved,
@@ -17,15 +17,17 @@ export const addStats: RequestHandler = async (req, res, next) => {
 
     const { weight, height, fatPercentage, musclesMass, bodyImageUrl } =
       req.body;
-    const userGoals = await Goals.findOne({ user: userId });
+    const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {
-      res.status(401).send("User's goals not found");
+      res.status(403).send("User's goals not found");
       return;
     }
 
-    const user = await User.findById(userId);
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    const user = (await User.findById(userId)) as UserType;
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     let grade = 15;
     let messages: string[] = [];
@@ -41,7 +43,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
           fatPercentage,
           lastStatsRecord,
           musclesMass,
-          userGoals.basicGoals,
+          userGoals.basicGoal,
           userGoals.detailGoals,
           weight,
           messages
@@ -79,15 +81,17 @@ export const getAllStatsDates: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(401).send("No stats were found for this user");
+      res.status(403).send("No stats were found for this user");
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(401).send("No stats were created yet");
+      res.status(403).send("No stats were created yet");
       return;
     }
 
@@ -106,10 +110,14 @@ export const getStatsByDate: RequestHandler = async (req, res, next) => {
     const { userId } = req;
     const { date } = req.params;
 
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    validationErrorsHandler(req);
+
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(401).send("No stats were found for this user");
+      res.status(403).send("No stats were found for this user");
       return;
     }
 
@@ -118,7 +126,7 @@ export const getStatsByDate: RequestHandler = async (req, res, next) => {
     );
 
     if (!requestedStats) {
-      res.status(401).send("Invalid date, no stats were entered at this date");
+      res.status(403).send("Invalid date, no stats were entered at this date");
       return;
     }
 
@@ -132,15 +140,17 @@ export const getAllStats: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(401).send("No stats were found for this user");
+      res.status(403).send("No stats were found for this user");
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(401).send("No stats were created yet");
+      res.status(403).send("No stats were created yet");
       return;
     }
 
@@ -154,15 +164,17 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(401).send("No stats were found for this user");
+      res.status(403).send("No stats were found for this user");
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(401).send("No stats were created yet");
+      res.status(403).send("No stats were created yet");
       return;
     }
 
@@ -170,13 +182,13 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
     const lastStats = userStats.stats[lastStatsIndex];
 
     const currentTime = new Date().getTime();
-    const lastStatsTime = Date.parse(lastStats.date);
+    const lastStatsTime = Date.parse(lastStats.date.toString());
     const dayInMS = 100 * 60 * 60 * 24; //one day in ms
     const allowedToDelete = currentTime - lastStatsTime < dayInMS;
 
     if (!allowedToDelete) {
       res
-        .status(401)
+        .status(403)
         .send(
           "It's been over 24 hours since the last stats were created, You can't delete them"
         );
@@ -198,15 +210,19 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     const { weight, height, fatPercentage, musclesMass, bodyImageUrl } =
       req.body;
 
-    const userStats = await PhysicalStats.findOne({ user: userId });
+    validationErrorsHandler(req);
+
+    const userStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(401).send("No stats were found for this user");
+      res.status(403).send("No stats were found for this user");
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(401).send("No stats were created yet");
+      res.status(403).send("No stats were created yet");
       return;
     }
 
@@ -214,13 +230,13 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     const lastStats = userStats.stats[lastStatsIndex];
 
     const currentTime = new Date().getTime();
-    const lastStatsTime = Date.parse(lastStats.date);
+    const lastStatsTime = Date.parse(lastStats.date.toString());
     const dayInMS = 100 * 60 * 60 * 24; //one day in ms
     const allowedToChange = currentTime - lastStatsTime < dayInMS;
 
     if (!allowedToChange) {
       res
-        .status(401)
+        .status(403)
         .send(
           "It's been over 24 hours since the last stats were created, You can't change them"
         );
@@ -231,7 +247,7 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
       !weight && !height && !fatPercentage && !musclesMass && !bodyImageUrl;
 
     if (noData) {
-      res.status(401).send("No data was provided");
+      res.status(403).send("No data was provided");
       return;
     }
 
@@ -256,11 +272,13 @@ export const setRanking: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const physicalStats = await PhysicalStats.findOne({ user: userId });
+    const physicalStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
 
     if (!physicalStats) {
       res
-        .status(401)
+        .status(403)
         .send(
           "Something went wrong... Couldn't find stats that match the user"
         );

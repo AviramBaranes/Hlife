@@ -16,13 +16,13 @@ const signup = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);
         const { name, username, email, password, passwordConfirmation, gender, dateOfBirth, } = req.body;
-        const user = await User_1.default.findOne({ email });
+        const user = (await User_1.default.findOne({ email }));
         if (user) {
-            res.status(401).send("user already exist with this email!");
+            res.status(403).send("user already exist with this email!");
             return;
         }
         if (password !== passwordConfirmation) {
-            res.status(401).send("passwords do not match");
+            res.status(403).send("passwords do not match");
             return;
         }
         const hashedPassword = await bcryptjs_1.default.hash(password, 12);
@@ -63,14 +63,14 @@ const login = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);
         const { email, password } = req.body;
-        const user = await User_1.default.findOne({ email }).select("+password");
+        const user = (await User_1.default.findOne({ email }).select("+password"));
         if (!user) {
-            res.status(401).send("User not found, Make sure the email is correct");
+            res.status(403).send("User not found, Make sure the email is correct");
             return;
         }
         const isCorrectPassword = await bcryptjs_1.default.compare(password, user.password);
         if (!isCorrectPassword) {
-            res.status(401).send("Password is invalid");
+            res.status(403).send("Password is invalid");
             return;
         }
         const payload = { userId: user._id };
@@ -90,7 +90,6 @@ const login = async (req, res, next) => {
             message,
             username: user.username,
             hasProgram: user.hasProgram,
-            hasDiet: user.hasDiet,
         });
     }
     catch (err) {
@@ -116,9 +115,9 @@ const resetPassword = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);
         const { userId, currentPassword, newPassword, newPasswordConfirmation } = req.body;
-        const user = await User_1.default.findById(userId).select("+password");
+        const user = (await User_1.default.findById(userId).select("+password"));
         if (!user)
-            return res.status(403).send("Unauthorized");
+            return res.status(401).send("Unauthorized");
         const isMatch = newPassword === newPasswordConfirmation;
         if (!isMatch)
             return res.status(403).send("Passwords do not match");
@@ -142,7 +141,7 @@ const sendResetEmail = async (req, res, next) => {
         const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
         if (tokenSlice.length < 2)
             return res.status(403).send("CSRF ERROR");
-        const user = await User_1.default.findOne({ email });
+        const user = (await User_1.default.findOne({ email }));
         if (!user) {
             return res
                 .status(403)
@@ -150,7 +149,7 @@ const sendResetEmail = async (req, res, next) => {
         }
         const token = crypto_1.default.randomBytes(32).toString("hex");
         user.resetToken = token;
-        user.tokenExpiration = Date.now() + 3600000;
+        user.tokenExpiration = new Date(Date.now() + 3600000);
         await user.save();
         mail_1.default.setApiKey(process.env.sendGrid_api);
         const link = `http://localhost:3000/auth/reset-password/${token}`;
@@ -181,10 +180,10 @@ const resetPasswordViaToken = async (req, res, next) => {
         const isMatch = password === passwordConfirmation;
         if (!isMatch)
             return res.status(403).send("Passwords do not match");
-        const user = await User_1.default.findOne({ resetToken });
+        const user = (await User_1.default.findOne({ resetToken }));
         if (!user)
             return res.status(403).send("Invalid Token");
-        const isExpired = Date.now() > user.tokenExpiration;
+        const isExpired = Date.now() > user.tokenExpiration.getTime();
         if (isExpired)
             return res.status(403).send("Token Expired");
         const hashedPassword = await bcryptjs_1.default.hash(password, 12);
@@ -202,10 +201,11 @@ exports.resetPasswordViaToken = resetPasswordViaToken;
 const validateResetToken = async (req, res, next) => {
     try {
         const { token } = req.params;
-        const user = await User_1.default.findOne({ resetToken: token });
+        validationErrors_1.validationErrorsHandler(req);
+        const user = (await User_1.default.findOne({ resetToken: token }));
         if (!user)
             return res.status(403).send("Invalid Token");
-        const isExpired = Date.now() > user.tokenExpiration;
+        const isExpired = Date.now() > user.tokenExpiration.getTime();
         if (isExpired)
             return res.status(403).send("Token Expired");
         return res.status(200).send("Token Verified Successfully");
@@ -218,12 +218,11 @@ exports.validateResetToken = validateResetToken;
 const validateUser = async (req, res, next) => {
     try {
         const { userId } = req;
-        const user = await User_1.default.findById(userId);
+        const user = (await User_1.default.findById(userId));
         res.status(200).json({
             isAuthenticated: true,
             username: user.username,
             hasProgram: user.hasProgram,
-            hasDiet: user.hasDiet,
             userId,
         });
     }

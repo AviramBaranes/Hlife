@@ -1,18 +1,17 @@
 import { RequestHandler } from "express";
 import { Schema } from "mongoose";
 
-import Workout from "../models/Workout";
-import Program from "../models/Program";
+import Workout, { WorkoutType } from "../models/Workout";
+import Program, { ProgramObj, ProgramType } from "../models/Program";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
-import User from "../models/User";
-
-export interface Program {
-  _id: Schema.Types.ObjectId;
-  day: string;
-  restDay: boolean;
-  workout?: Schema.Types.ObjectId;
-}
+import User, { UserType } from "../models/User";
+import PhysicalStats, { PhysicalStatsType } from "../models/PhysicalStats";
+import Goals, { GoalsType } from "../models/Goals";
+import {
+  calculateFemaleRecommendationProgram,
+  calculateMaleRecommendationProgram,
+} from "../utils/program/programHelpers";
 
 const initialProgramList = [
   { day: "Sunday" },
@@ -22,7 +21,53 @@ const initialProgramList = [
   { day: "Thursday" },
   { day: "Friday" },
   { day: "Saturday" },
-] as Program[];
+] as any;
+
+export const getRecommendationProgram: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { userId } = req;
+
+    const goals = (await Goals.findOne({ user: userId })) as GoalsType;
+
+    if (!goals.basicGoal) {
+      res
+        .status(403)
+        .send(
+          "User need to create goals in order to get a recommendation program"
+        );
+      return;
+    }
+
+    const user = (await User.findById(userId)) as UserType;
+    const physicalStats = (await PhysicalStats.findOne({
+      user: userId,
+    })) as PhysicalStatsType;
+
+    let recommendation: { workoutName: string; timesPerWeek: number }[];
+    switch (user.gender) {
+      case "female":
+        recommendation = calculateFemaleRecommendationProgram(
+          goals.basicGoal,
+          physicalStats.rank
+        );
+        break;
+      case "male":
+        recommendation = calculateMaleRecommendationProgram(
+          goals.basicGoal,
+          physicalStats.rank
+        );
+        break;
+    }
+
+    res.status(200).json(recommendation);
+  } catch (err) {
+    catchErrorHandler(err, next);
+  }
+};
 
 export const createProgram: RequestHandler = async (req, res, next) => {
   try {
@@ -34,23 +79,26 @@ export const createProgram: RequestHandler = async (req, res, next) => {
 
     let workout;
     if (trainingDayName) {
-      workout = await Workout.findOne({ trainingDayName, user: userId });
+      workout = (await Workout.findOne({
+        trainingDayName,
+        user: userId,
+      })) as WorkoutType;
     }
 
     if (!workout && trainingDayName) {
       res
-        .status(401)
+        .status(403)
         .send(
           "Couldn't find a workout with this name, make sure you create one first"
         );
       return;
     }
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     //create new model
     if (program.program.length === 0) {
-      const programList = [...initialProgramList] as Program[];
+      const programList = [...initialProgramList];
 
       const programDayIndex = programList.findIndex(
         (program) => program.day === day
@@ -72,7 +120,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
     }
     //edit existing model
     else {
-      const programList = program.program as Program[];
+      const programList = program.program;
 
       const programDayIndex = programList.findIndex(
         (program) => program.day === day
@@ -83,7 +131,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
         programList[programDayIndex].workout;
 
       if (isDayAlreadySet) {
-        res.status(401).send("This day already has a program");
+        res.status(403).send("This day already has a program");
         return;
       }
 
@@ -102,18 +150,16 @@ export const createProgram: RequestHandler = async (req, res, next) => {
       await program.save();
 
       let programFull = true;
-      program.program.forEach(
-        (program: Program, _: number, programs: Program[]) => {
-          if (programs.length !== 7) {
-            programFull = false;
-            return;
-          }
-          if (!program.restDay && !program.workout) programFull = false;
+      program.program.forEach((program, _: number, programs) => {
+        if (programs.length !== 7) {
+          programFull = false;
+          return;
         }
-      );
+        if (!program.restDay && !program.workout) programFull = false;
+      });
 
       if (programFull) {
-        const user = await User.findById(userId);
+        const user = (await User.findById(userId)) as UserType;
         user.hasProgram = true;
         await user.save();
       }
@@ -130,20 +176,20 @@ export const getAllPrograms: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     if (!program) {
-      res.status(401).send("Something wrong... this user has no program");
+      res.status(403).send("Something wrong... this user has no program");
       return;
     }
 
     const programFull = program.program.every(
-      (program: Program) => program.restDay || program.workout
+      (program) => program.restDay || program.workout
     );
 
     if (!programFull) {
       res
-        .status(401)
+        .status(403)
         .send(
           "You need to create a program for each day in order to request them"
         );
@@ -164,10 +210,10 @@ export const getProgram: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     if (program.program.length === 0) {
-      res.status(401).send("No program was found for the user");
+      res.status(403).send("No program was found for the user");
       return;
     }
 
@@ -176,11 +222,11 @@ export const getProgram: RequestHandler = async (req, res, next) => {
     );
 
     const isProgramAlreadySet =
-      requestedProgram.restDay || requestedProgram.workout;
+      requestedProgram!.restDay || requestedProgram!.workout;
 
     if (!isProgramAlreadySet) {
       res
-        .status(401)
+        .status(403)
         .send("No program was set at this day yet, make sure you create one");
       return;
     }
@@ -201,50 +247,42 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
     validationErrorsHandler(req);
 
     if (trainingDayName && restDay) {
-      res.status(401).send("You can't set a workout day as a rest day");
+      res.status(403).send("You can't set a workout day as a rest day");
       return;
     }
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     if (!program) {
-      res.status(401).send("No program was found for the user");
+      res.status(403).send("No program was found for the user");
       return;
     }
 
     const requestedProgram = {
-      ...program.program.find(
-        (program: { day: string }) => program.day === day
-      ),
-    };
-
-    if (Object.keys(requestedProgram).length === 0) {
-      res
-        .status(401)
-        .send(
-          "No program has made for this user. Make sure you create one first"
-        );
-      return;
-    }
+      ...program.program.find((program) => program.day === day),
+    } as ProgramObj;
 
     const isProgramAlreadySet =
       requestedProgram.restDay || requestedProgram.workout;
 
     if (!isProgramAlreadySet) {
       res
-        .status(401)
+        .status(403)
         .send("No program was set at this day yet, make sure you create one");
       return;
     }
 
     let workout;
     if (trainingDayName) {
-      workout = await Workout.findOne({ user: userId, trainingDayName });
+      workout = (await Workout.findOne({
+        user: userId,
+        trainingDayName,
+      })) as WorkoutType;
     }
 
     if (!workout && trainingDayName) {
       res
-        .status(401)
+        .status(403)
         .send(
           "Couldn't find a workout with this name, make sure you create one first"
         );
@@ -256,7 +294,7 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
     requestedProgram.restDay = restDay;
 
     const requestedProgramIndex = program.program.findIndex(
-      (program: { day: string }) => program.day === day
+      (program) => program.day === day
     );
 
     program.program[requestedProgramIndex] = { ...requestedProgram };

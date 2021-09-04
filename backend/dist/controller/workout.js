@@ -13,8 +13,11 @@ const createWorkout = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
         validationErrors_1.validationErrorsHandler(req);
-        const user = await User_1.default.findById(userId);
+        const user = (await User_1.default.findById(userId));
         let isNamesValid = true;
+        if (!user.workouts) {
+            user.workouts = [];
+        }
         user.workouts.forEach((workout) => {
             const isNameIdentical = workout.name === name;
             const isTrainingDayNameIdentical = workout.trainingDayName === trainingDayName;
@@ -23,7 +26,7 @@ const createWorkout = async (req, res, next) => {
             }
         });
         if (!isNamesValid) {
-            res.status(401).send("Each workout need to have a unique name");
+            res.status(403).send("Each workout need to have a unique name");
             return;
         }
         const workout = new Workout_1.default({
@@ -53,10 +56,13 @@ const getWorkoutByName = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName } = req.query;
         validationErrors_1.validationErrorsHandler(req);
-        const workout = await Workout_1.default.findOne({ user: userId, trainingDayName });
+        const workout = (await Workout_1.default.findOne({
+            user: userId,
+            trainingDayName,
+        }));
         if (!workout) {
             res
-                .status(401)
+                .status(403)
                 .send("couldn't find workout, make sure you create a workout with this name first.");
             return;
         }
@@ -71,9 +77,9 @@ exports.getWorkoutByName = getWorkoutByName;
 const getById = async (req, res, next) => {
     try {
         const { workoutId } = req.params;
-        const workout = await Workout_1.default.findById(workoutId);
+        const workout = (await Workout_1.default.findById(workoutId));
         if (!workout) {
-            res.status(401).send("No workout with this id");
+            res.status(403).send("No workout with this id");
             return;
         }
         res.status(200).json(workout);
@@ -89,16 +95,19 @@ const changeWorkout = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
         validationErrors_1.validationErrorsHandler(req);
-        const workout = await Workout_1.default.findOne({ user: userId, trainingDayName });
+        const workout = (await Workout_1.default.findOne({
+            user: userId,
+            trainingDayName,
+        }));
         if (!workout) {
             res
-                .status(401)
+                .status(403)
                 .send("couldn't find workout, make sure you create a workout with this name first.");
             return;
         }
         if (!name && !description && !exercises) {
             res
-                .status(401)
+                .status(403)
                 .send("You need to provide data in order to change the workout");
             return;
         }
@@ -124,10 +133,13 @@ const deleteWorkout = async (req, res, next) => {
         const { userId } = req;
         const { name } = req.params;
         validationErrors_1.validationErrorsHandler(req);
-        const workout = await Workout_1.default.findOneAndDelete({ user: userId, name });
+        const workout = (await Workout_1.default.findOneAndDelete({
+            user: userId,
+            name,
+        }));
         if (!workout) {
             res
-                .status(401)
+                .status(403)
                 .send("couldn't find workout, make sure you create a workout with this name first.");
             return;
         }

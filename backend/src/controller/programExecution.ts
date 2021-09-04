@@ -5,11 +5,10 @@ import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 
 //models
-import User from "../models/User";
-import Workout from "../models/Workout";
-import ProgramExecution from "../models/ProgramExecution";
-import Program from "../models/Program";
-import { Program as ProgramType } from "./program";
+import User, { UserType } from "../models/User";
+import Workout, { WorkoutType } from "../models/Workout";
+import ProgramExecution, { ProgramExecType } from "../models/ProgramExecution";
+import Program, { ProgramType } from "../models/Program";
 import {
   getAllExecutions,
   getExecutionsOfMonth,
@@ -28,31 +27,31 @@ export const getExercisesByDate: RequestHandler = async (req, res, next) => {
       new Date(date)
     ); //get the day as a name
 
-    const user = await User.findById(userId);
+    const user = (await User.findById(userId)) as UserType;
 
     //TODO add program logic to program endpoints
     if (!user.hasProgram) {
       res
-        .status(401)
+        .status(403)
         .send(
           "You need to create a full program before you declare about execution"
         );
       return;
     }
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
-    const programOfDay = program.program.find(
-      (program: ProgramType) => program.day === day
-    ) as ProgramType;
+    const programOfDay = program.program.find((program) => program.day === day);
 
-    if (programOfDay.restDay) {
+    if (programOfDay!.restDay) {
       res
         .status(200)
         .send("This is a rest day, You have no exercises to complete!");
       return;
     }
-    const workout = await Workout.findById(programOfDay.workout);
+    const workout = (await Workout.findById(
+      programOfDay!.workout
+    )) as WorkoutType;
 
     const exercises = workout.exercises.map(
       (exercise: { name: string }) => exercise.name
@@ -77,28 +76,26 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
       new Date(date)
     ); //get the day as a name
 
-    const user = await User.findById(userId);
+    const user = (await User.findById(userId)) as UserType;
 
     if (!user.hasProgram) {
       res
-        .status(401)
+        .status(403)
         .send(
           "You need to create a full program before you declare about execution"
         );
       return;
     }
 
-    const program = await Program.findOne({ user: userId });
+    const program = (await Program.findOne({ user: userId })) as ProgramType;
 
-    const programOfDay = program.program.find(
-      (program: ProgramType) => program.day === day
-    ) as ProgramType;
+    const programOfDay = program.program.find((program) => program.day === day);
 
     const programExecution = await ProgramExecution.findOne({ user: userId });
 
-    if (programOfDay.restDay) {
+    if (programOfDay!.restDay) {
       const currentExecution = {
-        programId: programOfDay._id,
+        programId: programOfDay!._id,
         date,
         executionRate: 100,
         grade: 10,
@@ -120,7 +117,7 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
       const grade = Math.ceil(executionRate / 10);
 
       const execution = {
-        programId: programOfDay._id,
+        programId: programOfDay!._id,
         date,
         executionRate,
         grade,
@@ -144,10 +141,14 @@ export const getSingleExecution: RequestHandler = async (req, res, next) => {
     const { userId } = req;
     const stringDate = req.params.date;
 
-    const programExecution = await ProgramExecution.findOne({ user: userId });
+    validationErrorsHandler(req);
+
+    const programExecution = (await ProgramExecution.findOne({
+      user: userId,
+    })) as ProgramExecType;
 
     if (programExecution.executions.length === 0) {
-      res.status(401).send("User doesn't has any declared executions");
+      res.status(403).send("User doesn't has any declared executions");
       return;
     }
 
@@ -159,7 +160,7 @@ export const getSingleExecution: RequestHandler = async (req, res, next) => {
     );
 
     if (!requestedExecution) {
-      res.status(401).send("No execution was found at this date");
+      res.status(403).send("No execution was found at this date");
       return;
     }
 
@@ -175,10 +176,12 @@ export const getExecutionsByRange: RequestHandler = async (req, res, next) => {
     const { userId } = req;
     const { date, range } = req.body;
 
-    const user = await User.findById(userId);
+    validationErrorsHandler(req);
+
+    const user = (await User.findById(userId)) as UserType;
 
     if (!user.hasProgram) {
-      res.status(401).send("This user doesn't has a full program yet");
+      res.status(403).send("This user doesn't has a full program yet");
       return;
     }
 
@@ -204,7 +207,7 @@ export const getExecutionsByRange: RequestHandler = async (req, res, next) => {
     }
 
     if (executions.length === 0) {
-      res.status(401).send("No Executions were found in this dates");
+      res.status(403).send("No Executions were found in this dates");
       return;
     }
 

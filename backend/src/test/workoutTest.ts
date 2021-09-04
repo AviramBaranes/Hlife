@@ -32,7 +32,7 @@ describe("create workout tests", () => {
 
     await workoutController.createWorkout(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Each workout need to have a unique name");
   });
 
@@ -97,7 +97,7 @@ describe("get workout by name tests", () => {
 
     await workoutController.getWorkoutByName(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "couldn't find workout, make sure you create a workout with this name first."
     );
@@ -132,7 +132,7 @@ describe("get workout by id test", () => {
 
     await workoutController.getById(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No workout with this id");
   });
 
@@ -166,7 +166,7 @@ describe("change workout tests", () => {
 
     await workoutController.changeWorkout(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "couldn't find workout, make sure you create a workout with this name first."
     );
@@ -177,7 +177,7 @@ describe("change workout tests", () => {
 
     await workoutController.changeWorkout(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "You need to provide data in order to change the workout"
     );
@@ -224,7 +224,7 @@ describe("delete workout tests", () => {
 
     await workoutController.deleteWorkout(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "couldn't find workout, make sure you create a workout with this name first."
     );

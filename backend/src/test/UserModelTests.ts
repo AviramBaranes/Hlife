@@ -66,6 +66,5 @@ describe("User model tests", () => {
     });
 
     expect(user.hasProgram).equal(false);
-    expect(user.hasDiet).equal(false);
   });
 });

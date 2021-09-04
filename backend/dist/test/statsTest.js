@@ -54,7 +54,7 @@ describe("addStats endpoint general tests", () => {
     it("should handle user goal not found", async () => {
         stubedGoalsModel.returns(false);
         await statsController.addStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("User's goals not found");
     });
     it("should create stats model", async () => {
@@ -111,7 +111,7 @@ describe("addStats endpoint deeply tests", () => {
         stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
         stubedGoalsModel.returns({
-            basicGoals: "lose fat",
+            basicGoal: "lose fat",
             detailGoals: { weight: 30, fatPercentage: 5, musclesMass: 100 },
         });
     });
@@ -301,7 +301,7 @@ describe("getAllStatsDates endpoint tests", () => {
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getAllStatsDates(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
@@ -309,7 +309,7 @@ describe("getAllStatsDates endpoint tests", () => {
             stats: [],
         });
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were created yet");
     });
     it("should send success response with all the stats", async () => {
@@ -344,7 +344,7 @@ describe("getStatsByDate endpoint tests", () => {
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getStatsByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats found by date", async () => {
@@ -353,7 +353,7 @@ describe("getStatsByDate endpoint tests", () => {
         });
         req.params.date = "11/11/2001";
         await statsController.getStatsByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Invalid date, no stats were entered at this date");
     });
     it("should send success response with the requested stats", async () => {
@@ -386,7 +386,7 @@ describe("getAllStats endpoint tests", () => {
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
@@ -394,7 +394,7 @@ describe("getAllStats endpoint tests", () => {
             stats: [],
         });
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were created yet");
     });
     it("should send success response with all the stats", async () => {
@@ -427,7 +427,7 @@ describe("deleteLastStats endpoint tests", () => {
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
@@ -435,7 +435,7 @@ describe("deleteLastStats endpoint tests", () => {
             stats: [],
         });
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were created yet");
     });
     it("should send error response if stats were created over 24 hours ago", async () => {
@@ -443,7 +443,7 @@ describe("deleteLastStats endpoint tests", () => {
             stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
         });
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("It's been over 24 hours since the last stats were created, You can't delete them");
     });
     it("should send success response and delete the last stats", async () => {
@@ -478,7 +478,7 @@ describe("changeLastStats endpoint tests", () => {
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
@@ -486,7 +486,7 @@ describe("changeLastStats endpoint tests", () => {
             stats: [],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No stats were created yet");
     });
     it("should send error response if stats were created over 24 hours ago", async () => {
@@ -494,7 +494,7 @@ describe("changeLastStats endpoint tests", () => {
             stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("It's been over 24 hours since the last stats were created, You can't change them");
     });
     it("should send error response if no data was sent", async () => {
@@ -502,7 +502,7 @@ describe("changeLastStats endpoint tests", () => {
             stats: [{ date: new Date() }],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No data was provided");
     });
     it("should change the last stats and send success response", async () => {
@@ -550,7 +550,7 @@ describe("set ranks tests", () => {
     it("should send an error response if physical stats was not found", async () => {
         stubedStats.returns(false);
         await statsController.setRanking(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Something went wrong... Couldn't find stats that match the user");
     });
     it("should save the new rank", async () => {

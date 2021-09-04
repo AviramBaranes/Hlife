@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
-import Workout from "../models/Workout";
-import User from "../models/User";
+import Workout, { WorkoutType } from "../models/Workout";
+import User, { UserType } from "../models/User";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 
@@ -12,15 +12,20 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const user = await User.findById(userId);
+    const user = (await User.findById(userId)) as UserType;
 
     let isNamesValid = true;
+
+    if (!user.workouts) {
+      user.workouts = [];
+    }
 
     user.workouts.forEach(
       (workout: { trainingDayName: string; name: string }) => {
         const isNameIdentical = workout.name === name;
         const isTrainingDayNameIdentical =
           workout.trainingDayName === trainingDayName;
+
         if (isNameIdentical || isTrainingDayNameIdentical) {
           isNamesValid = false;
         }
@@ -28,7 +33,7 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
     );
 
     if (!isNamesValid) {
-      res.status(401).send("Each workout need to have a unique name");
+      res.status(403).send("Each workout need to have a unique name");
       return;
     }
 
@@ -37,7 +42,7 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
       trainingDayName,
       name,
       exercises,
-    });
+    }) as WorkoutType;
 
     if (description) workout.description = description;
     if (time) workout.time = time;
@@ -61,11 +66,14 @@ export const getWorkoutByName: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const workout = await Workout.findOne({ user: userId, trainingDayName });
+    const workout = (await Workout.findOne({
+      user: userId,
+      trainingDayName,
+    })) as WorkoutType;
 
     if (!workout) {
       res
-        .status(401)
+        .status(403)
         .send(
           "couldn't find workout, make sure you create a workout with this name first."
         );
@@ -83,10 +91,10 @@ export const getById: RequestHandler = async (req, res, next) => {
   try {
     const { workoutId } = req.params;
 
-    const workout = await Workout.findById(workoutId);
+    const workout = (await Workout.findById(workoutId)) as WorkoutType;
 
     if (!workout) {
-      res.status(401).send("No workout with this id");
+      res.status(403).send("No workout with this id");
       return;
     }
 
@@ -104,11 +112,14 @@ export const changeWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const workout = await Workout.findOne({ user: userId, trainingDayName });
+    const workout = (await Workout.findOne({
+      user: userId,
+      trainingDayName,
+    })) as WorkoutType;
 
     if (!workout) {
       res
-        .status(401)
+        .status(403)
         .send(
           "couldn't find workout, make sure you create a workout with this name first."
         );
@@ -117,7 +128,7 @@ export const changeWorkout: RequestHandler = async (req, res, next) => {
 
     if (!name && !description && !exercises) {
       res
-        .status(401)
+        .status(403)
         .send("You need to provide data in order to change the workout");
       return;
     }
@@ -143,11 +154,14 @@ export const deleteWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const workout = await Workout.findOneAndDelete({ user: userId, name });
+    const workout = (await Workout.findOneAndDelete({
+      user: userId,
+      name,
+    })) as WorkoutType;
 
     if (!workout) {
       res
-        .status(401)
+        .status(403)
         .send(
           "couldn't find workout, make sure you create a workout with this name first."
         );

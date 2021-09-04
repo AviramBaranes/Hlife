@@ -31,6 +31,10 @@ const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/
 const Workout_1 = __importDefault(require("../models/Workout"));
 const Program_1 = __importDefault(require("../models/Program"));
 const User_1 = __importDefault(require("../models/User"));
+// describe('get program recommendation endpoint test ', () => {
+//   it('should send an error response if no basic goal was defined',async()=>{
+//   })
+// })
 describe("create program endpoint test", () => {
     const res = responseDefaultObj_1.default();
     const req = {
@@ -47,7 +51,7 @@ describe("create program endpoint test", () => {
     it("Should send error response if workout was not found", async () => {
         stubedWorkoutModel.returns(false);
         await programController.createProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Couldn't find a workout with this name, make sure you create one first");
     });
     it("should create new program model with a list of all days + a rest day", async () => {
@@ -85,7 +89,7 @@ describe("create program endpoint test", () => {
         stubedWorkoutModel.returns(false);
         delete req.body.trainingDayName;
         await programController.createProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("This day already has a program");
     });
     it("should send an error response if day already has a program (workout)", async () => {
@@ -95,7 +99,7 @@ describe("create program endpoint test", () => {
         stubedWorkoutModel.returns(false);
         delete req.body.trainingDayName;
         await programController.createProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("This day already has a program");
     });
     it("should create new program day with a workout", async () => {
@@ -165,13 +169,13 @@ describe("get all programs endpoint test", () => {
     it("should send an error response if no program was found", async () => {
         stubedProgramModel.returns(false);
         await programController.getAllPrograms(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Something wrong... this user has no program");
     });
     it("should send an error response if program is not full", async () => {
         stubedProgramModel.returns({ program: [{ day: "a" }, { day: "b" }] });
         await programController.getAllPrograms(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("You need to create a program for each day in order to request them");
     });
     it("should send a success response with the full program", async () => {
@@ -203,13 +207,13 @@ describe("get program endpoint test", () => {
     it("Should send an error response if workout was not found", async () => {
         stubedProgramModel.returns({ program: [] });
         await programController.getProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No program was found for the user");
     });
     it("should send an error response if there is no program as made yet", async () => {
         stubedProgramModel.returns({ program: [{ day: "Sunday" }] });
         await programController.getProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No program was set at this day yet, make sure you create one");
     });
     it("should send a success response with the requested program", async () => {
@@ -248,33 +252,27 @@ describe("change program endpoint test", () => {
     it("Should send an error response if the request contains a rest day and a workout", async () => {
         stubedProgramModel.returns(false);
         await programController.changeProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("You can't set a workout day as a rest day");
     });
     it("Should send an error response if program was not found", async () => {
         req.body.restDay = false;
         stubedProgramModel.returns(false);
         await programController.changeProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No program was found for the user");
-    });
-    it("should send an error response if there is no program as made yet", async () => {
-        stubedProgramModel.returns({ program: [] });
-        await programController.changeProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
-        chai_1.expect(res.msg).equal("No program has made for this user. Make sure you create one first");
     });
     it("should send an error response if there is no program as made yet", async () => {
         stubedProgramModel.returns({ program: [{ day: "Sunday" }] });
         await programController.changeProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No program was set at this day yet, make sure you create one");
     });
     it("Should send error response if workout was not found", async () => {
         stubedWorkoutModel.returns(false);
         stubedProgramModel.returns({ program: [{ day: "Sunday", restDay: true }] });
         await programController.changeProgram(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Couldn't find a workout with this name, make sure you create one first");
     });
     it("Should set a new workout", async () => {

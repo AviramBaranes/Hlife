@@ -16,7 +16,7 @@ const GoalsSchema = new Schema({
         weight: { type: Number, required: true },
         fatPercentage: { type: Number },
         musclesMass: { type: Number },
-        date: { type: Date },
+        // date: { type: Date },
     },
 });
 const Goals = mongoose_1.default.model("Goals", GoalsSchema);

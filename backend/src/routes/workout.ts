@@ -17,15 +17,25 @@ router.post(
   "/",
   authMiddleware,
   [
-    body("trainingDayName", "Invalid name").custom((value: string) =>
-      validateEnums(value, trainingDayNames)
+    body("trainingDayName", "Invalid training day name").custom(
+      (value: string) => validateEnums(value, trainingDayNames)
     ),
-    body("name", "Invalid name").isAlpha().isLength({ min: 3 }),
-    body("description", "Invalid description").optional().isLength({ min: 10 }),
-    body("exercises").custom((value: ExercisesObj[]) =>
+
+    body("name")
+      .isAlpha()
+      .withMessage("Name can contain only letters")
+      .isLength({ min: 3 })
+      .withMessage("Name must be at least 3 letters"),
+
+    body("description", "Description too short")
+      .optional()
+      .isLength({ min: 10 }),
+
+    body("exercises", "Exercises are invalid").custom((value: ExercisesObj[]) =>
       validateExercises(value)
     ),
-    body("time", "Invalid time").optional().isInt({ min: 10, max: 300 }),
+
+    body("time", "Time is invalid").optional().isInt({ min: 10, max: 300 }),
   ],
   workoutController.createWorkout
 );
@@ -34,8 +44,8 @@ router.post(
 router.get(
   "/",
   authMiddleware,
-  query("trainingDayName").custom((value: string) =>
-    validateEnums(value, trainingDayNames)
+  query("trainingDayName", "Invalid training day name").custom(
+    (value: string) => validateEnums(value, trainingDayNames)
   ),
   workoutController.getWorkoutByName
 );
@@ -47,24 +57,34 @@ router.put(
   "/",
   authMiddleware,
   [
-    body("trainingDayName", "Invalid name").custom((value: string) =>
-      validateEnums(value, trainingDayNames)
+    body("trainingDayName", "Invalid training day name").custom(
+      (value: string) => validateEnums(value, trainingDayNames)
     ),
-    body("name", "Invalid name").isAlpha().isLength({ min: 3 }),
-    body("description", "Invalid description").optional().isLength({ min: 10 }),
-    body("exercises").custom((value: ExercisesObj[]) =>
+
+    body("name")
+      .isAlpha()
+      .withMessage("Name can contain only letters")
+      .isLength({ min: 3 })
+      .withMessage("Name must be at least 3 letters"),
+
+    body("description", "Description too short")
+      .optional()
+      .isLength({ min: 10 }),
+
+    body("exercises", "Exercises are invalid").custom((value: ExercisesObj[]) =>
       validateExercises(value)
     ),
-    body("time", "Invalid time").optional().isInt({ min: 10, max: 300 }),
+
+    body("time", "Time is invalid").optional().isInt({ min: 10, max: 300 }),
   ],
   workoutController.changeWorkout
 );
 
 router.delete(
-  "/:name",
+  "/:trainingDayName",
   authMiddleware,
-  param("name").custom((value: string) =>
-    validateEnums(value, trainingDayNames)
+  param("trainingDayName", "Invalid training day name").custom(
+    (value: string) => validateEnums(value, trainingDayNames)
   ),
   workoutController.deleteWorkout
 );

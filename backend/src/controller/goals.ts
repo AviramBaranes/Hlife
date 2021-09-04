@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import Goals from "../models/Goals";
+import Goals, { GoalsType } from "../models/Goals";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 
@@ -11,16 +11,16 @@ export const createGoal: RequestHandler = async (req, res, next) => {
 
     if (basicGoal === "lose fat" && !fatPercentage) {
       res
-        .status(401)
+        .status(403)
         .send(
           "If you want to lose fat you need to provide your fat percentage"
         );
       return;
     }
 
-    if (basicGoal !== "lose fat" && !musclesMass) {
+    if (basicGoal === "increase muscles mass" && !musclesMass) {
       res
-        .status(401)
+        .status(403)
         .send(
           "If you want to increase muscles mass you need to provide your muscles mass"
         );
@@ -35,7 +35,7 @@ export const createGoal: RequestHandler = async (req, res, next) => {
         fatPercentage,
         musclesMass,
       },
-    });
+    }) as GoalsType;
     await userGoals.save();
 
     res.status(201).send("Goals created successfully");
@@ -50,41 +50,41 @@ export const changeBasicGoal: RequestHandler = async (req, res, next) => {
     const { userId } = req;
     const { fatPercentage, musclesMass } = req.body;
 
-    const userGoals = await Goals.findOne({ user: userId });
+    const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {
-      res.status(401).send("Goals have not created yet for this user");
+      res.status(403).send("Goals have not created yet for this user");
       return;
     }
 
     let basicGoal = userGoals.basicGoal;
-    const noFatPercentageBefore = !userGoals.detailGoal.fatPercentage;
-    const noMusclesMassBefore = !userGoals.detailGoal.musclesMass;
+    const noFatPercentageBefore = !userGoals.detailGoals.fatPercentage;
+    const noMusclesMassBefore = !userGoals.detailGoals.musclesMass;
 
     if (basicGoal === "increase muscles mass") {
       if (noFatPercentageBefore && !fatPercentage) {
         res
-          .status(401)
+          .status(403)
           .send(
             "If you want to lose fat you need to provide your fat percentage"
           );
         return;
       }
       if (noFatPercentageBefore) {
-        userGoals.detailGoal.fatPercentage = fatPercentage;
+        userGoals.detailGoals.fatPercentage = fatPercentage;
       }
       basicGoal = "lose fat";
     } else {
       if (noMusclesMassBefore && !musclesMass) {
         res
-          .status(401)
+          .status(403)
           .send(
             "If you want to increase muscles mass you need to provide your muscles mass"
           );
         return;
       }
       if (noMusclesMassBefore) {
-        userGoals.detailGoal.musclesMass = musclesMass;
+        userGoals.detailGoals.musclesMass = musclesMass;
       }
       basicGoal = "increase muscles mass";
     }
@@ -105,21 +105,21 @@ export const changeGoals: RequestHandler = async (req, res, next) => {
 
     const { weight, fatPercentage, musclesMass } = req.body;
 
-    const userGoals = await Goals.findOne({ user: userId });
+    const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {
-      res.status(401).send("Goals have not created yet for this user");
+      res.status(403).send("Goals have not created yet for this user");
       return;
     }
 
     if (!weight && !fatPercentage && !musclesMass) {
-      res.status(401).send("No parameters were provided");
+      res.status(403).send("No parameters were provided");
       return;
     }
 
-    if (weight) userGoals.detailedGoals.weight = weight;
-    if (fatPercentage) userGoals.detailedGoals.fatPercentage = fatPercentage;
-    if (musclesMass) userGoals.detailedGoals.musclesMass = musclesMass;
+    if (weight) userGoals.detailGoals.weight = weight;
+    if (fatPercentage) userGoals.detailGoals.fatPercentage = fatPercentage;
+    if (musclesMass) userGoals.detailGoals.musclesMass = musclesMass;
 
     await userGoals.save();
 
@@ -133,10 +133,10 @@ export const getGoals: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const userGoals = await Goals.findOne({ user: userId });
+    const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {
-      res.status(401).send("Goals have not created yet for this user");
+      res.status(403).send("Goals have not created yet for this user");
       return;
     }
 

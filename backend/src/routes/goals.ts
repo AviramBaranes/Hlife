@@ -10,13 +10,14 @@ router.post(
   "/",
   authMiddleware,
   [
-    body("basicGoal").custom((value: string) => {
+    body(
+      "basicGoal",
+      "basic goal can be either 'lose fat' or 'increase muscles mass'"
+    ).custom((value: string) => {
       if (value === "lose fat" || value === "increase muscles mass") {
         return true;
       }
-      throw new Error(
-        "basic goal can be either 'lose fat' or 'increase muscles mass'"
-      );
+      return false;
     }),
     body("weight", "Weight must be a number").isFloat({ min: 30, max: 225 }),
     body("fatPercentage", "Fat percentage must be a number")

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -34,3 +34,20 @@ const PhysicalStatsSchema = new Schema({
 
 const PhysicalStats = mongoose.model("PhysicalStats", PhysicalStatsSchema);
 export default PhysicalStats;
+
+export interface StatsObjType {
+  date: Date;
+  weight: number;
+  deservedGrade: number;
+  height: number | undefined;
+  fatPercentage: number | undefined;
+  musclesMass: number | undefined;
+  bodyImageUrl: string | undefined;
+}
+
+export interface PhysicalStatsType extends Document {
+  user: ObjectId;
+  age: number;
+  rank: "Beginner" | "Intermediate" | "Advanced" | "Pro";
+  stats: StatsObjType[];
+}

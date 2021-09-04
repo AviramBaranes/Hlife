@@ -52,12 +52,6 @@ describe("ProgramExecution model tests", () => {
         "Argument passed in must be a single String of 12 bytes or a string of 24 hex characters"
       );
 
-      console.log(
-        err.errors.trainingDayName.properties.message,
-        err.errors["exercises.0.sets"].properties.message,
-        err.errors["exercises.0.reps"].properties.message
-      );
-
       expect(err.errors.trainingDayName.properties.message).equal(
         "`-` is not a valid enum value for path `trainingDayName`."
       );

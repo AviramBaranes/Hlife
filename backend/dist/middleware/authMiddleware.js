@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
             authToken = (_a = req.headers.cookie) === null || _a === void 0 ? void 0 : _a.split("jon=")[1].split(";")[0];
         }
         catch (err) {
-            errorHandler("Unauthorized Couldnt find cookie");
+            errorHandler("Unauthorized Couldn't find cookie");
         }
         let decodedToken;
         try {

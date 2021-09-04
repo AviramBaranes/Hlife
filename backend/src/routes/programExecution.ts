@@ -8,43 +8,51 @@ import { validateEnums } from "../utils/helpers/validation/customValidationHelpe
 const router = express.Router();
 
 router.get(
-  "/exercises-to-do/:date",
+  "/exercises-to-do/:date?",
   authMiddleware,
   param("date", "The parameter that provided is not a valid date")
     .optional()
-    .isDate(),
+    .isDate({ format: "DD-MM-YYYY" }),
   programExecutionController.getExercisesByDate
 );
 
-router.post("/:date", authMiddleware, [
-  param("date", "The parameter that provided is not a valid date")
-    .optional()
-    .isDate(),
-  body("exercises").custom((value: { [name: string]: string }) => {
-    for (let key in value) {
-      if (typeof value[key] === "boolean") {
+router.post(
+  "/:date?",
+  authMiddleware,
+  [
+    param("date", "The parameter that provided is not a valid date")
+      .optional()
+      .isDate({ format: "DD-MM-YYYY" }),
+    body("exercises", "Each exercise need to have a boolean value").custom(
+      (value: { [name: string]: string }) => {
+        for (let key in value) {
+          if (typeof value[key] === "boolean") {
+            continue;
+          }
+          return false;
+        }
         return true;
       }
-      return new Error("Each exercise need to have a boolean value");
-    }
-  }),
-]);
+    ),
+  ],
+  programExecutionController.declareAnExecution
+);
 
 router.get(
   "/:date",
   authMiddleware,
-  param("date", "This date is invalid").isDate(),
+  [param("date", "This date is invalid").isDate({ format: "DD-MM-YYYY" })],
   programExecutionController.getSingleExecution
 );
 
 router.get(
-  "/by-range",
+  "/by-range/:range/:date",
   authMiddleware,
   [
-    body("range", "a range can only be a week, a month, a year or all").custom(
+    param("range", "a range can only be a week, a month, a year or all").custom(
       (value: string) => validateEnums(value, ["week", "month", "year", "all"])
     ),
-    body("date", "date is invalid"),
+    param("date", "date is invalid").isDate({ format: "DD-MM-YYYY" }),
   ],
   programExecutionController.getExecutionsByRange
 );

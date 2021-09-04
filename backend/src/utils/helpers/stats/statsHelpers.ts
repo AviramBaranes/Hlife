@@ -1,8 +1,5 @@
-interface GoalsAndStatsObj {
-  fatPercentage: number;
-  musclesMass: number;
-  weight?: number;
-}
+import { DetailGoalType } from "../../../models/Goals";
+import { StatsObjType } from "../../../models/PhysicalStats";
 
 export interface GoalsAchieved {
   fatPercentage: boolean;
@@ -15,20 +12,20 @@ let goalsAchieved = <GoalsAchieved>{};
 export const calculateGrade = (
   lastWeightRecord: number,
   fatPercentage: number,
-  lastStatsRecord: GoalsAndStatsObj,
+  lastStatsRecord: StatsObjType,
   musclesMass: number,
   basicGoals: string,
-  detailedGoals: GoalsAndStatsObj,
+  detailedGoals: DetailGoalType,
   weight: number,
   failureMessages: string[]
 ) => {
   let calculatedGrade = 0;
 
-  const fatPercentageImproved = fatPercentage < lastStatsRecord.fatPercentage;
-  const fatPercentageReachGoal = fatPercentage <= detailedGoals.fatPercentage;
+  const fatPercentageImproved = fatPercentage < lastStatsRecord.fatPercentage!;
+  const fatPercentageReachGoal = fatPercentage <= detailedGoals.fatPercentage!;
 
-  const musclesMassImproved = musclesMass > lastStatsRecord.musclesMass;
-  const musclesMassReachGoal = musclesMass >= detailedGoals.musclesMass;
+  const musclesMassImproved = musclesMass > lastStatsRecord.musclesMass!;
+  const musclesMassReachGoal = musclesMass >= detailedGoals.musclesMass!;
 
   const loseFatGoal = basicGoals === "lose fat";
   const WeightDecrease = lastWeightRecord > weight;

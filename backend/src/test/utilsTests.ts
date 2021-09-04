@@ -25,49 +25,34 @@ describe("validation helpers tests", () => {
   });
 
   it("should throw error if exercises are invalid (sets)", () => {
-    try {
-      exercises.push({
-        name: "name",
-        sets: 0,
-        reps: 2,
-      });
-      const result = validateExercises(exercises);
-      expect(result).to.be.an("error"); // if test fails the catch block will not run
-    } catch (err) {
-      expect(err).to.be.an("error");
-      expect(err.message).equal("Invalid data");
-    }
+    exercises.push({
+      name: "name",
+      sets: 0,
+      reps: 2,
+    });
+    const result = validateExercises(exercises);
+    expect(result).equal(false); // if test fails the catch block will not run
   });
   it("should throw error if exercises are invalid (reps)", () => {
-    try {
-      exercises.pop();
-      exercises.push({
-        name: "name",
-        sets: 1,
-        reps: 100,
-      });
-      const result = validateExercises(exercises);
-      expect(result).to.be.an("error"); // if test fails the catch block will not run
-    } catch (err) {
-      expect(err).to.be.an("error");
-      expect(err.message).equal("Invalid data");
-    }
+    exercises.pop();
+    exercises.push({
+      name: "name",
+      sets: 1,
+      reps: 100,
+    });
+    const result = validateExercises(exercises);
+    expect(result).equal(false); // if test fails the catch block will not run
   });
   it("should throw error if exercises are invalid (muscles)", () => {
-    try {
-      exercises.pop();
-      exercises.push({
-        name: "name",
-        sets: 1,
-        reps: 8,
-        muscles: ["Chest", "not a muscle", "Abs"],
-      });
-      const result = validateExercises(exercises);
-      expect(result).to.be.an("error"); // if test fails the catch block will not run
-    } catch (err) {
-      expect(err).to.be.an("error");
-      expect(err.message).equal("Invalid data");
-    }
+    exercises.pop();
+    exercises.push({
+      name: "name",
+      sets: 1,
+      reps: 8,
+      muscles: ["Chest", "not a muscle", "Abs"],
+    });
+    const result = validateExercises(exercises);
+    expect(result).equal(false); // if test fails the catch block will not run
   });
   it("should return true is exercises are valid", () => {
     exercises.pop();

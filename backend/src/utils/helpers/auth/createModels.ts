@@ -8,13 +8,9 @@ import PhysicalStats from "../../../models/PhysicalStats";
 // import DietExecution from "../../../models/DietExecution";
 import Program from "../../../models/Program";
 import ProgramExecution from "../../../models/ProgramExecution";
+import { UserType } from "../../../models/User";
 
-interface NewUser {
-  _id: ObjectId;
-  dateOfBirth: string;
-}
-
-const createModelsWhenSignup = async (newUser: NewUser) => {
+const createModelsWhenSignup = async (newUser: UserType) => {
   //age of the user:
   try {
     const now = new Date(Date.now());
@@ -51,7 +47,6 @@ const createModelsWhenSignup = async (newUser: NewUser) => {
 
     // await UserDietExecution.save();
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };

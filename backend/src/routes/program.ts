@@ -18,12 +18,20 @@ const days = [
   "Saturday",
 ];
 
+router.get(
+  "/recommendation",
+  authMiddleware,
+  programController.getRecommendationProgram
+);
+
 router.post(
   "/:day",
   authMiddleware,
   [
-    param("day").custom((value: string) => validateEnums(value, days)),
-    body("trainingDayName")
+    param("day", "Invalid day").custom((value: string) =>
+      validateEnums(value, days)
+    ),
+    body("trainingDayName", "Training day is invalid")
       .optional()
       .custom((value: string) => validateEnums(value, trainingDayNames)),
   ],
@@ -35,7 +43,9 @@ router.get("/", authMiddleware, programController.getAllPrograms);
 router.get(
   "/:day",
   authMiddleware,
-  param("day").custom((value: string) => validateEnums(value, days)),
+  param("day", "Day is invalid").custom((value: string) =>
+    validateEnums(value, days)
+  ),
   programController.getProgram
 );
 
@@ -43,11 +53,13 @@ router.put(
   "/:day",
   authMiddleware,
   [
-    param("day").custom((value: string) => validateEnums(value, days)),
-    body("trainingDayName")
+    param("day", "Invalid day").custom((value: string) =>
+      validateEnums(value, days)
+    ),
+    body("trainingDayName", "Training day is invalid")
       .optional()
       .custom((value: string) => validateEnums(value, trainingDayNames)),
-    body("restDay").isBoolean(),
+    body("restDay", "rest day needs to be a boolean").isBoolean(),
   ],
   programController.changeProgram
 );

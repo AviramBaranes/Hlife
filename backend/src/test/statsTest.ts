@@ -37,7 +37,7 @@ describe("addStats endpoint general tests", () => {
 
     await statsController.addStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("User's goals not found");
   });
 
@@ -100,7 +100,7 @@ describe("addStats endpoint deeply tests", () => {
     stubedUserModel = sinon.stub(User, "findById");
     stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
     stubedGoalsModel.returns({
-      basicGoals: "lose fat",
+      basicGoal: "lose fat",
       detailGoals: { weight: 30, fatPercentage: 5, musclesMass: 100 },
     });
   });
@@ -349,7 +349,7 @@ describe("getAllStatsDates endpoint tests", () => {
 
     await statsController.getAllStatsDates(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were found for this user");
   });
 
@@ -360,7 +360,7 @@ describe("getAllStatsDates endpoint tests", () => {
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were created yet");
   });
 
@@ -407,7 +407,7 @@ describe("getStatsByDate endpoint tests", () => {
 
     await statsController.getStatsByDate(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were found for this user");
   });
 
@@ -420,7 +420,7 @@ describe("getStatsByDate endpoint tests", () => {
 
     await statsController.getStatsByDate(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Invalid date, no stats were entered at this date");
   });
 
@@ -463,7 +463,7 @@ describe("getAllStats endpoint tests", () => {
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were found for this user");
   });
 
@@ -474,7 +474,7 @@ describe("getAllStats endpoint tests", () => {
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were created yet");
   });
 
@@ -517,7 +517,7 @@ describe("deleteLastStats endpoint tests", () => {
 
     await statsController.deleteLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were found for this user");
   });
 
@@ -528,7 +528,7 @@ describe("deleteLastStats endpoint tests", () => {
 
     await statsController.deleteLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were created yet");
   });
 
@@ -539,7 +539,7 @@ describe("deleteLastStats endpoint tests", () => {
 
     await statsController.deleteLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "It's been over 24 hours since the last stats were created, You can't delete them"
     );
@@ -587,7 +587,7 @@ describe("changeLastStats endpoint tests", () => {
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were found for this user");
   });
 
@@ -598,7 +598,7 @@ describe("changeLastStats endpoint tests", () => {
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No stats were created yet");
   });
 
@@ -609,7 +609,7 @@ describe("changeLastStats endpoint tests", () => {
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "It's been over 24 hours since the last stats were created, You can't change them"
     );
@@ -622,7 +622,7 @@ describe("changeLastStats endpoint tests", () => {
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No data was provided");
   });
 
@@ -682,7 +682,7 @@ describe("set ranks tests", () => {
 
     await statsController.setRanking(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "Something went wrong... Couldn't find stats that match the user"
     );

@@ -58,7 +58,7 @@ router.post("/", authMiddleware_1.default, [
 //get all stats dates
 router.get("/all-stats-dates", authMiddleware_1.default, statsController.getAllStatsDates);
 //get a stat
-router.get("/:date", authMiddleware_1.default, express_validator_1.param("date", "invalid param").isDate(), statsController.getStatsByDate);
+router.get("/:date", authMiddleware_1.default, express_validator_1.param("date", "invalid date").isDate({ format: "DD-MM-YYYY" }), statsController.getStatsByDate);
 //get all stats
 router.get("/", authMiddleware_1.default, statsController.getAllStats);
 //change the last stat

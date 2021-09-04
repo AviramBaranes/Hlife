@@ -20,7 +20,7 @@ const authMiddleware = (
     try {
       authToken = req.headers.cookie?.split("jon=")[1].split(";")[0];
     } catch (err) {
-      errorHandler("Unauthorized Couldnt find cookie");
+      errorHandler("Unauthorized Couldn't find cookie");
     }
 
     let decodedToken;

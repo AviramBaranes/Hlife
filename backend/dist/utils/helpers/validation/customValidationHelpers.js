@@ -9,9 +9,6 @@ const validateEnums = (value, enumList) => {
             return;
         }
     });
-    if (isValid) {
-        return true;
-    }
-    throw new Error("Invalid value");
+    return isValid;
 };
 exports.validateEnums = validateEnums;

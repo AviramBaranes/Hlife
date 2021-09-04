@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -27,3 +27,15 @@ const ProgramExecution = mongoose.model(
   ProgramExecutionSchema
 );
 export default ProgramExecution;
+
+interface Execution {
+  programId: ObjectId;
+  date: Date;
+  executionRate: number;
+  grade: number;
+}
+
+export interface ProgramExecType extends Document {
+  user: ObjectId;
+  executions: Execution[];
+}

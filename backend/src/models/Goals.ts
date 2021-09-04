@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 const Schema = mongoose.Schema;
 
@@ -18,9 +18,21 @@ const GoalsSchema = new Schema({
 
     musclesMass: { type: Number },
 
-    date: { type: Date },
+    // date: { type: Date },
   },
 });
 
 const Goals = mongoose.model("Goals", GoalsSchema);
 export default Goals;
+
+export interface DetailGoalType {
+  weight: number;
+  fatPercentage: number | undefined;
+  musclesMass: number | undefined;
+}
+
+export interface GoalsType extends Document {
+  user: ObjectId;
+  basicGoal: "lose fat" | "increase muscles mass";
+  detailGoals: DetailGoalType;
+}

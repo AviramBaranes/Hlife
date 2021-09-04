@@ -9,24 +9,48 @@ import Goals from "../models/Goals";
 import * as goalsController from "../controller/goals";
 import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
 
+interface ReqBody {
+  weight?: number;
+  fatPercentage?: number;
+  musclesMass?: number;
+}
+
 describe("create goals tests", () => {
   const req = {
     body: {
-      basicGoal: "goal",
+      basicGoal: "lose fat",
       weight: 1,
-      fatPercentage: 2,
-      musclesMass: 3,
-    },
+    } as any,
   };
   const res = createCustomResponseObj();
+  it("should send an error response if basic goal is lose fat and there is no fatPercentage data", async () => {
+    await goalsController.createGoal(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal(
+      "If you want to lose fat you need to provide your fat percentage"
+    );
+  });
+
+  it("should send an error response if basic goal is gain muscle mass and there is no musclesMass data", async () => {
+    req.body.basicGoal = "increase muscles mass";
+    await goalsController.createGoal(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal(
+      "If you want to increase muscles mass you need to provide your muscles mass"
+    );
+  });
+
   it("create the right goals model", async () => {
     const stubedGoalsModel = sinon.stub(Goals.prototype, "save");
-
+    req.body.fatPercentage = 2;
+    req.body.musclesMass = 3;
     await goalsController.createGoal(req as any, res as any, () => {});
 
     const argumentForConstructor = stubedGoalsModel.firstCall.thisValue;
 
-    expect(argumentForConstructor.basicGoal).equal("goal");
+    expect(argumentForConstructor.basicGoal).equal("increase muscles mass");
     expect(argumentForConstructor.detailGoals.weight).equal(1);
     expect(argumentForConstructor.detailGoals.fatPercentage).equal(2);
     expect(argumentForConstructor.detailGoals.musclesMass).equal(3);
@@ -55,7 +79,7 @@ describe("get goals tests", () => {
 
     await goalsController.getGoals(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Goals have not created yet for this user");
   });
   it("send error response if no model was found", async () => {
@@ -85,38 +109,38 @@ describe("change basic goal tests", () => {
     stubedGoalsModel = sinon.stub(Goals, "findOne");
   });
 
-  it("send error response if no model was found", async () => {
+  it("should send an error response if no model was found", async () => {
     stubedGoalsModel.returns(false);
 
     await goalsController.changeBasicGoal(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Goals have not created yet for this user");
   });
 
-  it("should send error response if no fatPercentage provided", async () => {
+  it("should send an error response if no fatPercentage provided", async () => {
     stubedGoalsModel.returns({
       basicGoal: "increase muscles mass",
-      detailGoal: {},
+      detailGoals: {},
     });
 
     await goalsController.changeBasicGoal(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "If you want to lose fat you need to provide your fat percentage"
     );
   });
 
-  it("should send error response if no muscles mass provided", async () => {
+  it("should send an error response if no muscles mass provided", async () => {
     stubedGoalsModel.returns({
       basicGoal: "lose fat",
-      detailGoal: {},
+      detailGoals: {},
     });
 
     await goalsController.changeBasicGoal(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "If you want to increase muscles mass you need to provide your muscles mass"
     );
@@ -126,7 +150,7 @@ describe("change basic goal tests", () => {
     stubedGoalsModel.returns({
       save: sinon.spy(),
       basicGoal: "increase muscles mass",
-      detailGoal: { fatPercentage: 10 },
+      detailGoals: { fatPercentage: 10 },
     });
 
     await goalsController.changeBasicGoal(req as any, res as any, () => {});
@@ -135,7 +159,7 @@ describe("change basic goal tests", () => {
 
     expect(userGoal.save.called).equal(true);
     expect(userGoal.basicGoal).equal("lose fat");
-    expect(userGoal.detailGoal.fatPercentage).equal(10);
+    expect(userGoal.detailGoals.fatPercentage).equal(10);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
@@ -144,7 +168,7 @@ describe("change basic goal tests", () => {
     stubedGoalsModel.returns({
       save: sinon.spy(),
       basicGoal: "lose fat",
-      detailGoal: { musclesMass: 10 },
+      detailGoals: { musclesMass: 10 },
     });
 
     await goalsController.changeBasicGoal(req as any, res as any, () => {});
@@ -153,14 +177,14 @@ describe("change basic goal tests", () => {
 
     expect(userGoal.save.called).equal(true);
     expect(userGoal.basicGoal).equal("increase muscles mass");
-    expect(userGoal.detailGoal.musclesMass).equal(10);
+    expect(userGoal.detailGoals.musclesMass).equal(10);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
 
   it("should change basicGoal to increase muscles mass and enter muscles mass goal", async () => {
     stubedGoalsModel.returns({
-      detailGoal: {},
+      detailGoals: {},
       basicGoal: "lose fat",
       save: sinon.spy(),
     });
@@ -173,14 +197,14 @@ describe("change basic goal tests", () => {
 
     expect(userGoal.save.called).equal(true);
     expect(userGoal.basicGoal).equal("increase muscles mass");
-    expect(userGoal.detailGoal.musclesMass).equal(10);
+    expect(userGoal.detailGoals.musclesMass).equal(10);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
 
   it("should change basicGoal to lose fat and enter new fatPercentage field", async () => {
     stubedGoalsModel.returns({
-      detailGoal: {},
+      detailGoals: {},
       basicGoal: "increase muscles mass",
       save: sinon.spy(),
     });
@@ -193,7 +217,7 @@ describe("change basic goal tests", () => {
 
     expect(userGoal.save.called).equal(true);
     expect(userGoal.basicGoal).equal("lose fat");
-    expect(userGoal.detailGoal.fatPercentage).equal(10);
+    expect(userGoal.detailGoals.fatPercentage).equal(10);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
@@ -202,12 +226,6 @@ describe("change basic goal tests", () => {
     stubedGoalsModel.restore();
   });
 });
-
-interface ReqBody {
-  weight?: number;
-  fatPercentage?: number;
-  musclesMass?: number;
-}
 
 describe("change goals tests", () => {
   const req = {
@@ -226,7 +244,7 @@ describe("change goals tests", () => {
 
     await goalsController.changeGoals(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Goals have not created yet for this user");
   });
 
@@ -235,12 +253,12 @@ describe("change goals tests", () => {
 
     await goalsController.changeGoals(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No parameters were provided");
   });
 
   it("should update weight property in user goals", async () => {
-    stubedGoalsModel.returns({ detailedGoals: {}, save: sinon.spy() });
+    stubedGoalsModel.returns({ detailGoals: {}, save: sinon.spy() });
 
     req.body.weight = 1;
 
@@ -249,13 +267,13 @@ describe("change goals tests", () => {
     const userGoal = Goals.findOne();
 
     expect(userGoal.save.called).equal(true);
-    expect(userGoal.detailedGoals.weight).equal(1);
+    expect(userGoal.detailGoals.weight).equal(1);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
 
   it("should update fatPercentage property in user goals", async () => {
-    stubedGoalsModel.returns({ detailedGoals: {}, save: sinon.spy() });
+    stubedGoalsModel.returns({ detailGoals: {}, save: sinon.spy() });
 
     req.body.fatPercentage = 1;
 
@@ -264,13 +282,13 @@ describe("change goals tests", () => {
     const userGoal = Goals.findOne();
 
     expect(userGoal.save.called).equal(true);
-    expect(userGoal.detailedGoals.fatPercentage).equal(1);
+    expect(userGoal.detailGoals.fatPercentage).equal(1);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
 
   it("should update musclesMass property in user goals", async () => {
-    stubedGoalsModel.returns({ detailedGoals: {}, save: sinon.spy() });
+    stubedGoalsModel.returns({ detailGoals: {}, save: sinon.spy() });
 
     req.body.musclesMass = 1;
 
@@ -279,13 +297,13 @@ describe("change goals tests", () => {
     const userGoal = Goals.findOne();
 
     expect(userGoal.save.called).equal(true);
-    expect(userGoal.detailedGoals.musclesMass).equal(1);
+    expect(userGoal.detailGoals.musclesMass).equal(1);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });
 
   it("should update all property in user goals", async () => {
-    stubedGoalsModel.returns({ detailedGoals: {}, save: sinon.spy() });
+    stubedGoalsModel.returns({ detailGoals: {}, save: sinon.spy() });
 
     req.body.musclesMass = 1;
     req.body.fatPercentage = 2;
@@ -296,9 +314,9 @@ describe("change goals tests", () => {
     const userGoal = Goals.findOne();
 
     expect(userGoal.save.called).equal(true);
-    expect(userGoal.detailedGoals.musclesMass).equal(1);
-    expect(userGoal.detailedGoals.fatPercentage).equal(2);
-    expect(userGoal.detailedGoals.weight).equal(3);
+    expect(userGoal.detailGoals.musclesMass).equal(1);
+    expect(userGoal.detailGoals.fatPercentage).equal(2);
+    expect(userGoal.detailGoals.weight).equal(3);
     expect(res.statusCode).equal(201);
     expect(res.msg).equal("Goals updated");
   });

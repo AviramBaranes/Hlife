@@ -19,7 +19,13 @@ const stats_1 = __importDefault(require("./routes/stats"));
 const goals_1 = __importDefault(require("./routes/goals"));
 const workout_1 = __importDefault(require("./routes/workout"));
 const program_1 = __importDefault(require("./routes/program"));
-const csrfProtection = csurf_1.default({ cookie: true });
+const programExecution_1 = __importDefault(require("./routes/programExecution"));
+const csrfProtection = process.env.NODE_ENV === "test"
+    ? csurf_1.default({
+        cookie: true,
+        ignoreMethods: ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"],
+    })
+    : csurf_1.default({ cookie: true });
 const app = express_1.default();
 database_1.default();
 const limiter = new express_rate_limit_1.default({
@@ -40,16 +46,13 @@ app.get("/", csrfProtection, function (req, res) {
     res.cookie("XSRF-TOKEN", req.csrfToken());
     res.send("SET");
 });
-// app.use((req, res, next) => {
-//   console.log(req.cookies);
-//   next();
-// });
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 app.use("/auth", auth_1.default);
 app.use("/goals", goals_1.default);
 app.use("/stats", stats_1.default);
 app.use("/workout", workout_1.default);
 app.use("/program", program_1.default);
+app.use("/program-exec", programExecution_1.default);
 app.use((error, req, res, next) => {
     let { statusCode, message, data } = error;
     if (!statusCode)
@@ -60,4 +63,5 @@ app.use((error, req, res, next) => {
         data = null;
     res.status(statusCode).json({ message, data });
 });
-app.listen(8080);
+const server = app.listen(8080);
+exports.default = server; //for tests

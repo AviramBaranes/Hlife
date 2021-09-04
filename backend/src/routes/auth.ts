@@ -6,46 +6,62 @@ import authMiddleware from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-//sugnup
+//signup
 router.post(
   "/signup",
   [
-    body("name", "name only allow letters, and must be atleast 3 characters")
+    body("name")
       .isAlpha()
-      .isLength({ min: 3 }),
-    body("username", "username must be atleast 3 characters")
+      .withMessage("name only allow letters")
       .isLength({ min: 3 })
-      .isAlphanumeric(),
-    body("email", "please enter a correct emil").isEmail().normalizeEmail(),
-    body(
-      ["password", "passwordConfirmation"],
-      "password need to be atleast 6 characters"
-    )
+      .withMessage("name must be at least 3 characters"),
+
+    body("username")
+      .isLength({ min: 3 })
+      .withMessage("username must be at least 3 characters")
+      .isAlphanumeric()
+      .withMessage("username only allow letters and numbers"),
+
+    body("email", "please enter a correct email").isEmail().normalizeEmail(),
+
+    body("password")
       .isLength({ min: 6 })
-      .isAlphanumeric(), //isStrongPassword
-    body("gender").custom((value: string) => {
+      .withMessage("password need to be at least 6 characters")
+      .isAlphanumeric()
+      .withMessage("password only allow letters and numbers"), //isStrongPassword
+
+    body("passwordConfirmation")
+      .isLength({ min: 6 })
+      .withMessage("password need to be at least 6 characters")
+      .isAlphanumeric()
+      .withMessage("password only allow letters and numbers"),
+
+    body("gender", "gender is invalid").custom((value: string) => {
       if (value === "male" || value === "female") {
         return true;
       }
-      throw new Error("gender is invalid");
+      return false;
     }),
-    body("dateOfBirth").custom((value: string) => {
-      const limit = new Date("01/01/1920");
-      const max = new Date("01/01/2005");
-      const date = new Date(value);
 
-      if (date + "test" === "Invalid Datetest") {
-        throw new Error("invalid Date");
-      }
+    body(
+      "dateOfBirth",
+      'The field must be a date between "01/01/1920" and "01/01/2005"'
+    )
+      .isDate({ format: "DD-MM-YYYY" })
+      .custom((value: string) => {
+        const limit = new Date("01/01/1920");
+        const max = new Date("01/01/2005");
+        const date = new Date(value);
 
-      if (date.getTime() < limit.getTime() || date.getTime() > max.getTime()) {
-        throw new Error(
-          "Date must be in range between 01/01/1920 and 01/01/2005"
-        );
-      }
+        if (
+          date.getTime() < limit.getTime() ||
+          date.getTime() > max.getTime()
+        ) {
+          return false;
+        }
 
-      return true;
-    }),
+        return true;
+      }),
   ],
   authController.signup
 );
@@ -54,7 +70,8 @@ router.post(
 router.post(
   "/login",
   [
-    body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
+    body("email", "please enter a correct email").isEmail().normalizeEmail(),
+
     body(
       "password",
       "Invalid password, At least 6 characters for a password"
@@ -72,7 +89,9 @@ router.post(
   authMiddleware,
   body(["currentPassword", "newPassword", "newPasswordConfirmation"])
     .isLength({ min: 6 })
-    .withMessage("Invalid password, At least 6 characters for a password"),
+    .withMessage("password need to be at least 6 characters")
+    .isAlphanumeric()
+    .withMessage("password only allow letters and numbers"),
   authController.resetPassword
 );
 
@@ -88,14 +107,16 @@ router.put(
   "/reset/password-reset",
   body(["password", "passwordConfirmation"])
     .isLength({ min: 6 })
-    .withMessage("Invalid password, At least 6 characters for a password"),
+    .withMessage("password need to be at least 6 characters")
+    .isAlphanumeric()
+    .withMessage("password only allow letters and numbers"),
   authController.resetPasswordViaToken
 );
 
 //validate token
 router.get(
   "/reset/validate-token/:token",
-  param("resetToken")
+  param("token")
     .isLength({ min: 64, max: 64 })
     .withMessage("Invalid Token, too short"),
   authController.validateResetToken

@@ -13,6 +13,12 @@ import Workout from "../models/Workout";
 import Program from "../models/Program";
 import User from "../models/User";
 
+// describe('get program recommendation endpoint test ', () => {
+//   it('should send an error response if no basic goal was defined',async()=>{
+
+//   })
+// })
+
 describe("create program endpoint test", () => {
   const res = createCustomResponseObj();
   const req = {
@@ -32,7 +38,7 @@ describe("create program endpoint test", () => {
 
     await programController.createProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "Couldn't find a workout with this name, make sure you create one first"
     );
@@ -89,7 +95,7 @@ describe("create program endpoint test", () => {
 
     await programController.createProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("This day already has a program");
   });
 
@@ -103,7 +109,7 @@ describe("create program endpoint test", () => {
 
     await programController.createProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("This day already has a program");
   });
 
@@ -196,7 +202,7 @@ describe("get all programs endpoint test", () => {
 
     await programController.getAllPrograms(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("Something wrong... this user has no program");
   });
 
@@ -205,7 +211,7 @@ describe("get all programs endpoint test", () => {
 
     await programController.getAllPrograms(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "You need to create a program for each day in order to request them"
     );
@@ -247,7 +253,7 @@ describe("get program endpoint test", () => {
 
     await programController.getProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No program was found for the user");
   });
 
@@ -256,7 +262,7 @@ describe("get program endpoint test", () => {
 
     await programController.getProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "No program was set at this day yet, make sure you create one"
     );
@@ -306,7 +312,7 @@ describe("change program endpoint test", () => {
 
     await programController.changeProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("You can't set a workout day as a rest day");
   });
 
@@ -316,26 +322,16 @@ describe("change program endpoint test", () => {
 
     await programController.changeProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal("No program was found for the user");
   });
 
-  it("should send an error response if there is no program as made yet", async () => {
-    stubedProgramModel.returns({ program: [] });
-
-    await programController.changeProgram(req as any, res as any, () => {});
-
-    expect(res.statusCode).equal(401);
-    expect(res.msg).equal(
-      "No program has made for this user. Make sure you create one first"
-    );
-  });
   it("should send an error response if there is no program as made yet", async () => {
     stubedProgramModel.returns({ program: [{ day: "Sunday" }] });
 
     await programController.changeProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "No program was set at this day yet, make sure you create one"
     );
@@ -347,7 +343,7 @@ describe("change program endpoint test", () => {
 
     await programController.changeProgram(req as any, res as any, () => {});
 
-    expect(res.statusCode).equal(401);
+    expect(res.statusCode).equal(403);
     expect(res.msg).equal(
       "Couldn't find a workout with this name, make sure you create one first"
     );

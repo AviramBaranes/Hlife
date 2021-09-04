@@ -47,7 +47,7 @@ describe("create workout tests", () => {
             ],
         });
         await workoutController.createWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("Each workout need to have a unique name");
     });
     it("should create a workout model", async () => {
@@ -95,7 +95,7 @@ describe("get workout by name tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.getWorkoutByName(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return success response and the workout object", async () => {
@@ -119,7 +119,7 @@ describe("get workout by id test", () => {
     it("should send an error response if no workout was found", async () => {
         stubedWorkout.returns(false);
         await workoutController.getById(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("No workout with this id");
     });
     it("should send a success response with the workout object", async () => {
@@ -143,13 +143,13 @@ describe("change workout tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.changeWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return error response if no data was provided", async () => {
         stubedWorkout.returns(true);
         await workoutController.changeWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("You need to provide data in order to change the workout");
     });
     it("should save the updated workout", async () => {
@@ -182,7 +182,7 @@ describe("delete workout tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.deleteWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
+        chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return success response and the workout object", async () => {

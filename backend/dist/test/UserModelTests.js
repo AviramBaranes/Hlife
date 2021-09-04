@@ -43,6 +43,5 @@ describe("User model tests", () => {
             chai_1.expect(err).equal(null);
         });
         chai_1.expect(user.hasProgram).equal(false);
-        chai_1.expect(user.hasDiet).equal(false);
     });
 });

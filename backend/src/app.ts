@@ -17,6 +17,7 @@ import statsRoute from "./routes/stats";
 import goalsRoute from "./routes/goals";
 import workoutRoute from "./routes/workout";
 import programRoute from "./routes/program";
+import programExecRoute from "./routes/programExecution";
 
 declare global {
   namespace Express {
@@ -26,7 +27,13 @@ declare global {
   }
 }
 
-const csrfProtection = csrf({ cookie: true });
+const csrfProtection =
+  process.env.NODE_ENV === "test"
+    ? csrf({
+        cookie: true,
+        ignoreMethods: ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"],
+      })
+    : csrf({ cookie: true });
 const app = express();
 
 connectDb();
@@ -53,11 +60,6 @@ app.get("/", csrfProtection, function (req, res) {
   res.send("SET");
 });
 
-// app.use((req, res, next) => {
-//   console.log(req.cookies);
-//   next();
-// });
-
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 
 app.use("/auth", authRoute);
@@ -65,6 +67,7 @@ app.use("/goals", goalsRoute);
 app.use("/stats", statsRoute);
 app.use("/workout", workoutRoute);
 app.use("/program", programRoute);
+app.use("/program-exec", programExecRoute);
 
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {
@@ -78,4 +81,5 @@ app.use(
   }
 );
 
-app.listen(8080);
+const server = app.listen(8080);
+export default server; //for tests
