@@ -12,12 +12,149 @@ import createCustomResponseObj, {
 import Workout from "../models/Workout";
 import Program from "../models/Program";
 import User from "../models/User";
+import Goals from "../models/Goals";
+import PhysicalStats from "../models/PhysicalStats";
 
-// describe('get program recommendation endpoint test ', () => {
-//   it('should send an error response if no basic goal was defined',async()=>{
+describe("get program recommendation endpoint test ", () => {
+  const req = { userId: "123" };
+  const res = createCustomResponseObj();
+  let stubedUserModel: SinonStub,
+    stubedGoalsModel: SinonStub,
+    stubedStatsModel: SinonStub;
+  beforeEach(() => {
+    stubedGoalsModel = sinon.stub(Goals, "findOne");
+    stubedUserModel = sinon.stub(User, "findById");
+    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+  });
 
-//   })
-// })
+  afterEach(() => {
+    stubedGoalsModel.restore();
+    stubedUserModel.restore();
+    stubedStatsModel.restore();
+  });
+
+  it("should send an error response if no basic goal was defined", async () => {
+    stubedGoalsModel.returns({ basicGoal: false });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal(
+      "User need to create goals in order to get a recommendation program"
+    );
+  });
+
+  it("should send the correct recommendation (female gain muscle pro)", async () => {
+    stubedUserModel.returns({ gender: "female" });
+    stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+    stubedStatsModel.returns({ rank: "Pro" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "AB", timesPerWeek: 4 });
+  });
+
+  it("should send the correct recommendation (female gain muscle)", async () => {
+    stubedUserModel.returns({ gender: "female" });
+    stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+    stubedStatsModel.returns({ rank: "Intermediate" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "FB", timesPerWeek: 2 });
+  });
+
+  it("should send the correct recommendation (female lose fat pro)", async () => {
+    stubedUserModel.returns({ gender: "female" });
+    stubedGoalsModel.returns({ basicGoal: "lose fat" });
+    stubedStatsModel.returns({ rank: "Pro" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+    console.log(res.jsonObj);
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+    expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+  });
+
+  it("should send the correct recommendation (female lose fat)", async () => {
+    stubedUserModel.returns({ gender: "female" });
+    stubedGoalsModel.returns({ basicGoal: "lose fat" });
+    stubedStatsModel.returns({ rank: "Advanced" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+    console.log(res.jsonObj);
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+  });
+
+  it("should send the correct recommendation (male lose fat pro)", async () => {
+    stubedUserModel.returns({ gender: "male" });
+    stubedGoalsModel.returns({ basicGoal: "lose fat" });
+    stubedStatsModel.returns({ rank: "Pro" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+    console.log(res.jsonObj);
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+    expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+  });
+
+  it("should send the correct recommendation (male lose fat)", async () => {
+    stubedUserModel.returns({ gender: "male" });
+    stubedGoalsModel.returns({ basicGoal: "lose fat" });
+    stubedStatsModel.returns({ rank: "Beginner" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+    console.log(res.jsonObj);
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 2 });
+  });
+
+  it("should send the correct recommendation (male gain muscle)", async () => {
+    stubedUserModel.returns({ gender: "male" });
+    stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+    stubedStatsModel.returns({ rank: "Pro" });
+
+    await programController.getRecommendationProgram(
+      req as any,
+      res as any,
+      () => {}
+    );
+    console.log(res.jsonObj);
+    expect(res.statusCode).equal(200);
+    expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 6 });
+  });
+});
 
 describe("create program endpoint test", () => {
   const res = createCustomResponseObj();

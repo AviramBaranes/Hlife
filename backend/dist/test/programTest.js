@@ -31,10 +31,92 @@ const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/
 const Workout_1 = __importDefault(require("../models/Workout"));
 const Program_1 = __importDefault(require("../models/Program"));
 const User_1 = __importDefault(require("../models/User"));
-// describe('get program recommendation endpoint test ', () => {
-//   it('should send an error response if no basic goal was defined',async()=>{
-//   })
-// })
+const Goals_1 = __importDefault(require("../models/Goals"));
+const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
+describe("get program recommendation endpoint test ", () => {
+    const req = { userId: "123" };
+    const res = responseDefaultObj_1.default();
+    let stubedUserModel, stubedGoalsModel, stubedStatsModel;
+    beforeEach(() => {
+        stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
+        stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
+        stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
+    });
+    afterEach(() => {
+        stubedGoalsModel.restore();
+        stubedUserModel.restore();
+        stubedStatsModel.restore();
+    });
+    it("should send an error response if no basic goal was defined", async () => {
+        stubedGoalsModel.returns({ basicGoal: false });
+        await programController.getRecommendationProgram(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(403);
+        chai_1.expect(res.msg).equal("User need to create goals in order to get a recommendation program");
+    });
+    it("should send the correct recommendation (female gain muscle pro)", async () => {
+        stubedUserModel.returns({ gender: "female" });
+        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+        stubedStatsModel.returns({ rank: "Pro" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "AB", timesPerWeek: 4 });
+    });
+    it("should send the correct recommendation (female gain muscle)", async () => {
+        stubedUserModel.returns({ gender: "female" });
+        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+        stubedStatsModel.returns({ rank: "Intermediate" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "FB", timesPerWeek: 2 });
+    });
+    it("should send the correct recommendation (female lose fat pro)", async () => {
+        stubedUserModel.returns({ gender: "female" });
+        stubedGoalsModel.returns({ basicGoal: "lose fat" });
+        stubedStatsModel.returns({ rank: "Pro" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        console.log(res.jsonObj);
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+        chai_1.expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+    });
+    it("should send the correct recommendation (female lose fat)", async () => {
+        stubedUserModel.returns({ gender: "female" });
+        stubedGoalsModel.returns({ basicGoal: "lose fat" });
+        stubedStatsModel.returns({ rank: "Advanced" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        console.log(res.jsonObj);
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+    });
+    it("should send the correct recommendation (male lose fat pro)", async () => {
+        stubedUserModel.returns({ gender: "male" });
+        stubedGoalsModel.returns({ basicGoal: "lose fat" });
+        stubedStatsModel.returns({ rank: "Pro" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        console.log(res.jsonObj);
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+        chai_1.expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+    });
+    it("should send the correct recommendation (male lose fat)", async () => {
+        stubedUserModel.returns({ gender: "male" });
+        stubedGoalsModel.returns({ basicGoal: "lose fat" });
+        stubedStatsModel.returns({ rank: "Beginner" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        console.log(res.jsonObj);
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 2 });
+    });
+    it("should send the correct recommendation (male gain muscle)", async () => {
+        stubedUserModel.returns({ gender: "male" });
+        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
+        stubedStatsModel.returns({ rank: "Pro" });
+        await programController.getRecommendationProgram(req, res, () => { });
+        console.log(res.jsonObj);
+        chai_1.expect(res.statusCode).equal(200);
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 6 });
+    });
+});
 describe("create program endpoint test", () => {
     const res = responseDefaultObj_1.default();
     const req = {
