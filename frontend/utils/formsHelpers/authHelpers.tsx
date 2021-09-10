@@ -85,8 +85,8 @@ export function createInputListForSignup(
       },
     },
     {
-      label: "Password Confirmation",
-      htmlFor: "passwordConfirmation",
+      label: "Confirm",
+      htmlFor: "password-Confirmation",
       type: "password",
       value: passwordConfirmation,
       valid: false,
@@ -147,7 +147,7 @@ export function createInputListForPasswordReset(
       },
     },
     {
-      label: "Password Confirmation",
+      label: "Confirm",
       htmlFor: "passwordConfirmation",
       type: "password",
       value: passwordConfirmation,

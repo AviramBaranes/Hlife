@@ -161,6 +161,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
       if (programFull) {
         const user = (await User.findById(userId)) as UserType;
         user.hasProgram = true;
+        user.grade += 100;
         await user.save();
       }
     }

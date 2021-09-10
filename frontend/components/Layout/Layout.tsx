@@ -10,10 +10,8 @@ import { RootState } from "../../redux/store";
 
 function Layout({ children }: { children: React.ReactNode[] }) {
   const dispatch = useDispatch();
-  const { error } = useSelector((state: RootState) => state.tokensReducer) as {
-    csrfToken: string;
-    error: { message: string };
-  };
+
+  const { error } = useSelector((state: RootState) => state.tokensReducer);
   const { loading } = useSelector((state: RootState) => state.usersReducer);
 
   useEffect(() => {

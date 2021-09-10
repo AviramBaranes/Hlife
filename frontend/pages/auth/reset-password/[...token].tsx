@@ -7,26 +7,21 @@ import {
   inputChangeHandler,
   submitChangePasswordHandler,
 } from "../../../utils/formsHelpers/authHelpers";
-import Card from "../../../components/UI/Card/Card";
 import Button from "../../../components/UI/Button/Button";
 import Input from "../../../components/UI/Input/Input";
 import { useDispatch } from "react-redux";
-import { errorsActions } from "../../../redux/slices/errors";
 import { ComplexInputListObject } from "../../../types/inputConfig";
+import classes from "../../../styles/pages/changePassword.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 interface ResetPasswordProps {
   token: string;
   withError: string;
 }
 
-function ResetPassword({ token, withError }: ResetPasswordProps) {
+function ResetPassword({ token }: ResetPasswordProps) {
   const dispatch = useDispatch();
-
-  if (withError) {
-    dispatch(
-      errorsActions.newError({ errorTitle: "Error", errorMessage: withError })
-    );
-  }
 
   const [passwordsFields, setPasswordsFields] = useState({
     password: "",
@@ -43,49 +38,51 @@ function ResetPassword({ token, withError }: ResetPasswordProps) {
   const [formValidity, setFormValidity] = useState(false);
 
   return (
-    <Card>
-      {withError ? null : (
-        <>
-          <h2>Change Password</h2>
-          <form
-            onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-              submitChangePasswordHandler(e, dispatch, passwordsFields, token)
-            }
-          >
-            {inputs.map((input, index) => {
-              return (
-                <Input
-                  key={input.htmlFor!}
-                  htmlFor={input.htmlFor!}
-                  label={input.label!}
-                  value={input.value}
-                  type={input.type!}
-                  inputChangeHandler={(
-                    event: React.FormEvent<HTMLInputElement>
-                  ) =>
-                    inputChangeHandler(
-                      event,
-                      index,
-                      inputs,
-                      setInputs,
-                      setPasswordsFields as React.Dispatch<
-                        React.SetStateAction<string | object>
-                      >,
-                      setFormValidity
-                    )
-                  }
-                  touched={input.touched}
-                  inValid={!input.valid}
-                />
-              );
-            })}
-            <Button disabled={!formValidity} type="submit">
-              Reset Password
-            </Button>
-          </form>
-        </>
-      )}
-    </Card>
+    <>
+      <section className={classes.Title}>
+        <h1>Change Password</h1>
+        <h5>Fill the fields with your new strong password</h5>
+      </section>
+      <section className={classes.Main}>
+        <form
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+            submitChangePasswordHandler(e, dispatch, passwordsFields, token)
+          }
+        >
+          {inputs.map((input, index) => {
+            return (
+              <Input
+                key={input.htmlFor!}
+                htmlFor={input.htmlFor!}
+                label={input.label!}
+                value={input.value}
+                type={input.type!}
+                inputChangeHandler={(
+                  event: React.FormEvent<HTMLInputElement>
+                ) =>
+                  inputChangeHandler(
+                    event,
+                    index,
+                    inputs,
+                    setInputs,
+                    setPasswordsFields as React.Dispatch<
+                      React.SetStateAction<string | object>
+                    >,
+                    setFormValidity
+                  )
+                }
+                touched={input.touched}
+                inValid={!input.valid}
+              />
+            );
+          })}
+          <Button disabled={!formValidity} type="submit">
+            Reset Password
+          </Button>
+        </form>
+        <FontAwesomeIcon icon={faLock} className="fa-10x" />
+      </section>
+    </>
   );
 }
 
@@ -101,6 +98,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     return { props: { token } };
   } catch (err) {
-    return { props: { withError: err.response.data } };
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
   }
 };

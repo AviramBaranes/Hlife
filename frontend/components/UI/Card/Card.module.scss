@@ -3,10 +3,9 @@
 .Card {
   border-radius: 3rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  border: 3px solid $primary-color;
   padding: 10px;
   text-align: center;
-  width: 60%;
+  width: 40%;
   margin: 5vh auto;
 
   h2 {
@@ -15,17 +14,6 @@
     color: $primary-color;
   }
 
-  select {
-    width: 75%;
-    background-color: $secondary-background;
-    padding: 0.4rem;
-    border-radius: 4px;
-    border: 1px solid $secondary-color;
-    color: $secondary-color;
-    &:focus {
-      border: 3px solid $primary-color;
-    }
-  }
   label {
     display: block;
     color: $secondary-color;

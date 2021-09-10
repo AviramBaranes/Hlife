@@ -4,139 +4,71 @@
 @import "../../styles/variables.scss";
 
 .Navbar {
-  background: $secondary-background;
-  border: $secondary-color 1px solid;
-  height: 100vh;
-  width: 25vw;
-}
-
-.Navbar nav {
-  height: 100vh;
-  color: $primary-color;
+  height: 10vh;
+  width: 90%;
+  margin: 2rem auto;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  flex: 1 1 50rem;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .Navbar ul {
-  height: 80vh;
-  color: $secondary-color;
-  width: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.Navbar li {
-  width: 100%;
-  border: 1px solid $secondary-color;
-  height: 15%;
-  cursor: pointer;
-}
-.Logo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.Logo h1 {
-  font-size: 3rem;
-  font-weight: bold;
-  font-family: "Hammersmith One", sans-serif;
-}
-
-.Logo h5 {
-  font-family: "Lobster", cursive;
-  /* margin-right: 11rem;
-  margin-bottom: 0.6rem; */
-}
-
-.Header {
-  width: 90%;
-  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-.Icon {
-  display: flex;
-  align-items: center;
-  height: 90%;
-  margin: auto;
+.Navbar li {
+  cursor: pointer;
+  margin: 0rem 2rem;
+}
+.Logo {
+  cursor: pointer;
+  font-size: 2.5rem;
+  color: $primary-color;
 }
 
-.Icon svg {
-  margin: 2rem;
-}
-.Icon h1 {
-  font-size: calc(0.7rem + 1.5vw);
+.BarsIcon {
+  cursor: pointer;
+  color: $primary-color;
+  font-size: 1.5rem;
 }
 
 .Active {
-  color: $primary-color;
-  background: $primary-background;
+  border-bottom: 2px solid $primary-color;
 }
 
-@media (max-width: 978px) {
-  .Icon h1 {
-    font-size: calc(0.6rem + 0.5vw);
+@media (max-width: 555px) {
+  .Logo {
+    font-size: 2rem;
   }
-}
-
-@media (max-width: 736px) {
   .Navbar {
-    height: 15vh;
-    width: 100vw;
-    display: flex;
-    align-items: center;
+    width: 80%;
+    height: 5vh;
+    li {
+      margin: 0rem 1rem;
+    }
+    h2 {
+      font-size: 1rem;
+    }
   }
-
-  .Navbar nav {
-    height: 15vh;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .Header {
-    width: 40%;
-  }
-  .Navbar ul {
-    width: 40%;
-    height: 13vh;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .Navbar li {
-    width: 10%;
-    height: 15%;
-    border: none;
-  }
-
-  .Icon {
-    justify-content: space-around;
-  }
-
-  .Icon svg {
-    margin: 0.5rem;
-    font-size: 2.5rem;
-  }
-  .Icon h1 {
-    display: none;
+  .BarsIcon {
+    font-size: 1rem;
   }
 }
-@media (max-width: 434px) {
-  .Header svg {
-    display: none;
+
+@media (max-width: 335px) {
+  .Logo {
+    font-size: 1.2rem;
   }
-  .Icon svg {
-    margin: 0.5rem;
-    font-size: 1.5rem;
+  .Navbar {
+    li {
+      margin: 0rem 0.6rem;
+    }
+    h2 {
+      font-size: 0.6rem;
+    }
   }
-  .Logo h5 {
-    font-family: "Lobster", cursive;
-    font-size: 0.5rem;
+  .BarsIcon {
+    font-size: 0.6rem;
   }
 }

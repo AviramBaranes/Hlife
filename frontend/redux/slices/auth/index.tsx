@@ -3,14 +3,12 @@ import axiosInstance from "../../../utils/axios/axiosInstance";
 
 let loading: any;
 let hasProgram: any;
-let hasDiet: any;
 
 loading = undefined;
 
 const initialState = {
   username: "",
   hasProgram,
-  hasDiet,
   loading,
   error: {},
   isAuthenticated: false,
@@ -129,7 +127,6 @@ const usersSlice = createSlice({
       state.loading = false;
       state.username = payload.username;
       state.hasProgram = false;
-      state.hasDiet = false;
       state.isAuthenticated = true;
     });
     builder.addCase(signupUserAction.rejected, (state, { error }) => {
@@ -144,7 +141,6 @@ const usersSlice = createSlice({
       state.loading = false;
       state.username = payload.username;
       state.hasProgram = payload.hasProgram;
-      state.hasDiet = payload.hasDiet;
       state.isAuthenticated = true;
     });
     builder.addCase(loginUserAction.rejected, (state, { error }) => {
@@ -162,7 +158,6 @@ const usersSlice = createSlice({
         state.username = payload.username;
         state.isAuthenticated = true;
         state.hasProgram = payload.hasProgram;
-        state.hasDiet = payload.hasDiet;
       }
     );
     builder.addCase(
@@ -192,7 +187,6 @@ const usersSlice = createSlice({
     builder.addCase(logoutAction.fulfilled, (state) => {
       state.username = "";
       state.hasProgram = undefined;
-      state.hasDiet = undefined;
       state.loading = undefined;
       state.error = {};
       state.isAuthenticated = false;

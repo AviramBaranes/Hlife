@@ -10,10 +10,10 @@
   cursor: pointer;
   font: inherit;
   padding-left: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
   margin: 2rem auto;
-  width: 20vw;
+  width: 27%;
 
   &:first-of-type {
     margin-left: 0;
@@ -35,6 +35,10 @@
 @media (max-width: 720px) {
   .Button {
     padding-left: 4rem;
-    width: 27vw;
+  }
+}
+@media (max-width: 335px) {
+  .Button {
+    padding-left: 4rem;
   }
 }

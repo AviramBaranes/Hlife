@@ -162,6 +162,7 @@ const sendResetEmail = async (req, res, next) => {
         try {
             await mail_1.default.send(message);
             res.status(200).send("Reset Email Sent!");
+            return;
         }
         catch (error) {
             process.env.Node_ENV !== "test" && console.log(error);

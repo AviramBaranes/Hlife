@@ -204,7 +204,6 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
     sendGridMail.setApiKey(process.env.sendGrid_api as string);
 
     const link = `http://localhost:3000/auth/reset-password/${token}`;
-
     const message = {
       from: process.env.WALLA_USER as string,
       to: email,
@@ -215,6 +214,7 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
     try {
       await sendGridMail.send(message);
       res.status(200).send("Reset Email Sent!");
+      return;
     } catch (error) {
       process.env.Node_ENV !== "test" && console.log(error);
       throw error;

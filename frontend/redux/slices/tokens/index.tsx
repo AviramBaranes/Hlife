@@ -3,7 +3,7 @@ import axios from "../../../utils/axios/axiosInstance";
 
 const initialState = {
   csrfToken: "",
-  error: {},
+  error: { message: "" },
 };
 
 export const getCsrfToken = createAsyncThunk(
@@ -42,16 +42,8 @@ const tokensSlice = createSlice({
       state.csrfToken = payload;
     });
     build.addCase(getCsrfToken.rejected, (state, { error }) => {
-      state.error = error;
+      (state.error.message as any) = error.message;
     });
   },
-  //   {
-  //     [getCsrfToken.fulfilled](state, { payload }) {
-  //       state.csrfToken = payload;
-  //     },
-  //     [getCsrfToken.rejected](state, { error }) {
-  //       state.error = error;
-  //     },
-  //   },
 });
 export default tokensSlice.reducer;

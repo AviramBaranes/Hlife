@@ -9,6 +9,7 @@ import {
 import Input from "../../UI/Input/Input";
 import Button from "../../UI/Button/Button";
 import { ComplexInputListObject } from "../../../types/inputConfig";
+import classes from "../../../styles/pages/signup.module.scss";
 
 function signupForm() {
   const dispatch = useDispatch();
@@ -88,18 +89,7 @@ function signupForm() {
           />
         );
       })}
-      <label htmlFor="gender">Gender</label>
-      <select
-        required
-        role="listbox"
-        id="gender"
-        name="gender"
-        onChange={() => inputChangeHandler}
-      >
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-      <br />
+
       <Input
         inputChangeHandler={dateInputChangeHandler}
         inValid={dateInputIsValid}
@@ -113,6 +103,20 @@ function signupForm() {
           max: "2005-01-01",
         }}
       />
+      <div className={classes.GenderSelect}>
+        <label htmlFor="gender">Gender</label>
+        <select
+          required
+          role="listbox"
+          id="gender"
+          name="gender"
+          onChange={() => inputChangeHandler}
+        >
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+      <br />
       <Button disabled={!formValidity} type="submit">
         Create User
       </Button>

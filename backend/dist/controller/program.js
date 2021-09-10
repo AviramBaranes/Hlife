@@ -120,6 +120,7 @@ const createProgram = async (req, res, next) => {
             if (programFull) {
                 const user = (await User_1.default.findById(userId));
                 user.hasProgram = true;
+                user.grade += 100;
                 await user.save();
             }
         }

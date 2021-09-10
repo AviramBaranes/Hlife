@@ -19,9 +19,9 @@ function Input(props: InputProps) {
     inputClasses.push(classes.InValid);
   }
   return (
-    <>
+    <div className={classes.FormItem}>
       <label className={classes.Label} htmlFor={props.htmlFor}>
-        {props.label}
+        {props.label}:
       </label>
       <input
         role="textbox"
@@ -38,7 +38,7 @@ function Input(props: InputProps) {
         {...props.elementConfig}
       />
       <br />
-    </>
+    </div>
   );
 }
 export default Input;
