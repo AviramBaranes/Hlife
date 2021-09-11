@@ -1,0 +1,142 @@
+@import "../../styles/variables.scss";
+
+.Title {
+  display: grid;
+  place-items: center;
+  h1 {
+    margin-top: 3rem;
+    font-size: 3rem;
+  }
+}
+
+.Main {
+  height: 55vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5rem;
+  h2 {
+    font-size: 2.4rem;
+  }
+  img {
+    padding: 0;
+    width: 60%;
+    height: 60%;
+  }
+  section {
+    margin: 0rem 5rem;
+    height: 60%;
+    width: 65%;
+    border-right: white solid 1px;
+  }
+  button {
+    transform: translateX(100%);
+  }
+}
+
+.Line {
+  margin-bottom: 2rem;
+}
+
+.Footer {
+  text-align: center;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1245px) {
+  .Main {
+    h2 {
+      font-size: 2rem;
+    }
+    svg {
+      width: 30%;
+    }
+  }
+}
+
+@media (max-width: 1100px) {
+  .Main {
+    h2 {
+      font-size: 1.5rem;
+      width: 25%;
+    }
+    svg {
+      width: 30%;
+    }
+  }
+}
+
+@media (max-width: 1028px) {
+  .Main {
+    height: 65vh;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 2rem;
+    h2 {
+      font-size: 2rem;
+      margin: 1rem auto;
+    }
+    section {
+      margin: 2rem 5rem;
+      border-right: none;
+    }
+    button {
+      transform: translateX(0%);
+    }
+    img {
+      width: 40%;
+      height: 40%;
+    }
+  }
+
+  .Footer {
+    text-align: center;
+    display: grid;
+    place-items: center;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .Main {
+    h2 {
+      font-size: 1.7rem;
+    }
+  }
+}
+
+@media (max-width: 557px) {
+  .Main {
+    h2 {
+      font-size: 1.3rem;
+    }
+    section {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 440px) {
+  .Title {
+    h1 {
+      margin-top: 1rem;
+      font-size: 2rem;
+    }
+  }
+}
+
+@media (max-width: 305px) {
+  .Title {
+    h1 {
+      margin-top: 1rem;
+      font-size: 1.4rem;
+    }
+  }
+  .Main {
+    h2 {
+      font-size: 0.9rem;
+    }
+  }
+}
