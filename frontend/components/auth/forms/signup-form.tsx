@@ -19,13 +19,14 @@ function signupForm() {
     username: "",
     email: "",
     password: "",
-    passwordConfirmation: "",
+    "password-Confirmation": "",
     gender: "male",
     dateOfBirth: "",
   });
 
-  const { name, username, email, password, passwordConfirmation, dateOfBirth } =
-    userFields;
+  const { name, username, email, password, dateOfBirth } = userFields;
+
+  const passwordConfirmation = userFields["password-Confirmation"];
 
   const ALL_INPUTS = createInputListForSignup(
     name,
@@ -104,7 +105,7 @@ function signupForm() {
         }}
       />
       <div className={classes.GenderSelect}>
-        <label htmlFor="gender">Gender</label>
+        <label htmlFor="gender">Gender:</label>
         <select
           required
           role="listbox"

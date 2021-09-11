@@ -25,7 +25,7 @@ export const sendPasswordResetEmailAction = createAsyncThunk(
         bodyRequest
       );
       return res.data;
-    } catch (err) {
+    } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);
@@ -44,7 +44,7 @@ export const signupUserAction = createAsyncThunk(
       const res = await axiosInstance.post("/auth/signup", bodyRequest);
 
       return res.data;
-    } catch (err) {
+    } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);
@@ -62,7 +62,7 @@ export const loginUserAction = createAsyncThunk(
       const res = await axiosInstance.post("/auth/login", bodyRequest);
 
       return res.data;
-    } catch (err) {
+    } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);
@@ -76,7 +76,7 @@ export const validateAuthenticationAction = createAsyncThunk(
     try {
       const res = await axiosInstance.get("/auth/isUser");
       return res.data;
-    } catch (err) {
+    } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);
@@ -100,7 +100,7 @@ export const logoutAction = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await axiosInstance.post("/auth/logout");
-    } catch (err) {
+    } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
       return rejectWithValue(customError);

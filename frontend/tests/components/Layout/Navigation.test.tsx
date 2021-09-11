@@ -1,27 +1,19 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 
 import Navigation from "../../../components/Layout/Navigation";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
 
-jest.mock("react-dom", () => {
-  return {
-    ...jest.requireActual("react-dom"),
-    createPortal(Modal: any) {
-      return Modal;
-    },
-  };
-});
-
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
 
 describe("Navigation", () => {
-  test("should render the dom correctly (test by elements)", () => {
-    const initialState = { usersReducer: { isAuthenticated: false } };
+  test("should render the dom correctly (registration nav)", () => {
+    const initialState = {
+      usersReducer: { isAuthenticated: true, hasProgram: false },
+    };
 
     const store = mockStore(initialState);
 
@@ -31,18 +23,28 @@ describe("Navigation", () => {
       </Provider>
     );
 
-    const navElement = container.children[0].children[0];
-    const headerDiv = navElement.children[0];
+    const navElement = container.children[0];
+    const logoElement = navElement.children[0];
     const ulElement = navElement.children[1];
+    const barsIconElement = navElement.children[2];
 
     expect(navElement.tagName).toBe("NAV");
-    expect(headerDiv.tagName).toBe("DIV");
+    expect(logoElement.tagName).toBe("H1");
+    expect(logoElement.children[0].tagName).toBe("A");
+    expect(barsIconElement.tagName).toBe("DIV");
+    expect(barsIconElement.children[0].tagName).toBe("svg");
     expect(ulElement.tagName).toBe("UL");
-    expect(ulElement.children.length).toBe(4);
+    expect(ulElement.children.length).toBe(2);
+    expect(ulElement.children[0].tagName).toBe("LI");
+    expect(ulElement.children[0].children[0].tagName).toBe("H2");
+    expect(ulElement.children[1].tagName).toBe("LI");
+    expect(ulElement.children[1].children[0].tagName).toBe("H2");
   });
 
-  test("should render the dom correctly (test by text)", () => {
-    const initialState = { usersReducer: { isAuthenticated: true } };
+  test("should render the dom correctly (test by text) (registration nav)", () => {
+    const initialState = {
+      usersReducer: { isAuthenticated: false, hasProgram: true },
+    };
 
     const store = mockStore(initialState);
 
@@ -54,18 +56,50 @@ describe("Navigation", () => {
 
     const elements = [
       screen.getByText("Hlife"),
-      screen.getByText("Reach your goals faster and better"),
-      screen.getByText("Profile"),
-      screen.getByText("Activity"),
-      screen.getByText("Calculators"),
-      screen.getByText("Settings"),
+      screen.getByText("Log-In"),
+      screen.getByText("Sign-Up"),
     ];
 
     elements.forEach((element) => expect(element).toBeInTheDocument());
   });
 
-  test("should render the 'logout' item", () => {
-    const initialState = { usersReducer: { isAuthenticated: true } };
+  test("should render the dom correctly (normal nav)", () => {
+    const initialState = {
+      usersReducer: { isAuthenticated: true, hasProgram: true },
+    };
+
+    const store = mockStore(initialState);
+
+    const { container } = render(
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
+    );
+
+    const navElement = container.children[0];
+    const logoElement = navElement.children[0];
+    const ulElement = navElement.children[1];
+    const barsIconElement = navElement.children[2];
+
+    expect(navElement.tagName).toBe("NAV");
+    expect(logoElement.tagName).toBe("H1");
+    expect(logoElement.children[0].tagName).toBe("A");
+    expect(barsIconElement.tagName).toBe("DIV");
+    expect(barsIconElement.children[0].tagName).toBe("svg");
+    expect(ulElement.tagName).toBe("UL");
+    expect(ulElement.children.length).toBe(3);
+    expect(ulElement.children[0].tagName).toBe("LI");
+    expect(ulElement.children[0].children[0].tagName).toBe("H2");
+    expect(ulElement.children[1].tagName).toBe("LI");
+    expect(ulElement.children[1].children[0].tagName).toBe("H2");
+    expect(ulElement.children[2].tagName).toBe("LI");
+    expect(ulElement.children[2].children[0].tagName).toBe("H2");
+  });
+
+  test("should render the dom correctly (test by text) (normal nav)", () => {
+    const initialState = {
+      usersReducer: { isAuthenticated: true, hasProgram: true },
+    };
 
     const store = mockStore(initialState);
 
@@ -75,43 +109,13 @@ describe("Navigation", () => {
       </Provider>
     );
 
-    const logoutItem = screen.queryByText("Log Out");
+    const elements = [
+      screen.getByText("Hlife"),
+      screen.getByText("Home"),
+      screen.getByText("Stats"),
+      screen.getByText("Program"),
+    ];
 
-    expect(logoutItem).toBeInTheDocument();
-  });
-  test("should not render the 'logout' item", () => {
-    const initialState = { usersReducer: { isAuthenticated: false } };
-
-    const store = mockStore(initialState);
-
-    render(
-      <Provider store={store}>
-        <Navigation />
-      </Provider>
-    );
-
-    const logoutItem = screen.queryByText("Log Out");
-
-    expect(logoutItem).not.toBeInTheDocument();
-  });
-
-  test("should open the modal", () => {
-    const initialState = { usersReducer: { isAuthenticated: true } };
-
-    const store = mockStore(initialState);
-
-    const { getByText } = render(
-      <Provider store={store}>
-        <Navigation />
-      </Provider>
-    );
-
-    const logoutItem = getByText("Log Out");
-
-    userEvent.click(logoutItem);
-
-    const modalIndicator = screen.getByText("Are you sure you want to logout?");
-
-    expect(modalIndicator).toBeInTheDocument();
+    elements.forEach((element) => expect(element).toBeInTheDocument());
   });
 });

@@ -14,7 +14,7 @@ jest.mock("../../utils/Axios/axiosInstance", () => {
 
 describe("tokens test", () => {
   test("should have the correct initialState", () => {
-    const expectedInitialState = { csrfToken: "", error: {} };
+    const expectedInitialState = { csrfToken: "", error: { message: "" } };
 
     const initialState = store.getState().tokensReducer;
 
@@ -24,9 +24,7 @@ describe("tokens test", () => {
     store.dispatch(getCsrfToken());
 
     await waitFor(() => {
-      expect(
-        (store.getState().tokensReducer.error as { message: string }).message
-      ).toBe("Rejected");
+      expect(store.getState().tokensReducer.error.message).toBe("Rejected");
     });
   });
 });

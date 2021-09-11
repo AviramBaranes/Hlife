@@ -193,7 +193,6 @@ export function inputChangeHandler(
   setFormValidity: Dispatch<SetStateAction<boolean>>
 ) {
   const { name, value } = event.target as CustomEventTarget;
-
   const inputsDataCopy = [...inputsList];
 
   const inputElementCopy = { ...inputsDataCopy[index] };
@@ -292,10 +291,10 @@ export async function loginSubmitFormHandler(
 export async function signupSubmitFormHandler(
   e: React.FormEvent<HTMLFormElement>,
   dispatch: AppDispatch,
-  userFields: { password: string; passwordConfirmation: string }
+  userFields: { password: string; "password-Confirmation": string }
 ) {
   e.preventDefault();
-  if (userFields.password !== userFields.passwordConfirmation) {
+  if (userFields.password !== userFields["password-Confirmation"]) {
     return dispatch(
       errorsActions.newError({
         errorTitle: "Sign Up Failed",
@@ -385,7 +384,7 @@ export async function submitChangePasswordHandler(
     );
 
     Router.push("/auth/login");
-  } catch (err) {
+  } catch (err: any) {
     dispatch(usersActions.changeLoadingState(false));
 
     dispatch(

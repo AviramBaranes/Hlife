@@ -21,15 +21,13 @@ describe("SignupForm Dom Renders Tests", () => {
       </Provider>
     );
 
-    const nameLabelElement = screen.getByLabelText("Name");
-    const usernameLabelElement = screen.getByLabelText("Username");
-    const emailLabelElement = screen.getByLabelText("Email");
-    const passwordLabelElement = screen.getByLabelText("Password");
-    const passwordConfirmationLabelElement = screen.getByLabelText(
-      "Password Confirmation"
-    );
-    const genderLabelElement = screen.getByLabelText("Gender");
-    const dateLabelElement = screen.getByLabelText("Date Of Birth");
+    const nameLabelElement = screen.getByLabelText("Name:");
+    const usernameLabelElement = screen.getByLabelText("Username:");
+    const emailLabelElement = screen.getByLabelText("Email:");
+    const passwordLabelElement = screen.getByLabelText("Password:");
+    const passwordConfirmationLabelElement = screen.getByLabelText("Confirm:");
+    const genderLabelElement = screen.getByLabelText("Gender:");
+    const dateLabelElement = screen.getByLabelText("Date Of Birth:");
 
     expect(nameLabelElement).toBeInTheDocument();
     expect(usernameLabelElement).toBeInTheDocument();
@@ -140,7 +138,7 @@ describe("SignupForm Validity Handle Test", () => {
     );
 
     const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("passwordConfirmation");
+    const inputElement = screen.getByPlaceholderText("password-Confirmation");
 
     expect(inputElement.classList[1]).toBe(undefined);
 
@@ -221,7 +219,7 @@ describe("SignupForm Validity Handle Test", () => {
     );
 
     const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("passwordConfirmation");
+    const inputElement = screen.getByPlaceholderText("password-Confirmation");
 
     userEvent.type(inputElement, "123456");
 
@@ -251,7 +249,7 @@ describe("SignupForm Validity Handle Test", () => {
 });
 
 describe("SignupForm Submit Handle Test", () => {
-  test("should desplay error message if passwords do not match ", async () => {
+  test("should display error message if passwords do not match ", async () => {
     render(
       <Provider store={store}>
         <ErrorContainer />
@@ -339,5 +337,3 @@ describe("SignupForm Submit Handle Test", () => {
     expect((window.location as any).routerPushedValue).toBe("/");
   });
 });
-
-//16 test

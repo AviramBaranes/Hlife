@@ -11,7 +11,6 @@ import MessageContainer from "../../../components/UI/containers/Messages/Message
 
 jest.mock("../../../redux/slices/auth");
 jest.mock("next/router");
-jest.unmock("react-redux");
 
 describe("ForgotPasswordForm", () => {
   test("should render the correct dom elements", () => {
@@ -22,7 +21,7 @@ describe("ForgotPasswordForm", () => {
     );
 
     const formElement = screen.getByRole("form");
-    const labelElement = screen.getByLabelText("Email");
+    const labelElement = screen.getByLabelText("Email:");
     const inputElement = screen.getByPlaceholderText("email");
     const buttonElement = screen.getByRole("button");
 
@@ -48,7 +47,7 @@ describe("ForgotPasswordForm", () => {
     expect(buttonElement).toBeDisabled();
   });
 
-  test("should behave approprialy if input is valid", () => {
+  test("should behave appropriately if input is valid", () => {
     render(
       <Provider store={store}>
         <ForgotPasswordForm />
@@ -64,7 +63,7 @@ describe("ForgotPasswordForm", () => {
     expect(buttonElement).not.toBeDisabled();
   });
 
-  test("should desplay error message if form submition failed ", async () => {
+  test("should display error message if form submission failed ", async () => {
     render(
       <Provider store={store}>
         <ErrorContainer />
@@ -85,7 +84,7 @@ describe("ForgotPasswordForm", () => {
     expect(messageElement).toBeInTheDocument();
   });
 
-  test("should desplay success message if form submition succeed ", async () => {
+  test("should display success message if form submission succeed ", async () => {
     render(
       <Provider store={store}>
         <MessageContainer />

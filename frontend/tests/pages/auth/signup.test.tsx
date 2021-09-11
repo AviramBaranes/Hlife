@@ -13,19 +13,23 @@ describe("signup page tests", () => {
       </Provider>
     );
 
-    const cardIndicator = container.children[0];
-    const h2Indicator = screen.getByText("Sign Up");
-    const formIndicator = screen.getAllByRole("textbox");
-    const pIndicator = screen.getByText("Already have an account?", {
+    const inputs = screen.getAllByRole("textbox");
+    const h1Title = screen.getByText("Welcome");
+    const h5Title = screen.getByText("Start changing your life today!");
+    const h2Title = screen.getByText("Sign Up");
+    const formElement = container.children[1].children[0].children[1];
+    const svgElement =
+      container.children[1].children[0].children[0].children[1];
+    const pElement = screen.getByText("Already have an account?", {
       exact: false,
     });
 
-    expect(cardIndicator.className).toBe("Card");
-    expect(h2Indicator).toBeInTheDocument();
-    expect(pIndicator).toBeInTheDocument();
-    expect(formIndicator.length).toBe(6);
-    expect(document.querySelector("a")!.getAttribute("href")).toBe(
-      "/auth/login"
-    );
+    expect(inputs.length).toEqual(6);
+    expect(h1Title.tagName).toEqual("H1");
+    expect(h5Title.tagName).toEqual("H5");
+    expect(h2Title.tagName).toEqual("H2");
+    expect(formElement.tagName).toEqual("FORM");
+    expect(svgElement.tagName).toEqual("svg");
+    expect(pElement.tagName).toEqual("P");
   });
 });

@@ -13,26 +13,23 @@ describe("login page tests", () => {
       </Provider>
     );
 
-    const cardIndicator = container.children[0];
-    const h2Indicator = screen.getByText("Log In");
-    const formIndicator = screen.getAllByRole("textbox");
-    const pIndicator = screen.getByText("Don't have an account?", {
-      exact: false,
-    });
-    const pIndicator2 = screen.getByText("Forgot your password ?", {
-      exact: false,
-    });
+    const links = screen.getAllByRole("link");
+    const h1Title = screen.getByText("Welcome Back!");
+    const h2Title = screen.getByText("Log In");
+    const formElement = container.children[1].children[0].children[2];
+    const inputs = screen.getAllByRole("textbox");
+    const svgElement = container.children[1].children[0].children[1];
+    const p1Element = container.children[2].children[0].children[0];
+    const p2Element = container.children[2].children[0].children[1];
 
-    expect(cardIndicator.className).toBe("Card");
-    expect(h2Indicator).toBeInTheDocument();
-    expect(pIndicator).toBeInTheDocument();
-    expect(pIndicator2).toBeInTheDocument();
-    expect(formIndicator.length).toBe(2);
-    expect(document.querySelectorAll("a")[0].getAttribute("href")).toBe(
-      "/auth/signup"
-    );
-    expect(document.querySelectorAll("a")[1].getAttribute("href")).toBe(
-      "/auth/forgotPassword"
-    );
+    expect(h1Title.tagName).toEqual("H1");
+    expect(h2Title.tagName).toEqual("H2");
+    expect(formElement.tagName).toEqual("FORM");
+    expect(svgElement.tagName).toEqual("svg");
+    expect(p1Element.textContent).toEqual("Don't have an account? signup");
+    expect(p2Element.textContent).toEqual("Forgot your password? go here");
+    expect(links[0]).toHaveAttribute("href", "/auth/signup");
+    expect(links[1]).toHaveAttribute("href", "/auth/forgotPassword");
+    expect(inputs.length).toEqual(2);
   });
 });

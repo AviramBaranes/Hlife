@@ -19,7 +19,7 @@ function Login() {
           <Line />
           <LoginForm />
         </section>
-        <Image src={dumbbellsPic} />
+        {dumbbellsPic.src && <Image src={dumbbellsPic} />}
       </div>
       <div className={classes.Footer}>
         <div>
@@ -27,7 +27,7 @@ function Login() {
             Don't have an account? <Link href="/auth/signup">signup</Link>
           </p>
           <p>
-            Forgot your password ?{" "}
+            Forgot your password?{" "}
             <Link href="/auth/forgotPassword">go here</Link>
           </p>
         </div>

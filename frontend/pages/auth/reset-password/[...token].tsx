@@ -15,12 +15,7 @@ import classes from "../../../styles/pages/changePassword.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 
-interface ResetPasswordProps {
-  token: string;
-  withError: string;
-}
-
-function ResetPassword({ token }: ResetPasswordProps) {
+function ResetPassword({ token }: { token: string }) {
   const dispatch = useDispatch();
 
   const [passwordsFields, setPasswordsFields] = useState({

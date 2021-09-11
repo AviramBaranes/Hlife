@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { screen, render } from "@testing-library/react";
 
-import { Button, Card, Input } from "./exports/index";
+import { Button, Input } from "./exports/index";
 
 describe("Button tests", () => {
   test("should render the custom button correctly", () => {
@@ -19,25 +19,7 @@ describe("Button tests", () => {
   });
 });
 
-describe("Card tests", () => {
-  test("should render the card component correctly", () => {
-    const { container } = render(
-      <Card>
-        <h1>title</h1>
-        <p>content</p>
-      </Card>
-    );
-
-    const cardFirstChild = screen.getByText("title");
-    const cardSecondChild = screen.getByText("content");
-
-    expect(cardFirstChild).toBeInTheDocument();
-    expect(cardSecondChild).toBeInTheDocument();
-    expect(container.children[0].className).toBe("Card");
-  });
-});
-
-describe("Card tests", () => {
+describe("Input tests", () => {
   test("should render the Input component as valid (if didn't touched & invalid false)", () => {
     const props = {
       touched: false,
@@ -48,12 +30,12 @@ describe("Card tests", () => {
     const { container } = render(<Input {...props} />);
 
     const inputElement = screen.getByRole("textbox");
-    const labelElement = screen.getByLabelText("content");
+    const labelElement = screen.getByLabelText("content:");
 
     expect(inputElement).toBeInTheDocument();
     expect(labelElement).toBeInTheDocument();
-    expect(container.children[0].className).toBe("Label");
-    expect(container.children[1].className).toBe("Input");
+    expect(container.children[0].children[0].className).toBe("Label");
+    expect(container.children[0].children[1].className).toBe("Input");
   });
 
   test("should render the Input component as valid (if touched & invalid is false)", () => {
@@ -66,12 +48,12 @@ describe("Card tests", () => {
     const { container } = render(<Input {...props} />);
 
     const inputElement = screen.getByRole("textbox");
-    const labelElement = screen.getByLabelText("content");
+    const labelElement = screen.getByLabelText("content:");
 
     expect(inputElement).toBeInTheDocument();
     expect(labelElement).toBeInTheDocument();
-    expect(container.children[0].className).toBe("Label");
-    expect(container.children[1].className).toBe("Input");
+    expect(container.children[0].children[0].className).toBe("Label");
+    expect(container.children[0].children[1].className).toBe("Input");
   });
   test("should render the Input component as in-valid", () => {
     const props = {
@@ -83,11 +65,11 @@ describe("Card tests", () => {
     const { container } = render(<Input {...props} />);
 
     const inputElement = screen.getByRole("textbox");
-    const labelElement = screen.getByLabelText("content");
+    const labelElement = screen.getByLabelText("content:");
 
     expect(inputElement).toBeInTheDocument();
     expect(labelElement).toBeInTheDocument();
-    expect(container.children[0].className).toBe("Label");
-    expect(container.children[1].className).toBe("Input InValid");
+    expect(container.children[0].children[0].className).toBe("Label");
+    expect(container.children[0].children[1].className).toBe("Input InValid");
   });
 });

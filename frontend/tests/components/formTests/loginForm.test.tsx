@@ -21,8 +21,8 @@ describe("LoginForm", () => {
     );
 
     const formElement = screen.getByRole("form");
-    const emailLabelElement = screen.getByLabelText("Email");
-    const passwordLabelElement = screen.getByLabelText("Password");
+    const emailLabelElement = screen.getByLabelText("Email:");
+    const passwordLabelElement = screen.getByLabelText("Password:");
     const emailInputElement = screen.getByPlaceholderText("email");
     const passwordInputElement = screen.getByPlaceholderText("password");
     const buttonElement = screen.getByRole("button");

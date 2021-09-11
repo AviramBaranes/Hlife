@@ -23,7 +23,7 @@ function signup() {
           <SignupForm />
         </section>
         <div className={classes.Image}>
-          <Image src={signupSvg} />
+          {signupSvg.src && <Image src={signupSvg} />}
         </div>
       </div>
       <div className={classes.Footer}>

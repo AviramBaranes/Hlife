@@ -14,7 +14,7 @@ jest.mock("../../utils/axios/axiosInstance", () => {
   const get = jest.fn();
   const post = jest.fn();
   get.mockImplementationOnce(async () => {
-    return { data: { hasProgram: false, username: "avi1234", hasDiet: true } };
+    return { data: { hasProgram: false, username: "avi1234" } };
   });
   post
     .mockImplementationOnce(async (url, payload) => {
@@ -24,8 +24,8 @@ jest.mock("../../utils/axios/axiosInstance", () => {
       return { data: { username: payload.username } };
     })
     .mockImplementationOnce(async (url, payload) => {
-      const { hasProgram, username, hasDiet } = payload;
-      return { data: { hasProgram, username, hasDiet } };
+      const { hasProgram, username } = payload;
+      return { data: { hasProgram, username } };
     })
     .mockImplementationOnce(async (url, payload) => {
       return;
@@ -40,7 +40,6 @@ describe("Auth slice tests", () => {
     const expectedInitialState = {
       username: "",
       hasProgram: undefined,
-      hasDiet: undefined,
       loading: undefined,
       error: {},
       isAuthenticated: false,
@@ -64,7 +63,6 @@ describe("Auth slice tests", () => {
     const expectedState = {
       username: "username",
       hasProgram: false,
-      hasDiet: false,
       loading: false,
       error: {},
       isAuthenticated: true,
@@ -79,14 +77,11 @@ describe("Auth slice tests", () => {
     });
   });
   test("should change the state when login", async () => {
-    store.dispatch(
-      loginUserAction({ username: "avi123", hasProgram: true, hasDiet: false })
-    );
+    store.dispatch(loginUserAction({ username: "avi123", hasProgram: true }));
 
     const expectedState = {
       username: "avi123",
       hasProgram: true,
-      hasDiet: false,
       loading: false,
       error: {},
       isAuthenticated: true,
@@ -107,7 +102,6 @@ describe("Auth slice tests", () => {
     const expectedState = {
       username: "avi1234",
       hasProgram: false,
-      hasDiet: true,
       loading: false,
       error: {},
       isAuthenticated: true,
@@ -127,7 +121,6 @@ describe("Auth slice tests", () => {
     const expectedState = {
       username: "",
       hasProgram: undefined,
-      hasDiet: undefined,
       loading: undefined,
       error: {},
       isAuthenticated: false,
