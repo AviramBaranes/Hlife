@@ -6,6 +6,7 @@ import * as goalsController from "../controller/goals";
 
 const router = express.Router();
 
+//create goals
 router.post(
   "/",
   authMiddleware,
@@ -30,6 +31,7 @@ router.post(
   goalsController.createGoal
 );
 
+//change basic goal
 router.put(
   "/basicGoal",
   authMiddleware,
@@ -44,6 +46,7 @@ router.put(
   goalsController.changeBasicGoal
 );
 
+//change detail goal
 router.put(
   "/",
   authMiddleware,
@@ -61,6 +64,7 @@ router.put(
   goalsController.changeGoals
 );
 
+//get goals
 router.get("/", authMiddleware, goalsController.getGoals);
 
 export default router;

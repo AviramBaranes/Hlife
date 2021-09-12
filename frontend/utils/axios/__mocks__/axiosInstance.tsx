@@ -1,6 +1,6 @@
-// const put = jest.fn();
-// const post = jest.fn();
-// // const get = jest.fn();
+const put = jest.fn();
+const post = jest.fn();
+const get = jest.fn();
 
 // put
 //   .mockImplementationOnce(async () => {
@@ -29,4 +29,4 @@
 //     (window as any).axiosPayloadTests = { signUpSubmitPayload };
 //   });
 
-// export default { put, post };
+export default { put, post, get };

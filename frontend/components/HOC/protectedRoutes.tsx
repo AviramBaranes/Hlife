@@ -1,5 +1,5 @@
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { FC, useEffect, useState } from "react";
 import { RootStateOrAny, useDispatch, useSelector } from "react-redux";
 import { validateAuthenticationAction } from "../../redux/slices/auth";
@@ -9,7 +9,7 @@ import { CustomError } from "../../types/CustomErrors";
 
 const ProtectedRoute = (WrappedComponent: FC) => {
   return (props: object) => {
-    const Router = useRouter();
+    // const Router = useRouter();
     const dispatch: AppDispatch = useDispatch();
 
     const { isAuthenticated, loading } = useSelector(

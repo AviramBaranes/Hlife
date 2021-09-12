@@ -8,10 +8,10 @@ import store from "../../../redux/store";
 import SignupForm from "../../../components/auth/forms/signup-form";
 import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 import MessageContainer from "../../../components/UI/containers/Messages/MessageContainer";
+import Router from "next/router";
 
 jest.mock("../../../redux/slices/auth");
 jest.mock("next/router");
-jest.unmock("react-redux");
 
 describe("SignupForm Dom Renders Tests", () => {
   test("should render the correct dom elements (only labels)", async () => {
@@ -249,6 +249,12 @@ describe("SignupForm Validity Handle Test", () => {
 });
 
 describe("SignupForm Submit Handle Test", () => {
+  let spiedRouter: jest.SpyInstance<any, any>;
+
+  beforeAll(() => {
+    spiedRouter = jest.spyOn(Router, "push");
+  });
+
   test("should display error message if passwords do not match ", async () => {
     render(
       <Provider store={store}>
@@ -334,6 +340,6 @@ describe("SignupForm Submit Handle Test", () => {
 
     expect(titleElement).toBeInTheDocument();
     expect(messageElement).toBeInTheDocument();
-    expect((window.location as any).routerPushedValue).toBe("/");
+    expect(spiedRouter.mock.calls[0][0]).toBe("/");
   });
 });

@@ -21,12 +21,16 @@ describe("test payload", () => {
     [url: string, data?: any, config?: AxiosRequestConfig | undefined]
   >;
 
-  beforeAll(() => {
+  beforeEach(() => {
     mockedAxios = jest
       .spyOn(axiosInstance, "post")
       .mockImplementationOnce(async () => ({
         post: jest.fn(),
       }));
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test("should call axios with the right payload (forgot-password) ", async () => {
@@ -43,81 +47,68 @@ describe("test payload", () => {
     userEvent.type(inputElement, "email@email.com");
     userEvent.click(buttonElement);
 
-    const expectedParamsFromAxios = {
-      url: "/auth/password/send-token",
-      payload: { email: "email@email.com" },
-    };
-
     await waitFor(() => {
-      expect(
-        (window as any).axiosPayloadTests.sendEmailSubmitPayload
-      ).toStrictEqual(expectedParamsFromAxios);
+      expect(mockedAxios.mock.calls[0][0]).toEqual("/auth/password/send-token");
+      expect(mockedAxios.mock.calls[0][1]).toStrictEqual({
+        email: "email@email.com",
+      });
     });
   });
-  // test("should call axios with the right payload (login) ", async () => {
-  //   const store = mockStore({});
-  //   render(
-  //     <Provider store={store}>
-  //       <LoginForm />
-  //     </Provider>
-  //   );
+  test("should call axios with the right payload (login) ", async () => {
+    const store = mockStore({});
+    render(
+      <Provider store={store}>
+        <LoginForm />
+      </Provider>
+    );
 
-  //   const emailInputElement = screen.getByPlaceholderText("email");
-  //   const passwordInputElement = screen.getByPlaceholderText("password");
-  //   const buttonElement = screen.getByRole("button");
+    const emailInputElement = screen.getByPlaceholderText("email");
+    const passwordInputElement = screen.getByPlaceholderText("password");
+    const buttonElement = screen.getByRole("button");
 
-  //   userEvent.type(emailInputElement, "email@email.com");
-  //   userEvent.type(passwordInputElement, "123456");
-  //   userEvent.click(buttonElement);
+    userEvent.type(emailInputElement, "email@email.com");
+    userEvent.type(passwordInputElement, "123456");
+    userEvent.click(buttonElement);
 
-  //   const expectedParamsFromAxios = {
-  //     url: "/auth/login",
-  //     payload: { email: "email@email.com", password: "123456" },
-  //   };
+    await waitFor(() => {
+      expect(mockedAxios.mock.calls[0][0]).toEqual("/auth/login");
+      expect(mockedAxios.mock.calls[0][1]).toStrictEqual({
+        email: "email@email.com",
+        password: "123456",
+      });
+    });
+  });
+  test("should call axios with the right payload (signup) ", async () => {
+    const store = mockStore({});
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
 
-  //   await waitFor(() => {
-  //     expect(
-  //       (window as any).axiosPayloadTests.loginSubmitPayload
-  //     ).toStrictEqual(expectedParamsFromAxios);
-  //   });
-  // });
-  // test("should call axios with the right payload (signup) ", async () => {
-  //   const store = mockStore({});
-  //   render(
-  //     <Provider store={store}>
-  //       <SignupForm />
-  //     </Provider>
-  //   );
+    const buttonElement = screen.getByRole("button");
+    const inputs = screen.getAllByRole("textbox");
+    userEvent.type(inputs[0], "avi");
+    userEvent.type(inputs[1], "avi123");
+    userEvent.type(inputs[2], "email@email.com");
+    userEvent.type(inputs[3], "theyMatch");
+    userEvent.type(inputs[4], "theyMatch");
 
-  //   const buttonElement = screen.getByRole("button");
-  //   const inputs = screen.getAllByRole("textbox");
-  //   userEvent.type(inputs[0], "avi");
-  //   userEvent.type(inputs[1], "avi123");
-  //   userEvent.type(inputs[2], "email@email.com");
-  //   userEvent.type(inputs[3], "theyMatch");
-  //   userEvent.type(inputs[4], "theyMatch");
+    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
 
-  //   fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
+    userEvent.click(buttonElement);
 
-  //   userEvent.click(buttonElement);
-
-  //   const expectedParamsFromAxios = {
-  //     url: "/auth/signup",
-  //     payload: {
-  //       name: "avi",
-  //       username: "avi123",
-  //       email: "email@email.com",
-  //       password: "theyMatch",
-  //       "password-Confirmation": "theyMatch",
-  //       dateOfBirth: "2000-05-24",
-  //       gender: "male",
-  //     },
-  //   };
-
-  //   await waitFor(() => {
-  //     expect(
-  //       (window as any).axiosPayloadTests.signUpSubmitPayload
-  //     ).toStrictEqual(expectedParamsFromAxios);
-  //   });
-  // });
+    await waitFor(() => {
+      expect(mockedAxios.mock.calls[0][0]).toEqual("/auth/signup");
+      expect(mockedAxios.mock.calls[0][1]).toStrictEqual({
+        name: "avi",
+        username: "avi123",
+        email: "email@email.com",
+        password: "theyMatch",
+        "password-Confirmation": "theyMatch",
+        dateOfBirth: "2000-05-24",
+        gender: "male",
+      });
+    });
+  });
 });

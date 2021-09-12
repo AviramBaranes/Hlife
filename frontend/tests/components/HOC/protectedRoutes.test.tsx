@@ -6,6 +6,7 @@ import ProtectedRoute from "../../../components/HOC/protectedRoutes";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
+import Router from "next/router";
 
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
@@ -13,6 +14,12 @@ const mockStore = configureStore(middlewares);
 jest.mock("../../../redux/slices/auth");
 
 describe("protected route", () => {
+  let spiedRouter: jest.SpyInstance<any, any>;
+
+  beforeAll(() => {
+    spiedRouter = jest.spyOn(Router, "replace");
+  });
+
   test("should render the wrappedComponent (isAuthenticated: true)", () => {
     const initialState = {
       usersReducer: { isAuthenticated: true, loading: false },
@@ -49,7 +56,7 @@ describe("protected route", () => {
       expect(dummyComponent.mock.calls[0][0].props).toBe("props");
     });
   });
-  test("should redirect the user", (done) => {
+  test("should redirect the user", async () => {
     const initialState = {
       usersReducer: { isAuthenticated: false, loading: false },
     };
@@ -62,10 +69,9 @@ describe("protected route", () => {
         <Component props={"props"} />
       </Provider>
     );
-    setTimeout(() => {
-      expect((window as any).location.routerReplacedValue).toBe("/auth/login");
+    await waitFor(() => {
+      expect(spiedRouter.mock.calls[0][0]).toBe("/auth/login");
       expect(dummyComponent.mock.calls.length).toBe(0);
-      done();
-    }, 1);
+    });
   });
 });

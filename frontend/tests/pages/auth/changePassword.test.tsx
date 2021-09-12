@@ -10,8 +10,9 @@ import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import { AxiosRequestConfig } from "axios";
+import Router from "next/router";
 
-jest.mock("next/router");
+jest.mock("../../../utils/Axios/axiosInstance");
 
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
@@ -23,11 +24,7 @@ describe("Reset Password 'getServerSideProps' tests", () => {
   >;
 
   beforeAll(() => {
-    mockedAxiosInstance = jest
-      .spyOn(axiosInstance, "get")
-      .mockImplementation(async () => ({
-        get: jest.fn(),
-      }));
+    mockedAxiosInstance = jest.spyOn(axiosInstance, "get");
   });
 
   it("should send a token in props", async () => {
@@ -47,6 +44,7 @@ describe("Reset Password page tests", () => {
     Promise<unknown>,
     [url: string, data?: any, config?: AxiosRequestConfig | undefined]
   >;
+  let spiedRouter: jest.SpyInstance<any, any>;
 
   beforeAll(() => {
     mockedAxiosInstance = jest
@@ -54,9 +52,11 @@ describe("Reset Password page tests", () => {
       .mockImplementationOnce(async () => {
         throw { response: { data: "data", status: 555 } };
       })
-      .mockImplementationOnce(async () => {
+      .mockImplementation(async () => {
         return { data: "message" };
       });
+
+    spiedRouter = jest.spyOn(Router, "push");
   });
 
   test("should render the dom", () => {
@@ -195,7 +195,37 @@ describe("Reset Password page tests", () => {
       expect(actions[2].type).toBe("errors/errorConfirmed");
       expect(actions[3].type).toBe("messages/newMessage");
       expect(actions[3].payload).toStrictEqual(expectedPayload); //for objects
-      expect((window as any).location.routerPushedValue).toBe("/auth/login");
+      expect(spiedRouter.mock.calls[0][0]).toEqual("/auth/login");
+    });
+  });
+  test("should call axios with the correct payload", async () => {
+    const store = mockStore({});
+    render(
+      <Provider store={store}>
+        <ResetPassword token={"token"} />
+      </Provider>
+    );
+
+    const formIndicator = screen.getAllByRole("textbox");
+    const button = screen.getByRole("button");
+
+    userEvent.type(formIndicator[0], "password");
+    userEvent.type(formIndicator[1], "password");
+    userEvent.click(button);
+
+    const expectedFields = {
+      password: "password",
+      passwordConfirmation: "password",
+      resetToken: "token",
+    };
+
+    await waitFor(() => {
+      expect(mockedAxiosInstance.mock.calls[0][0]).toEqual(
+        "/auth/reset/password-reset"
+      );
+      expect(mockedAxiosInstance.mock.calls[0][1]).toStrictEqual(
+        expectedFields
+      );
     });
   });
 });

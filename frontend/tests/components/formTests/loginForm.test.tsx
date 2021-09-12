@@ -8,11 +8,18 @@ import store from "../../../redux/store";
 import LoginForm from "../../../components/auth/forms/login-form";
 import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 import MessageContainer from "../../../components/UI/containers/Messages/MessageContainer";
+import Router from "next/router";
 
 jest.mock("next/router");
-jest.unmock("react-redux");
 jest.mock("../../../redux/slices/auth");
+
 describe("LoginForm", () => {
+  let spiedRouter: jest.SpyInstance<any, any>;
+
+  beforeAll(() => {
+    spiedRouter = jest.spyOn(Router, "push");
+  });
+
   test("should render the correct dom elements", async () => {
     render(
       <Provider store={store}>
@@ -157,7 +164,7 @@ describe("LoginForm", () => {
 
     expect(titleElement).toBeInTheDocument();
     expect(messageElement).toBeInTheDocument();
-    expect((window as any).location.routerPushedValue).toBe("/");
+    expect(spiedRouter.mock.calls[0][0]).toEqual("/");
   });
 });
 
