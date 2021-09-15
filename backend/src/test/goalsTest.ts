@@ -8,6 +8,7 @@ import Goals from "../models/Goals";
 
 import * as goalsController from "../controller/goals";
 import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
+import User from "../models/User";
 
 interface ReqBody {
   weight?: number;
@@ -23,6 +24,22 @@ describe("create goals tests", () => {
     } as any,
   };
   const res = createCustomResponseObj();
+  let stubedUser: SinonStub;
+  beforeEach(() => {
+    stubedUser = sinon.stub(User, "findById");
+    stubedUser.returns({ hasGoals: false, save: () => {} });
+  });
+  afterEach(() => {
+    stubedUser.restore();
+  });
+  it("should send an error response if goal already created", async () => {
+    stubedUser.returns({ hasGoals: true });
+
+    await goalsController.createGoal(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("User already created goals");
+  });
   it("should send an error response if basic goal is lose fat and there is no fatPercentage data", async () => {
     await goalsController.createGoal(req as any, res as any, () => {});
 

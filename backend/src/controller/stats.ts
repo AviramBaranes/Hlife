@@ -37,6 +37,18 @@ export const addStats: RequestHandler = async (req, res, next) => {
       const lastStatsIndex = userStats.stats.length - 1;
       const lastStatsRecord = userStats.stats[lastStatsIndex];
       const lastWeightRecord = lastStatsRecord.weight;
+
+      const currentTime = new Date().getTime();
+      if (
+        lastStatsRecord.date.getTime() + 7 * 24 * 60 * 60 * 1000 >
+        currentTime
+      ) {
+        res
+          .status(403)
+          .send("You can only declare stats change once in 7 days");
+        return;
+      }
+
       const { failureMessages, goalsAchieved, calculatedGrade } =
         calculateGrade(
           lastWeightRecord,
@@ -64,6 +76,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
     };
 
     user.grade += grade;
+    user.hasInitialStats = true;
     userStats.stats.push(newStatsEntry);
 
     await userStats.save();
@@ -72,7 +85,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
     res
       .status(201)
       .json({ messages, currentGrade: user.grade, accomplishments });
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -100,7 +113,7 @@ export const getAllStatsDates: RequestHandler = async (req, res, next) => {
     );
 
     res.status(200).json({ statsDates: [...statsDates] });
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -131,7 +144,7 @@ export const getStatsByDate: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json({ ...requestedStats });
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -155,7 +168,7 @@ export const getAllStats: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json({ stats: [...userStats.stats] });
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -199,7 +212,7 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
     await userStats.save();
 
     res.status(200).send("The last stats were deleted");
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -260,7 +273,7 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     await userStats.save();
 
     res.status(200).send("The last stats were updated");
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -290,7 +303,7 @@ export const setRanking: RequestHandler = async (req, res, next) => {
 
     res.status(201).send("Ranking the user successfully");
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };

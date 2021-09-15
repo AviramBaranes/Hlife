@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
-import store from "../../../redux/store";
+import store from "../../../redux/store/reduxStore";
 import Logout from "../../../components/auth/logout/Logout";
 import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 

@@ -1,17 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../../utils/axios/axiosInstance";
+import { RootState } from "../../store/reduxStore";
 
-let loading: any;
-let hasProgram: any;
+interface AuthSliceState {
+  username: null | string;
+  hasProgram: undefined | boolean;
+  loading: undefined | boolean;
+  error: {};
+  isAuthenticated: undefined | boolean;
+}
 
-loading = undefined;
-
-const initialState = {
-  username: "",
-  hasProgram,
-  loading,
+const initialState: AuthSliceState = {
+  username: null,
+  hasProgram: undefined,
+  loading: undefined,
   error: {},
-  isAuthenticated: false,
+  isAuthenticated: undefined,
 };
 
 export const sendPasswordResetEmailAction = createAsyncThunk(
@@ -84,9 +88,7 @@ export const validateAuthenticationAction = createAsyncThunk(
   },
   {
     condition(_, { getState }) {
-      const { usersReducer } = getState() as {
-        usersReducer: { loading: boolean };
-      };
+      const { usersReducer } = getState() as RootState;
       const { loading } = usersReducer;
       if (loading === false || loading === true) {
         return false;

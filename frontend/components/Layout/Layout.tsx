@@ -5,8 +5,8 @@ import { getCsrfToken } from "../../redux/slices/tokens";
 import Navigation from "./Navigation";
 import LoadingSpinner from "../UI/Spinner/Spinner";
 import classes from "./Layout.module.scss";
-import { errorsActions } from "../../redux/slices/errors";
-import { RootState } from "../../redux/store";
+import { errorsActions } from "../../redux/slices/errors/errorsSlice";
+import { RootState } from "../../redux/store/reduxStore";
 
 function Layout({ children }: { children: React.ReactNode[] }) {
   const dispatch = useDispatch();

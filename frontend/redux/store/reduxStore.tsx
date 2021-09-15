@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import tokensReducer from "../slices/tokens";
-import usersReducer from "../slices/auth";
-import errorsReducer from "../slices/errors";
-import messagesReducer from "../slices/messages";
+import usersReducer from "../slices/auth/authSlice";
+import errorsReducer from "../slices/errors/errorsSlice";
+import messagesReducer from "../slices/messages/messagesSlice";
+import goalsReducer from "../slices/goals/goalsSlice";
+import statsReducer from "../slices/stats/statsSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +13,8 @@ const store = configureStore({
     usersReducer,
     errorsReducer,
     messagesReducer,
+    goalsReducer,
+    statsReducer,
   },
 });
 export default store;

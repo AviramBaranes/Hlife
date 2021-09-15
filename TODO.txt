@@ -1,0 +1,9 @@
+1.tests
+
+2.continue registration:
+    A: recommendations calc in server side props
+    B: custom program page
+    C: create workout according to program
+    D: schedule program
+
+3.style

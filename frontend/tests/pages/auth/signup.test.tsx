@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
-import Signup from "../../../pages/auth/signup";
+import Signup from "../../../pages/auth/registration/signup";
 import { Provider } from "react-redux";
-import store from "../../../redux/store";
+import store from "../../../redux/store/reduxStore";
 
 describe("signup page tests", () => {
   test("should render the dom correctly", () => {

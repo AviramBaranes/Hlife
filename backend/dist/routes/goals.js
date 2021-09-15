@@ -27,6 +27,7 @@ const express_validator_1 = require("express-validator");
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const goalsController = __importStar(require("../controller/goals"));
 const router = express_1.default.Router();
+//create goals
 router.post("/", authMiddleware_1.default, [
     express_validator_1.body("basicGoal", "basic goal can be either 'lose fat' or 'increase muscles mass'").custom((value) => {
         if (value === "lose fat" || value === "increase muscles mass") {
@@ -40,8 +41,9 @@ router.post("/", authMiddleware_1.default, [
         .isFloat({ min: 0, max: 50 }),
     express_validator_1.body("musclesMass", "Muscles mass must be a number")
         .optional()
-        .isFloat({ min: 25, max: 100 }),
+        .isFloat({ min: 25, max: 125 }),
 ], goalsController.createGoal);
+//change basic goal
 router.put("/basicGoal", authMiddleware_1.default, [
     express_validator_1.body("fatPercentage", "Fat percentage must be a number")
         .optional()
@@ -50,6 +52,7 @@ router.put("/basicGoal", authMiddleware_1.default, [
         .optional()
         .isFloat({ min: 25, max: 100 }),
 ], goalsController.changeBasicGoal);
+//change detail goal
 router.put("/", authMiddleware_1.default, [
     express_validator_1.body("weight", "Weight must be a number")
         .optional()
@@ -61,5 +64,6 @@ router.put("/", authMiddleware_1.default, [
         .optional()
         .isFloat({ min: 25, max: 100 }),
 ], goalsController.changeGoals);
+//get goals
 router.get("/", authMiddleware_1.default, goalsController.getGoals);
 exports.default = router;

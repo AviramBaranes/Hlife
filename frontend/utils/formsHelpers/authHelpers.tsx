@@ -10,24 +10,19 @@ import {
   ValidationRules,
   ComplexInputListObject,
 } from "../../types/inputConfig";
-import { errorsActions } from "../../redux/slices/errors";
-import { messagesActions } from "../../redux/slices/messages";
+import { errorsActions } from "../../redux/slices/errors/errorsSlice";
+import { messagesActions } from "../../redux/slices/messages/messagesSlice";
 import {
   loginUserAction,
   logoutAction,
   sendPasswordResetEmailAction,
   signupUserAction,
   usersActions,
-} from "../../redux/slices/auth";
+} from "../../redux/slices/auth/authSlice";
 import axiosInstance from "../axios/axiosInstance";
 import { SetStateAction } from "react";
 import { CustomError } from "../../types/CustomErrors";
-import { AppDispatch } from "../../redux/store";
-
-interface CustomEventTarget extends EventTarget {
-  name: string;
-  value: string;
-}
+import { AppDispatch } from "../../redux/store/reduxStore";
 
 export function createInputListForSignup(
   name: string,
@@ -185,14 +180,14 @@ function validationTester(value: string, rules: ValidationRules) {
 }
 
 export function inputChangeHandler(
-  event: React.FormEvent<HTMLInputElement>,
+  event: React.ChangeEvent<HTMLInputElement>,
   index: number,
   inputsList: ComplexInputListObject[],
   setInputList: Dispatch<SetStateAction<ComplexInputListObject[]>>,
   setUserFields: Dispatch<SetStateAction<object | string>>,
   setFormValidity: Dispatch<SetStateAction<boolean>>
 ) {
-  const { name, value } = event.target as CustomEventTarget;
+  const { name, value } = event.target;
   const inputsDataCopy = [...inputsList];
 
   const inputElementCopy = { ...inputsDataCopy[index] };

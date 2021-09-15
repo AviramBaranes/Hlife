@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 import Login from "../../../pages/auth/login";
 import { Provider } from "react-redux";
-import store from "../../../redux/store";
+import store from "../../../redux/store/reduxStore";
 
 describe("login page tests", () => {
   test("should render the dom correctly", () => {

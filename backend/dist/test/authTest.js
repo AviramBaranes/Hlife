@@ -524,8 +524,9 @@ describe("validateUser tests", () => {
         stubedUser = sinon_1.default.stub(User_1.default, "findById");
         stubedUser.returns({
             username: "aviram",
-            hasProgram: true,
-            hasDiet: false,
+            hasProgram: false,
+            hasInitialStats: true,
+            hasGoals: true,
         });
         await authController.validateUser(req, res, () => { });
     });
@@ -534,9 +535,10 @@ describe("validateUser tests", () => {
     });
     it("should set the right json data in res", () => {
         chai_1.expect(res.jsonObj.isAuthenticated).equal(true);
+        chai_1.expect(res.jsonObj.hasProgram).equal(false);
+        chai_1.expect(res.jsonObj.hasInitialStats).equal(true);
+        chai_1.expect(res.jsonObj.hasGoals).equal(true);
         chai_1.expect(res.jsonObj.username).equal("aviram");
-        chai_1.expect(res.jsonObj.hasProgram).equal(true);
-        chai_1.expect(res.jsonObj.userId).equal(1);
     });
     after(() => {
         stubedUser.restore();

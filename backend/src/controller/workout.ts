@@ -54,7 +54,7 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
     return res
       .status(201)
       .send(`${trainingDayName}-workout created successfully`);
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -82,7 +82,7 @@ export const getWorkoutByName: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(workout);
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -100,7 +100,7 @@ export const getById: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(workout);
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -142,7 +142,7 @@ export const changeWorkout: RequestHandler = async (req, res, next) => {
 
     res.status(201).send("Workout changed successfully");
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -170,7 +170,7 @@ export const deleteWorkout: RequestHandler = async (req, res, next) => {
 
     res.status(200).send("Workout deleted successfully");
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };

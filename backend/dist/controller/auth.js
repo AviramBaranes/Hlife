@@ -220,11 +220,13 @@ const validateUser = async (req, res, next) => {
     try {
         const { userId } = req;
         const user = (await User_1.default.findById(userId));
+        const { hasProgram, username, hasGoals, hasInitialStats } = user;
         res.status(200).json({
             isAuthenticated: true,
-            username: user.username,
-            hasProgram: user.hasProgram,
-            userId,
+            hasProgram,
+            hasInitialStats,
+            hasGoals,
+            username,
         });
     }
     catch (err) {

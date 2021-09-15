@@ -73,7 +73,7 @@ export const signup = async (
       })
       .json({ message, username });
     //
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -124,7 +124,7 @@ export const login = async (
         username: user.username,
         hasProgram: user.hasProgram,
       });
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -137,7 +137,7 @@ export const logout: RequestHandler = (req, res, next) => {
         path: "/",
       })
       .send("success");
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -171,7 +171,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
     await user.save();
 
     res.status(200).send("password reseted successfully!");
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -219,7 +219,7 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
       process.env.Node_ENV !== "test" && console.log(error);
       throw error;
     }
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -251,7 +251,7 @@ export const resetPasswordViaToken: RequestHandler = async (req, res, next) => {
     await user.save();
 
     res.status(200).send(`${user.name}'s password successfully changed!`);
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -271,7 +271,7 @@ export const validateResetToken: RequestHandler = async (req, res, next) => {
     if (isExpired) return res.status(403).send("Token Expired");
 
     return res.status(200).send("Token Verified Successfully");
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };
@@ -282,13 +282,16 @@ export const validateUser: RequestHandler = async (req, res, next) => {
 
     const user = (await User.findById(userId)) as UserType;
 
+    const { hasProgram, username, hasGoals, hasInitialStats } = user;
+
     res.status(200).json({
       isAuthenticated: true,
-      username: user.username,
-      hasProgram: user.hasProgram,
-      userId,
+      hasProgram,
+      hasInitialStats,
+      hasGoals,
+      username,
     });
-  } catch (err) {
+  } catch (err: any) {
     return catchErrorHandler(err, next);
   }
 };

@@ -29,6 +29,7 @@ const sinon_1 = __importDefault(require("sinon"));
 const Goals_1 = __importDefault(require("../models/Goals"));
 const goalsController = __importStar(require("../controller/goals"));
 const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
+const User_1 = __importDefault(require("../models/User"));
 describe("create goals tests", () => {
     const req = {
         body: {
@@ -37,6 +38,20 @@ describe("create goals tests", () => {
         },
     };
     const res = responseDefaultObj_1.default();
+    let stubedUser;
+    beforeEach(() => {
+        stubedUser = sinon_1.default.stub(User_1.default, "findById");
+        stubedUser.returns({ hasGoals: false, save: () => { } });
+    });
+    afterEach(() => {
+        stubedUser.restore();
+    });
+    it("should send an error response if goal already created", async () => {
+        stubedUser.returns({ hasGoals: true });
+        await goalsController.createGoal(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(403);
+        chai_1.expect(res.msg).equal("User already created goals");
+    });
     it("should send an error response if basic goal is lose fat and there is no fatPercentage data", async () => {
         await goalsController.createGoal(req, res, () => { });
         chai_1.expect(res.statusCode).equal(403);

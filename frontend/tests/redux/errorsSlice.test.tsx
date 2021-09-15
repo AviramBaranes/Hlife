@@ -1,7 +1,7 @@
 import { waitFor } from "@testing-library/dom";
 
-import store from "../../redux/store";
-import { errorsActions } from "../../redux/slices/errors";
+import store from "../../redux/store/reduxStore";
+import { errorsActions } from "../../redux/slices/errors/errorsSlice";
 
 describe("Errors slice tests", () => {
   test("should have the correct initialState", () => {

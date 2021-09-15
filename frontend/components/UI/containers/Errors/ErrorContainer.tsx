@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 
-import { errorsActions } from "../../../../redux/slices/errors";
+import { errorsActions } from "../../../../redux/slices/errors/errorsSlice";
 import classes from "./ErrorContainer.module.scss";
-import { RootState } from "../../../../redux/store";
+import { RootState } from "../../../../redux/store/reduxStore";
 
 interface ErrorModalProps {
   errorTitle: string;

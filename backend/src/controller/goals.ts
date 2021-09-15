@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import Goals, { GoalsType } from "../models/Goals";
+import User, { UserType } from "../models/User";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 
@@ -8,6 +9,13 @@ export const createGoal: RequestHandler = async (req, res, next) => {
     validationErrorsHandler(req);
     const { userId } = req;
     const { basicGoal, weight, fatPercentage, musclesMass } = req.body;
+
+    const user = (await User.findById(userId)) as UserType;
+    console.log(user);
+    if (user.hasGoals) {
+      res.status(403).send("User already created goals");
+      return;
+    }
 
     if (basicGoal === "lose fat" && !fatPercentage) {
       res
@@ -38,8 +46,11 @@ export const createGoal: RequestHandler = async (req, res, next) => {
     }) as GoalsType;
     await userGoals.save();
 
+    user.hasGoals = true;
+    user.save();
+
     res.status(201).send("Goals created successfully");
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -93,7 +104,7 @@ export const changeBasicGoal: RequestHandler = async (req, res, next) => {
     await userGoals.save();
 
     res.status(201).send("Goals updated");
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -124,7 +135,7 @@ export const changeGoals: RequestHandler = async (req, res, next) => {
     await userGoals.save();
 
     res.status(201).send("Goals updated");
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -141,7 +152,7 @@ export const getGoals: RequestHandler = async (req, res, next) => {
     }
 
     res.status(201).json({ ...userGoals });
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };

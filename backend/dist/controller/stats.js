@@ -31,6 +31,14 @@ const addStats = async (req, res, next) => {
             const lastStatsIndex = userStats.stats.length - 1;
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
+            const currentTime = new Date().getTime();
+            if (lastStatsRecord.date.getTime() + 7 * 24 * 60 * 60 * 1000 >
+                currentTime) {
+                res
+                    .status(403)
+                    .send("You can only declare stats change once in 7 days");
+                return;
+            }
             const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoal, userGoals.detailGoals, weight, messages);
             grade += calculatedGrade;
             messages = [...failureMessages];
@@ -46,6 +54,7 @@ const addStats = async (req, res, next) => {
             bodyImageUrl,
         };
         user.grade += grade;
+        user.hasInitialStats = true;
         userStats.stats.push(newStatsEntry);
         await userStats.save();
         await user.save();

@@ -26,7 +26,7 @@ router.post(
       .isFloat({ min: 0, max: 50 }),
     body("musclesMass", "Muscles mass must be a number")
       .optional()
-      .isFloat({ min: 25, max: 100 }),
+      .isFloat({ min: 25, max: 125 }),
   ],
   goalsController.createGoal
 );

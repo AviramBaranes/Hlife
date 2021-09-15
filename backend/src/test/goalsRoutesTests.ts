@@ -58,6 +58,9 @@ describe("post goals route", () => {
   });
 
   it("should move from validation middleware successfully", async () => {
+    const stubedUser = sinon.stub(User, "findById");
+    stubedUser.returns({ hasGoals: true });
+
     const payload = JSON.stringify({
       basicGoal: "lose fat",
       weight: 30,
@@ -70,9 +73,8 @@ describe("post goals route", () => {
       .send(payload);
 
     expect(response.statusCode).equal(403);
-    expect(response.text).equal(
-      "If you want to lose fat you need to provide your fat percentage"
-    );
+    expect(response.text).equal("User already created goals");
+    stubedUser.restore();
   });
 });
 

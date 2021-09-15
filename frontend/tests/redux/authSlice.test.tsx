@@ -1,6 +1,6 @@
 import { waitFor } from "@testing-library/react";
 
-import store from "../../redux/store";
+import store from "../../redux/store/reduxStore";
 import {
   sendPasswordResetEmailAction,
   validateAuthenticationAction,
@@ -8,7 +8,7 @@ import {
   signupUserAction,
   logoutAction,
   loginUserAction,
-} from "../../redux/slices/auth";
+} from "../../redux/slices/auth/authSlice";
 
 jest.mock("../../utils/axios/axiosInstance", () => {
   const get = jest.fn();

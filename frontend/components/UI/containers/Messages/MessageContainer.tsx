@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import classes from "./MessageContainer.module.scss";
-import { messagesActions } from "../../../../redux/slices/messages";
-import { RootState } from "../../../../redux/store";
+import { messagesActions } from "../../../../redux/slices/messages/messagesSlice";
+import { RootState } from "../../../../redux/store/reduxStore";
 
 interface MessageModalProps {
   messageTitle: string;

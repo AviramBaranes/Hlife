@@ -7,12 +7,12 @@ interface InputProps {
   label: string;
   htmlFor: string;
   type: string;
-  value: string;
-  inputChangeHandler: Function;
+  value: string | number;
+  inputChangeHandler: ChangeEventHandler<HTMLInputElement>;
   elementConfig?: {};
 }
 
-function Input(props: InputProps) {
+const Input: React.FC<InputProps> = (props) => {
   const inputClasses = [classes.Input];
 
   if (props.touched && props.inValid) {
@@ -32,13 +32,11 @@ function Input(props: InputProps) {
         type={props.type}
         value={props.value}
         placeholder={props.htmlFor}
-        onChange={
-          props.inputChangeHandler as ChangeEventHandler<HTMLInputElement>
-        }
+        onChange={props.inputChangeHandler}
         {...props.elementConfig}
       />
       <br />
     </div>
   );
-}
+};
 export default Input;

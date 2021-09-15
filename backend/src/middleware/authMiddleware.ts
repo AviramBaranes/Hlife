@@ -33,11 +33,11 @@ const authMiddleware = (
     req.userId = decodedToken.userId;
 
     next();
-  } catch (err) {
+  } catch (err: any) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
-    process.env.NODE_ENV !== "test" && console.log(err);
+    // process.env.NODE_ENV !== "test" && console.log(err);
     next(err);
     return err;
   }

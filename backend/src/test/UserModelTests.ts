@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import User from "../models/User";
+import User, { UserType } from "../models/User";
 
 type ValidationError = {
   errors: { [key: string]: { properties: { message: string } } };
@@ -66,5 +66,7 @@ describe("User model tests", () => {
     });
 
     expect(user.hasProgram).equal(false);
+    expect(user.hasGoals).equal(false);
+    expect(user.hasInitialStats).equal(false);
   });
 });

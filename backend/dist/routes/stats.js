@@ -29,6 +29,29 @@ const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware")
 const customValidationHelpers_1 = require("../utils/helpers/validation/customValidationHelpers");
 const router = express_1.default.Router();
 const ranksOptionsEnum = ["Beginner", "Intermediate", "Advanced", "Pro"];
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, cb) {
+//       cb(null, "./files");
+//     },
+//     filename(req, file, cb) {
+//       cb(null, `${new Date().getTime()}_${file.originalname}`);
+//     },
+//   }),
+//   limits: {
+//     fileSize: 1000000, // max file size 1MB = 1000000 bytes
+//   },
+//   fileFilter(req, file, cb) {
+//     if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
+//       return cb(
+//         new Error(
+//           "only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls format."
+//         )
+//       );
+//     }
+//     cb(null, true); // continue with upload
+//   },
+// });
 //add stat
 router.post("/", authMiddleware_1.default, [
     express_validator_1.body("weight", "Weight needs to be in range 35kg-250kg").isFloat({

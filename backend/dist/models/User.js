@@ -19,7 +19,8 @@ const UserSchema = new Schema({
     },
     grade: { type: Number, required: true, default: 0 },
     hasProgram: { type: Boolean, default: false },
-    // hasDiet: { type: Boolean, default: false },
+    hasGoals: { type: Boolean, default: false },
+    hasInitialStats: { type: Boolean, default: false },
     workouts: [
         {
             trainingDayName: {

@@ -1,13 +1,13 @@
 import { waitFor } from "@testing-library/react";
 
-import store from "../../redux/store";
+import store from "../../redux/store/reduxStore";
 import {
   sendPasswordResetEmailAction,
   validateAuthenticationAction,
   usersActions,
   signupUserAction,
   loginUserAction,
-} from "../../redux/slices/auth";
+} from "../../redux/slices/auth/authSlice";
 
 jest.mock("../../utils/Axios/axiosInstance", () => {
   const get = jest.fn();

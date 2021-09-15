@@ -57,6 +57,13 @@ describe("addStats endpoint general tests", () => {
         chai_1.expect(res.statusCode).equal(403);
         chai_1.expect(res.msg).equal("User's goals not found");
     });
+    it("should not add stats more then once in 7 days", async () => {
+        stubedGoalsModel.returns(true);
+        stubedStatsModel.returns({ stats: [{ date: new Date() }] });
+        await statsController.addStats(req, res, () => { });
+        chai_1.expect(res.statusCode).equal(403);
+        chai_1.expect(res.msg).equal("You can only declare stats change once in 7 days");
+    });
     it("should create stats model", async () => {
         stubedStatsModel.returns({ stats: [], save: sinon_1.default.spy() });
         stubedGoalsModel.returns(true);
@@ -73,6 +80,7 @@ describe("addStats endpoint general tests", () => {
         chai_1.expect(newStats.musclesMass).equal(30);
         chai_1.expect(newStats.bodyImageUrl).equal("image");
         chai_1.expect(user.grade).equal(15);
+        chai_1.expect(user.hasInitialStats).equal(true);
         chai_1.expect(user.save.called).equal(true);
         chai_1.expect(stats.stats.length).equal(1);
         chai_1.expect(stats.save.called).equal(true);
@@ -106,6 +114,14 @@ describe("addStats endpoint deeply tests", () => {
     let stubedGoalsModel;
     let stubedUserModel;
     let stubedStatsModel;
+    let stubedDate;
+    before(() => {
+        stubedDate = sinon_1.default.stub(Date.prototype, "getTime");
+        stubedDate.returns(Infinity);
+    });
+    after(() => {
+        stubedDate.restore();
+    });
     beforeEach(() => {
         stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
         stubedUserModel = sinon_1.default.stub(User_1.default, "findById");

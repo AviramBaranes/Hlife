@@ -1,6 +1,6 @@
 import { waitFor } from "@testing-library/react";
 
-import store from "../../redux/store";
+import store from "../../redux/store/reduxStore";
 import { getCsrfToken } from "../../redux/slices/tokens";
 
 jest.mock("../../utils/Axios/axiosInstance", () => {

@@ -52,6 +52,8 @@ describe("post goals route", () => {
         chai_1.expect(response.body.data[3].msg).equal("Muscles mass must be a number");
     });
     it("should move from validation middleware successfully", async () => {
+        const stubedUser = sinon_1.default.stub(User_1.default, "findById");
+        stubedUser.returns({ hasGoals: true });
         const payload = JSON.stringify({
             basicGoal: "lose fat",
             weight: 30,
@@ -62,7 +64,8 @@ describe("post goals route", () => {
             .set("Content-type", "application/json")
             .send(payload);
         chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("If you want to lose fat you need to provide your fat percentage");
+        chai_1.expect(response.text).equal("User already created goals");
+        stubedUser.restore();
     });
 });
 describe("change basic goal route", () => {

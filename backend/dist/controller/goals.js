@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getGoals = exports.changeGoals = exports.changeBasicGoal = exports.createGoal = void 0;
 const Goals_1 = __importDefault(require("../models/Goals"));
+const User_1 = __importDefault(require("../models/User"));
 const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
 const createGoal = async (req, res, next) => {
@@ -12,6 +13,12 @@ const createGoal = async (req, res, next) => {
         validationErrors_1.validationErrorsHandler(req);
         const { userId } = req;
         const { basicGoal, weight, fatPercentage, musclesMass } = req.body;
+        const user = (await User_1.default.findById(userId));
+        console.log(user);
+        if (user.hasGoals) {
+            res.status(403).send("User already created goals");
+            return;
+        }
         if (basicGoal === "lose fat" && !fatPercentage) {
             res
                 .status(403)
@@ -34,6 +41,8 @@ const createGoal = async (req, res, next) => {
             },
         });
         await userGoals.save();
+        user.hasGoals = true;
+        user.save();
         res.status(201).send("Goals created successfully");
     }
     catch (err) {

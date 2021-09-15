@@ -16,8 +16,12 @@ function RegistrationsNav() {
         </Link>
       </li>
 
-      <li className={pathname === "/auth/signup" ? classes.Active : ""}>
-        <Link href="/auth/signup">
+      <li
+        className={
+          pathname === "/auth/registration/signup" ? classes.Active : ""
+        }
+      >
+        <Link href="/auth/registration/signup">
           <h2>Sign-Up</h2>
         </Link>
       </li>

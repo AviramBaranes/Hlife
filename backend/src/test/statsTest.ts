@@ -11,6 +11,7 @@ import createCustomResponseObj, {
 import PhysicalStats from "../models/PhysicalStats";
 import Goals from "../models/Goals";
 import User from "../models/User";
+import Sinon from "sinon";
 
 describe("addStats endpoint general tests", () => {
   const res = createCustomResponseObj();
@@ -41,6 +42,16 @@ describe("addStats endpoint general tests", () => {
     expect(res.msg).equal("User's goals not found");
   });
 
+  it("should not add stats more then once in 7 days", async () => {
+    stubedGoalsModel.returns(true);
+    stubedStatsModel.returns({ stats: [{ date: new Date() }] });
+
+    await statsController.addStats(req as any, res as any, () => {});
+
+    expect(res.statusCode).equal(403);
+    expect(res.msg).equal("You can only declare stats change once in 7 days");
+  });
+
   it("should create stats model", async () => {
     stubedStatsModel.returns({ stats: [], save: sinon.spy() });
     stubedGoalsModel.returns(true);
@@ -60,6 +71,7 @@ describe("addStats endpoint general tests", () => {
     expect(newStats.musclesMass).equal(30);
     expect(newStats.bodyImageUrl).equal("image");
     expect(user.grade).equal(15);
+    expect(user.hasInitialStats).equal(true);
     expect(user.save.called).equal(true);
     expect(stats.stats.length).equal(1);
     expect(stats.save.called).equal(true);
@@ -95,6 +107,14 @@ describe("addStats endpoint deeply tests", () => {
   let stubedGoalsModel: SinonStub;
   let stubedUserModel: SinonStub;
   let stubedStatsModel: SinonStub;
+  let stubedDate: SinonStub;
+  before(() => {
+    stubedDate = sinon.stub(Date.prototype, "getTime");
+    stubedDate.returns(Infinity);
+  });
+  after(() => {
+    stubedDate.restore();
+  });
   beforeEach(() => {
     stubedGoalsModel = sinon.stub(Goals, "findOne");
     stubedUserModel = sinon.stub(User, "findById");

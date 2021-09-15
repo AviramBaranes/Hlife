@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 
 import SendEmail from "../../../pages/auth/forgotPassword";
 import { Provider } from "react-redux";
-import store from "../../../redux/store";
+import store from "../../../redux/store/reduxStore";
 
 describe("send email page tests", () => {
   test("should render the dom correctly", () => {

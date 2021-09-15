@@ -24,7 +24,9 @@ const UserSchema = new Schema({
 
   hasProgram: { type: Boolean, default: false },
 
-  // hasDiet: { type: Boolean, default: false },
+  hasGoals: { type: Boolean, default: false },
+
+  hasInitialStats: { type: Boolean, default: false },
 
   workouts: [
     {
@@ -61,6 +63,8 @@ export interface UserType extends Document {
   dateOfBirth: Date;
   grade: number;
   hasProgram: boolean;
+  hasGoals: boolean;
+  hasInitialStats: boolean;
   workouts: Workout[] | undefined;
   resetToken: string | undefined;
   tokenExpiration: Date | undefined;

@@ -40,7 +40,7 @@ function loginForm() {
             label={field.label!}
             value={field.value}
             type={field.type!}
-            inputChangeHandler={(event: React.FormEvent<HTMLInputElement>) =>
+            inputChangeHandler={(event: React.ChangeEvent<HTMLInputElement>) =>
               inputChangeHandler(
                 event,
                 index,
