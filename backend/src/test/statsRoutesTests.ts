@@ -36,7 +36,6 @@ describe("post stats route", () => {
       height: 251,
       fatPercentage: 8.5,
       musclesMass: 34.5,
-      bodyImageUrl: "not a url",
     });
 
     const response = await request(server)
@@ -45,6 +44,7 @@ describe("post stats route", () => {
       .set("Content-type", "application/json")
       .send(payload);
 
+    console.log(response.body);
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal("Validation Failed");
     expect(response.body.data[0].value).equal(34);
@@ -63,8 +63,6 @@ describe("post stats route", () => {
     expect(response.body.data[3].msg).equal(
       "Muscles mass needs to be in a range of 10kg-200kg"
     );
-    expect(response.body.data[4].value).equal("not a url");
-    expect(response.body.data[4].msg).equal("Image is invalid");
   });
 
   it("should move from validation middleware successfully", async () => {

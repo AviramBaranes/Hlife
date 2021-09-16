@@ -27,33 +27,30 @@ const express_validator_1 = require("express-validator");
 const statsController = __importStar(require("../controller/stats"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 const customValidationHelpers_1 = require("../utils/helpers/validation/customValidationHelpers");
+const multer_1 = __importDefault(require("multer"));
 const router = express_1.default.Router();
 const ranksOptionsEnum = ["Beginner", "Intermediate", "Advanced", "Pro"];
-// const upload = multer({
-//   storage: multer.diskStorage({
-//     destination(req, file, cb) {
-//       cb(null, "./files");
-//     },
-//     filename(req, file, cb) {
-//       cb(null, `${new Date().getTime()}_${file.originalname}`);
-//     },
-//   }),
-//   limits: {
-//     fileSize: 1000000, // max file size 1MB = 1000000 bytes
-//   },
-//   fileFilter(req, file, cb) {
-//     if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
-//       return cb(
-//         new Error(
-//           "only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls format."
-//         )
-//       );
-//     }
-//     cb(null, true); // continue with upload
-//   },
-// });
+const upload = multer_1.default({
+    storage: multer_1.default.diskStorage({
+        destination(req, file, cb) {
+            cb(null, "./images");
+        },
+        filename(req, file, cb) {
+            cb(null, `${new Date().getTime()}_${file.originalname}`);
+        },
+    }),
+    limits: {
+        fileSize: 1000000, // max file size 1MB = 1000000 bytes
+    },
+    fileFilter(req, file, cb) {
+        if (!file.originalname.match(/\.(jpeg|jpg|png|svg)$/)) {
+            return cb(new Error("only upload files with jpg, jpeg, png, svg."));
+        }
+        cb(undefined, true); // continue with upload
+    },
+});
 //add stat
-router.post("/", authMiddleware_1.default, [
+router.post("/", authMiddleware_1.default, upload.single("file"), [
     express_validator_1.body("weight", "Weight needs to be in range 35kg-250kg").isFloat({
         min: 35,
         max: 250,
@@ -64,19 +61,18 @@ router.post("/", authMiddleware_1.default, [
         min: 100,
         max: 250,
     }),
-    express_validator_1.body("fatPercentage", "Fat Percentage needs to be lower than 80%")
+    express_validator_1.body("fatPercentage", "Fat Percentage needs to be lower than 40%")
         .optional()
         .isInt({
         min: 0,
-        max: 80,
+        max: 40,
     }),
     express_validator_1.body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
         .optional()
         .isInt({
         min: 0,
-        max: 120,
+        max: 200,
     }),
-    express_validator_1.body("bodyImageUrl", "Image is invalid").optional().isURL(),
 ], statsController.addStats);
 //get all stats dates
 router.get("/all-stats-dates", authMiddleware_1.default, statsController.getAllStatsDates);

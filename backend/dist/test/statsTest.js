@@ -78,7 +78,6 @@ describe("addStats endpoint general tests", () => {
         chai_1.expect(newStats.height).equal(180);
         chai_1.expect(newStats.fatPercentage).equal(20);
         chai_1.expect(newStats.musclesMass).equal(30);
-        chai_1.expect(newStats.bodyImageUrl).equal("image");
         chai_1.expect(user.grade).equal(15);
         chai_1.expect(user.hasInitialStats).equal(true);
         chai_1.expect(user.save.called).equal(true);

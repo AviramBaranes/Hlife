@@ -11,7 +11,7 @@ interface FatPercentageFieldProps {
   basicGoal?: string;
   shouldDisplay: boolean;
   title: string;
-  buttonEvents: {
+  buttonsEvents: {
     skip: () => void;
     continue: (desiredFatPercentage: string) => void;
   };
@@ -22,12 +22,13 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
   basicGoal,
   shouldDisplay,
   title,
-  buttonEvents,
+  buttonsEvents,
 }) => {
   const [desiredFatPercentage, setDesiredFatPercentage] = useState("15");
   const [currentImage, setCurrentImage] = useState(personFat_15);
 
-  const allowedToSkip = basicGoal === "increase muscles mass";
+  const allowedToSkip =
+    basicGoal === "increase muscles mass" || basicGoal === undefined;
 
   return (
     <section style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
@@ -51,7 +52,7 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
         <Button
           type="button"
           disabled={false}
-          clicked={() => buttonEvents.continue(desiredFatPercentage)}
+          clicked={() => buttonsEvents.continue(desiredFatPercentage)}
         >
           Continue
         </Button>
@@ -61,7 +62,7 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
           }}
           type="button"
           disabled={false}
-          clicked={buttonEvents.skip}
+          clicked={buttonsEvents.skip}
         >
           Skip
         </Button>

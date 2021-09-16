@@ -55,6 +55,7 @@ app.use("/program", program_1.default);
 app.use("/program-exec", programExecution_1.default);
 app.use((error, req, res, next) => {
     let { statusCode, message, data } = error;
+    console.log(error);
     if (!statusCode)
         statusCode = 500;
     if (!message)

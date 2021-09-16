@@ -9,6 +9,7 @@ import csrf from "csurf";
 import mongoSanitize from "express-mongo-sanitize";
 import RateLimiter from "express-rate-limit";
 import express, { Request, Response, NextFunction } from "express";
+import path from "path";
 
 import connectDb from "./utils/database";
 import { CustomError } from "./types/error";
@@ -55,7 +56,7 @@ app.use(
   })
 ); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
-app.get("/", csrfProtection, function (req, res) {
+app.get("/", csrfProtection, function (req: Request, res: any) {
   res.cookie("XSRF-TOKEN", req.csrfToken());
   res.send("SET");
 });
@@ -72,7 +73,7 @@ app.use("/program-exec", programExecRoute);
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {
     let { statusCode, message, data } = error;
-
+    console.log(error);
     if (!statusCode) statusCode = 500;
     if (!message) message = "Server Error";
     if (!data) data = null;

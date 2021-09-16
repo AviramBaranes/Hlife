@@ -15,8 +15,15 @@ export const addStats: RequestHandler = async (req, res, next) => {
     validationErrorsHandler(req);
     const { userId } = req;
 
-    const { weight, height, fatPercentage, musclesMass, bodyImageUrl } =
-      req.body;
+    const { weight, height, fatPercentage, musclesMass } = req.body;
+
+    let bodyImageUrl: string | undefined;
+
+    if (req.file) {
+      const { path } = req.file as Express.Multer.File;
+      bodyImageUrl = path.replace("\\", "/");
+    }
+
     const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {
@@ -86,6 +93,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
       .status(201)
       .json({ messages, currentGrade: user.grade, accomplishments });
   } catch (err: any) {
+    console.log(err);
     catchErrorHandler(err, next);
   }
 };

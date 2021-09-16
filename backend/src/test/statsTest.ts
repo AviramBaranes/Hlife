@@ -69,7 +69,6 @@ describe("addStats endpoint general tests", () => {
     expect(newStats.height).equal(180);
     expect(newStats.fatPercentage).equal(20);
     expect(newStats.musclesMass).equal(30);
-    expect(newStats.bodyImageUrl).equal("image");
     expect(user.grade).equal(15);
     expect(user.hasInitialStats).equal(true);
     expect(user.save.called).equal(true);

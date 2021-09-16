@@ -9,35 +9,32 @@ import multer from "multer";
 const router = express.Router();
 const ranksOptionsEnum = ["Beginner", "Intermediate", "Advanced", "Pro"];
 
-// const upload = multer({
-//   storage: multer.diskStorage({
-//     destination(req, file, cb) {
-//       cb(null, "./files");
-//     },
-//     filename(req, file, cb) {
-//       cb(null, `${new Date().getTime()}_${file.originalname}`);
-//     },
-//   }),
-//   limits: {
-//     fileSize: 1000000, // max file size 1MB = 1000000 bytes
-//   },
-//   fileFilter(req, file, cb) {
-//     if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
-//       return cb(
-//         new Error(
-//           "only upload files with jpg, jpeg, png, pdf, doc, docx, xslx, xls format."
-//         )
-//       );
-//     }
-//     cb(null, true); // continue with upload
-//   },
-// });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "./images");
+    },
+    filename(req, file, cb) {
+      cb(null, `${new Date().getTime()}_${file.originalname}`);
+    },
+  }),
+  limits: {
+    fileSize: 1000000, // max file size 1MB = 1000000 bytes
+  },
+  fileFilter(req, file, cb: any) {
+    if (!file.originalname.match(/\.(jpeg|jpg|png|svg)$/)) {
+      return cb(new Error("only upload files with jpg, jpeg, png, svg."));
+    }
+    cb(undefined, true); // continue with upload
+  },
+});
 
 //add stat
 
 router.post(
   "/",
   authMiddleware,
+  upload.single("file"),
   [
     body("weight", "Weight needs to be in range 35kg-250kg").isFloat({
       min: 35,
@@ -49,19 +46,18 @@ router.post(
         min: 100,
         max: 250,
       }),
-    body("fatPercentage", "Fat Percentage needs to be lower than 80%")
+    body("fatPercentage", "Fat Percentage needs to be lower than 40%")
       .optional()
       .isInt({
         min: 0,
-        max: 80,
+        max: 40,
       }),
     body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
       .optional()
       .isInt({
         min: 0,
-        max: 120,
+        max: 200,
       }),
-    body("bodyImageUrl", "Image is invalid").optional().isURL(),
   ],
   statsController.addStats
 );

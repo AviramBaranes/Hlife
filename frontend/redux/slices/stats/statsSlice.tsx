@@ -6,6 +6,7 @@ interface StatsSliceState {
   height: number;
   fatPercentage: number;
   musclesMass: number;
+  photo: null | File;
 }
 
 const initialState: StatsSliceState = {
@@ -14,6 +15,7 @@ const initialState: StatsSliceState = {
   height: 0,
   fatPercentage: 0,
   musclesMass: 0,
+  photo: null,
 };
 
 const statsSlice = createSlice({
@@ -30,6 +32,9 @@ const statsSlice = createSlice({
     },
     addMusclesMassField(state, { payload }) {
       state.musclesMass = payload.musclesMass;
+    },
+    addPhoto(state, { payload }) {
+      state.photo = payload.photo;
     },
   },
 });

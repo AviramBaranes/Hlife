@@ -14,7 +14,12 @@ const addStats = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);
         const { userId } = req;
-        const { weight, height, fatPercentage, musclesMass, bodyImageUrl } = req.body;
+        const { weight, height, fatPercentage, musclesMass } = req.body;
+        let bodyImageUrl;
+        if (req.file) {
+            const { path } = req.file;
+            bodyImageUrl = path.replace("\\", "/");
+        }
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
         if (!userGoals) {
             res.status(403).send("User's goals not found");
@@ -63,6 +68,7 @@ const addStats = async (req, res, next) => {
             .json({ messages, currentGrade: user.grade, accomplishments });
     }
     catch (err) {
+        console.log(err);
         catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };

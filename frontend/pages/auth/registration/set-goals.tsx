@@ -1,15 +1,10 @@
 import { GetServerSideProps } from "next";
-import router from "next/router";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/goalsFields/RequiredFields";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import { goalsActions } from "../../../redux/slices/goals/goalsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import { RootState } from "../../../redux/store/reduxStore";
-import axiosInstance from "../../../utils/axios/axiosInstance";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import {
   createGoalsFieldsProps,
@@ -64,7 +59,7 @@ const setGoals: React.FC = () => {
         basicGoal={basicGoal}
         shouldDisplay={shouldDisplayFatPercentageField}
         title="What is your desired fat percentage?"
-        buttonEvents={buttonEventsForFatPercentageField}
+        buttonsEvents={buttonEventsForFatPercentageField}
       />
 
       <MusclesMassField
@@ -72,7 +67,7 @@ const setGoals: React.FC = () => {
         basicGoal={basicGoal}
         shouldDisplay={shouldDisplayMusclesMassField}
         title="What is your desired muscles mass?"
-        buttonEvents={buttonEventsForMuscleMassField}
+        buttonsEvents={buttonEventsForMuscleMassField}
       />
     </>
   );

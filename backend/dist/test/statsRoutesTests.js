@@ -35,13 +35,13 @@ describe("post stats route", () => {
             height: 251,
             fatPercentage: 8.5,
             musclesMass: 34.5,
-            bodyImageUrl: "not a url",
         });
         const response = await supertest_1.default(app_1.default)
             .post("/stats")
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
+        console.log(response.body);
         chai_1.expect(response.statusCode).equal(422);
         chai_1.expect(response.body.message).equal("Validation Failed");
         chai_1.expect(response.body.data[0].value).equal(34);
@@ -52,8 +52,6 @@ describe("post stats route", () => {
         chai_1.expect(response.body.data[2].msg).equal("Fat Percentage needs to be lower than 80%");
         chai_1.expect(response.body.data[3].value).equal(34.5);
         chai_1.expect(response.body.data[3].msg).equal("Muscles mass needs to be in a range of 10kg-200kg");
-        chai_1.expect(response.body.data[4].value).equal("not a url");
-        chai_1.expect(response.body.data[4].msg).equal("Image is invalid");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");

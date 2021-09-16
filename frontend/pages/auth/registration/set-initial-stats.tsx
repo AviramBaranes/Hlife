@@ -1,15 +1,11 @@
 import { GetServerSideProps } from "next";
-import router from "next/router";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/statsFields/RequiredFields";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import { statsActions } from "../../../redux/slices/stats/statsSlice";
+import UploadImage from "../../../components/Registration/statsFields/UploadPhoto";
 import { RootState } from "../../../redux/store/reduxStore";
-import axiosInstance from "../../../utils/axios/axiosInstance";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import { createStatsProps } from "../../../utils/registration/stats/setInitialStatsHelpers";
 
@@ -17,29 +13,46 @@ const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
   //state
   const dispatch = useDispatch();
   const { statsReducer } = useSelector((state: RootState) => state);
-  const { fatPercentage, musclesMass, weight, rank, height } = statsReducer;
+  const { fatPercentage, musclesMass, weight, rank, height, photo } =
+    statsReducer;
   const [shouldSkipFatPercentage, setShouldSkipFatPercentage] = useState(false);
+  const [shouldSkipMusclesMass, setShouldSkipMusclesMass] = useState(false);
 
   //booleans
-  const displayRequiredFields = !(weight && rank);
+  const required = weight && rank;
+  const displayRequiredFields = !required;
   const shouldDisplayFatPercentageField = Boolean(
-    weight && rank && !fatPercentage && !shouldSkipFatPercentage
+    required && !fatPercentage && !shouldSkipFatPercentage
   );
   const shouldDisplayMusclesMassField = Boolean(
-    (weight && rank && fatPercentage) ||
-      (weight && rank && shouldSkipFatPercentage)
+    (required && fatPercentage && !shouldSkipMusclesMass && !musclesMass) ||
+      (required &&
+        shouldSkipFatPercentage &&
+        !shouldSkipMusclesMass &&
+        !musclesMass)
+  );
+  const shouldDisplayUploadPhotoField = Boolean(
+    (required && fatPercentage && musclesMass) ||
+      (required && fatPercentage && shouldSkipMusclesMass) ||
+      (required && shouldSkipFatPercentage && musclesMass) ||
+      (required && shouldSkipFatPercentage && shouldSkipMusclesMass)
   );
 
-  const { buttonEventsForFatPercentageField, buttonEventsForMuscleMassField } =
-    createStatsProps(
-      setShouldSkipFatPercentage,
-      dispatch,
-      rank,
-      weight,
-      musclesMass,
-      height,
-      fatPercentage
-    );
+  const {
+    buttonEventsForFatPercentageField,
+    buttonEventsForMuscleMassField,
+    buttonEventsForPhotoField,
+  } = createStatsProps(
+    setShouldSkipFatPercentage,
+    setShouldSkipMusclesMass,
+    dispatch,
+    rank,
+    weight,
+    musclesMass,
+    height,
+    fatPercentage,
+    photo
+  );
 
   return (
     <>
@@ -51,14 +64,19 @@ const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
         instructions="This field is optional"
         shouldDisplay={shouldDisplayFatPercentageField}
         title="What is your current fat percentage?"
-        buttonEvents={buttonEventsForFatPercentageField}
+        buttonsEvents={buttonEventsForFatPercentageField}
       />
 
       <MusclesMassField
         instructions="This field is optional"
         shouldDisplay={shouldDisplayMusclesMassField}
         title="What is your current muscles mass?"
-        buttonEvents={buttonEventsForMuscleMassField}
+        buttonsEvents={buttonEventsForMuscleMassField}
+      />
+
+      <UploadImage
+        buttonsEvents={buttonEventsForPhotoField}
+        shouldDisplay={shouldDisplayUploadPhotoField}
       />
     </>
   );

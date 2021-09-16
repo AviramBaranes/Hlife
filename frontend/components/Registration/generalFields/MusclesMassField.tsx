@@ -10,7 +10,7 @@ interface MusclesMassFieldProps {
   basicGoal?: string;
   shouldDisplay: boolean;
   title: string;
-  buttonEvents: {
+  buttonsEvents: {
     continue: (desiredMusclesMass: string) => void;
     skip: () => void;
   };
@@ -21,11 +21,11 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
   basicGoal,
   shouldDisplay,
   title,
-  buttonEvents,
+  buttonsEvents,
 }) => {
   const [desiredMusclesMass, setDesiredMusclesMass] = useState("50");
 
-  const allowedToSkip = basicGoal === "lose fat";
+  const allowedToSkip = basicGoal === "lose fat" || basicGoal === undefined;
 
   return (
     <section style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
@@ -43,7 +43,7 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
         <Button
           type="button"
           disabled={false}
-          clicked={() => buttonEvents.continue(desiredMusclesMass)}
+          clicked={() => buttonsEvents.continue(desiredMusclesMass)}
         >
           Continue
         </Button>
@@ -53,7 +53,7 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
           }}
           type="button"
           disabled={false}
-          clicked={buttonEvents.skip}
+          clicked={buttonsEvents.skip}
         >
           Skip
         </Button>
