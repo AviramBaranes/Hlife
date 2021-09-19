@@ -10,7 +10,7 @@ import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContai
 import MessageContainer from "../../../components/UI/containers/Messages/MessageContainer";
 import Router from "next/router";
 
-jest.mock("../../../redux/slices/auth");
+jest.mock("../../../redux/slices/auth/authSlice");
 jest.mock("next/router");
 
 describe("ForgotPasswordForm", () => {

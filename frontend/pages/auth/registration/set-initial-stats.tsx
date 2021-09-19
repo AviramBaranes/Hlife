@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/statsFields/RequiredFields";
-import UploadImage from "../../../components/Registration/statsFields/UploadPhoto";
+import UploadPhoto from "../../../components/Registration/statsFields/UploadPhoto";
 import { RootState } from "../../../redux/store/reduxStore";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import { createStatsProps } from "../../../utils/registration/stats/setInitialStatsHelpers";
 
-const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
+const SetInitialStats: React.FC = () => {
   //state
   const dispatch = useDispatch();
   const { statsReducer } = useSelector((state: RootState) => state);
@@ -50,15 +50,15 @@ const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
     weight,
     musclesMass,
     height,
-    fatPercentage,
-    photo
+    fatPercentage
   );
 
   return (
     <>
       <h1>Create your initial stats</h1>
       <p>This action will gain you 15 points!</p>
-      {<RequiredFields shouldDisplay={displayRequiredFields} />}
+
+      <RequiredFields shouldDisplay={displayRequiredFields} />
 
       <FatPercentageField
         instructions="This field is optional"
@@ -74,7 +74,7 @@ const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
         buttonsEvents={buttonEventsForMuscleMassField}
       />
 
-      <UploadImage
+      <UploadPhoto
         buttonsEvents={buttonEventsForPhotoField}
         shouldDisplay={shouldDisplayUploadPhotoField}
       />
@@ -82,14 +82,13 @@ const setStats: React.FC<{ displayRequiredFields: boolean }> = ({}) => {
   );
 };
 
-export default setStats;
+export default SetInitialStats;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
-
-  if (destination === "/auth/registration/set-stats") {
-    return { props: { displayRequiredFields: true } };
+  if (destination === "/auth/registration/set-initial-stats") {
+    return { props: {} };
   } else {
-    return { redirect: { destination }, props: {} };
+    return { redirect: { destination, permanent: false }, props: {} };
   }
 };

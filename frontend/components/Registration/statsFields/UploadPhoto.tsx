@@ -30,7 +30,6 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
   };
 
   const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("here");
     e.preventDefault();
     const { files } = e.target;
     setPhoto(files![0]);
@@ -51,6 +50,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         {photoSrc && <img src={photoSrc as any} />}
       </div>
       <input
+        data-testid="uploadPhotoInput"
         onChange={fileInputChangeHandler}
         style={{ display: "none" }}
         type="file"
@@ -66,7 +66,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         Continue
       </Button>
       <Button disabled={false} type="button" clicked={buttonsEvents.skip}>
-        skip
+        Skip
       </Button>
     </div>
   );

@@ -4,18 +4,18 @@ import { RootState } from "../../store/reduxStore";
 
 interface AuthSliceState {
   username: null | string;
-  hasProgram: undefined | boolean;
-  loading: undefined | boolean;
+  hasProgram: null | boolean;
+  loading: null | boolean;
   error: {};
-  isAuthenticated: undefined | boolean;
+  isAuthenticated: null | boolean;
 }
 
 const initialState: AuthSliceState = {
   username: null,
-  hasProgram: undefined,
-  loading: undefined,
+  hasProgram: null,
+  loading: null,
   error: {},
-  isAuthenticated: undefined,
+  isAuthenticated: null,
 };
 
 export const sendPasswordResetEmailAction = createAsyncThunk(
@@ -116,7 +116,7 @@ const usersSlice = createSlice({
   reducers: {
     changeLoadingState(state, { payload }) {
       const { loading } = payload;
-      if (loading === false || loading === true || loading === undefined) {
+      if (loading === false || loading === true || loading === null) {
         state.loading = loading;
       }
     },
@@ -188,8 +188,8 @@ const usersSlice = createSlice({
     });
     builder.addCase(logoutAction.fulfilled, (state) => {
       state.username = "";
-      state.hasProgram = undefined;
-      state.loading = undefined;
+      state.hasProgram = null;
+      state.loading = null;
       state.error = {};
       state.isAuthenticated = false;
     });

@@ -30,19 +30,20 @@ export const getDisplayRequirements = (
   return result;
 };
 
+let fatPercentage: number; // keep track on fat percentage for the last call
 export const createGoalsFieldsProps = (
   setShouldSkipFatPercentage: React.Dispatch<React.SetStateAction<boolean>>,
   dispatch: Dispatch<any>,
   basicGoal: string,
-  desiredWeight: number | null,
-  desiredMusclesMass: number | null,
-  desiredFatPercentage: number | null
+  desiredWeight: number | null
 ) => {
+  let musclesMass: number;
   const buttonEventsForFatPercentageField = {
     skip() {
       setShouldSkipFatPercentage(true);
     },
-    continue(desiredFatPercentage: string) {
+    continue(desiredFatPercentage: number) {
+      fatPercentage = desiredFatPercentage;
       dispatch(goalsActions.addFatPercentageField({ desiredFatPercentage }));
     },
   };
@@ -50,7 +51,8 @@ export const createGoalsFieldsProps = (
     skip: async () => {
       await submitGoalsHandler();
     },
-    continue: async (desiredMusclesMass: string) => {
+    continue: async (desiredMusclesMass: number) => {
+      musclesMass = desiredMusclesMass;
       dispatch(goalsActions.addMusclesMassField({ desiredMusclesMass }));
       await submitGoalsHandler();
     },
@@ -63,6 +65,7 @@ export const createGoalsFieldsProps = (
     basicGoal === "lose fat"
       ? "This field is optional"
       : "This field is required";
+
   const submitGoalsHandler = async () => {
     const bodyRequest = {
       basicGoal,
@@ -74,8 +77,8 @@ export const createGoalsFieldsProps = (
       fatPercentage: undefined | number;
     };
 
-    if (desiredMusclesMass) bodyRequest.musclesMass = desiredMusclesMass;
-    if (desiredFatPercentage) bodyRequest.fatPercentage = desiredFatPercentage;
+    if (musclesMass) bodyRequest.musclesMass = musclesMass;
+    if (fatPercentage) bodyRequest.fatPercentage = fatPercentage;
 
     try {
       const res = await axiosInstance.post("/goals", bodyRequest);

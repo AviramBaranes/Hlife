@@ -22,6 +22,14 @@ const statsSlice = createSlice({
   name: "stats",
   initialState,
   reducers: {
+    resetState(state) {
+      state.rank = initialState.rank;
+      state.weight = initialState.weight;
+      state.height = initialState.height;
+      state.fatPercentage = initialState.fatPercentage;
+      state.musclesMass = initialState.musclesMass;
+      state.photo = initialState.photo;
+    },
     addRequiredFields(state, { payload }) {
       state.rank = payload.rank;
       state.weight = payload.weight;

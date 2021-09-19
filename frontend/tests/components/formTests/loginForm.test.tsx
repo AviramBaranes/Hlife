@@ -11,7 +11,7 @@ import MessageContainer from "../../../components/UI/containers/Messages/Message
 import Router from "next/router";
 
 jest.mock("next/router");
-jest.mock("../../../redux/slices/auth");
+jest.mock("../../../redux/slices/auth/authSlice");
 
 describe("LoginForm", () => {
   let spiedRouter: jest.SpyInstance<any, any>;

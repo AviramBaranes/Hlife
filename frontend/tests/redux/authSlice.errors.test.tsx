@@ -30,7 +30,7 @@ describe("Auth slice errors tests", () => {
   test("should not change the state ", async () => {
     store.dispatch(usersActions.changeLoadingState({ loading: "string" }));
 
-    expect(store.getState().usersReducer.loading).toBe(undefined);
+    expect(store.getState().usersReducer.loading).toBe(null);
   });
   test("should change loading state when sends reset email fails", async () => {
     store.dispatch(sendPasswordResetEmailAction(""));
@@ -75,7 +75,7 @@ describe("Auth slice errors tests", () => {
     });
   });
   test("should change the state when validateAuthenticationAction is fails", async () => {
-    store.dispatch(usersActions.changeLoadingState({ loading: undefined }));
+    store.dispatch(usersActions.changeLoadingState({ loading: null }));
     store.dispatch(validateAuthenticationAction());
 
     await waitFor(() => {

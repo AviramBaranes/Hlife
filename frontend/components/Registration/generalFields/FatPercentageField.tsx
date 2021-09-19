@@ -13,7 +13,7 @@ interface FatPercentageFieldProps {
   title: string;
   buttonsEvents: {
     skip: () => void;
-    continue: (desiredFatPercentage: string) => void;
+    continue: (desiredFatPercentage: number) => void;
   };
 }
 
@@ -25,6 +25,7 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
   buttonsEvents,
 }) => {
   const [desiredFatPercentage, setDesiredFatPercentage] = useState("15");
+  const [inputTouched, setInputTouched] = useState(false);
   const [currentImage, setCurrentImage] = useState(personFat_15);
 
   const allowedToSkip =
@@ -35,24 +36,23 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
       <h3>{title}</h3>
       <p>{instructions}</p>
       <RangeInput
+        testId="fatPercentageInput"
         min="5"
         max="40"
         step="5"
         value={desiredFatPercentage}
-        onChange={(event) =>
-          fatPercentageChangeHandler(
-            event,
-            setDesiredFatPercentage,
-            setCurrentImage
-          )
-        }
+        onChange={(event) => {
+          setInputTouched(true);
+          setDesiredFatPercentage(event.target.value);
+          fatPercentageChangeHandler(event, setCurrentImage);
+        }}
       />
-      <Image src={currentImage} />
+      {currentImage && <Image src={currentImage} />}
       <div>
         <Button
           type="button"
-          disabled={false}
-          clicked={() => buttonsEvents.continue(desiredFatPercentage)}
+          disabled={!inputTouched}
+          clicked={() => buttonsEvents.continue(+desiredFatPercentage)}
         >
           Continue
         </Button>
@@ -61,7 +61,7 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
             style: { display: `${allowedToSkip ? "block" : "none"}` },
           }}
           type="button"
-          disabled={false}
+          disabled={!allowedToSkip}
           clicked={buttonsEvents.skip}
         >
           Skip

@@ -61,8 +61,8 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
   const submitFieldsHandler = () => {
     dispatch(
       statsActions.addRequiredFields({
-        weight: weight.value,
-        height: height.value,
+        weight: +weight.value,
+        height: +height.value,
         rank,
       })
     );
@@ -98,6 +98,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
           touched={weight.touched}
           htmlFor="weight"
         />
+
         <Input
           label="Height"
           type="text"

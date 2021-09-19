@@ -20,8 +20,26 @@ export const createStatsProps = (
     skip() {
       setShouldSkipFatPercentage(true);
     },
-    continue(fatPercentage: string) {
+    continue(fatPercentage: number) {
       dispatch(statsActions.addFatPercentageField({ fatPercentage }));
+    },
+  };
+
+  const buttonEventsForMuscleMassField = {
+    skip: async () => {
+      setShouldSkipMusclesMass(true);
+    },
+    continue: async (musclesMass: number) => {
+      dispatch(statsActions.addMusclesMassField({ musclesMass }));
+    },
+  };
+
+  const buttonEventsForPhotoField = {
+    skip: async () => {
+      await submitInitialStatsHandler();
+    },
+    continue: async (photo: File) => {
+      await submitInitialStatsHandler(photo);
     },
   };
 
@@ -36,12 +54,8 @@ export const createStatsProps = (
         formData.append("fatPercentage", fatPercentage.toString());
       if (photo) formData.append("file", photo);
 
-      console.log(formData.get("file"));
-
       await axiosInstance.post("/stats/set-ranking", { selfRank: rank });
-      const res = await axiosInstance.post("/stats", formData, {
-        headers: { "content-type": "multipart/form-data" },
-      });
+      const res = await axiosInstance.post("/stats", formData);
 
       dispatch(
         messagesActions.newMessage({
@@ -60,24 +74,6 @@ export const createStatsProps = (
         })
       );
     }
-  };
-
-  const buttonEventsForMuscleMassField = {
-    skip: async () => {
-      setShouldSkipMusclesMass(true);
-    },
-    continue: async (musclesMass: string) => {
-      dispatch(statsActions.addMusclesMassField({ musclesMass }));
-    },
-  };
-
-  const buttonEventsForPhotoField = {
-    skip: async () => {
-      await submitInitialStatsHandler();
-    },
-    continue: async (photo: File) => {
-      await submitInitialStatsHandler(photo);
-    },
   };
 
   return {

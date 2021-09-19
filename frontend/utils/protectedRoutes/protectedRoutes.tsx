@@ -16,11 +16,10 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
 
     if (!isAuthenticated) {
       destination = "/auth/login";
-    }
-    if (!hasGoals) {
+    } else if (!hasGoals) {
       destination = "/auth/registration/set-goals";
     } else if (!hasInitialStats) {
-      destination = "/auth/registration/set-stats";
+      destination = "/auth/registration/set-initial-stats";
     } else if (!hasProgram) {
       destination = "/auth/registration/set-program";
     } else {

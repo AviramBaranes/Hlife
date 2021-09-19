@@ -11,7 +11,7 @@ interface MusclesMassFieldProps {
   shouldDisplay: boolean;
   title: string;
   buttonsEvents: {
-    continue: (desiredMusclesMass: string) => void;
+    continue: (desiredMusclesMass: number) => void;
     skip: () => void;
   };
 }
@@ -24,6 +24,7 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
   buttonsEvents,
 }) => {
   const [desiredMusclesMass, setDesiredMusclesMass] = useState("50");
+  const [inputTouched, setInputTouched] = useState(false);
 
   const allowedToSkip = basicGoal === "lose fat" || basicGoal === undefined;
 
@@ -32,18 +33,22 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
       <h3>{title}</h3>
       <p>{instructions}</p>
       <RangeInput
+        testId="musclesMassInput"
         min="25"
         max="125"
         step="5"
         value={desiredMusclesMass}
-        onChange={(e) => setDesiredMusclesMass(e.target.value)}
+        onChange={(e) => {
+          setDesiredMusclesMass(e.target.value);
+          setInputTouched(true);
+        }}
       />
-      <Image src={bodyBuilderImage} />
+      {bodyBuilderImage && <Image src={bodyBuilderImage} />}
       <div>
         <Button
           type="button"
-          disabled={false}
-          clicked={() => buttonsEvents.continue(desiredMusclesMass)}
+          disabled={!inputTouched}
+          clicked={() => buttonsEvents.continue(+desiredMusclesMass)}
         >
           Continue
         </Button>
@@ -52,7 +57,7 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
             style: { display: `${allowedToSkip ? "block" : "none"}` },
           }}
           type="button"
-          disabled={false}
+          disabled={!allowedToSkip}
           clicked={buttonsEvents.skip}
         >
           Skip

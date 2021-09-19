@@ -8,7 +8,7 @@ import store from "../../../redux/store/reduxStore";
 import Logout from "../../../components/auth/logout/Logout";
 import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 
-jest.mock("../../../redux/slices/auth");
+jest.mock("../../../redux/slices/auth/authSlice");
 jest.unmock("react-redux");
 
 describe("Logout", () => {

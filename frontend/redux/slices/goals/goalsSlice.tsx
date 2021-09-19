@@ -18,6 +18,12 @@ const goalsSlice = createSlice({
   name: "goals",
   initialState,
   reducers: {
+    resetState(state) {
+      state.basicGoal = initialState.basicGoal;
+      state.desiredFatPercentage = initialState.desiredFatPercentage;
+      state.desiredMusclesMass = initialState.desiredMusclesMass;
+      state.desiredWeight = initialState.desiredWeight;
+    },
     addRequiredFields(state, { payload }) {
       state.basicGoal = payload.basicGoal;
       state.desiredWeight = payload.desiredWeight;

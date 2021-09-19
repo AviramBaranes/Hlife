@@ -15,8 +15,10 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
 
   const [basicGoal, setBasicGoal] = useState("");
   const [desiredWeight, setDesiredWeight] = useState("80");
+  const [touched, setTouched] = useState(false);
 
   const rangeChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTouched(true);
     setDesiredWeight(e.target.value);
   };
 
@@ -34,7 +36,12 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
   };
 
   const submitFieldsHandler = () => {
-    dispatch(goalsActions.addRequiredFields({ basicGoal, desiredWeight }));
+    dispatch(
+      goalsActions.addRequiredFields({
+        basicGoal,
+        desiredWeight: +desiredWeight,
+      })
+    );
   };
 
   return (
@@ -46,11 +53,11 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
         <div>
           <div onClick={basicGoalChangeHandler}>
             <h4>Lose Fat</h4>
-            <Image src={slimBody} />
+            {slimBody && <Image src={slimBody} />}
           </div>
           <div onClick={basicGoalChangeHandler}>
             <h4>Gain Muscle</h4>
-            <Image src={muscleBody} />
+            {muscleBody && <Image src={muscleBody} />}
           </div>
         </div>
         <div>
@@ -58,7 +65,9 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             What is your desired weight?<span>*</span>
           </h4>
           <RangeInput
+            testId="goalsRequiredFields"
             min="30"
+            name="desired-weight"
             max="225"
             step="5"
             value={desiredWeight}
@@ -66,7 +75,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
           />
         </div>
         <Button
-          disabled={!basicGoal}
+          disabled={!basicGoal && !touched}
           type="button"
           clicked={submitFieldsHandler}
         >

@@ -14,8 +14,9 @@ import {
 const setGoals: React.FC = () => {
   //state
   const dispatch = useDispatch();
-  const { basicGoal, desiredFatPercentage, desiredWeight, desiredMusclesMass } =
-    useSelector((state: RootState) => state.goalsReducer);
+  const { basicGoal, desiredFatPercentage, desiredWeight } = useSelector(
+    (state: RootState) => state.goalsReducer
+  );
   const [shouldSkipFatPercentage, setShouldSkipFatPercentage] = useState(false);
 
   //booleans
@@ -40,11 +41,8 @@ const setGoals: React.FC = () => {
     setShouldSkipFatPercentage,
     dispatch,
     basicGoal,
-    desiredWeight,
-    desiredMusclesMass,
-    desiredFatPercentage
+    desiredWeight
   );
-
   return (
     <>
       <h1>Create Your Goals</h1>
@@ -80,11 +78,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   if (destination === "/auth/registration/set-goals") {
     return {
-      props: {
-        shouldDisplayRequiredFields: true,
-        shouldDisplayFatPercentageField: true,
-        shouldDisplayMusclesMassField: true,
-      },
+      props: {},
     };
   } else
     return {

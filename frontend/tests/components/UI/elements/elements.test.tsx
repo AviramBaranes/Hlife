@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/extend-expect";
 import { screen, render } from "@testing-library/react";
 
-import { Button, Input } from "./exports/index";
+import { Button, Input, RangeInput } from "./exports/index";
 
 describe("Button tests", () => {
   test("should render the custom button correctly", () => {
@@ -19,7 +19,7 @@ describe("Button tests", () => {
   });
 });
 
-describe("Input tests", () => {
+describe("Normal Input tests", () => {
   test("should render the Input component as valid (if didn't touched & invalid false)", () => {
     const props = {
       touched: false,
@@ -71,5 +71,28 @@ describe("Input tests", () => {
     expect(labelElement).toBeInTheDocument();
     expect(container.children[0].children[0].className).toBe("Label");
     expect(container.children[0].children[1].className).toBe("Input InValid");
+  });
+});
+
+describe("Range Input tests", () => {
+  test("should render the Input component as valid (if didn't touched & invalid false)", () => {
+    const props = {
+      min: "10",
+      max: "100",
+      step: "20",
+      value: "50",
+      testId: "12345",
+      onChange: () => {},
+    } as any;
+
+    render(<RangeInput {...props} />);
+
+    const inputElement = screen.getByTestId("12345");
+    const minText = screen.getByText("10");
+    const maxText = screen.getByText("100");
+
+    expect(inputElement).toBeInTheDocument();
+    expect(minText).toBeInTheDocument();
+    expect(maxText).toBeInTheDocument();
   });
 });

@@ -38,11 +38,11 @@ describe("Auth slice tests", () => {
   test("should have the right initialState", () => {
     const initialState = store.getState().usersReducer;
     const expectedInitialState = {
-      username: "",
-      hasProgram: undefined,
-      loading: undefined,
+      username: null,
+      hasProgram: null,
+      loading: null,
       error: {},
-      isAuthenticated: false,
+      isAuthenticated: null,
     };
     expect(initialState).toStrictEqual(expectedInitialState);
   });
@@ -96,7 +96,7 @@ describe("Auth slice tests", () => {
     });
   });
   test("should change the state when validateAuthenticationAction is called", async () => {
-    store.dispatch(usersActions.changeLoadingState({ loading: undefined }));
+    store.dispatch(usersActions.changeLoadingState({ loading: null }));
     store.dispatch(validateAuthenticationAction());
 
     const expectedState = {
@@ -120,8 +120,8 @@ describe("Auth slice tests", () => {
 
     const expectedState = {
       username: "",
-      hasProgram: undefined,
-      loading: undefined,
+      hasProgram: null,
+      loading: null,
       error: {},
       isAuthenticated: false,
     };

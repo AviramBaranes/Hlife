@@ -2,11 +2,8 @@ import React from "react";
 
 export const fatPercentageChangeHandler = async (
   event: React.ChangeEvent<HTMLInputElement>,
-  setDesiredFatPercentage: React.Dispatch<React.SetStateAction<string>>,
   setCurrentImage: React.Dispatch<React.SetStateAction<StaticImageData>>
 ) => {
-  setDesiredFatPercentage(event.target.value);
-
   let image: StaticImageData | unknown;
   switch (event.target.value) {
     case "5":
