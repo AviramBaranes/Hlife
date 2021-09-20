@@ -282,12 +282,14 @@ export const validateUser: RequestHandler = async (req, res, next) => {
 
     const user = (await User.findById(userId)) as UserType;
 
-    const { hasProgram, username, hasGoals, hasInitialStats } = user;
+    const { hasProgram, username, hasGoals, hasInitialStats, hasAllWorkouts } =
+      user;
 
     res.status(200).json({
       isAuthenticated: true,
       hasProgram,
       hasInitialStats,
+      hasAllWorkouts,
       hasGoals,
       username,
     });

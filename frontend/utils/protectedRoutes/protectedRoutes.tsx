@@ -12,7 +12,13 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
       },
     });
 
-    const { isAuthenticated, hasProgram, hasInitialStats, hasGoals } = data;
+    const {
+      isAuthenticated,
+      hasProgram,
+      hasInitialStats,
+      hasGoals,
+      hasAllWorkouts,
+    } = data;
 
     if (!isAuthenticated) {
       destination = "/auth/login";
@@ -20,8 +26,12 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
       destination = "/auth/registration/set-goals";
     } else if (!hasInitialStats) {
       destination = "/auth/registration/set-initial-stats";
+    } else if (!cookies.choseAWorkout) {
+      destination = "/auth/registration/choose-workout";
+    } else if (!hasAllWorkouts) {
+      destination = "/auth/registration/create-workout";
     } else if (!hasProgram) {
-      destination = "/auth/registration/set-program";
+      destination = "/auth/registration/schedule-program";
     } else {
       destination = "/";
     }

@@ -129,9 +129,9 @@ export const calculateMaleRecommendationProgram = (
       case "Intermediate":
         return [{ workoutName: "AB", timesPerWeek: 4 }];
       case "Advanced":
-        return [{ workoutName: "ABC", timesPerWeek: 6 }];
+        return [{ workoutName: "ABC", timesPerWeek: 5 }];
       case "Pro":
-        return [{ workoutName: "ABCD", timesPerWeek: 6 }];
+        return [{ workoutName: "ABCD", timesPerWeek: 4 }];
     }
   }
 

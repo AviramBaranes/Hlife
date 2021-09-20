@@ -64,7 +64,7 @@ export const getRecommendationProgram: RequestHandler = async (
     }
 
     res.status(200).json(recommendation);
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -168,7 +168,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
 
     res.status(201).send("Program added successfully");
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -199,7 +199,7 @@ export const getAllPrograms: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(program.program);
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -234,7 +234,7 @@ export const getProgram: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(requestedProgram);
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };
@@ -303,7 +303,7 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
 
     res.status(201).send("Program updated successfully");
     return;
-  } catch (err) {
+  } catch (err: any) {
     catchErrorHandler(err, next);
   }
 };

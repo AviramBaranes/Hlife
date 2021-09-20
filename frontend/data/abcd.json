@@ -1,0 +1,4 @@
+{
+  "description": "Separate your program to 4 groups of workouts.\nGroup A:  Chest.\nGroup B: Back.\nGroup C: Legs.\nGroup D: Shoulders, Triceps, Biceps, Abs.",
+  "order": "A,X,B,X,C,X,D"
+}

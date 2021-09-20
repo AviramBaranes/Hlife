@@ -28,6 +28,8 @@ const UserSchema = new Schema({
 
   hasInitialStats: { type: Boolean, default: false },
 
+  hasAllWorkouts: { type: Boolean, default: false },
+
   workouts: [
     {
       trainingDayName: {
@@ -63,6 +65,7 @@ export interface UserType extends Document {
   dateOfBirth: Date;
   grade: number;
   hasProgram: boolean;
+  hasAllWorkouts: boolean;
   hasGoals: boolean;
   hasInitialStats: boolean;
   workouts: Workout[] | undefined;
