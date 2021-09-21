@@ -44,9 +44,13 @@ app.use(express_mongo_sanitize_1.default({
 app.use(limiter); // Protect the system against brute force
 app.get("/", csrfProtection, function (req, res) {
     res.cookie("XSRF-TOKEN", req.csrfToken());
-    res.send("SET");
+    res.end();
 });
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
+app.get("/chose-workout", (req, res, next) => {
+    res.cookie("choseWorkout", true);
+    res.end();
+});
 app.use("/auth", auth_1.default);
 app.use("/goals", goals_1.default);
 app.use("/stats", stats_1.default);

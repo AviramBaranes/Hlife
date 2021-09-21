@@ -58,10 +58,14 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 app.get("/", csrfProtection, function (req: Request, res: any) {
   res.cookie("XSRF-TOKEN", req.csrfToken());
-  res.send("SET");
+  res.end();
 });
-
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
+
+app.get("/chose-workout", (req, res, next) => {
+  res.cookie("choseWorkout", true);
+  res.end();
+});
 
 app.use("/auth", authRoute);
 app.use("/goals", goalsRoute);

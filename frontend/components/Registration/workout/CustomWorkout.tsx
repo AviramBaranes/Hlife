@@ -1,5 +1,8 @@
 import router from "next/router";
 import React, { SetStateAction, useReducer } from "react";
+import { useDispatch } from "react-redux";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import axiosInstance from "../../../utils/axios/axiosInstance";
 import Button from "../../UI/Button/Button";
 
 interface FormState {
@@ -38,6 +41,8 @@ const formInitialState: FormState = {
 const CustomWorkout: React.FC<{
   setDisplay: React.Dispatch<SetStateAction<boolean>>;
 }> = ({ setDisplay }) => {
+  //
+  const dispatch = useDispatch();
   const [formState, dispatchFormAction] = useReducer(
     formReducer,
     formInitialState
@@ -63,18 +68,27 @@ const CustomWorkout: React.FC<{
     dispatchFormAction({ type: "FORM_VALIDITY" });
   };
 
-  const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const formSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     dispatchFormAction({ type: "FORM_VALIDITY" });
 
     if (!formState.isFormValid) return;
+    try {
+      await axiosInstance.get("/chose-workout");
 
-    document.cookie = document.cookie + "choseWorkout=true; ";
-    localStorage.setItem("programStyle", formState.programStyle);
-    localStorage.setItem("timesPerWeek", formState.timesPerWeek.toString());
+      localStorage.setItem("programStyle", formState.programStyle);
+      localStorage.setItem("timesPerWeek", formState.timesPerWeek.toString());
 
-    router.push("/auth/registration/create-workout");
+      // router.push("/auth/registration/create-workout");
+    } catch (err) {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Something went wrong",
+          errorMessage: "Try to refresh",
+        })
+      );
+    }
   };
 
   const backBtnClickedHandler = () => {};
@@ -104,12 +118,11 @@ const CustomWorkout: React.FC<{
           max={7}
           step={1}
         />
-        <label htmlFor="description">Description:</label>
         <Button type="submit" disabled={!formState.isFormValid}>
           Continue
         </Button>
       </form>
-      <Button disabled={false} type="button" clicked={() => setDisplay(false)}>
+      <Button disabled={false} type="button" clicked={() => setDisplay(true)}>
         Back
       </Button>
     </div>

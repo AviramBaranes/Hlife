@@ -1,6 +1,9 @@
 import router from "next/router";
 import React, { Dispatch } from "react";
+import { useDispatch } from "react-redux";
 import Button from "../../../components/UI/Button/Button";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import axiosInstance from "../../../utils/axios/axiosInstance";
 
 interface ChooseWorkoutProps {
   programStyle: string;
@@ -19,12 +22,24 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   order,
   setDisplay,
 }) => {
-  const ConfirmBtnHandler = () => {
-    document.cookie = document.cookie + "choseWorkout=true; ";
-    localStorage.setItem("programStyle", programStyle);
-    localStorage.setItem("timesPerWeek", workoutDaysPerWeek.toString());
+  const dispatch = useDispatch();
+  const ConfirmBtnHandler = async () => {
+    try {
+      await axiosInstance.get("/chose-workout");
 
-    router.push("/auth/registration/create-workout");
+      localStorage.setItem("programStyle", programStyle);
+      localStorage.setItem("timesPerWeek", workoutDaysPerWeek.toString());
+      localStorage.setItem("order", order);
+
+      // router.push("/auth/registration/create-workout");
+    } catch (err) {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Something went wrong",
+          errorMessage: "Try to refresh",
+        })
+      );
+    }
   };
 
   return (

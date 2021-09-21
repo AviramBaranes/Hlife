@@ -11,12 +11,13 @@ export const calculateRecommendationWorkout = async (cookies: {
         Cookie: `jon=${cookies.jon}; _csrf=${cookies._csrf}; XSRF-TOKEN=${cookies["XSRF-TOKEN"]}`,
       },
     });
+
     if (data.length > 1) {
       const aerobicJsonData = await fs.promises.readFile(
-        path.join(__dirname, "data", "aerobic.json")
+        path.join(process.cwd(), "data", "aerobic.json")
       );
       const fbJsonData = await fs.promises.readFile(
-        path.join(__dirname, "data", "fb.json")
+        path.join(process.cwd(), "data", "fb.json")
       );
       const aerobicParsedData = JSON.parse(aerobicJsonData.toString());
       const fbParsedData = JSON.parse(fbJsonData.toString());
@@ -36,22 +37,22 @@ export const calculateRecommendationWorkout = async (cookies: {
         timesPerWeek: number;
       };
       const jsonData = await fs.promises.readFile(
-        path.join(__dirname, "data", `${workoutName.toLowerCase()}.json`)
+        path.join(process.cwd(), "data", `${workoutName.toLowerCase()}.json`)
       );
       const parsedData = JSON.parse(jsonData.toString());
 
       let order = parsedData.order;
 
-      if (workoutName === "FB") {
+      if (workoutName === "FB" || workoutName === "aerobic") {
         switch (timesPerWeek) {
           case 1:
-            order = "FB,X,X,X,X,X,X";
+            order = `${workoutName},X,X,X,X,X,X`;
             break;
           case 2:
-            order = "FB,X,X,FB,X,X,X";
+            order = `${workoutName},X,X,${workoutName},X,X,X`;
             break;
           case 3:
-            order = "FB,X,FB,X,FB,X,X";
+            order = `${workoutName},X,${workoutName},X,${workoutName},X,X`;
             break;
         }
       }
