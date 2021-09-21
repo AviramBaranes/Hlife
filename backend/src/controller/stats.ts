@@ -93,7 +93,6 @@ export const addStats: RequestHandler = async (req, res, next) => {
       .status(201)
       .json({ messages, currentGrade: user.grade, accomplishments });
   } catch (err: any) {
-    console.log(err);
     catchErrorHandler(err, next);
   }
 };

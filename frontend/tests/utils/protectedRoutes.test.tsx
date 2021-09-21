@@ -27,14 +27,27 @@ describe("protected routes tests", () => {
         data: { isAuthenticated: true, hasGoals: true, hasInitialStats: true },
       }))
       .mockImplementationOnce(async () => ({
+        data: { isAuthenticated: true, hasGoals: true, hasInitialStats: true },
+      }))
+      .mockImplementationOnce(async () => ({
         data: {
           isAuthenticated: true,
           hasGoals: true,
+          hasInitialStats: true,
+          hasAllWorkouts: true,
+        },
+      }))
+      .mockImplementationOnce(async () => ({
+        data: {
+          isAuthenticated: true,
+          hasGoals: true,
+          hasAllWorkouts: true,
           hasInitialStats: true,
           hasProgram: true,
         },
       }));
   });
+
   afterAll(() => {
     jest.resetAllMocks();
   });
@@ -58,14 +71,22 @@ describe("protected routes tests", () => {
     expect(path).toEqual("/auth/registration/set-goals");
   });
 
-  test("should return '/auth/registration/set-stats' user with no stats", async () => {
+  test("should return '/auth/registration/set-initial-stats' user with no stats", async () => {
     const path = await protectRouteHandler("" as any);
     expect(path).toEqual("/auth/registration/set-initial-stats");
   });
 
-  test("should return '/auth/registration/set-program' for user with no program", async () => {
+  test("should return '/auth/registration/choose-workout' user with no stats", async () => {
     const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/set-program");
+    expect(path).toEqual("/auth/registration/choose-workout");
+  });
+  test("should return '/auth/registration/create-workout' user with no stats", async () => {
+    const path = await protectRouteHandler("" as any);
+    expect(path).toEqual("/auth/registration/create-workout");
+  });
+  test("should return '/auth/registration/schedule-program' for user with no program", async () => {
+    const path = await protectRouteHandler("" as any);
+    expect(path).toEqual("/auth/registration/schedule-program");
   });
 
   test("should return '/' for user with full program", async () => {

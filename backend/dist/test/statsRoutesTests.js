@@ -41,7 +41,6 @@ describe("post stats route", () => {
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
-        console.log(response.body);
         chai_1.expect(response.statusCode).equal(422);
         chai_1.expect(response.body.message).equal("Validation Failed");
         chai_1.expect(response.body.data[0].value).equal(34);
@@ -49,7 +48,7 @@ describe("post stats route", () => {
         chai_1.expect(response.body.data[1].value).equal(251);
         chai_1.expect(response.body.data[1].msg).equal("Height needs to be in a range of 100cm-250cm");
         chai_1.expect(response.body.data[2].value).equal(8.5);
-        chai_1.expect(response.body.data[2].msg).equal("Fat Percentage needs to be lower than 80%");
+        chai_1.expect(response.body.data[2].msg).equal("Fat Percentage needs to be lower than 40%");
         chai_1.expect(response.body.data[3].value).equal(34.5);
         chai_1.expect(response.body.data[3].msg).equal("Muscles mass needs to be in a range of 10kg-200kg");
     });
@@ -59,7 +58,7 @@ describe("post stats route", () => {
         const payload = JSON.stringify({
             weight: 35,
             height: 250,
-            fatPercentage: 75,
+            fatPercentage: 35,
             musclesMass: 34,
         });
         const response = await supertest_1.default(app_1.default)
@@ -200,7 +199,7 @@ describe("delete last stats route", () => {
         stubedPhysicalStatsModel.restore();
     });
 });
-describe("post stats route", () => {
+describe("post ranking route", () => {
     it("should send an error response if unauthorized", async () => {
         const response = await supertest_1.default(app_1.default).post("/stats/set-ranking");
         chai_1.expect(response.statusCode).equal(401);

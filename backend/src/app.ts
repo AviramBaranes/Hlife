@@ -73,7 +73,6 @@ app.use("/program-exec", programExecRoute);
 app.use(
   (error: CustomError, req: Request, res: Response, next: NextFunction) => {
     let { statusCode, message, data } = error;
-    console.log(error);
     if (!statusCode) statusCode = 500;
     if (!message) message = "Server Error";
     if (!data) data = null;

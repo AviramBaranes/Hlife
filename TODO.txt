@@ -1,9 +1,6 @@
-1.tests
-
 2.continue registration:
-    A: recommendations calc in server side props
-    B: custom program page
-    C: create workout according to program
-    D: schedule program
-    E: ux when redirect (maybe via props in backend)
-3.style
+    A: create workout according to program
+    B: schedule program
+    C: ux when redirect (maybe via props in backend)
+3.tests
+4.style

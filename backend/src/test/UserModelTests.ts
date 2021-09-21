@@ -2,15 +2,11 @@ import { expect } from "chai";
 
 import User, { UserType } from "../models/User";
 
-type ValidationError = {
-  errors: { [key: string]: { properties: { message: string } } };
-};
-
 describe("User model tests", () => {
   it("should be invalid if required fields are empty", () => {
     const user = new User({});
 
-    user.validate((err: ValidationError) => {
+    user.validate((err: any) => {
       expect(err.errors.name.properties.message).equal(
         "Path `name` is required."
       );
@@ -36,7 +32,7 @@ describe("User model tests", () => {
     };
     const user = new User(userFields);
 
-    user.validate((err: ValidationError) => {
+    user.validate((err: any) => {
       expect(err.errors.gender.properties.message).equal(
         "`-` is not a valid enum value for path `gender`."
       );
@@ -59,9 +55,9 @@ describe("User model tests", () => {
       dateOfBirth: "01/01/2005",
     };
 
-    const user = new User(userFields);
+    const user = new User(userFields) as UserType;
 
-    user.validate((err: ValidationError) => {
+    user.validate((err: any) => {
       expect(err).equal(null);
     });
 

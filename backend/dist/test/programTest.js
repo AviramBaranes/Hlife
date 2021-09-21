@@ -74,7 +74,6 @@ describe("get program recommendation endpoint test ", () => {
         stubedGoalsModel.returns({ basicGoal: "lose fat" });
         stubedStatsModel.returns({ rank: "Pro" });
         await programController.getRecommendationProgram(req, res, () => { });
-        console.log(res.jsonObj);
         chai_1.expect(res.statusCode).equal(200);
         chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
         chai_1.expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
@@ -84,7 +83,6 @@ describe("get program recommendation endpoint test ", () => {
         stubedGoalsModel.returns({ basicGoal: "lose fat" });
         stubedStatsModel.returns({ rank: "Advanced" });
         await programController.getRecommendationProgram(req, res, () => { });
-        console.log(res.jsonObj);
         chai_1.expect(res.statusCode).equal(200);
         chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
     });
@@ -93,7 +91,6 @@ describe("get program recommendation endpoint test ", () => {
         stubedGoalsModel.returns({ basicGoal: "lose fat" });
         stubedStatsModel.returns({ rank: "Pro" });
         await programController.getRecommendationProgram(req, res, () => { });
-        console.log(res.jsonObj);
         chai_1.expect(res.statusCode).equal(200);
         chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
         chai_1.expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
@@ -103,7 +100,6 @@ describe("get program recommendation endpoint test ", () => {
         stubedGoalsModel.returns({ basicGoal: "lose fat" });
         stubedStatsModel.returns({ rank: "Beginner" });
         await programController.getRecommendationProgram(req, res, () => { });
-        console.log(res.jsonObj);
         chai_1.expect(res.statusCode).equal(200);
         chai_1.expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 2 });
     });
@@ -112,9 +108,8 @@ describe("get program recommendation endpoint test ", () => {
         stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
         stubedStatsModel.returns({ rank: "Pro" });
         await programController.getRecommendationProgram(req, res, () => { });
-        console.log(res.jsonObj);
         chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 6 });
+        chai_1.expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 4 });
     });
 });
 describe("create program endpoint test", () => {

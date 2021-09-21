@@ -3,15 +3,11 @@ import { expect } from "chai";
 import Goals from "../models/Goals";
 import User from "../models/User";
 
-type ValidationError = {
-  errors: { [key: string]: { properties: { message: string } } };
-};
-
 describe("Goals model tests", () => {
   it("should be invalid if required fields are empty", () => {
     const goals = new Goals();
 
-    goals.validate((err: ValidationError) => {
+    goals.validate((err: any) => {
       expect(err.errors.user.properties.message).equal(
         "Path `user` is required."
       );
@@ -59,7 +55,7 @@ describe("Goals model tests", () => {
     };
     const goals = new Goals(goalsFields);
 
-    goals.validate((err: ValidationError) => {
+    goals.validate((err: any) => {
       expect(err).equal(null);
     });
   });

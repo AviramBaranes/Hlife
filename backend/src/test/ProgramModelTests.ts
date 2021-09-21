@@ -3,15 +3,11 @@ import { expect } from "chai";
 import Program from "../models/Program";
 import User from "../models/User";
 
-type ValidationError = {
-  errors: { [key: string]: { properties: { message: string } } };
-};
-
 describe("Program model tests", () => {
   it("should be invalid if required fields are empty", () => {
     const program = new Program({});
 
-    program.validate((err: ValidationError) => {
+    program.validate((err: any) => {
       expect(err.errors.user.properties.message).equal(
         "Path `user` is required."
       );
@@ -57,7 +53,7 @@ describe("Program model tests", () => {
     };
     const stats = new Program(programFields);
 
-    stats.validate((err: ValidationError) => {
+    stats.validate((err: any) => {
       expect(err).equal(null);
     });
   });

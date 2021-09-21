@@ -3,15 +3,11 @@ import { expect } from "chai";
 import PhysicalStats from "../models/PhysicalStats";
 import User from "../models/User";
 
-type ValidationError = {
-  errors: { [key: string]: { properties: { message: string } } };
-};
-
 describe("PhysicalStats model tests", () => {
   it("should be invalid if required fields are empty", () => {
     const stats = new PhysicalStats({});
 
-    stats.validate((err: ValidationError) => {
+    stats.validate((err: any) => {
       expect(err.errors.user.properties.message).equal(
         "Path `user` is required."
       );
@@ -75,7 +71,7 @@ describe("PhysicalStats model tests", () => {
     };
     const stats = new PhysicalStats(statsFields);
 
-    stats.validate((err: ValidationError) => {
+    stats.validate((err: any) => {
       expect(err).equal(null);
     });
   });

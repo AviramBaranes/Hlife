@@ -11,7 +11,7 @@ export const createGoal: RequestHandler = async (req, res, next) => {
     const { basicGoal, weight, fatPercentage, musclesMass } = req.body;
 
     const user = (await User.findById(userId)) as UserType;
-    console.log(user);
+
     if (user.hasGoals) {
       res.status(403).send("User already created goals");
       return;

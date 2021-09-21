@@ -20,7 +20,7 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   setDisplay,
 }) => {
   const ConfirmBtnHandler = () => {
-    document.cookie = document.cookie + "choseAWorkout=true; ";
+    document.cookie = document.cookie + "choseWorkout=true; ";
     localStorage.setItem("programStyle", programStyle);
     localStorage.setItem("timesPerWeek", workoutDaysPerWeek.toString());
 

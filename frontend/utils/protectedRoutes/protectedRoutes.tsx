@@ -26,7 +26,7 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
       destination = "/auth/registration/set-goals";
     } else if (!hasInitialStats) {
       destination = "/auth/registration/set-initial-stats";
-    } else if (!cookies.choseAWorkout) {
+    } else if (!cookies.choseWorkout) {
       destination = "/auth/registration/choose-workout";
     } else if (!hasAllWorkouts) {
       destination = "/auth/registration/create-workout";

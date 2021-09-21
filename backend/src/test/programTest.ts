@@ -88,7 +88,6 @@ describe("get program recommendation endpoint test ", () => {
       res as any,
       () => {}
     );
-    console.log(res.jsonObj);
     expect(res.statusCode).equal(200);
     expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
     expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
@@ -104,7 +103,6 @@ describe("get program recommendation endpoint test ", () => {
       res as any,
       () => {}
     );
-    console.log(res.jsonObj);
     expect(res.statusCode).equal(200);
     expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
   });
@@ -119,7 +117,6 @@ describe("get program recommendation endpoint test ", () => {
       res as any,
       () => {}
     );
-    console.log(res.jsonObj);
     expect(res.statusCode).equal(200);
     expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
     expect(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
@@ -135,7 +132,6 @@ describe("get program recommendation endpoint test ", () => {
       res as any,
       () => {}
     );
-    console.log(res.jsonObj);
     expect(res.statusCode).equal(200);
     expect(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 2 });
   });
@@ -150,9 +146,8 @@ describe("get program recommendation endpoint test ", () => {
       res as any,
       () => {}
     );
-    console.log(res.jsonObj);
     expect(res.statusCode).equal(200);
-    expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 6 });
+    expect(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 4 });
   });
 });
 

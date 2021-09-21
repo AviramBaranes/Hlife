@@ -68,7 +68,6 @@ const addStats = async (req, res, next) => {
             .json({ messages, currentGrade: user.grade, accomplishments });
     }
     catch (err) {
-        console.log(err);
         catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };

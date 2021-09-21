@@ -3,15 +3,11 @@ import { expect } from "chai";
 import ProgramExecution from "../models/ProgramExecution";
 import User from "../models/User";
 
-type ValidationError = {
-  errors: { [key: string]: { properties: { message: string } } };
-};
-
 describe("ProgramExecution model tests", () => {
   it("should be invalid if required fields are empty", () => {
     const programExec = new ProgramExecution({});
 
-    programExec.validate((err: ValidationError) => {
+    programExec.validate((err: any) => {
       expect(err.errors.user.properties.message).equal(
         "Path `user` is required."
       );
@@ -92,7 +88,7 @@ describe("ProgramExecution model tests", () => {
     };
     const programExec = new ProgramExecution(programExecFields);
 
-    programExec.validate((err: ValidationError) => {
+    programExec.validate((err: any) => {
       expect(err).equal(null);
     });
   });

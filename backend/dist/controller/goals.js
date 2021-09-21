@@ -14,7 +14,6 @@ const createGoal = async (req, res, next) => {
         const { userId } = req;
         const { basicGoal, weight, fatPercentage, musclesMass } = req.body;
         const user = (await User_1.default.findById(userId));
-        console.log(user);
         if (user.hasGoals) {
             res.status(403).send("User already created goals");
             return;

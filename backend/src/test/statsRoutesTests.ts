@@ -44,7 +44,6 @@ describe("post stats route", () => {
       .set("Content-type", "application/json")
       .send(payload);
 
-    console.log(response.body);
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal("Validation Failed");
     expect(response.body.data[0].value).equal(34);
@@ -57,7 +56,7 @@ describe("post stats route", () => {
     );
     expect(response.body.data[2].value).equal(8.5);
     expect(response.body.data[2].msg).equal(
-      "Fat Percentage needs to be lower than 80%"
+      "Fat Percentage needs to be lower than 40%"
     );
     expect(response.body.data[3].value).equal(34.5);
     expect(response.body.data[3].msg).equal(
@@ -72,7 +71,7 @@ describe("post stats route", () => {
     const payload = JSON.stringify({
       weight: 35,
       height: 250,
-      fatPercentage: 75,
+      fatPercentage: 35,
       musclesMass: 34,
     });
 
@@ -261,7 +260,7 @@ describe("delete last stats route", () => {
   });
 });
 
-describe("post stats route", () => {
+describe("post ranking route", () => {
   it("should send an error response if unauthorized", async () => {
     const response = await request(server).post("/stats/set-ranking");
 

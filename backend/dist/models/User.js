@@ -21,6 +21,7 @@ const UserSchema = new Schema({
     hasProgram: { type: Boolean, default: false },
     hasGoals: { type: Boolean, default: false },
     hasInitialStats: { type: Boolean, default: false },
+    hasAllWorkouts: { type: Boolean, default: false },
     workouts: [
         {
             trainingDayName: {

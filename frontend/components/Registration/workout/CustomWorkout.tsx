@@ -70,7 +70,7 @@ const CustomWorkout: React.FC<{
 
     if (!formState.isFormValid) return;
 
-    document.cookie = document.cookie + "choseAWorkout=true; ";
+    document.cookie = document.cookie + "choseWorkout=true; ";
     localStorage.setItem("programStyle", formState.programStyle);
     localStorage.setItem("timesPerWeek", formState.timesPerWeek.toString());
 
