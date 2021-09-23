@@ -15,6 +15,7 @@ interface ChooseWorkoutProps {
   workoutDaysPerWeek: number;
   restDaysPerWeek: number;
   order: string;
+  multiProgramStyles?: boolean;
   error?: boolean;
 }
 

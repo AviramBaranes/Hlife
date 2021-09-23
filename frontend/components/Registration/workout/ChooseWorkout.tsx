@@ -12,6 +12,7 @@ interface ChooseWorkoutProps {
   restDaysPerWeek: number;
   order: string;
   setDisplay: Dispatch<React.SetStateAction<boolean>>;
+  multiProgramStyles?: boolean;
 }
 
 const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
@@ -21,17 +22,19 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   restDaysPerWeek,
   order,
   setDisplay,
+  multiProgramStyles,
 }) => {
   const dispatch = useDispatch();
   const ConfirmBtnHandler = async () => {
     try {
       await axiosInstance.get("/chose-workout");
 
+      multiProgramStyles && localStorage.setItem("multiProgramStyles", "true");
       localStorage.setItem("programStyle", programStyle);
       localStorage.setItem("timesPerWeek", workoutDaysPerWeek.toString());
       localStorage.setItem("order", order);
 
-      // router.push("/auth/registration/create-workout");
+      router.push("/auth/registration/create-workout");
     } catch (err) {
       dispatch(
         errorsActions.newError({

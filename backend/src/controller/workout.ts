@@ -27,7 +27,9 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
           workout.trainingDayName === trainingDayName;
 
         if (isNameIdentical || isTrainingDayNameIdentical) {
-          isNamesValid = false;
+          if (workout.trainingDayName !== "aerobic") {
+            isNamesValid = false;
+          }
         }
       }
     );

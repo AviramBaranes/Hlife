@@ -24,6 +24,7 @@ export const calculateRecommendationWorkout = async (cookies: {
       const workoutDaysPerWeek = data[0].timesPerWeek + data[1].timesPerWeek;
       const restDaysPerWeek = 7 - workoutDaysPerWeek;
       return {
+        multiProgramStyles: true,
         programStyle: `${data[0].workoutName} & ${data[1].workoutName}`,
         description: `${data[0].workoutName}: ${aerobicParsedData.description},\n${data[1].workoutName}: ${fbParsedData.description}`,
         workoutDaysPerWeek,
