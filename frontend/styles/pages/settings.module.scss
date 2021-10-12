@@ -1,0 +1,202 @@
+.Main {
+  h3 {
+    width: 120px;
+    text-align: center;
+    padding-bottom: 0.3rem;
+    margin: 1rem auto;
+    font-size: 2rem;
+    border-bottom: var(--primary-color) 1px solid;
+  }
+  h4 {
+    font-size: 1.2rem;
+  }
+}
+
+.ModeSection,
+.PasswordSection {
+  width: 75vw;
+  margin: 1rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  border-bottom: var(--text-color) 1px solid;
+}
+.Title {
+  display: flex;
+  align-items: center;
+  width: 75vw;
+  justify-content: space-between;
+}
+.PasswordSection {
+  // border: none;
+  flex-direction: column;
+  svg {
+    cursor: pointer;
+    animation: rotateArrow 500ms ease-in-out;
+  }
+  form {
+    width: 60vw;
+    margin-left: 15rem;
+  }
+  button {
+    width: 12rem;
+    position: absolute;
+    left: 38%;
+    margin-bottom: 1rem;
+  }
+}
+
+.Form {
+  animation: formDropDown 500ms ease-in-out;
+}
+
+.FormClosing {
+  animation: formDropDownReverse 500ms ease-in-out;
+}
+
+@keyframes rotateArrow {
+  from {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes formDropDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+@keyframes formDropDownReverse {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes mobile {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes mobileReverse {
+  from {
+    transform: translateX(-10%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-10%);
+    opacity: 0;
+  }
+}
+
+.Checkbox {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+.SwitchLabel {
+  display: block;
+  width: 3rem;
+  height: 1.4rem;
+  background-color: #477a85;
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 0 20px #477a8550;
+}
+.SwitchLabel::after {
+  content: "";
+  width: 1.4rem;
+  height: 1.4rem;
+  background-color: #e8f5f7;
+  position: absolute;
+  border-radius: 70px;
+  transition: 0.5s;
+}
+
+.Checkbox:checked + .SwitchLabel:after {
+  transform: translateX(115%);
+}
+
+.Checkbox:checked + .SwitchLabel {
+  background-color: #243d42;
+}
+@media (max-width: 1028px) {
+  .Form {
+    animation: mobile 500ms ease-in-out;
+    transform: translateX(-30%);
+    form {
+      div {
+        width: 80vw;
+        justify-content: space-between;
+      }
+      button {
+        transform: translateX(140%);
+      }
+    }
+  }
+  .FormClosing {
+    animation: mobileReverse 500ms ease-in-out;
+  }
+}
+@media (max-width: 858px) {
+  .Form {
+    transform: translateX(-35%);
+    form {
+      div {
+        width: 90vw;
+        justify-content: space-between;
+      }
+      button {
+        transform: translateX(120%);
+      }
+    }
+  }
+}
+@media (max-width: 555px) {
+  .Form {
+    transform: translateX(-40%);
+    form {
+      button {
+        transform: translateX(100%);
+      }
+    }
+  }
+  .Main {
+    h3 {
+      font-size: 1.5rem;
+      width: 95px;
+    }
+  }
+}
+@media (max-width: 314px) {
+  .ModeSection,
+  .PasswordSection {
+    h4 {
+      font-size: 1rem;
+    }
+    width: 80vw;
+    margin: 1rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: var(--text-color) 1px solid;
+  }
+}

@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 import classes from "./Navigation.module.scss";
-import { RootState } from "../../redux/store/reduxStore";
-import AuthorizedNav from "./AuthorizeNav";
-import RegistrationsNav from "./RegistrationsNav";
+import { RootState } from "../../../redux/store/reduxStore";
+import AuthorizedNav from "../NavComponents/AuthorizeNav";
+import RegistrationsNav from "../NavComponents/RegistrationsNav";
 
-function Navigation() {
+const Navigation: React.FC<{
+  setDisplaySideNav: React.Dispatch<SetStateAction<boolean>>;
+}> = ({ setDisplaySideNav }) => {
   const { isAuthenticated, hasProgram } = useSelector(
     (state: RootState) => state.usersReducer
   );
@@ -22,12 +24,15 @@ function Navigation() {
           <Link href="/">Hlife</Link>
         </h1>
         {isRegister ? <AuthorizedNav /> : <RegistrationsNav />}
-        <div className={classes.BarsIcon}>
+        <div
+          className={classes.BarsIcon}
+          onClick={() => setDisplaySideNav(true)}
+        >
           <FontAwesomeIcon icon={faBars} />
         </div>
       </nav>
     </>
   );
-}
+};
 
 export default Navigation;

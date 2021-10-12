@@ -42,12 +42,13 @@ function signupForm() {
   const [dateInputTouched, setDateInputTouched] = useState(false);
   const [dateInputIsValid, setDateInputIsValid] = useState(false);
 
-  function dateInputChangeHandler(e: React.FormEvent<HTMLInputElement>) {
-    const value = (e.target as HTMLInputElement).value;
+  function dateInputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const { value } = e.target;
     setDateInputTouched(true);
     const minDate = Date.parse("1920-01-01");
     const maxDate = Date.parse("2005-01-01");
     const enteredDate = Date.parse(value);
+    console.log(enteredDate <= maxDate && enteredDate >= minDate);
     if (enteredDate <= maxDate && enteredDate >= minDate) {
       setDateInputIsValid(true);
     } else {
@@ -73,7 +74,7 @@ function signupForm() {
             label={field.label!}
             value={field.value}
             type={field.type!}
-            inputChangeHandler={(event: React.FormEvent<HTMLInputElement>) =>
+            inputChangeHandler={(event: React.ChangeEvent<HTMLInputElement>) =>
               inputChangeHandler(
                 event,
                 index,
@@ -93,7 +94,7 @@ function signupForm() {
 
       <Input
         inputChangeHandler={dateInputChangeHandler}
-        inValid={dateInputIsValid}
+        inValid={!dateInputIsValid}
         touched={dateInputTouched}
         htmlFor="dateOfBirth"
         type="date"
@@ -107,6 +108,7 @@ function signupForm() {
       <div className={classes.GenderSelect}>
         <label htmlFor="gender">Gender:</label>
         <select
+          value="male"
           required
           role="listbox"
           id="gender"

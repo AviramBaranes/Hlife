@@ -1,46 +1,195 @@
-import React, { useEffect, useState } from "react";
+import router from "next/router";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { usersActions } from "../../../redux/slices/auth/authSlice";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
+import axiosInstance from "../../../utils/axios/axiosInstance";
+import Button from "../../UI/Button/Button";
 import Input from "../../UI/Input/Input";
+import Modal from "../../UI/Modal/Modal";
+import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
 
-const CreateAerobicWorkout: React.FC = () => {
-  const [timesPerWeek, setTimesPerWeek] = useState<number[]>([]);
+interface Workout {
+  name: string;
+  time: number;
+  description?: string;
+}
+interface CreateAerobicWorkoutProps {
+  setShouldDisplaySecondForm?: React.Dispatch<SetStateAction<boolean>>;
+}
 
-  useEffect(() => {
-    const arrayLength = +localStorage.getItem("timesPerWeek")!;
-    for (let i = 1; i <= arrayLength; i++) {
-      setTimesPerWeek((prevState) => [...prevState, i]);
+const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
+  setShouldDisplaySecondForm,
+}) => {
+  const dispatch = useDispatch();
+
+  const [showModal, setShowModal] = useState(true);
+  const [timesPerWeek, setTimesPerWeek] = useState(
+    +localStorage.getItem("timesPerWeek")!
+  );
+  const [workout, setWorkout] = useState<Workout[]>([]);
+
+  const [description, setDescription] = useState("");
+  const [totalTime, setTotalTime] = useState("");
+  const [workoutName, setWorkoutName] = useState("");
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const createWorkoutHandler = async () => {
+    try {
+      dispatch(usersActions.changeLoadingState(true));
+      workout.forEach(async (singleWorkout) => {
+        const requestBody = {
+          trainingDayName: "aerobic",
+          name: singleWorkout.name,
+          time: singleWorkout.time,
+          exercises: [],
+        } as {
+          trainingDayName: string;
+          name: string;
+          description?: string;
+          time: number;
+        };
+
+        if (singleWorkout.description)
+          requestBody.description = singleWorkout.description;
+
+        await axiosInstance.post("/workout/", requestBody);
+      });
+
+      const [hours, minutes] = totalTime.split(":");
+      const time = +hours * 60 + +minutes;
+
+      const requestBody = {
+        trainingDayName: "aerobic",
+        name: workoutName,
+        time,
+        exercises: [],
+      } as {
+        trainingDayName: string;
+        name: string;
+        description?: string;
+        time: number;
+      };
+
+      if (description) requestBody.description = description;
+
+      const { data } = await axiosInstance.post("/workout/", requestBody);
+
+      if (!setShouldDisplaySecondForm) {
+        const { data } = await axiosInstance.post("/workout/hasAllWorkout");
+
+        dispatch(usersActions.changeLoadingState(false));
+
+        dispatch(
+          messagesActions.newMessage({
+            messageTitle: "Workout created successfully!",
+            message: data,
+          })
+        );
+        router.push("/auth/registration/schedule-program");
+      }
+
+      if (setShouldDisplaySecondForm) {
+        dispatch(usersActions.changeLoadingState(false));
+        dispatch(
+          messagesActions.newMessage({
+            messageTitle: "Workout created successfully!",
+            message: data,
+          })
+        );
+        setShouldDisplaySecondForm(true);
+      }
+    } catch (err: any) {
+      dispatch(usersActions.changeLoadingState(false));
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Failed to create workout",
+          errorMessage: err.response.data,
+          errorStatusCode: err.response.status,
+        })
+      );
     }
-  }, []);
+  };
+
+  const submitFormHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setWorkout((prevState) => {
+      const [hours, minutes] = totalTime.split(":");
+      const time = +hours * 60 + +minutes;
+      return [
+        ...prevState,
+        {
+          name: workoutName,
+          time,
+          description: description,
+        },
+      ];
+    });
+    setWorkoutName("");
+    setTotalTime("");
+    setDescription("");
+    setFormSubmitted(true);
+
+    dispatch(
+      messagesActions.newMessage({
+        messageTitle: "Workout Added",
+        message: "Workout added successfully you can now enter another one",
+      })
+    );
+  };
 
   return (
     <div>
-      <h4>Workout 1:</h4>
-      <form>
-        <Input
-          htmlFor="workout-name"
-          label="Workout Name"
-          inValid={}
-          inputChangeHandler={}
-          touched={}
-          type="text"
-          value={}
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          While creating workout dont refresh the page or data you entered will
+          be lost.
+          <Button
+            type="button"
+            disabled={false}
+            clicked={() => setShowModal(false)}
+          >
+            OK
+          </Button>
+        </Modal>
+      )}
+      <h4>Workout {workout.length + 1}:</h4>
+      <form onSubmit={submitFormHandler}>
+        <WorkoutGeneralInfoForm
+          totalTime={totalTime}
+          description={description}
+          setDescription={setDescription}
+          setTotalTime={setTotalTime}
+          setWorkoutName={setWorkoutName}
+          workoutName={workoutName}
+          formSubmitted={formSubmitted}
+          setFormSubmitted={setFormSubmitted}
         />
-        <Input
-          htmlFor="time"
-          label="Time"
-          inValid={}
-          inputChangeHandler={}
-          touched={}
-          type="text"
-          value={}
-        />
-        <label htmlFor="description"></label>
-        <textarea
-          name="description"
-          id="description"
-          cols={30}
-          rows={10}
-        ></textarea>
+        <button
+          disabled={
+            workoutName.length < 6 ||
+            !totalTime ||
+            workout.length + 1 >= timesPerWeek!
+          }
+          type="submit"
+          style={{
+            display: `${
+              workout.length + 1 >= timesPerWeek! ? "none" : "block"
+            }`,
+          }}
+        >
+          Add another
+        </button>
       </form>
+      <button
+        onClick={createWorkoutHandler}
+        type="submit"
+        disabled={workoutName.length < 6 || !totalTime}
+      >
+        Submit
+      </button>
     </div>
   );
 };

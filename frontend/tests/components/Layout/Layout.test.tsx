@@ -24,6 +24,9 @@ describe("Layout component", () => {
       tokensReducer: {
         error: { message: "" },
       },
+      settingsReducer: {
+        themeClass: "DarkMode",
+      },
     };
 
     const store = mockStore(initialState);
@@ -53,6 +56,9 @@ describe("Layout component", () => {
       },
       tokensReducer: {
         error: { message: "" },
+      },
+      settingsReducer: {
+        themeClass: "DarkMode",
       },
     };
 
@@ -85,6 +91,9 @@ describe("Layout component", () => {
       tokensReducer: {
         error: { message },
       },
+      settingsReducer: {
+        themeClass: "DarkMode",
+      },
     };
 
     const store = mockStore(initialState);
@@ -110,6 +119,9 @@ describe("Layout component", () => {
       },
       tokensReducer: {
         error: { message: "error message" },
+      },
+      settingsReducer: {
+        themeClass: "DarkMode",
       },
     };
 

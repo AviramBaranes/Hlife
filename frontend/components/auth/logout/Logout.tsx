@@ -1,14 +1,15 @@
-import React from "react";
+import React, { SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 
 import classes from "./Logout.module.scss";
 import { logoutHandler } from "../../../utils/formsHelpers/authHelpers";
 
-function Logout({
-  setShowModal,
-}: {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+interface LogoutProps {
+  setShowModal: React.Dispatch<SetStateAction<boolean>>;
+  setShowNav: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const Logout: React.FC<LogoutProps> = ({ setShowModal, setShowNav }) => {
   const dispatch = useDispatch();
 
   return (
@@ -18,7 +19,10 @@ function Logout({
       <div className={classes.Buttons}>
         <button
           className={classes.Red}
-          onClick={() => logoutHandler(dispatch, setShowModal)}
+          onClick={() => {
+            setShowNav(false);
+            logoutHandler(dispatch, setShowModal);
+          }}
         >
           Logout
         </button>
@@ -28,6 +32,6 @@ function Logout({
       </div>
     </div>
   );
-}
+};
 
 export default Logout;

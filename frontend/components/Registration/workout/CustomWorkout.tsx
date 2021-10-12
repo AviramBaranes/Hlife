@@ -70,17 +70,17 @@ const CustomWorkout: React.FC<{
 
   const formSubmitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     dispatchFormAction({ type: "FORM_VALIDITY" });
 
     if (!formState.isFormValid) return;
+    console.log("here");
     try {
       await axiosInstance.get("/chose-workout");
 
       localStorage.setItem("programStyle", formState.programStyle);
       localStorage.setItem("timesPerWeek", formState.timesPerWeek.toString());
 
-      // router.push("/auth/registration/create-workout");
+      router.push("/auth/registration/create-workout");
     } catch (err) {
       dispatch(
         errorsActions.newError({
@@ -91,8 +91,6 @@ const CustomWorkout: React.FC<{
     }
   };
 
-  const backBtnClickedHandler = () => {};
-
   return (
     <div>
       <section>
@@ -100,7 +98,11 @@ const CustomWorkout: React.FC<{
         <p>create your own custom workout program</p>
       </section>
       <form onSubmit={formSubmitHandler}>
-        <select onChange={programStyleSelectHandler} name="program-style">
+        <select
+          value="FB"
+          onChange={programStyleSelectHandler}
+          name="program-style"
+        >
           <option value="FB">FB</option>
           <option value="aerobic">aerobic</option>
           <option value="AB">AB</option>

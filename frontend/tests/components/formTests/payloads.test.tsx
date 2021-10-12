@@ -105,7 +105,7 @@ describe("test payload", () => {
         username: "avi123",
         email: "email@email.com",
         password: "theyMatch",
-        "password-Confirmation": "theyMatch",
+        passwordConfirmation: "theyMatch",
         dateOfBirth: "2000-05-24",
         gender: "male",
       });

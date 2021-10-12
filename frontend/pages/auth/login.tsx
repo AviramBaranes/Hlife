@@ -6,6 +6,8 @@ import LoginForm from "../../components/auth/forms/login-form";
 import classes from "../../styles/pages/login.module.scss";
 import Line from "../../components/UI/SVGs/title-line";
 import dumbbellsPic from "../../assets/svg/login-picture.svg";
+import { GetServerSideProps } from "next";
+import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
 
 function Login() {
   return (
@@ -37,3 +39,13 @@ function Login() {
 }
 
 export default Login;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const destination = await protectRouteHandler(ctx);
+
+  if (destination === "/auth/login") {
+    return { props: {} };
+  } else {
+    return { redirect: { permanent: false, destination } };
+  }
+};

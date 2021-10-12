@@ -1,10 +1,18 @@
-@import "./variables.scss";
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-image: url("../assets/Hlife-background\ .png");
-  color: white;
+  .DarkMode {
+    background-image: url("../assets/Hlife-background\ .png");
+    --primary-color: rgb(0, 221, 11);
+    --text-color: white;
+    --opposite-text: black;
+  }
+  .LightMode {
+    background-image: url("../assets/lighted-theme-background.svg");
+    --primary-color: rgb(0, 94, 0);
+    --text-color: black;
+    --opposite-text: white;
+  }
 }
 
 a {
@@ -31,5 +39,48 @@ ul {
   background: rgb(112, 106, 106);
 }
 *::-webkit-scrollbar-track:hover {
-  background: $primary-color;
+  background: var(--primary-color);
+}
+
+button {
+  text-align: center;
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  border-radius: 2rem;
+  color: var(--text-color);
+  outline: none;
+  cursor: pointer;
+  font: inherit;
+  padding-left: 2rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  margin: 2rem auto;
+  width: 27%;
+
+  &:first-of-type {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: var(--text-color);
+  }
+  &:hover {
+    background: var(--opposite-text);
+  }
+  &:active {
+    background: var(--primary-color);
+  }
+}
+
+@media (max-width: 720px) {
+  button {
+    padding-left: 4rem;
+  }
+}
+@media (max-width: 335px) {
+  button {
+    padding-left: 4rem;
+  }
 }

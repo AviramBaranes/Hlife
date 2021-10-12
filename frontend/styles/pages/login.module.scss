@@ -1,5 +1,3 @@
-@import "../../styles/variables.scss";
-
 .Title {
   display: grid;
   place-items: center;
@@ -27,7 +25,7 @@
     margin: 0rem 5rem;
     height: 60%;
     width: 90%;
-    border-right: white solid 1px;
+    border-right: var(--text-color) solid 1px;
   }
   button {
     transform: translateX(100%);

@@ -288,6 +288,7 @@ export async function signupSubmitFormHandler(
   dispatch: AppDispatch,
   userFields: { password: string; "password-Confirmation": string }
 ) {
+  console.log(userFields);
   e.preventDefault();
   if (userFields.password !== userFields["password-Confirmation"]) {
     return dispatch(

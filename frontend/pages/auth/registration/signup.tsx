@@ -6,6 +6,9 @@ import SignupForm from "../../../components/auth/forms/signup-form";
 import Line from "../../../components/UI/SVGs/title-line";
 import signupSvg from "../../../assets/svg/signup-svg.svg";
 import classes from "../../../styles/pages/signup.module.scss";
+// import { GetServerSideProps } from "next";
+import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
+import { GetServerSideProps } from "next";
 
 function signup() {
   return (
@@ -36,3 +39,13 @@ function signup() {
 }
 
 export default signup;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const destination = await protectRouteHandler(ctx);
+
+  if (destination === "/auth/login") {
+    return { props: {} };
+  } else {
+    return { redirect: { permanent: false, destination } };
+  }
+};

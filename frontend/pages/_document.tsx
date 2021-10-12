@@ -5,7 +5,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-        <body>
+        <body className="Light">
           <Main />
           <NextScript />
           <div id="overlays"></div>

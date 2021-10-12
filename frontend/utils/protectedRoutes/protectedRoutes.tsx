@@ -20,6 +20,9 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
       hasAllWorkouts,
     } = data;
 
+    // case cookie deleted
+    if (hasProgram) return "/";
+
     if (!isAuthenticated) {
       destination = "/auth/login";
     } else if (!hasGoals) {

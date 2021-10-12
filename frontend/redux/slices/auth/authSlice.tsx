@@ -39,9 +39,15 @@ export const sendPasswordResetEmailAction = createAsyncThunk(
 
 export const signupUserAction = createAsyncThunk(
   "signup/signupUserAction",
-  async (userFields: object, { rejectWithValue }) => {
+  async (userFields: { [key: string]: string }, { rejectWithValue }) => {
     const bodyRequest = {
-      ...userFields,
+      name: userFields.name,
+      username: userFields.username,
+      email: userFields.email,
+      password: userFields.password,
+      passwordConfirmation: userFields["password-Confirmation"],
+      dateOfBirth: userFields.dateOfBirth,
+      gender: userFields.gender,
     };
 
     try {

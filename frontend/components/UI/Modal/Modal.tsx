@@ -1,15 +1,12 @@
 import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
+import Backdrop from "../Backdrop/Backdrop";
 import classes from "./Modal.module.scss";
 
 type BackdropProps = { onClose: Function };
 type ModalOverlayProps = { children: ReactNode };
 type ModalProps = BackdropProps & ModalOverlayProps;
-
-const Backdrop = (props: BackdropProps) => {
-  return <div className={classes.backdrop} onClick={() => props.onClose} />;
-};
 
 const ModalOverlay = (props: ModalOverlayProps) => {
   return (

@@ -15,7 +15,7 @@ describe("Logout", () => {
   test("should render the dom correctly (tags roles)", () => {
     const { container } = render(
       <Provider store={store}>
-        <Logout setShowModal={() => {}} />
+        <Logout setShowNav={() => {}} setShowModal={() => {}} />
       </Provider>
     );
 
@@ -37,7 +37,7 @@ describe("Logout", () => {
   test("should render the dom correctly (inner text)", () => {
     const { container } = render(
       <Provider store={store}>
-        <Logout setShowModal={() => {}} />
+        <Logout setShowNav={() => {}} setShowModal={() => {}} />
       </Provider>
     );
 
@@ -61,7 +61,7 @@ describe("Logout", () => {
 
     render(
       <Provider store={store}>
-        <Logout setShowModal={mockedSetShowModal} />
+        <Logout setShowNav={() => {}} setShowModal={mockedSetShowModal} />
       </Provider>
     );
 
@@ -77,7 +77,7 @@ describe("Logout", () => {
     render(
       <Provider store={store}>
         <ErrorContainer />
-        <Logout setShowModal={() => {}} />
+        <Logout setShowNav={() => {}} setShowModal={() => {}} />
       </Provider>
     );
 
@@ -107,7 +107,7 @@ describe("Logout", () => {
 
     render(
       <Provider store={store}>
-        <Logout setShowModal={mockedSetShowModal} />
+        <Logout setShowNav={() => {}} setShowModal={mockedSetShowModal} />
       </Provider>
     );
 

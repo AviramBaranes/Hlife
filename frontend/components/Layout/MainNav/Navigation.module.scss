@@ -1,8 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 
-@import "../../styles/variables.scss";
-
 .Navbar {
   height: 10vh;
   width: 90%;
@@ -24,17 +22,17 @@
 .Logo {
   cursor: pointer;
   font-size: 2.5rem;
-  color: $primary-color;
+  color: var(--primary-color);
 }
 
 .BarsIcon {
   cursor: pointer;
-  color: $primary-color;
+  color: var(--primary-color);
   font-size: 1.5rem;
 }
 
 .Active {
-  border-bottom: 2px solid $primary-color;
+  border-bottom: 2px solid var(--primary-color);
 }
 
 @media (max-width: 555px) {
@@ -57,18 +55,20 @@
 }
 
 @media (max-width: 335px) {
-  .Logo {
-    font-size: 1.2rem;
-  }
   .Navbar {
+    width: 95%;
+    margin: 1rem auto;
     li {
       margin: 0rem 0.6rem;
     }
     h2 {
-      font-size: 0.6rem;
+      font-size: 0.8rem;
     }
   }
+  .Logo {
+    font-size: 1.5rem;
+  }
   .BarsIcon {
-    font-size: 0.6rem;
+    font-size: 1.5rem;
   }
 }

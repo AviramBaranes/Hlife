@@ -11,10 +11,21 @@
   }
 }
 
+.DarkMode {
+  background-image: url("../../assets/Hlife-background\ .png");
+  color: var(--text-color);
+}
+
+.LightMode {
+  background-image: url("../../assets/lighted-theme-background.svg");
+  color: var(--text-color);
+}
+
 @media (max-width: 444px) {
   .Layout {
     main {
-      height: 85vh;
+      height: 80vh;
+      margin: auto;
       width: 100%;
     }
   }

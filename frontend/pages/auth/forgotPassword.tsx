@@ -1,8 +1,10 @@
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { GetServerSideProps } from "next";
 import React from "react";
 import ForgotPasswordForm from "../../components/auth/forms/forgotPassword-form";
 import classes from "../../styles/pages/forgotPassword.module.scss";
+import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
 
 function SendEmail() {
   return (
@@ -24,3 +26,13 @@ function SendEmail() {
 }
 
 export default SendEmail;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const destination = await protectRouteHandler(ctx);
+
+  if (destination === "/auth/login") {
+    return { props: {} };
+  } else {
+    return { redirect: { permanent: false, destination } };
+  }
+};

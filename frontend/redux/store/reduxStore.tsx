@@ -6,6 +6,7 @@ import errorsReducer from "../slices/errors/errorsSlice";
 import messagesReducer from "../slices/messages/messagesSlice";
 import goalsReducer from "../slices/goals/goalsSlice";
 import statsReducer from "../slices/stats/statsSlice";
+import settingsReducer from "../slices/settings/settingsSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     messagesReducer,
     goalsReducer,
     statsReducer,
+    settingsReducer,
   },
 });
 export default store;

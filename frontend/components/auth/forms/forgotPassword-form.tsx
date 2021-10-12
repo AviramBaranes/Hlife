@@ -40,7 +40,7 @@ function forgotPasswordForm() {
         type="email"
         touched={inputConfig[0].touched}
         inValid={!inputConfig[0].valid}
-        inputChangeHandler={(event: React.FormEvent<HTMLInputElement>) =>
+        inputChangeHandler={(event: React.ChangeEvent<HTMLInputElement>) =>
           inputChangeHandler(
             event,
             0,

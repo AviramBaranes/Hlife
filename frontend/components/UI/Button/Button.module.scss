@@ -1,11 +1,9 @@
-@import "../../../styles/variables.scss";
-
 .Button {
   text-align: center;
   background-color: transparent;
-  border: 1px solid $primary-color;
+  border: 1px solid var(--primary-color);
   border-radius: 2rem;
-  color: white;
+  color: var(--text-color);
   outline: none;
   cursor: pointer;
   font: inherit;
@@ -22,13 +20,13 @@
 
   &:disabled {
     cursor: not-allowed;
-    color: #ccc;
+    color: var(--text-color);
   }
   &:hover {
-    background: black;
+    background: var(--opposite-text);
   }
   &:active {
-    background: $primary-color;
+    background: var(--primary-color);
   }
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import classes from "./Navigation.module.scss";
+import classes from "../MainNav/Navigation.module.scss";
 
 function RegistrationsNav() {
   const router = useRouter();

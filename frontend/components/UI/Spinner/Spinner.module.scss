@@ -1,12 +1,10 @@
-@import "../../../styles/variables.scss";
-
 .Loader,
 .Loader:before,
 .Loader:after {
   border-radius: 50%;
 }
 .Loader {
-  color: $primary-color;
+  color: var(--primary-color);
   font-size: 11px;
   text-indent: -99999em;
   margin: 45vh auto;
