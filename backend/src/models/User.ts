@@ -1,4 +1,5 @@
 import mongoose, { Document, ObjectId } from "mongoose";
+import { WorkoutType } from "./Workout";
 
 const Schema = mongoose.Schema;
 
@@ -30,16 +31,7 @@ const UserSchema = new Schema({
 
   hasAllWorkouts: { type: Boolean, default: false },
 
-  workouts: [
-    {
-      trainingDayName: {
-        type: String,
-        enum: ["A", "B", "C", "D", "FB", "aerobic"],
-        required: true,
-      },
-      name: { type: String, required: true },
-    },
-  ],
+  workouts: [{ type: mongoose.Types.ObjectId, ref: "Workout" }],
 
   resetToken: { type: String },
 
@@ -50,11 +42,6 @@ const UserSchema = new Schema({
 
 const User = mongoose.model("User", UserSchema);
 export default User;
-
-interface Workout {
-  trainingDayName: "A" | "B" | "C" | "D" | "FB" | "aerobic";
-  name: string;
-}
 
 export interface UserType extends Document {
   name: string;
@@ -68,7 +55,7 @@ export interface UserType extends Document {
   hasAllWorkouts: boolean;
   hasGoals: boolean;
   hasInitialStats: boolean;
-  workouts: Workout[] | undefined;
+  workouts: ObjectId[] | WorkoutType[] | undefined;
   resetToken: string | undefined;
   tokenExpiration: Date | undefined;
 }

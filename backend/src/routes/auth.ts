@@ -47,7 +47,7 @@ router.post(
       "dateOfBirth",
       'The field must be a date between "01/01/1920" and "01/01/2005"'
     )
-      .isDate({ format: "DD-MM-YYYY" })
+      .isDate()
       .custom((value: string) => {
         const limit = new Date("01/01/1920");
         const max = new Date("01/01/2005");

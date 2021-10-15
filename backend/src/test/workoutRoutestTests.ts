@@ -1,17 +1,11 @@
-import request, { Response } from "supertest";
+import request from "supertest";
 import { expect } from "chai";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
 
 import server from "../app";
-import mongoose from "mongoose";
 import User from "../models/User";
-import sinon, { SinonStub } from "sinon";
-import ProgramExecution from "../models/ProgramExecution";
-import Goals from "../models/Goals";
+import sinon from "sinon";
 import Workout from "../models/Workout";
-import Program from "../models/Program";
-import PhysicalStats from "../models/PhysicalStats";
 
 const user = new User({
   name: "-",
@@ -60,16 +54,18 @@ describe("post workout route", () => {
     expect(response.body.data[1].value).equal("1-");
     expect(response.body.data[1].msg).equal("Name can contain only letters");
     expect(response.body.data[2].msg).equal("Name must be at least 3 letters");
-    expect(response.body.data[3].value).equal("too-short");
-    expect(response.body.data[3].msg).equal("Description too short");
-    expect(response.body.data[4].msg).equal("Exercises are invalid");
-    expect(response.body.data[5].value).equal(1);
-    expect(response.body.data[5].msg).equal("Time is invalid");
+    expect(response.body.data[3].msg).equal("Exercises are invalid");
+    expect(response.body.data[4].value).equal(1);
+    expect(response.body.data[4].msg).equal("Time is invalid");
   });
 
   it("should move from validation middleware successfully", async () => {
     const stubedUserModel = sinon.stub(User, "findById");
-    stubedUserModel.returns({ workouts: [{ name: "name" }] });
+    stubedUserModel.returns({
+      populate() {
+        return { workouts: [{ name: "name" }] };
+      },
+    });
 
     const payload = JSON.stringify({
       trainingDayName: "A",

@@ -22,16 +22,7 @@ const UserSchema = new Schema({
     hasGoals: { type: Boolean, default: false },
     hasInitialStats: { type: Boolean, default: false },
     hasAllWorkouts: { type: Boolean, default: false },
-    workouts: [
-        {
-            trainingDayName: {
-                type: String,
-                enum: ["A", "B", "C", "D", "FB", "aerobic"],
-                required: true,
-            },
-            name: { type: String, required: true },
-        },
-    ],
+    workouts: [{ type: mongoose_1.default.Types.ObjectId, ref: "Workout" }],
     resetToken: { type: String },
     tokenExpiration: { type: Date },
 });

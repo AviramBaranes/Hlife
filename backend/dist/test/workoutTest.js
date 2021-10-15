@@ -41,10 +41,14 @@ describe("create workout tests", () => {
         req.body.trainingDayName = "A";
         req.body.name = "chest";
         stubedUser.returns({
-            workouts: [
-                { name: "-", trainingDayName: "-" },
-                { name: "chest", trainingDayName: "-" },
-            ],
+            populate() {
+                return {
+                    workouts: [
+                        { name: "-", trainingDayName: "-" },
+                        { name: "chest", trainingDayName: "-" },
+                    ],
+                };
+            },
         });
         await workoutController.createWorkout(req, res, () => { });
         chai_1.expect(res.statusCode).equal(403);
@@ -54,7 +58,11 @@ describe("create workout tests", () => {
         req.body.description = "description";
         req.body.exercises = [{ name: "name", sets: 1, reps: 1 }];
         const stubedWorkout = sinon_1.default.stub(Workout_1.default.prototype, "save");
-        stubedUser.returns({ workouts: [{ name: "-", trainingDayName: "-" }] });
+        stubedUser.returns({
+            populate() {
+                return { workouts: [{ name: "-", trainingDayName: "-" }] };
+            },
+        });
         await workoutController.createWorkout(req, res, () => { });
         const newWorkoutArgs = stubedWorkout.firstCall.thisValue;
         chai_1.expect(newWorkoutArgs.user).to.be.an("object");
@@ -66,16 +74,19 @@ describe("create workout tests", () => {
         chai_1.expect(newWorkoutArgs.description).equal("description");
     });
     it("should save user model with new workout", async () => {
+        const workouts = [];
+        const save = sinon_1.default.spy();
         stubedUser.returns({
-            workouts: [],
-            save: sinon_1.default.spy(),
+            populate() {
+                return {
+                    workouts,
+                    save,
+                };
+            },
         });
         await workoutController.createWorkout(req, res, () => { });
-        const user = await User_1.default.findById("-");
-        const workouts = user.workouts;
-        chai_1.expect(workouts[0].name).equal("chest");
-        chai_1.expect(workouts[0].trainingDayName).equal("A");
-        chai_1.expect(user.save.called).equal(true);
+        chai_1.expect(workouts[0]).to.be.an("object");
+        chai_1.expect(save.called).equal(true);
     });
     it("should return a success response", async () => {
         chai_1.expect(res.statusCode).equal(201);

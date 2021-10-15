@@ -52,7 +52,12 @@ const ExerciseSelect: React.FC<{
   };
 
   return (
-    <select value="squat" onChange={exerciseSelectedHandler} id="exercise">
+    <select
+      data-testid="exerciseSelect"
+      value="squat"
+      onChange={exerciseSelectedHandler}
+      id="exercise"
+    >
       <option value="squat">squat</option>
       <option value="deadlift">deadlift</option>
       <option value="calf raise">calf raise</option>

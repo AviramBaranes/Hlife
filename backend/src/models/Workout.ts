@@ -31,15 +31,6 @@ const WorkoutSchema = new Schema({
 const Workout = mongoose.model("Workout", WorkoutSchema);
 export default Workout;
 
-enum TrainingDayName {
-  "A",
-  "B",
-  "C",
-  "D",
-  "FB",
-  "aerobic",
-}
-
 interface Exercises {
   muscles: string[] | undefined;
   name: string;
@@ -50,7 +41,7 @@ interface Exercises {
 
 export interface WorkoutType extends Document {
   user: ObjectId;
-  trainingDayName: TrainingDayName;
+  trainingDayName: "A" | "B" | "C" | "D" | "FB" | "aerobic";
   name: string;
   description: string | undefined;
   exercises: Exercises[];

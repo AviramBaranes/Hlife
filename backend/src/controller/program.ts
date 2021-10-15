@@ -73,7 +73,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
     const { day } = req.params;
-    const { trainingDayName } = req.body;
+    const { trainingDayName, workoutName } = req.body;
 
     validationErrorsHandler(req);
 
@@ -81,6 +81,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
     if (trainingDayName) {
       workout = (await Workout.findOne({
         trainingDayName,
+        name: workoutName,
         user: userId,
       })) as WorkoutType;
     }
@@ -98,59 +99,47 @@ export const createProgram: RequestHandler = async (req, res, next) => {
 
     //create new model
     if (program.program.length === 0) {
-      const programList = [...initialProgramList];
+      program.program = [...initialProgramList];
 
-      const programDayIndex = programList.findIndex(
+      const programDayIndex = program.program.findIndex(
         (program) => program.day === day
       );
 
-      const programDay = programList[programDayIndex];
-
       if (workout) {
-        programDay.workout = workout._id;
-        programDay.restDay = false;
+        program.program[programDayIndex].workout = workout._id;
+        program.program[programDayIndex].restDay = false;
       } else {
-        programDay.restDay = true;
+        program.program[programDayIndex].restDay = true;
       }
 
-      programList[programDayIndex] = programDay;
-
-      program.program = programList;
       await program.save();
     }
     //edit existing model
     else {
-      const programList = program.program;
-
-      const programDayIndex = programList.findIndex(
+      const programDayIndex = program.program.findIndex(
         (program) => program.day === day
       );
 
       const isDayAlreadySet =
-        programList[programDayIndex].restDay ||
-        programList[programDayIndex].workout;
+        program.program[programDayIndex].restDay ||
+        program.program[programDayIndex].workout;
 
       if (isDayAlreadySet) {
         res.status(403).send("This day already has a program");
         return;
       }
 
-      const programDay = programList[programDayIndex];
-
       if (workout) {
-        programDay.workout = workout._id;
-        programDay.restDay = false;
+        program.program[programDayIndex].workout = workout._id;
+        program.program[programDayIndex].restDay = false;
       } else {
-        programDay.restDay = true;
+        program.program[programDayIndex].restDay = true;
       }
 
-      programList[programDayIndex] = programDay;
-
-      program.program = programList;
       await program.save();
 
       let programFull = true;
-      program.program.forEach((program, _: number, programs) => {
+      program.program.forEach((program, _, programs) => {
         if (programs.length !== 7) {
           programFull = false;
           return;
@@ -169,6 +158,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
     res.status(201).send("Program added successfully");
     return;
   } catch (err: any) {
+    console.log(err);
     catchErrorHandler(err, next);
   }
 };

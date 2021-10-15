@@ -16,22 +16,20 @@ const WorkoutExerciseForm: React.FC<{
   const submitExerciseFormHandler = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
     let name = exerciseName || (selectedExercise as string);
-
     if (!sets) return;
     if (!reps) return;
 
     const newExercise: Exercise = { name, sets, reps };
     if (description) newExercise.description = description;
-    if (muscles) newExercise.muscles = muscles;
+    if (muscles.length) newExercise.muscles = muscles;
 
     setExercises((prevState) => [...prevState, newExercise]);
     setFormSubmitted(true);
   };
-
   return (
     <>
       {!formSubmitted ? (
-        <div>
+        <div data-testid="ExerciseForm">
           <div>
             <label htmlFor="exercise">Exercise:</label>
             <ExerciseSelect
@@ -65,7 +63,7 @@ const WorkoutExerciseForm: React.FC<{
           </div>
 
           <div>
-            <label htmlFor="customExercise">Custom Exercise</label>
+            <label htmlFor="customExercise">Custom Exercise:</label>
             <input
               onChange={(e) => setExerciseName(e.target.value)}
               placeholder="exercise"
@@ -92,7 +90,7 @@ const WorkoutExerciseForm: React.FC<{
       ) : (
         <div>
           <h4>Exercise: {exerciseName || selectedExercise}</h4>
-          {!!muscles.length && <h4>Muscles: {muscles.join(" ,")}</h4>}
+          {!!muscles.length && <h4>Muscles: {muscles.join(", ")}</h4>}
           <h4>Reps: {reps}</h4>
           <h4>Sets: {sets}</h4>
           {description && <h4>Description: {description}</h4>}

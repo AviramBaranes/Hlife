@@ -1,5 +1,5 @@
 import router from "next/router";
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
@@ -8,7 +8,11 @@ import { Exercise } from "./Forms/Exercise";
 import WorkoutExerciseForm from "./Forms/WorkoutExerciseForm";
 import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
 
-const CreateSingleWorkout: React.FC = () => {
+const CreateSingleWorkout: React.FC<{
+  trainingDayName: string;
+  setSubmitCount?: React.Dispatch<SetStateAction<number>>;
+  last?: boolean;
+}> = ({ trainingDayName, setSubmitCount, last }) => {
   const dispatch = useDispatch();
 
   const [description, setDescription] = useState("");
@@ -20,31 +24,45 @@ const CreateSingleWorkout: React.FC = () => {
 
   async function submitWorkoutHandler(e: React.FormEvent) {
     e.preventDefault();
+    // console.log(exercises.length, totalTime, workoutName);
 
     const [hours, minutes] = totalTime.split(":");
     const time = +hours * 60 + +minutes;
 
     try {
-      const bodyRequest = {
-        trainingDayName: "FB",
+      const bodyRequest: {
+        trainingDayName: string;
+        name: string;
+        time: number;
+        exercises: Exercise[];
+        description?: string;
+      } = {
+        trainingDayName,
         name: workoutName,
         time,
-        description,
         exercises,
       };
 
+      if (description) bodyRequest.description = description;
+
       await axiosInstance.post("/workout", bodyRequest);
-      const { data } = await axiosInstance.post("/workout/hasAllWorkout");
 
-      dispatch(
-        messagesActions.newMessage({
-          messageTitle: "Created workout successfully",
-          message: data,
-        })
-      );
+      if (setSubmitCount) {
+        setSubmitCount((prevState) => ++prevState);
+      }
 
-      router.push("/auth/registration/schedule-program");
+      if (trainingDayName === "FB" || last) {
+        const { data } = await axiosInstance.post("/workout/hasAllWorkout");
+        dispatch(
+          messagesActions.newMessage({
+            messageTitle: "Created workout successfully",
+            message: data,
+          })
+        );
+        router.push("/auth/registration/schedule-program");
+      }
     } catch (err: any) {
+      console.log(err);
       dispatch(
         errorsActions.newError({
           errorTitle: "Failed to create workout",
@@ -91,7 +109,7 @@ const CreateSingleWorkout: React.FC = () => {
         <div></div>
         <button
           type="submit"
-          disabled={!exercises.length || !totalTime || !workoutName}
+          // disabled={!exercises.length || !totalTime || !workoutName}
         >
           Submit
         </button>

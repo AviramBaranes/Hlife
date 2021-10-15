@@ -55,12 +55,13 @@ const createProgram = async (req, res, next) => {
     try {
         const { userId } = req;
         const { day } = req.params;
-        const { trainingDayName } = req.body;
+        const { trainingDayName, workoutName } = req.body;
         validationErrors_1.validationErrorsHandler(req);
         let workout;
         if (trainingDayName) {
             workout = (await Workout_1.default.findOne({
                 trainingDayName,
+                name: workoutName,
                 user: userId,
             }));
         }
@@ -73,40 +74,33 @@ const createProgram = async (req, res, next) => {
         const program = (await Program_1.default.findOne({ user: userId }));
         //create new model
         if (program.program.length === 0) {
-            const programList = [...initialProgramList];
-            const programDayIndex = programList.findIndex((program) => program.day === day);
-            const programDay = programList[programDayIndex];
+            program.program = [...initialProgramList];
+            const programDayIndex = program.program.findIndex((program) => program.day === day);
             if (workout) {
-                programDay.workout = workout._id;
-                programDay.restDay = false;
+                program.program[programDayIndex].workout = workout._id;
+                program.program[programDayIndex].restDay = false;
             }
             else {
-                programDay.restDay = true;
+                program.program[programDayIndex].restDay = true;
             }
-            programList[programDayIndex] = programDay;
-            program.program = programList;
             await program.save();
         }
         //edit existing model
         else {
-            const programList = program.program;
-            const programDayIndex = programList.findIndex((program) => program.day === day);
-            const isDayAlreadySet = programList[programDayIndex].restDay ||
-                programList[programDayIndex].workout;
+            const programDayIndex = program.program.findIndex((program) => program.day === day);
+            const isDayAlreadySet = program.program[programDayIndex].restDay ||
+                program.program[programDayIndex].workout;
             if (isDayAlreadySet) {
                 res.status(403).send("This day already has a program");
                 return;
             }
-            const programDay = programList[programDayIndex];
             if (workout) {
-                programDay.workout = workout._id;
-                programDay.restDay = false;
+                program.program[programDayIndex].workout = workout._id;
+                program.program[programDayIndex].restDay = false;
             }
             else {
-                programDay.restDay = true;
+                program.program[programDayIndex].restDay = true;
             }
-            programList[programDayIndex] = programDay;
-            program.program = programList;
             await program.save();
             let programFull = true;
             program.program.forEach((program, _, programs) => {
@@ -128,6 +122,7 @@ const createProgram = async (req, res, next) => {
         return;
     }
     catch (err) {
+        console.log(err);
         catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };

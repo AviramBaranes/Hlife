@@ -5,6 +5,10 @@ import User, { UserType } from "../models/User";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 
+interface UserWithWorkout extends UserType {
+  workouts: WorkoutType[];
+}
+
 export const createWorkout: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
@@ -12,7 +16,7 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const user = (await User.findById(userId)) as UserType;
+    const user = (await User.findById(userId).populate()) as UserWithWorkout;
 
     let isNamesValid = true;
 
@@ -20,19 +24,17 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
       user.workouts = [];
     }
 
-    user.workouts.forEach(
-      (workout: { trainingDayName: string; name: string }) => {
-        const isNameIdentical = workout.name === name;
-        const isTrainingDayNameIdentical =
-          workout.trainingDayName === trainingDayName;
+    user.workouts.forEach((workout) => {
+      const isNameIdentical = workout.name === name;
+      const isTrainingDayNameIdentical =
+        workout.trainingDayName === trainingDayName;
 
-        if (isNameIdentical || isTrainingDayNameIdentical) {
-          if (workout.trainingDayName !== "aerobic") {
-            isNamesValid = false;
-          }
+      if (isNameIdentical || isTrainingDayNameIdentical) {
+        if (workout.trainingDayName !== "aerobic") {
+          isNamesValid = false;
         }
       }
-    );
+    });
 
     if (!isNamesValid) {
       res.status(403).send("Each workout need to have a unique name");
@@ -48,14 +50,31 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
 
     if (description) workout.description = description;
     if (time) workout.time = time;
-
     await workout.save();
-    user.workouts.push({ trainingDayName, name });
+
+    user.workouts.push(workout._id);
     await user.save();
 
     return res
       .status(201)
       .send(`${trainingDayName}-workout created successfully`);
+  } catch (err: any) {
+    console.log(err);
+    catchErrorHandler(err, next);
+  }
+};
+
+export const changeHasAllWorkout: RequestHandler = async (req, res, next) => {
+  try {
+    const { userId } = req;
+
+    const user = (await User.findById(userId)) as UserType;
+
+    user.hasAllWorkouts = true;
+    await user.save();
+
+    res.status(201).send("User has now created all workout!");
+    return;
   } catch (err: any) {
     catchErrorHandler(err, next);
   }
@@ -83,6 +102,26 @@ export const getWorkoutByName: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json(workout);
+    return;
+  } catch (err: any) {
+    catchErrorHandler(err, next);
+  }
+};
+
+export const getAllWorkouts: RequestHandler = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    const user = (await User.findById(userId).populate(
+      "workouts"
+    )) as UserWithWorkout;
+
+    if (!user.hasAllWorkouts) {
+      res
+        .status(403)
+        .send("You need to create all workouts and then request for them.");
+      return;
+    }
+    res.status(200).json(user.workouts);
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);

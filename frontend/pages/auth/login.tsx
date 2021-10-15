@@ -8,8 +8,15 @@ import Line from "../../components/UI/SVGs/title-line";
 import dumbbellsPic from "../../assets/svg/login-picture.svg";
 import { GetServerSideProps } from "next";
 import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
+import { useDispatch } from "react-redux";
+import { errorsActions } from "../../redux/slices/errors/errorsSlice";
+import { redirectedError } from "../../utils/errors/redirectedError";
 
-function Login() {
+const Login: React.FC<{ redirected: boolean }> = ({ redirected }) => {
+  if (redirected) {
+    const dispatch = useDispatch();
+    dispatch(errorsActions.newError(redirectedError));
+  }
   return (
     <>
       <div className={classes.Title}>
@@ -36,7 +43,7 @@ function Login() {
       </div>
     </>
   );
-}
+};
 
 export default Login;
 
@@ -44,8 +51,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
 
   if (destination === "/auth/login") {
-    return { props: {} };
+    const { url } = ctx.req;
+    let redirected = false;
+    if (url !== "/auth/login") redirected = true;
+    return { props: { redirected } };
   } else {
-    return { redirect: { permanent: false, destination } };
+    return {
+      redirect: { permanent: false, destination },
+      props: { redirected: true },
+    };
   }
 };

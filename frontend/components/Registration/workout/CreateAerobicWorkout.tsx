@@ -23,13 +23,10 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
   setShouldDisplaySecondForm,
 }) => {
   const dispatch = useDispatch();
+  const timesPerWeek = +localStorage.getItem("timesPerWeek")!;
 
   const [showModal, setShowModal] = useState(true);
-  const [timesPerWeek, setTimesPerWeek] = useState(
-    +localStorage.getItem("timesPerWeek")!
-  );
   const [workout, setWorkout] = useState<Workout[]>([]);
-
   const [description, setDescription] = useState("");
   const [totalTime, setTotalTime] = useState("");
   const [workoutName, setWorkoutName] = useState("");
@@ -37,7 +34,6 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
 
   const createWorkoutHandler = async () => {
     try {
-      dispatch(usersActions.changeLoadingState(true));
       workout.forEach(async (singleWorkout) => {
         const requestBody = {
           trainingDayName: "aerobic",
@@ -57,6 +53,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         await axiosInstance.post("/workout/", requestBody);
       });
 
+      // the last workout is not in the state so I need to post it manually
       const [hours, minutes] = totalTime.split(":");
       const time = +hours * 60 + +minutes;
 
@@ -79,8 +76,6 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
       if (!setShouldDisplaySecondForm) {
         const { data } = await axiosInstance.post("/workout/hasAllWorkout");
 
-        dispatch(usersActions.changeLoadingState(false));
-
         dispatch(
           messagesActions.newMessage({
             messageTitle: "Workout created successfully!",
@@ -91,7 +86,6 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
       }
 
       if (setShouldDisplaySecondForm) {
-        dispatch(usersActions.changeLoadingState(false));
         dispatch(
           messagesActions.newMessage({
             messageTitle: "Workout created successfully!",
@@ -101,7 +95,6 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         setShouldDisplaySecondForm(true);
       }
     } catch (err: any) {
-      dispatch(usersActions.changeLoadingState(false));
       dispatch(
         errorsActions.newError({
           errorTitle: "Failed to create workout",
@@ -155,6 +148,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
           </Button>
         </Modal>
       )}
+      <h3>Create aerobic workout</h3>
       <h4>Workout {workout.length + 1}:</h4>
       <form onSubmit={submitFormHandler}>
         <WorkoutGeneralInfoForm
@@ -169,7 +163,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         />
         <button
           disabled={
-            workoutName.length < 6 ||
+            workoutName.length < 4 ||
             !totalTime ||
             workout.length + 1 >= timesPerWeek!
           }
@@ -186,7 +180,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
       <button
         onClick={createWorkoutHandler}
         type="submit"
-        disabled={workoutName.length < 6 || !totalTime}
+        disabled={workoutName.length < 4 || !totalTime}
       >
         Submit
       </button>

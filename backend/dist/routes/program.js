@@ -44,6 +44,12 @@ router.post("/:day", authMiddleware_1.default, [
     express_validator_1.body("trainingDayName", "Training day is invalid")
         .optional()
         .custom((value) => customValidationHelpers_1.validateEnums(value, trainingDayNames)),
+    express_validator_1.body("workoutName")
+        .optional()
+        .isAlpha("en-US", { ignore: " " })
+        .withMessage("Name can contain only letters")
+        .isLength({ min: 3 })
+        .withMessage("Name must be at least 3 letters"),
 ], programController.createProgram);
 router.get("/", authMiddleware_1.default, programController.getAllPrograms);
 router.get("/:day", authMiddleware_1.default, express_validator_1.param("day", "Day is invalid").custom((value) => customValidationHelpers_1.validateEnums(value, days)), programController.getProgram);

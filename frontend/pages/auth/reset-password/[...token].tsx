@@ -53,7 +53,7 @@ function ResetPassword({ token }: { token: string }) {
                 value={input.value}
                 type={input.type!}
                 inputChangeHandler={(
-                  event: React.FormEvent<HTMLInputElement>
+                  event: React.ChangeEvent<HTMLInputElement>
                 ) =>
                   inputChangeHandler(
                     event,

@@ -9,6 +9,7 @@ import User from "../models/User";
 import Workout from "../models/Workout";
 
 import createCustomResponseObj from "../utils/helpers/forTests/responseDefaultObj";
+import { ObjectId } from "mongoose";
 
 describe("create workout tests", () => {
   const res = createCustomResponseObj();
@@ -24,10 +25,14 @@ describe("create workout tests", () => {
     req.body.name = "chest";
 
     stubedUser.returns({
-      workouts: [
-        { name: "-", trainingDayName: "-" },
-        { name: "chest", trainingDayName: "-" },
-      ],
+      populate() {
+        return {
+          workouts: [
+            { name: "-", trainingDayName: "-" },
+            { name: "chest", trainingDayName: "-" },
+          ],
+        };
+      },
     });
 
     await workoutController.createWorkout(req as any, res as any, () => {});
@@ -42,7 +47,11 @@ describe("create workout tests", () => {
 
     const stubedWorkout = sinon.stub(Workout.prototype, "save");
 
-    stubedUser.returns({ workouts: [{ name: "-", trainingDayName: "-" }] });
+    stubedUser.returns({
+      populate() {
+        return { workouts: [{ name: "-", trainingDayName: "-" }] };
+      },
+    });
 
     await workoutController.createWorkout(req as any, res as any, () => {});
 
@@ -58,19 +67,21 @@ describe("create workout tests", () => {
   });
 
   it("should save user model with new workout", async () => {
+    const workouts: ObjectId[] = [];
+    const save = sinon.spy();
     stubedUser.returns({
-      workouts: [],
-      save: sinon.spy(),
+      populate() {
+        return {
+          workouts,
+          save,
+        };
+      },
     });
 
     await workoutController.createWorkout(req as any, res as any, () => {});
 
-    const user = await User.findById("-");
-    const workouts = user.workouts;
-
-    expect(workouts[0].name).equal("chest");
-    expect(workouts[0].trainingDayName).equal("A");
-    expect(user.save.called).equal(true);
+    expect(workouts[0]).to.be.an("object");
+    expect(save.called).equal(true);
   });
 
   it("should return a success response", async () => {

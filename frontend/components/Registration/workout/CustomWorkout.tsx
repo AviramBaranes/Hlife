@@ -1,6 +1,7 @@
 import router from "next/router";
 import React, { SetStateAction, useReducer } from "react";
 import { useDispatch } from "react-redux";
+
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import Button from "../../UI/Button/Button";
@@ -73,7 +74,6 @@ const CustomWorkout: React.FC<{
     dispatchFormAction({ type: "FORM_VALIDITY" });
 
     if (!formState.isFormValid) return;
-    console.log("here");
     try {
       await axiosInstance.get("/chose-workout");
 
@@ -99,6 +99,7 @@ const CustomWorkout: React.FC<{
       </section>
       <form onSubmit={formSubmitHandler}>
         <select
+          role="listbox"
           value="FB"
           onChange={programStyleSelectHandler}
           name="program-style"

@@ -38,7 +38,7 @@ const WorkoutGeneralInfoForm: React.FC<WorkoutGeneralInfoFormProps> = ({
   }, [formSubmitted]);
 
   return (
-    <div>
+    <div data-testid="GeneralForm">
       <Input
         htmlFor="workoutName"
         inValid={workoutName.length < 4}

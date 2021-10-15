@@ -28,7 +28,6 @@ describe("User model tests", () => {
     const userFields = {
       gender: "-",
       dateOfBirth: "01/01/2007",
-      workouts: [{ trainingDayName: "G", name: "-" }],
     };
     const user = new User(userFields);
 
@@ -37,10 +36,6 @@ describe("User model tests", () => {
         "`-` is not a valid enum value for path `gender`."
       );
       expect(!!err.errors.dateOfBirth.properties.message).equal(true);
-
-      expect(err.errors["workouts.0.trainingDayName"].properties.message).equal(
-        "`G` is not a valid enum value for path `trainingDayName`."
-      );
     });
   });
 

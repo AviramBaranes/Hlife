@@ -34,6 +34,12 @@ router.post(
     body("trainingDayName", "Training day is invalid")
       .optional()
       .custom((value: string) => validateEnums(value, trainingDayNames)),
+    body("workoutName")
+      .optional()
+      .isAlpha("en-US", { ignore: " " })
+      .withMessage("Name can contain only letters")
+      .isLength({ min: 3 })
+      .withMessage("Name must be at least 3 letters"),
   ],
   programController.createProgram
 );

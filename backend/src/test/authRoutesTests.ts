@@ -80,7 +80,7 @@ describe("signup route test", () => {
       password: "1234ab",
       passwordConfirmation: "1234ab",
       gender: "male",
-      dateOfBirth: "11-11-2001",
+      dateOfBirth: "2001-11-11",
     });
 
     const response = await request(server)

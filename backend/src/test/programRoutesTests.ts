@@ -81,6 +81,7 @@ describe("post program route", () => {
 
     const payload = JSON.stringify({
       trainingDayName: "A",
+      workoutName: "name",
     });
 
     const response = await request(server)

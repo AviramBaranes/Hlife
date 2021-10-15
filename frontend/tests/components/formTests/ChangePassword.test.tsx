@@ -17,7 +17,34 @@ describe("testing change password via settings", () => {
       .mockImplementation(async () => null);
   });
 
-  test.todo("should handle invalid inputs");
+  test("should handle invalid inputs", () => {
+    render(
+      <Provider store={store}>
+        <ChangePassword />
+      </Provider>
+    );
+
+    const inputs = screen.getAllByRole("textbox");
+    const button = screen.getByText("continue");
+
+    userEvent.type(inputs[0], "newPassword");
+    userEvent.type(inputs[1], "newPassword");
+    userEvent.type(inputs[2], "newPassword");
+
+    // currentPassword need to be different from newPassword
+    expect(button).toBeDisabled();
+
+    userEvent.clear(inputs[1]);
+    userEvent.type(inputs[1], "different");
+
+    // newPassword and passwordConfirmation need to be the same
+    expect(button).toBeDisabled();
+
+    userEvent.clear(inputs[2]);
+    userEvent.type(inputs[2], "different");
+
+    expect(button).not.toBeDisabled();
+  });
 
   test("should change the password by connecting to the server", () => {
     render(

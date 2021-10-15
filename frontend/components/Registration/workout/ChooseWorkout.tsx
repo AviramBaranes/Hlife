@@ -25,6 +25,7 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   multiProgramStyles,
 }) => {
   const dispatch = useDispatch();
+
   const ConfirmBtnHandler = async () => {
     try {
       await axiosInstance.get("/chose-workout");

@@ -68,6 +68,7 @@ describe("post program route", () => {
         stubedWorkoutModel.returns(false);
         const payload = JSON.stringify({
             trainingDayName: "A",
+            workoutName: "name",
         });
         const response = await supertest_1.default(app_1.default)
             .post("/program/Sunday")

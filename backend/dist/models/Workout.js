@@ -27,12 +27,3 @@ const WorkoutSchema = new Schema({
 });
 const Workout = mongoose_1.default.model("Workout", WorkoutSchema);
 exports.default = Workout;
-var TrainingDayName;
-(function (TrainingDayName) {
-    TrainingDayName[TrainingDayName["A"] = 0] = "A";
-    TrainingDayName[TrainingDayName["B"] = 1] = "B";
-    TrainingDayName[TrainingDayName["C"] = 2] = "C";
-    TrainingDayName[TrainingDayName["D"] = 3] = "D";
-    TrainingDayName[TrainingDayName["FB"] = 4] = "FB";
-    TrainingDayName[TrainingDayName["aerobic"] = 5] = "aerobic";
-})(TrainingDayName || (TrainingDayName = {}));

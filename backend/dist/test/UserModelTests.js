@@ -20,13 +20,11 @@ describe("User model tests", () => {
         const userFields = {
             gender: "-",
             dateOfBirth: "01/01/2007",
-            workouts: [{ trainingDayName: "G", name: "-" }],
         };
         const user = new User_1.default(userFields);
         user.validate((err) => {
             chai_1.expect(err.errors.gender.properties.message).equal("`-` is not a valid enum value for path `gender`.");
             chai_1.expect(!!err.errors.dateOfBirth.properties.message).equal(true);
-            chai_1.expect(err.errors["workouts.0.trainingDayName"].properties.message).equal("`G` is not a valid enum value for path `trainingDayName`.");
         });
     });
     it("should be a valid model with default properties", () => {

@@ -1,9 +1,12 @@
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import CustomOrder from "../../../components/Registration/program/CustomOrder";
 import RecommendedOrder from "../../../components/Registration/program/RecommendedOrder";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
+import { redirectedError } from "../../../utils/errors/redirectedError";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 
 export interface Workout {
@@ -13,7 +16,13 @@ export interface Workout {
 
 const scheduleProgram: React.FC<{
   workouts: Workout[];
-}> = ({ workouts }) => {
+  redirected: boolean;
+}> = ({ workouts, redirected }) => {
+  if (redirected) {
+    const dispatch = useDispatch();
+    dispatch(errorsActions.newError(redirectedError));
+  }
+
   const [order, setOrder] = useState("");
 
   useEffect(() => {
@@ -55,12 +64,17 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
           Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies["XSRF_TOKEN"]};`,
         },
       });
-      console.log(data);
+
       const workouts = data.map(({ name, trainingDayName }: Workout) => {
         return { name, trainingDayName };
       });
-      console.log(workouts);
-      return { props: { workouts } };
+
+      const { url } = ctx.req;
+      let redirected = false;
+
+      if (url !== destination) redirected = true;
+
+      return { props: { workouts, redirected } };
     } catch (err) {
       return { redirect: { destination: "/error-occur", permanent: false } };
     }

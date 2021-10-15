@@ -5,13 +5,20 @@ import FatPercentageField from "../../../components/Registration/generalFields/F
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/statsFields/RequiredFields";
 import UploadPhoto from "../../../components/Registration/statsFields/UploadPhoto";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { RootState } from "../../../redux/store/reduxStore";
+import { redirectedError } from "../../../utils/errors/redirectedError";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import { createStatsProps } from "../../../utils/registration/stats/setInitialStatsHelpers";
 
-const SetInitialStats: React.FC = () => {
+const SetInitialStats: React.FC<{ redirected: boolean }> = ({ redirected }) => {
   //state
   const dispatch = useDispatch();
+
+  if (redirected) {
+    dispatch(errorsActions.newError(redirectedError));
+  }
+
   const { statsReducer } = useSelector((state: RootState) => state);
   const { fatPercentage, musclesMass, weight, rank, height, photo } =
     statsReducer;
@@ -87,7 +94,12 @@ export default SetInitialStats;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
   if (destination === "/auth/registration/set-initial-stats") {
-    return { props: {} };
+    const { url } = ctx.req;
+    let redirected = false;
+
+    if (url !== destination) redirected = true;
+
+    return { props: { redirected } };
   } else {
     return { redirect: { destination, permanent: false }, props: {} };
   }

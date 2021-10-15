@@ -1,6 +1,5 @@
-2.continue registration:
-    A: create workout according to program
-    B: schedule program
-    C: ux when redirect (maybe via props in backend)
-3.tests
-4.style
+1.tests
+    A: test Layout, Navigation, hook
+    B: test setting page and slice
+2.better ux in form when input is invalid
+3.style

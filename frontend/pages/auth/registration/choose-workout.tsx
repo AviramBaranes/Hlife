@@ -8,6 +8,7 @@ import { calculateRecommendationWorkout } from "../../../utils/registration/work
 import { useDispatch } from "react-redux";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import CustomWorkout from "../../../components/Registration/workout/CustomWorkout";
+import { redirectedError } from "../../../utils/errors/redirectedError";
 
 interface ChooseWorkoutProps {
   programStyle: string;
@@ -17,11 +18,16 @@ interface ChooseWorkoutProps {
   order: string;
   multiProgramStyles?: boolean;
   error?: boolean;
+  redirected: boolean;
 }
 
 const ChooseWorkoutPage: React.FC<ChooseWorkoutProps> = (props) => {
   const dispatch = useDispatch();
   const [displayRecommendations, setDisplayRecommendations] = useState(true);
+
+  if (props.redirected) {
+    dispatch(errorsActions.newError(redirectedError));
+  }
 
   if (props.error) {
     dispatch(
@@ -52,7 +58,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const cookies = parseCookies(ctx);
 
   const recommendation = await calculateRecommendationWorkout(cookies);
+  const { url } = ctx.req;
+  let redirected = false;
+
+  if (url !== destination) redirected = true;
+
   return {
-    props: { ...recommendation },
+    props: { ...recommendation, redirected },
   };
 };

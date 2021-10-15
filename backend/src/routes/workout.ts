@@ -22,22 +22,26 @@ router.post(
     ),
 
     body("name")
-      .isAlpha()
+      .isAlpha("en-US", { ignore: " " })
       .withMessage("Name can contain only letters")
       .isLength({ min: 3 })
       .withMessage("Name must be at least 3 letters"),
 
-    body("description", "Description too short")
+    body("exercises", "Exercises are invalid")
       .optional()
-      .isLength({ min: 10 }),
-
-    body("exercises", "Exercises are invalid").custom((value: ExercisesObj[]) =>
-      validateExercises(value)
-    ),
+      .custom((value: ExercisesObj[]) => validateExercises(value)),
 
     body("time", "Time is invalid").optional().isInt({ min: 10, max: 300 }),
   ],
   workoutController.createWorkout
+);
+
+router.get("/all", authMiddleware, workoutController.getAllWorkouts);
+
+router.post(
+  "/hasAllWorkout",
+  authMiddleware,
+  workoutController.changeHasAllWorkout
 );
 
 //get by name

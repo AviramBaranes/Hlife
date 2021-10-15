@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteWorkout = exports.changeWorkout = exports.getById = exports.getWorkoutByName = exports.createWorkout = void 0;
+exports.deleteWorkout = exports.changeWorkout = exports.getById = exports.getAllWorkouts = exports.getWorkoutByName = exports.changeHasAllWorkout = exports.createWorkout = void 0;
 const Workout_1 = __importDefault(require("../models/Workout"));
 const User_1 = __importDefault(require("../models/User"));
 const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
@@ -13,7 +13,7 @@ const createWorkout = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
         validationErrors_1.validationErrorsHandler(req);
-        const user = (await User_1.default.findById(userId));
+        const user = (await User_1.default.findById(userId).populate());
         let isNamesValid = true;
         if (!user.workouts) {
             user.workouts = [];
@@ -22,7 +22,9 @@ const createWorkout = async (req, res, next) => {
             const isNameIdentical = workout.name === name;
             const isTrainingDayNameIdentical = workout.trainingDayName === trainingDayName;
             if (isNameIdentical || isTrainingDayNameIdentical) {
-                isNamesValid = false;
+                if (workout.trainingDayName !== "aerobic") {
+                    isNamesValid = false;
+                }
             }
         });
         if (!isNamesValid) {
@@ -40,17 +42,32 @@ const createWorkout = async (req, res, next) => {
         if (time)
             workout.time = time;
         await workout.save();
-        user.workouts.push({ trainingDayName, name });
+        user.workouts.push(workout._id);
         await user.save();
         return res
             .status(201)
             .send(`${trainingDayName}-workout created successfully`);
     }
     catch (err) {
+        console.log(err);
         catchErrorsHandler_1.catchErrorHandler(err, next);
     }
 };
 exports.createWorkout = createWorkout;
+const changeHasAllWorkout = async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const user = (await User_1.default.findById(userId));
+        user.hasAllWorkouts = true;
+        await user.save();
+        res.status(201).send("User has now created all workout!");
+        return;
+    }
+    catch (err) {
+        catchErrorsHandler_1.catchErrorHandler(err, next);
+    }
+};
+exports.changeHasAllWorkout = changeHasAllWorkout;
 const getWorkoutByName = async (req, res, next) => {
     try {
         const { userId } = req;
@@ -74,6 +91,24 @@ const getWorkoutByName = async (req, res, next) => {
     }
 };
 exports.getWorkoutByName = getWorkoutByName;
+const getAllWorkouts = async (req, res, next) => {
+    try {
+        const { userId } = req;
+        const user = (await User_1.default.findById(userId).populate("workouts"));
+        if (!user.hasAllWorkouts) {
+            res
+                .status(403)
+                .send("You need to create all workouts and then request for them.");
+            return;
+        }
+        res.status(200).json(user.workouts);
+        return;
+    }
+    catch (err) {
+        catchErrorsHandler_1.catchErrorHandler(err, next);
+    }
+};
+exports.getAllWorkouts = getAllWorkouts;
 const getById = async (req, res, next) => {
     try {
         const { workoutId } = req.params;

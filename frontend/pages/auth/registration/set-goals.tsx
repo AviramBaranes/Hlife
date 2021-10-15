@@ -4,16 +4,23 @@ import { useDispatch, useSelector } from "react-redux";
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/goalsFields/RequiredFields";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { RootState } from "../../../redux/store/reduxStore";
+import { redirectedError } from "../../../utils/errors/redirectedError";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import {
   createGoalsFieldsProps,
   getDisplayRequirements,
 } from "../../../utils/registration/goals/setGoalsHelper";
 
-const setGoals: React.FC = () => {
+const setGoals: React.FC<{ redirected: boolean }> = ({ redirected }) => {
   //state
   const dispatch = useDispatch();
+
+  if (redirected) {
+    dispatch(errorsActions.newError(redirectedError));
+  }
+
   const { basicGoal, desiredFatPercentage, desiredWeight } = useSelector(
     (state: RootState) => state.goalsReducer
   );
@@ -77,15 +84,20 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
 
   if (destination === "/auth/registration/set-goals") {
+    const { url } = ctx.req;
+    let redirected = false;
+
+    if (url !== destination) redirected = true;
+
     return {
-      props: {},
+      props: { redirected },
     };
-  } else
-    return {
-      props: {},
-      redirect: {
-        permanent: false,
-        destination,
-      },
-    };
+  }
+  return {
+    props: {},
+    redirect: {
+      permanent: false,
+      destination,
+    },
+  };
 };

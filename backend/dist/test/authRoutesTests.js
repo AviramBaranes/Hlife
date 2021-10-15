@@ -65,7 +65,7 @@ describe("signup route test", () => {
             password: "1234ab",
             passwordConfirmation: "1234ab",
             gender: "male",
-            dateOfBirth: "11-11-2001",
+            dateOfBirth: "2001-11-11",
         });
         const response = await supertest_1.default(app_1.default)
             .post("/auth/signup")

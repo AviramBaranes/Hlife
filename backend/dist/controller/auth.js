@@ -114,7 +114,8 @@ exports.logout = logout;
 const resetPassword = async (req, res, next) => {
     try {
         validationErrors_1.validationErrorsHandler(req);
-        const { userId, currentPassword, newPassword, newPasswordConfirmation } = req.body;
+        const { userId } = req;
+        const { currentPassword, newPassword, newPasswordConfirmation } = req.body;
         const user = (await User_1.default.findById(userId).select("+password"));
         if (!user)
             return res.status(401).send("Unauthorized");

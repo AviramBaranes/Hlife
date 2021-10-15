@@ -1,18 +1,30 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import CreateSingleWorkout from "./CreateSingleWorkout";
-import { Exercise } from "./Forms/Exercise";
-import WorkoutExerciseForm from "./Forms/WorkoutExerciseForm";
-import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
 
-const CreateDefaultWorkout: React.FC<{ trainingDayName: string }> = ({
-  trainingDayName,
+const CreateDefaultWorkout: React.FC<{ programStyle: string }> = ({
+  programStyle,
 }) => {
+  const [submitCount, setSubmitCount] = useState(0);
   return (
-    <div>
-      <h3>{trainingDayName} Workout:</h3>
-      <CreateSingleWorkout />
-    </div>
+    <>
+      {programStyle.split("").map((char, i, arr) => {
+        return (
+          <div
+            key={char}
+            style={{
+              display: `${i === submitCount ? "block" : "none"}`,
+            }}
+          >
+            <h3>Create {char} Workout</h3>
+            <CreateSingleWorkout
+              trainingDayName={char}
+              setSubmitCount={setSubmitCount}
+              last={i === arr.length - 1}
+            />
+          </div>
+        );
+      })}
+    </>
   );
 };
 

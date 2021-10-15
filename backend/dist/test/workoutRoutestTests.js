@@ -51,15 +51,17 @@ describe("post workout route", () => {
         chai_1.expect(response.body.data[1].value).equal("1-");
         chai_1.expect(response.body.data[1].msg).equal("Name can contain only letters");
         chai_1.expect(response.body.data[2].msg).equal("Name must be at least 3 letters");
-        chai_1.expect(response.body.data[3].value).equal("too-short");
-        chai_1.expect(response.body.data[3].msg).equal("Description too short");
-        chai_1.expect(response.body.data[4].msg).equal("Exercises are invalid");
-        chai_1.expect(response.body.data[5].value).equal(1);
-        chai_1.expect(response.body.data[5].msg).equal("Time is invalid");
+        chai_1.expect(response.body.data[3].msg).equal("Exercises are invalid");
+        chai_1.expect(response.body.data[4].value).equal(1);
+        chai_1.expect(response.body.data[4].msg).equal("Time is invalid");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
-        stubedUserModel.returns({ workouts: [{ name: "name" }] });
+        stubedUserModel.returns({
+            populate() {
+                return { workouts: [{ name: "name" }] };
+            },
+        });
         const payload = JSON.stringify({
             trainingDayName: "A",
             name: "name",
