@@ -23,11 +23,8 @@ const scheduleProgram: React.FC<{
     dispatch(errorsActions.newError(redirectedError));
   }
 
-  const [order, setOrder] = useState("");
+  const [order, setOrder] = useState(localStorage.getItem("order")!);
 
-  useEffect(() => {
-    setOrder(localStorage.getItem("order")!);
-  }, []);
   return (
     <div>
       <section>

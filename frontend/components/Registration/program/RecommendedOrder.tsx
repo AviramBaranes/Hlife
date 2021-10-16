@@ -15,7 +15,7 @@ const RecommendedOrder: React.FC<{
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let newFormattedOrder = "";
+    let newFormattedOrder = "\n";
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     let programDay: string;
     const programOrderList = order.split(",");
@@ -23,23 +23,22 @@ const RecommendedOrder: React.FC<{
 
     const workoutsCopy = [...workouts];
     days.forEach((day, i) => {
-      const itemIndex = workoutsCopy.findIndex(
+      const workoutItemIndex = workoutsCopy.findIndex(
         (workout) => workout.trainingDayName === programOrderList[i]
       );
 
-      if (itemIndex >= 0) {
-        programDay = `${workoutsCopy[itemIndex].name} (${workoutsCopy[itemIndex].trainingDayName})`;
-        lastWorkoutMemory = workoutsCopy.splice(itemIndex, 1)[0];
+      //aerobic depends on workout name
+      if (workoutItemIndex >= 0) {
+        programDay = `${workoutsCopy[workoutItemIndex].name} (${workoutsCopy[workoutItemIndex].trainingDayName})`;
+        if (workoutsCopy[workoutItemIndex].name === "aerobic") {
+          lastWorkoutMemory = workoutsCopy.splice(workoutItemIndex, 1)[0];
+        }
       } else {
         programOrderList[i] === "X"
-          ? (programDay = "rest")
+          ? (programDay = "rest (X)")
           : (programDay = `${lastWorkoutMemory.name} (${lastWorkoutMemory.trainingDayName})`);
       }
-      if (i < 6) {
-        newFormattedOrder += ` ${day}: ${programDay} |`;
-      } else {
-        newFormattedOrder += ` ${day}: ${programDay}`;
-      }
+      newFormattedOrder += `${day}: ${programDay}\n`;
     });
     setOrder(newFormattedOrder);
   }, []);
@@ -93,31 +92,34 @@ const RecommendedOrder: React.FC<{
       trainingDayName?: string;
     }[] = [];
 
-    const orderList = order.split("|");
-
+    const orderList = order.split("\n");
+    orderList.pop();
+    orderList.shift();
     for (let dataGroup of orderList) {
-      const day = getDay(dataGroup.split(":")[0].replaceAll(" ", ""));
-      try {
-        const workoutName = dataGroup.split(":")[1].split(" (")[0].slice(1);
-        const trainingDayName = dataGroup
-          .split(":")[1]
-          .split(" (")[1]
-          .split(")")[0];
-        dataToSend.push({ workoutName, trainingDayName, day });
-      } catch (err) {
-        dataToSend.push({ day });
-      }
+      const day = getDay(dataGroup.split(":")[0]);
+      const workoutName = dataGroup.split(":")[1].split(" (")[0].slice(1);
+      const trainingDayName = dataGroup
+        .split(":")[1]
+        .split(" (")[1]
+        .split(")")[0];
+
+      trainingDayName === "X"
+        ? dataToSend.push({ day })
+        : dataToSend.push({ workoutName, trainingDayName, day });
     }
 
     let p = Promise.resolve(undefined) as Promise<
       AxiosResponse<any> | undefined
     >;
-
     for (let data of dataToSend) {
       p = p.then(() => {
         const { day, trainingDayName, workoutName } = data;
-        if (trainingDayName && workoutName)
-          return postOne(day, workoutName, trainingDayName);
+        if (trainingDayName && workoutName) {
+          const c = postOne(day, workoutName, trainingDayName);
+          console.log(c);
+          return c;
+        }
+
         return postOne(day);
       });
     }
@@ -141,7 +143,7 @@ const RecommendedOrder: React.FC<{
   }
 
   return (
-    <div>
+    <div data-testid="recommended-order">
       <h4>
         <strong>Recommended: </strong>
         {order}
