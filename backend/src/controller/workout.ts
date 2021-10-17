@@ -59,7 +59,6 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
       .status(201)
       .send(`${trainingDayName}-workout created successfully`);
   } catch (err: any) {
-    console.log(err);
     catchErrorHandler(err, next);
   }
 };

@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import React, { Dispatch } from "react";
 import Router from "next/router";
 import isAlpha from "validator/lib/isAlpha";
 import isAlphanumeric from "validator/lib/isAlphanumeric";
@@ -23,6 +23,7 @@ import axiosInstance from "../axios/axiosInstance";
 import { SetStateAction } from "react";
 import { CustomError } from "../../types/CustomErrors";
 import { AppDispatch } from "../../redux/store/reduxStore";
+import { InputProps } from "../../components/UI/Input/Input";
 
 export function createInputListForSignup(
   name: string,
@@ -95,35 +96,6 @@ export function createInputListForSignup(
   return ALL_INPUTS;
 }
 
-export function createInputListForLogin(email: string, password: string) {
-  const ALL_INPUTS = [
-    {
-      label: "Email",
-      htmlFor: "email",
-      type: "email",
-      value: email,
-      valid: false,
-      touched: false,
-      rules: {
-        isEmail: true,
-      },
-    },
-    {
-      label: "Password",
-      htmlFor: "password",
-      type: "password",
-      value: password,
-      valid: false,
-      touched: false,
-      rules: {
-        minLength: 6,
-        isAlphanumeric: true,
-      },
-    },
-  ];
-  return ALL_INPUTS;
-}
-
 export function createInputListForPasswordReset(
   password: string,
   passwordConfirmation: string
@@ -182,8 +154,8 @@ function validationTester(value: string, rules: ValidationRules) {
 export function inputChangeHandler(
   event: React.ChangeEvent<HTMLInputElement>,
   index: number,
-  inputsList: ComplexInputListObject[],
-  setInputList: Dispatch<SetStateAction<ComplexInputListObject[]>>,
+  inputsList: any[],
+  setInputList: Dispatch<SetStateAction<any[]>>,
   setUserFields: Dispatch<SetStateAction<object | string>>,
   setFormValidity: Dispatch<SetStateAction<boolean>>
 ) {
@@ -251,38 +223,6 @@ export async function submitSendEmailFormHandler(
       );
     });
 }
-
-export async function loginSubmitFormHandler(
-  e: React.FormEvent<HTMLFormElement>,
-  dispatch: AppDispatch,
-  userFields: {}
-) {
-  e.preventDefault();
-
-  dispatch(errorsActions.errorConfirmed());
-  dispatch(loginUserAction({ ...userFields }))
-    .then(unwrapResult)
-    .then((result: { message: string }) => {
-      const { message } = result;
-      Router.push("/");
-      dispatch(
-        messagesActions.newMessage({
-          messageTitle: "Logged In!",
-          message,
-        })
-      );
-    })
-    .catch((err: CustomError) => {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Login Failed",
-          errorMessage: err.data,
-          errorStatusCode: err.status,
-        })
-      );
-    });
-}
-
 export async function signupSubmitFormHandler(
   e: React.FormEvent<HTMLFormElement>,
   dispatch: AppDispatch,

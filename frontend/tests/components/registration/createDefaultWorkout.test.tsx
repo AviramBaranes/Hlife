@@ -105,8 +105,6 @@ describe("Create default workout tests", () => {
     const workoutNameInput_B = generalForm[1].children[0].children[1];
     const timeInput_B = generalForm[1].children[1].children[1];
 
-    // console.log(workoutNameInput_B);
-
     userEvent.type(workoutNameInput_B, "Chest");
     userEvent.type(timeInput_B, "03:00");
 

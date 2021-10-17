@@ -158,7 +158,6 @@ export const createProgram: RequestHandler = async (req, res, next) => {
     res.status(201).send("Program added successfully");
     return;
   } catch (err: any) {
-    console.log(err);
     catchErrorHandler(err, next);
   }
 };

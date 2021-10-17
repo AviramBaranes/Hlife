@@ -1,65 +1,108 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { ComplexInputListObject } from "../../../types/inputConfig";
-import {
-  createInputListForLogin,
-  inputChangeHandler,
-  loginSubmitFormHandler,
-} from "../../../utils/formsHelpers/authHelpers";
-import Input from "../../UI/Input/Input";
-import Button from "../../UI/Button/Button";
+import isEmail from "validator/lib/isEmail";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import axiosInstance from "../../../utils/axios/axiosInstance";
+import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
+import router from "next/router";
 
 function loginForm() {
   const dispatch = useDispatch();
 
-  const [userFields, setUserFields] = useState({
-    email: "",
-    password: "",
+  const [fields, setFields] = useState({
+    email: { valid: false, touched: false, value: "" },
+    password: { valid: false, touched: false, value: "" },
   });
-
-  const { email, password } = userFields;
-
-  const ALL_INPUTS = createInputListForLogin(email, password);
-
+  const [classes, setClasses] = useState({
+    emailInputClass: "",
+    passwordInputClass: "",
+  });
   const [formValidity, setFormValidity] = useState(false);
-  const [inputsList, setInputList] =
-    useState<ComplexInputListObject[]>(ALL_INPUTS);
 
-  function loginSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
-    loginSubmitFormHandler(e, dispatch, userFields);
+  function inputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setFields((prevState) => ({
+      ...prevState,
+      [name]: {
+        value,
+        touched: true,
+        valid: name === "email" ? isEmail(value) : value.length > 5,
+      },
+    }));
+  }
+
+  useEffect(() => {
+    setFormValidity(fields.email.valid && fields.password.valid);
+
+    if (!fields.password.valid && fields.password.touched) {
+      setClasses((prevState) => ({
+        ...prevState,
+        passwordInputClass: "inValid",
+      }));
+    } else {
+      setClasses((prevState) => ({ ...prevState, passwordInputClass: "" }));
+    }
+
+    if (!fields.email.valid && fields.email.touched) {
+      setClasses((prevState) => ({ ...prevState, emailInputClass: "inValid" }));
+    } else {
+      setClasses((prevState) => ({ ...prevState, emailInputClass: "" }));
+    }
+  }, [fields]);
+
+  async function loginSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      const bodyRequest = {
+        email: fields.email.value,
+        password: fields.password.value,
+      };
+      const { data } = await axiosInstance.post("/auth/login", bodyRequest);
+
+      await router.push("/");
+      dispatch(
+        messagesActions.newMessage({
+          messageTitle: "Logged In!",
+          message: data.message,
+        })
+      );
+    } catch (err: any) {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Login Failed",
+          errorMessage: err.response.data,
+        })
+      );
+    }
   }
 
   return (
     <form aria-label="form" onSubmit={loginSubmitHandler}>
-      {inputsList.map((field, index) => {
-        return (
-          <Input
-            key={field.htmlFor}
-            htmlFor={field.htmlFor!}
-            label={field.label!}
-            value={field.value}
-            type={field.type!}
-            inputChangeHandler={(event: React.ChangeEvent<HTMLInputElement>) =>
-              inputChangeHandler(
-                event,
-                index,
-                inputsList,
-                setInputList,
-                setUserFields as React.Dispatch<
-                  React.SetStateAction<string | object>
-                >,
-                setFormValidity
-              )
-            }
-            touched={field.touched}
-            inValid={!field.valid}
-          />
-        );
-      })}
-      <Button disabled={!formValidity} type="submit">
+      <label htmlFor="email">Email:</label>
+      <input
+        className={classes.emailInputClass}
+        name="email"
+        type="email"
+        id="email"
+        required
+        value={fields.email.value}
+        onChange={inputChangeHandler}
+      />
+      <label htmlFor="password">Password:</label>
+      <input
+        className={classes.passwordInputClass}
+        name="password"
+        type="password"
+        id="password"
+        required
+        value={fields.password.value}
+        onChange={inputChangeHandler}
+      />
+      <button disabled={!formValidity} type="submit">
         Login
-      </Button>
+      </button>
     </form>
   );
 }

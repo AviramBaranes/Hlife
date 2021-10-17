@@ -22,6 +22,8 @@ const SideNav: React.FC<{
   const [divClasses, setDivClasses] = useState(classes.SideNav);
   useEffect(() => {
     dispatch(validateAuthenticationAction());
+
+    return () => {};
   }, []);
 
   const [showModal, setShowModal] = useState(false);
@@ -29,8 +31,6 @@ const SideNav: React.FC<{
   function logoutHandler() {
     setShowModal(true);
   }
-
-  console.log(classes.SideNavClose);
 
   return (
     <>

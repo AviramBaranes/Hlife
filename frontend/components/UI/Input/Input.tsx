@@ -1,7 +1,7 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler, LegacyRef, useRef } from "react";
 import classes from "./Input.module.scss";
 
-interface InputProps {
+export interface InputProps {
   touched: boolean;
   inValid: boolean;
   label: string;
@@ -10,13 +10,21 @@ interface InputProps {
   value: string | number;
   inputChangeHandler: ChangeEventHandler<HTMLInputElement>;
   elementConfig?: {};
+  setErrorMsg?: React.Dispatch<React.SetStateAction<string>>;
+  errorMessage?: string;
 }
 
 const Input: React.FC<InputProps> = (props) => {
+  const inputRef = useRef() as any;
   const inputClasses = [classes.Input];
 
   if (props.touched && props.inValid) {
-    inputClasses.push(classes.InValid);
+    if (document.activeElement === inputRef.current) {
+      inputClasses.push(classes.InValid);
+      if (props.setErrorMsg && props.errorMessage) {
+        props.setErrorMsg(props.errorMessage);
+      }
+    }
   }
   return (
     <div className={classes.FormItem}>
@@ -24,6 +32,7 @@ const Input: React.FC<InputProps> = (props) => {
         {props.label}:
       </label>
       <input
+        ref={inputRef}
         role="textbox"
         id={props.htmlFor}
         className={inputClasses.join(" ")}
