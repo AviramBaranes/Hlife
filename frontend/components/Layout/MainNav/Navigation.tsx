@@ -1,6 +1,6 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import Link from "next/link";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,14 +8,19 @@ import classes from "./Navigation.module.scss";
 import { RootState } from "../../../redux/store/reduxStore";
 import AuthorizedNav from "../NavComponents/AuthorizeNav";
 import RegistrationsNav from "../NavComponents/RegistrationsNav";
+import { validateAuthenticationAction } from "../../../redux/slices/auth/authSlice";
 
 const Navigation: React.FC<{
   setDisplaySideNav: React.Dispatch<SetStateAction<boolean>>;
 }> = ({ setDisplaySideNav }) => {
+  const dispatch = useDispatch();
   const { isAuthenticated, hasProgram } = useSelector(
     (state: RootState) => state.usersReducer
   );
-  const isRegister = isAuthenticated && hasProgram;
+
+  useEffect(() => {
+    dispatch(validateAuthenticationAction());
+  }, []);
 
   return (
     <>
@@ -23,7 +28,11 @@ const Navigation: React.FC<{
         <h1 className={classes.Logo}>
           <Link href="/">Hlife</Link>
         </h1>
-        {isRegister ? <AuthorizedNav /> : <RegistrationsNav />}
+        {isAuthenticated && hasProgram ? (
+          <AuthorizedNav />
+        ) : (
+          <RegistrationsNav />
+        )}
         <div
           className={classes.BarsIcon}
           onClick={() => setDisplaySideNav(true)}

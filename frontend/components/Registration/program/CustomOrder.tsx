@@ -36,6 +36,8 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       trainingDayName,
     };
 
+    //find if already has program at this day and update accordingly
+
     const currentProgramIndex = programs.findIndex(
       (program) => program.day === e.target.id
     );

@@ -24,6 +24,13 @@ jest.mock("react-dom", () => {
     },
   };
 });
+jest.mock("nookies", () => ({
+  destroyCookie: jest.fn().mockImplementation(() => ({})),
+  parseCookies: jest
+    .fn()
+    .mockImplementationOnce(() => ({ redirected: "true" }))
+    .mockImplementationOnce(() => ({ redirected: "" })),
+}));
 
 describe("get server side props tests", () => {
   beforeAll(() => {
@@ -34,8 +41,12 @@ describe("get server side props tests", () => {
   });
 
   test("should handle redirect", async () => {
-    const { redirect } = (await getServerSideProps({} as any)) as any;
+    const setHeader = jest.fn();
+    const { redirect } = (await getServerSideProps({
+      res: { setHeader },
+    } as any)) as any;
 
+    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(redirect.destination).toBe("wrong path");
   });
   test("should return props with redirect set to true", async () => {

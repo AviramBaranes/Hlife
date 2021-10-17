@@ -19,7 +19,7 @@ describe("Navigation", () => {
 
     const { container } = render(
       <Provider store={store}>
-        <Navigation />
+        <Navigation setDisplaySideNav={() => {}} />
       </Provider>
     );
 
@@ -50,7 +50,7 @@ describe("Navigation", () => {
 
     render(
       <Provider store={store}>
-        <Navigation />
+        <Navigation setDisplaySideNav={() => {}} />
       </Provider>
     );
 
@@ -72,7 +72,7 @@ describe("Navigation", () => {
 
     const { container } = render(
       <Provider store={store}>
-        <Navigation />
+        <Navigation setDisplaySideNav={() => {}} />
       </Provider>
     );
 
@@ -105,7 +105,7 @@ describe("Navigation", () => {
 
     render(
       <Provider store={store}>
-        <Navigation />
+        <Navigation setDisplaySideNav={() => {}} />
       </Provider>
     );
 

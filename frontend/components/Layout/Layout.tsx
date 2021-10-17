@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCsrfToken } from "../../redux/slices/tokens";
 
@@ -36,7 +36,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
     },
   ];
 
-  useTheme(theme[themeIndex]);
+  global.window && useTheme(theme[themeIndex]);
 
   useEffect(() => {
     dispatch(settingsSliceActions.getTheme());
@@ -55,7 +55,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   //handle csrf token
   useEffect(() => {
     dispatch(getCsrfToken());
-  }, [dispatch]);
+  }, []);
 
   if (error.message) {
     dispatch(

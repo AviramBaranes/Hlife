@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 
 import ChooseWorkout from "../../../components/Registration/workout/ChooseWorkout";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
@@ -49,21 +49,23 @@ export default ChooseWorkoutPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
+  if (destination === "/auth/registration/choose-workout") {
+    const cookies = parseCookies(ctx);
+    const recommendation = await calculateRecommendationWorkout(cookies);
 
-  if (destination !== "/auth/registration/choose-workout") {
+    let redirected = false;
+    if (cookies.redirected) redirected = true;
+    destroyCookie(ctx, "redirected", {
+      path: "/",
+    });
+
+    return {
+      props: { ...recommendation, redirected },
+    };
+  } else {
+    ctx.res.setHeader("set-cookie", "redirected=true");
     return {
       redirect: { permanent: false, destination },
     };
   }
-  const cookies = parseCookies(ctx);
-
-  const recommendation = await calculateRecommendationWorkout(cookies);
-  const { url } = ctx.req;
-  let redirected = false;
-
-  if (url !== destination) redirected = true;
-
-  return {
-    props: { ...recommendation, redirected },
-  };
 };

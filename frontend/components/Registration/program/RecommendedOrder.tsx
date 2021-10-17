@@ -19,7 +19,7 @@ const RecommendedOrder: React.FC<{
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     let programDay: string;
     const programOrderList = order.split(",");
-    let lastWorkoutMemory: Workout;
+    let lastWorkoutMemory: Workout[] = [];
 
     const workoutsCopy = [...workouts];
     days.forEach((day, i) => {
@@ -30,13 +30,21 @@ const RecommendedOrder: React.FC<{
       //aerobic depends on workout name
       if (workoutItemIndex >= 0) {
         programDay = `${workoutsCopy[workoutItemIndex].name} (${workoutsCopy[workoutItemIndex].trainingDayName})`;
-        if (workoutsCopy[workoutItemIndex].name === "aerobic") {
-          lastWorkoutMemory = workoutsCopy.splice(workoutItemIndex, 1)[0];
+        if (workoutsCopy[workoutItemIndex].trainingDayName === "aerobic") {
+          lastWorkoutMemory.push(workoutsCopy.splice(workoutItemIndex, 1)[0]);
         }
       } else {
-        programOrderList[i] === "X"
-          ? (programDay = "rest (X)")
-          : (programDay = `${lastWorkoutMemory.name} (${lastWorkoutMemory.trainingDayName})`);
+        if (programOrderList[i] === "X") {
+          programDay = "rest (X)";
+        } else {
+          // if enough items shift else use the last and keep it
+          let item: Workout;
+          item =
+            lastWorkoutMemory.length > 1
+              ? lastWorkoutMemory.shift()!
+              : lastWorkoutMemory[0];
+          programDay = `${item.name} (${item.trainingDayName})`;
+        }
       }
       newFormattedOrder += `${day}: ${programDay}\n`;
     });
@@ -114,12 +122,8 @@ const RecommendedOrder: React.FC<{
     for (let data of dataToSend) {
       p = p.then(() => {
         const { day, trainingDayName, workoutName } = data;
-        if (trainingDayName && workoutName) {
-          const c = postOne(day, workoutName, trainingDayName);
-          console.log(c);
-          return c;
-        }
-
+        if (trainingDayName && workoutName)
+          return postOne(day, workoutName, trainingDayName);
         return postOne(day);
       });
     }

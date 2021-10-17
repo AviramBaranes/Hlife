@@ -11,6 +11,7 @@ import userEvent from "@testing-library/user-event";
 import axiosInstance from "../../../../utils/axios/axiosInstance";
 import router from "next/router";
 import { goalsActions } from "../../../../redux/slices/goals/goalsSlice";
+import * as protectRouteHandler from "../../../../utils/protectedRoutes/protectedRoutes";
 
 jest.mock(
   "../../../../utils/registration/fields/fatPercentageFieldHelpers",
@@ -18,31 +19,45 @@ jest.mock(
     fatPercentageChangeHandler: jest.fn(),
   })
 );
+
+jest.mock("nookies", () => ({
+  destroyCookie: jest.fn().mockImplementation(() => ({})),
+  parseCookies: jest
+    .fn()
+    .mockImplementationOnce(() => ({ redirected: "true" }))
+    .mockImplementationOnce(() => ({ redirected: "" })),
+}));
+
 describe("set-goals page server side", () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest
-      .spyOn(axiosInstance, "get")
-      .mockImplementationOnce(async () => ({}))
-      .mockImplementationOnce(async () => ({
-        data: { isAuthenticated: true },
-      }));
-  });
-  afterAll(() => {
-    jest.resetAllMocks();
+      .spyOn(protectRouteHandler, "default")
+      .mockImplementationOnce(async () => "wrong path")
+      .mockImplementation(async () => "/auth/registration/set-goals");
   });
 
-  it("should redirect if the wrong destination is returned", async () => {
-    const result = (await getServerSideProps({} as any)) as any;
+  test("should redirect if the wrong destination is returned", async () => {
+    const setHeader = jest.fn();
+    const result = (await getServerSideProps({
+      res: { setHeader },
+    } as any)) as any;
 
-    expect(result.props).toStrictEqual({});
+    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(result.redirect.permanent).toEqual(false);
-    expect(result.redirect.destination).toEqual("/auth/login");
+    expect(result.redirect.destination).toEqual("wrong path");
   });
 
-  it("should return empty props object if the right destination is returned", async () => {
+  test("should return props with redirected set to true", async () => {
     const result = (await getServerSideProps({} as any)) as any;
 
-    expect(result.props).toStrictEqual({});
+    expect(result.props).toStrictEqual({ redirected: true });
+    expect(result.redirect).toEqual(undefined);
+  });
+
+  test("should return props with redirected set to false", async () => {
+    const result = (await getServerSideProps({} as any)) as any;
+
+    expect(result.props).toStrictEqual({ redirected: false });
     expect(result.redirect).toEqual(undefined);
   });
 });
@@ -69,7 +84,7 @@ describe("set-goals page tests", () => {
   test("should render the correct dom", () => {
     const { container } = render(
       <Provider store={store}>
-        <SetGoals />
+        <SetGoals redirected={false} />
       </Provider>
     );
 
@@ -96,7 +111,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals />
+        <SetGoals redirected={false} />
       </Provider>
     );
 
@@ -187,7 +202,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals />
+        <SetGoals redirected={false} />
       </Provider>
     );
 
@@ -252,7 +267,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals />
+        <SetGoals redirected={false} />
       </Provider>
     );
 
@@ -297,7 +312,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals />
+        <SetGoals redirected={false} />
       </Provider>
     );
 

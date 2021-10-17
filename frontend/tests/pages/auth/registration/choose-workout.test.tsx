@@ -13,6 +13,14 @@ import * as protectedRouteHandler from "../../../../utils/protectedRoutes/protec
 import * as calculateRecommendationWorkout from "../../../../utils/registration/workout/chooseWorkoutHelper";
 import CustomWorkout from "../../../../components/Registration/workout/CustomWorkout";
 
+jest.mock("nookies", () => ({
+  destroyCookie: jest.fn().mockImplementation(() => ({})),
+  parseCookies: jest
+    .fn()
+    .mockImplementationOnce(() => ({ redirected: "true" }))
+    .mockImplementationOnce(() => ({ redirected: "" })),
+}));
+
 describe("choose workout get server side props test", () => {
   beforeAll(() => {
     jest
@@ -33,12 +41,16 @@ describe("choose workout get server side props test", () => {
   });
 
   test("should handle redirect", async () => {
-    const { redirect } = (await getServerSideProps({} as any)) as any;
+    const setHeader = jest.fn();
+    const { redirect } = (await getServerSideProps({
+      res: { setHeader },
+    } as any)) as any;
 
+    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(redirect.destination).toBe("wrong destination");
   });
 
-  test("should return recommendation in props (redirect is false)", async () => {
+  test("should return recommendation in props (redirect is true)", async () => {
     const result = (await getServerSideProps({
       req: { url: "" },
     } as any)) as any;
@@ -49,7 +61,7 @@ describe("choose workout get server side props test", () => {
     expect(result.props.redirected).toBe(true);
   });
 
-  test("should return recommendation in props (redirect is true)", async () => {
+  test("should return recommendation in props (redirect is false)", async () => {
     const result = (await getServerSideProps({
       req: { url: "/auth/registration/choose-workout" },
     } as any)) as any;

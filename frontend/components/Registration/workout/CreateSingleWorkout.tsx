@@ -109,7 +109,7 @@ const CreateSingleWorkout: React.FC<{
         <div></div>
         <button
           type="submit"
-          // disabled={!exercises.length || !totalTime || !workoutName}
+          disabled={!exercises.length || !totalTime || !workoutName}
         >
           Submit
         </button>

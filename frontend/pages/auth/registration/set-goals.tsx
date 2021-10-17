@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import { destroyCookie, parseCookies } from "nookies";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
@@ -84,20 +85,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
 
   if (destination === "/auth/registration/set-goals") {
-    const { url } = ctx.req;
     let redirected = false;
+    const cookies = parseCookies(ctx);
 
-    if (url !== destination) redirected = true;
+    if (cookies.redirected) redirected = true;
+    destroyCookie(ctx, "redirected", {
+      path: "/",
+    });
 
     return {
       props: { redirected },
     };
+  } else {
+    ctx.res.setHeader("set-cookie", "redirected=true");
+    return {
+      redirect: { permanent: false, destination },
+    };
   }
-  return {
-    props: {},
-    redirect: {
-      permanent: false,
-      destination,
-    },
-  };
 };

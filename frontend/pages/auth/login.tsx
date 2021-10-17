@@ -11,12 +11,14 @@ import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
 import { useDispatch } from "react-redux";
 import { errorsActions } from "../../redux/slices/errors/errorsSlice";
 import { redirectedError } from "../../utils/errors/redirectedError";
+import { parseCookies, destroyCookie } from "nookies";
 
 const Login: React.FC<{ redirected: boolean }> = ({ redirected }) => {
   if (redirected) {
     const dispatch = useDispatch();
     dispatch(errorsActions.newError(redirectedError));
   }
+
   return (
     <>
       <div className={classes.Title}>
@@ -49,16 +51,20 @@ export default Login;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
-
   if (destination === "/auth/login") {
-    const { url } = ctx.req;
     let redirected = false;
-    if (url !== "/auth/login") redirected = true;
+    const cookies = parseCookies(ctx);
+
+    if (cookies.redirected) redirected = true;
+    destroyCookie(ctx, "redirected", {
+      path: "/",
+    });
+
     return { props: { redirected } };
   } else {
+    ctx.res.setHeader("set-cookie", "redirected=true");
     return {
       redirect: { permanent: false, destination },
-      props: { redirected: true },
     };
   }
 };

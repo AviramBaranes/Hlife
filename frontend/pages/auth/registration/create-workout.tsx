@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import { destroyCookie, parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import CreateAerobicWorkout from "../../../components/Registration/workout/CreateAerobicWorkout";
@@ -56,19 +57,21 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
 
   if (destination === "/auth/registration/create-workout") {
-    const { url } = ctx.req;
     let redirected = false;
+    const cookies = parseCookies(ctx);
 
-    if (url !== destination) redirected = true;
+    if (cookies.redirected) redirected = true;
+    destroyCookie(ctx, "redirected", {
+      path: "/",
+    });
 
     return {
       props: { redirected },
     };
+  } else {
+    ctx.res.setHeader("set-cookie", "redirected=true");
+    return {
+      redirect: { permanent: false, destination },
+    };
   }
-  return {
-    redirect: {
-      permanent: false,
-      destination,
-    },
-  };
 };

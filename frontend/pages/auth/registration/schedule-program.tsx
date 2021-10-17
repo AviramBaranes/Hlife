@@ -1,5 +1,5 @@
 import { GetServerSideProps } from "next";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import CustomOrder from "../../../components/Registration/program/CustomOrder";
@@ -66,16 +66,18 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return { name, trainingDayName };
       });
 
-      const { url } = ctx.req;
       let redirected = false;
-
-      if (url !== destination) redirected = true;
+      if (cookies.redirected) redirected = true;
+      destroyCookie(ctx, "redirected", {
+        path: "/",
+      });
 
       return { props: { workouts, redirected } };
     } catch (err) {
       return { redirect: { destination: "/error-occur", permanent: false } };
     }
   } else {
+    ctx.res.setHeader("set-cookie", "redirected=true");
     return { redirect: { destination, permanent: false } };
   }
 };

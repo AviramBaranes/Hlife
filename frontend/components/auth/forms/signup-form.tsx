@@ -48,7 +48,6 @@ function signupForm() {
     const minDate = Date.parse("1920-01-01");
     const maxDate = Date.parse("2005-01-01");
     const enteredDate = Date.parse(value);
-    console.log(enteredDate <= maxDate && enteredDate >= minDate);
     if (enteredDate <= maxDate && enteredDate >= minDate) {
       setDateInputIsValid(true);
     } else {

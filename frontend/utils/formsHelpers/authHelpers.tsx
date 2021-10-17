@@ -264,13 +264,13 @@ export async function loginSubmitFormHandler(
     .then(unwrapResult)
     .then((result: { message: string }) => {
       const { message } = result;
+      Router.push("/");
       dispatch(
         messagesActions.newMessage({
           messageTitle: "Logged In!",
           message,
         })
       );
-      Router.push("/");
     })
     .catch((err: CustomError) => {
       dispatch(
@@ -288,7 +288,6 @@ export async function signupSubmitFormHandler(
   dispatch: AppDispatch,
   userFields: { password: string; "password-Confirmation": string }
 ) {
-  console.log(userFields);
   e.preventDefault();
   if (userFields.password !== userFields["password-Confirmation"]) {
     return dispatch(

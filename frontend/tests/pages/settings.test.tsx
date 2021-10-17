@@ -85,23 +85,16 @@ describe("settings page tests", () => {
   test("should change display settings when switch clicked", () => {
     render(
       <Provider store={store}>
-        <Layout>
-          <p></p>
-          <Settings isAuthenticated={false} />
-        </Layout>
+        <Settings isAuthenticated={false} />
       </Provider>
     );
 
     expect(store.getState().settingsReducer.themeClass).toBe("DarkMode");
-    expect(document.body.classList.contains("DarkMode")).toBe(true);
-    expect(document.body.classList.contains("LightMode")).toBe(false);
 
     const input = screen.getByRole("checkbox");
 
     userEvent.click(input);
 
     expect(store.getState().settingsReducer.themeClass).toBe("LightMode");
-    expect(document.body.classList.contains("DarkMode")).toBe(false);
-    expect(document.body.classList.contains("LightMode")).toBe(true);
   });
 });
