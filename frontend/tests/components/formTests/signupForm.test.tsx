@@ -1,34 +1,47 @@
 import "@testing-library/jest-dom/extend-expect";
 
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { Provider } from "react-redux";
 import store from "../../../redux/store/reduxStore";
 import SignupForm from "../../../components/auth/forms/signup-form";
-import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
-import MessageContainer from "../../../components/UI/containers/Messages/MessageContainer";
 import Router from "next/router";
+import axiosInstance from "../../../utils/axios/axiosInstance";
 
-jest.mock("../../../redux/slices/auth/authSlice");
-jest.mock("next/router");
+describe("SignupForm Tests", () => {
+  let spiedAxios: jest.SpyInstance;
+  let spiedRouter: jest.SpyInstance;
 
-describe("SignupForm Dom Renders Tests", () => {
-  test("should render the correct dom elements (only labels)", async () => {
+  beforeAll(() => {
+    spiedAxios = jest
+      .spyOn(axiosInstance, "post")
+      .mockImplementation(async () => ({ data: "" }));
+    spiedRouter = jest.spyOn(Router, "push");
+  });
+
+  test("should render the correct dom elements", async () => {
     render(
       <Provider store={store}>
         <SignupForm />
       </Provider>
     );
 
-    const nameLabelElement = screen.getByLabelText("Name:");
-    const usernameLabelElement = screen.getByLabelText("Username:");
-    const emailLabelElement = screen.getByLabelText("Email:");
-    const passwordLabelElement = screen.getByLabelText("Password:");
-    const passwordConfirmationLabelElement = screen.getByLabelText("Confirm:");
-    const genderLabelElement = screen.getByLabelText("Gender:");
-    const dateLabelElement = screen.getByLabelText("Date Of Birth:");
+    const nameLabelElement = screen.getByLabelText("Name");
+    const usernameLabelElement = screen.getByLabelText("Username");
+    const emailLabelElement = screen.getByLabelText("Email");
+    const passwordLabelElement = screen.getByLabelText("Password");
+    const passwordConfirmationLabelElement =
+      screen.getByLabelText("Confirm password");
+    const genderLabelElement = screen.getByLabelText("Gender");
+    const dateLabelElement = screen.getByLabelText("Date of birth");
+    const formElement = screen.getByRole("form");
+    const selectElement = screen.getByRole("listbox");
+    const buttonElement = screen.getByRole("button");
 
+    expect(formElement).toBeInTheDocument();
+    expect(selectElement).toBeInTheDocument();
+    expect(buttonElement).toBeInTheDocument();
     expect(nameLabelElement).toBeInTheDocument();
     expect(usernameLabelElement).toBeInTheDocument();
     expect(emailLabelElement).toBeInTheDocument();
@@ -38,26 +51,6 @@ describe("SignupForm Dom Renders Tests", () => {
     expect(dateLabelElement).toBeInTheDocument();
   });
 
-  test("should render the correct dom elements (rest of the elements)", async () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const formElement = screen.getByRole("form");
-    const selectElement = screen.getByRole("listbox");
-    const inputList = screen.getAllByRole("textbox");
-    const buttonElement = screen.getByRole("button");
-
-    expect(formElement).toBeInTheDocument();
-    expect(selectElement).toBeInTheDocument();
-    expect(inputList.length).toBe(6);
-    expect(buttonElement).toBeInTheDocument();
-  });
-});
-
-describe("SignupForm Validity Handle Test", () => {
   test("should be invalid (name invalid)", () => {
     render(
       <Provider store={store}>
@@ -65,87 +58,36 @@ describe("SignupForm Validity Handle Test", () => {
       </Provider>
     );
 
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("name");
+    const nameLabelElement = screen.getByLabelText("Name");
+    const usernameLabelElement = screen.getByLabelText("Username");
+    const emailLabelElement = screen.getByLabelText("Email");
+    const passwordLabelElement = screen.getByLabelText("Password");
+    const passwordConfirmationLabelElement =
+      screen.getByLabelText("Confirm password");
+    const dateLabelElement = screen.getByLabelText("Date of birth");
+    const btn = screen.getByRole("button");
 
-    expect(inputElement.classList[1]).toBe(undefined);
+    expect(nameLabelElement.className).toBe("");
+    expect(usernameLabelElement.className).toBe("");
+    expect(emailLabelElement.className).toBe("");
+    expect(passwordLabelElement.className).toBe("");
+    expect(passwordConfirmationLabelElement.className).toBe("");
+    expect(dateLabelElement.className).toBe("");
 
-    userEvent.type(inputElement, "av");
+    userEvent.type(nameLabelElement, "av");
+    userEvent.type(usernameLabelElement, "av");
+    userEvent.type(emailLabelElement, "av");
+    userEvent.type(passwordLabelElement, "12");
+    userEvent.type(passwordConfirmationLabelElement, "12");
+    userEvent.type(dateLabelElement, "1900-01-01");
 
-    expect(inputElement.classList[1]).toBe("InValid");
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be invalid (username invalid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("username");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-
-    userEvent.type(inputElement, "av");
-
-    expect(inputElement.classList[1]).toBe("InValid");
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be invalid (email invalid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("email");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-
-    userEvent.type(inputElement, "not an email");
-
-    expect(inputElement.classList[1]).toBe("InValid");
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be invalid (password 1 invalid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("password");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-
-    userEvent.type(inputElement, "12345");
-
-    expect(inputElement.classList[1]).toBe("InValid");
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be invalid (password 2 invalid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("password-Confirmation");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-
-    userEvent.type(inputElement, "12345");
-
-    expect(inputElement.classList[1]).toBe("InValid");
-    expect(buttonElement).toBeDisabled();
+    expect(nameLabelElement.className).toBe("inValid");
+    expect(usernameLabelElement.className).toBe("inValid");
+    expect(emailLabelElement.className).toBe("inValid");
+    expect(passwordLabelElement.className).toBe("inValid");
+    expect(passwordConfirmationLabelElement.className).toBe("inValid");
+    expect(dateLabelElement.className).toBe("inValid");
+    expect(btn).toBeDisabled();
   });
 
   test("should be valid (name valid)", () => {
@@ -155,191 +97,77 @@ describe("SignupForm Validity Handle Test", () => {
       </Provider>
     );
 
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("name");
+    const nameLabelElement = screen.getByLabelText("Name");
+    const usernameLabelElement = screen.getByLabelText("Username");
+    const emailLabelElement = screen.getByLabelText("Email");
+    const passwordLabelElement = screen.getByLabelText("Password");
+    const passwordConfirmationLabelElement =
+      screen.getByLabelText("Confirm password");
+    const dateLabelElement = screen.getByLabelText("Date of birth");
+    const btn = screen.getByRole("button");
 
-    userEvent.type(inputElement, "avi");
+    userEvent.type(nameLabelElement, "avi");
+    userEvent.type(usernameLabelElement, "avi");
+    userEvent.type(emailLabelElement, "avi@avi.com");
+    userEvent.type(passwordLabelElement, "123123");
+    userEvent.type(passwordConfirmationLabelElement, "123123");
+    userEvent.type(dateLabelElement, "2001-11-11");
 
-    expect(inputElement.classList[1]).toBe(undefined);
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be valid (username valid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("username");
-
-    userEvent.type(inputElement, "avi123");
-    expect(inputElement.classList[1]).toBe(undefined);
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be valid (email valid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("email");
-
-    userEvent.type(inputElement, "email@email.com");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be valid (password 1 valid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("password");
-
-    userEvent.type(inputElement, "123456");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be valid (password 2 valid)", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputElement = screen.getByPlaceholderText("password-Confirmation");
-
-    userEvent.type(inputElement, "123456");
-
-    expect(inputElement.classList[1]).toBe(undefined);
-    expect(buttonElement).toBeDisabled();
-  });
-
-  test("should be valid if all valid", () => {
-    render(
-      <Provider store={store}>
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputs = screen.getAllByRole("textbox");
-
-    userEvent.type(inputs[0], "avi");
-    userEvent.type(inputs[1], "avi123");
-    userEvent.type(inputs[2], "email@email.com");
-    userEvent.type(inputs[3], "123456");
-    userEvent.type(inputs[4], "123456");
-    userEvent.type(inputs[5], "2004-01-01");
-
-    expect(buttonElement).not.toBeDisabled();
-  });
-});
-
-describe("SignupForm Submit Handle Test", () => {
-  let spiedRouter: jest.SpyInstance<any, any>;
-
-  beforeAll(() => {
-    spiedRouter = jest.spyOn(Router, "push");
+    expect(nameLabelElement.className).toBe("");
+    expect(usernameLabelElement.className).toBe("");
+    expect(emailLabelElement.className).toBe("");
+    expect(passwordLabelElement.className).toBe("");
+    expect(passwordConfirmationLabelElement.className).toBe("");
+    expect(dateLabelElement.className).toBe("");
+    expect(btn).not.toBeDisabled();
   });
 
   test("should display error message if passwords do not match ", async () => {
     render(
       <Provider store={store}>
-        <ErrorContainer />
         <SignupForm />
       </Provider>
     );
 
-    const buttonElement = screen.getByRole("button");
-    const inputs = screen.getAllByRole("textbox");
+    const nameLabelElement = screen.getByLabelText("Name");
+    const usernameLabelElement = screen.getByLabelText("Username");
+    const emailLabelElement = screen.getByLabelText("Email");
+    const passwordLabelElement = screen.getByLabelText("Password");
+    const passwordConfirmationLabelElement =
+      screen.getByLabelText("Confirm password");
+    const dateLabelElement = screen.getByLabelText("Date of birth");
+    const btn = screen.getByRole("button");
 
-    userEvent.type(inputs[0], "avi");
-    userEvent.type(inputs[1], "avi123");
-    userEvent.type(inputs[2], "email@email.com");
-    userEvent.type(inputs[3], "theyNot");
-    userEvent.type(inputs[4], "aMatch");
+    userEvent.type(nameLabelElement, "avi");
+    userEvent.type(usernameLabelElement, "avi");
+    userEvent.type(emailLabelElement, "avi@avi.com");
+    userEvent.type(passwordLabelElement, "123123");
+    userEvent.type(passwordConfirmationLabelElement, "1231234");
+    userEvent.type(dateLabelElement, "2001-11-11");
 
-    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
+    //passwords do not match
+    userEvent.click(btn);
+    expect(spiedAxios.mock.calls.length).toEqual(0);
 
-    userEvent.click(buttonElement);
+    userEvent.clear(passwordConfirmationLabelElement);
+    userEvent.type(passwordConfirmationLabelElement, "123123");
+    //passwords match
+    userEvent.click(btn);
 
-    const titleElement = await screen.findByText("Sign Up Failed");
-    const messageElement = await screen.findByText(
-      "Password need to be a match"
-    );
-
-    expect(titleElement).toBeInTheDocument();
-    expect(messageElement).toBeInTheDocument();
-  });
-
-  test("should display error message if form submition failed ", async () => {
-    render(
-      <Provider store={store}>
-        <ErrorContainer />
-        <SignupForm />
-      </Provider>
-    );
-
-    const [errorButton, submitButton] = screen.getAllByRole("button");
-    userEvent.click(errorButton);
-    const inputs = screen.getAllByRole("textbox");
-
-    userEvent.type(inputs[0], "avi");
-    userEvent.type(inputs[1], "avi123");
-    userEvent.type(inputs[2], "email@email.com");
-    userEvent.type(inputs[3], "theyMatch");
-    userEvent.type(inputs[4], "theyMatch");
-
-    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
-
-    userEvent.click(submitButton);
-
-    const titleElement = await screen.findByText("Sign Up Failed");
-    const messageElement = await screen.findByText("error data");
-
-    expect(titleElement).toBeInTheDocument();
-    expect(messageElement).toBeInTheDocument();
-  });
-
-  test("should desplay success message if form submition succeed ", async () => {
-    render(
-      <Provider store={store}>
-        <MessageContainer />
-        <SignupForm />
-      </Provider>
-    );
-
-    const buttonElement = screen.getByRole("button");
-    const inputs = screen.getAllByRole("textbox");
-
-    userEvent.type(inputs[0], "avi");
-    userEvent.type(inputs[1], "avi123");
-    userEvent.type(inputs[2], "email@email.com");
-    userEvent.type(inputs[3], "theyMatch");
-    userEvent.type(inputs[4], "theyMatch");
-
-    fireEvent.change(inputs[5], { target: { value: "2000-05-24" } });
-
-    userEvent.click(buttonElement);
-
-    const titleElement = await screen.findByText("Signed Up!");
-    const messageElement = await screen.findByText("avi signed in");
-
-    expect(titleElement).toBeInTheDocument();
-    expect(messageElement).toBeInTheDocument();
-    expect(spiedRouter.mock.calls[0][0]).toBe("/");
+    await waitFor(() => {
+      expect(spiedAxios.mock.calls[0][0]).toEqual("/auth/signup");
+      expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
+        name: "avi",
+        username: "avi",
+        email: "avi@avi.com",
+        password: "123123",
+        passwordConfirmation: "123123",
+        dateOfBirth: "2001-11-11",
+        gender: "male",
+      });
+      expect(spiedRouter.mock.calls[0][0]).toEqual(
+        "/auth/registration/set-goals"
+      );
+    });
   });
 });

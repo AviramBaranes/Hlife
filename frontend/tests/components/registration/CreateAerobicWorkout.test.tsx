@@ -49,29 +49,29 @@ describe("create aerobic workout test", () => {
     expect(addBtn).toBeDisabled();
     expect(submitBtn).toBeDisabled();
 
-    const nameInput = screen.getByLabelText("Workout Name:");
-    const timeInput = screen.getByLabelText("Total Time:");
+    const nameInput = screen.getByLabelText("Workout name");
+    const timeInput = screen.getByLabelText("Total time");
     userEvent.type(timeInput, "01:30");
 
     //name input is empty
-    expect(timeInput.className).toBe("Input");
-    expect(nameInput.className).toBe("Input");
+    expect(timeInput.className).toBe("");
+    expect(nameInput.className).toBe("");
     expect(addBtn).toBeDisabled();
     expect(submitBtn).toBeDisabled();
 
     userEvent.type(nameInput, "---");
 
     //name input is too short
-    expect(timeInput.className).toBe("Input");
-    expect(nameInput.className).toBe("Input InValid");
+    expect(timeInput.className).toBe("");
+    expect(nameInput.className).toBe("inValid");
     expect(addBtn).toBeDisabled();
     expect(submitBtn).toBeDisabled();
 
     userEvent.type(nameInput, "-");
 
     //input are valid
-    expect(timeInput.className).toBe("Input");
-    expect(nameInput.className).toBe("Input");
+    expect(timeInput.className).toBe("");
+    expect(nameInput.className).toBe("");
     expect(addBtn).not.toBeDisabled();
     expect(submitBtn).not.toBeDisabled();
 
@@ -90,8 +90,8 @@ describe("create aerobic workout test", () => {
     );
 
     const submitBtn = screen.getByText("Submit");
-    const nameInput = screen.getByLabelText("Workout Name:");
-    const timeInput = screen.getByLabelText("Total Time:");
+    const nameInput = screen.getByLabelText("Workout name");
+    const timeInput = screen.getByLabelText("Total time");
     userEvent.type(timeInput, "01:30");
     userEvent.type(nameInput, "boxing");
     userEvent.click(submitBtn);
@@ -122,9 +122,9 @@ describe("create aerobic workout test", () => {
 
     const addBtn = screen.getByText("Add another");
     const submitBtn = screen.getByText("Submit");
-    const nameInput = screen.getByLabelText("Workout Name:");
-    const timeInput = screen.getByLabelText("Total Time:");
-    const descInput = screen.getByLabelText("Description:");
+    const nameInput = screen.getByLabelText("Workout name");
+    const timeInput = screen.getByLabelText("Total time");
+    const descInput = screen.getByLabelText("Description");
     userEvent.type(timeInput, "01:30");
     userEvent.type(nameInput, "boxing");
     userEvent.click(addBtn);

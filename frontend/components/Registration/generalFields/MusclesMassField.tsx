@@ -45,23 +45,21 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
       />
       {bodyBuilderImage && <Image src={bodyBuilderImage} />}
       <div>
-        <Button
+        <button
           type="button"
           disabled={!inputTouched}
-          clicked={() => buttonsEvents.continue(+desiredMusclesMass)}
+          onClick={() => buttonsEvents.continue(+desiredMusclesMass)}
         >
           Continue
-        </Button>
-        <Button
-          elementConfig={{
-            style: { display: `${allowedToSkip ? "block" : "none"}` },
-          }}
+        </button>
+        <button
+          style={{ display: `${allowedToSkip ? "block" : "none"}` }}
           type="button"
           disabled={!allowedToSkip}
-          clicked={buttonsEvents.skip}
+          onClick={buttonsEvents.skip}
         >
           Skip
-        </Button>
+        </button>
       </div>
     </section>
   );

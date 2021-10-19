@@ -1,23 +1,46 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
-import Login from "../../../pages/auth/login";
+import * as protectedRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
+import Login, { getServerSideProps } from "../../../pages/auth/login";
 import { Provider } from "react-redux";
 import store from "../../../redux/store/reduxStore";
+
+describe("login get server side props test", () => {
+  beforeAll(() => {
+    jest
+      .spyOn(protectedRouteHandler, "default")
+      .mockImplementationOnce(async () => "wrong destination")
+      .mockImplementation(async () => "/auth/login");
+  });
+
+  test("should handle redirect", async () => {
+    const { redirect } = (await getServerSideProps({} as any)) as any;
+
+    expect(redirect.destination).toBe("wrong destination");
+  });
+
+  test("should return recommendation in props", async () => {
+    const result = (await getServerSideProps({} as any)) as any;
+
+    expect(result.props).toStrictEqual({});
+  });
+});
 
 describe("login page tests", () => {
   test("should render the dom correctly", () => {
     const { container } = render(
       <Provider store={store}>
-        <Login />
+        <Login redirected={false} />
       </Provider>
     );
 
     const links = screen.getAllByRole("link");
     const h1Title = screen.getByText("Welcome Back!");
     const h2Title = screen.getByText("Log In");
+    const emailInput = screen.getByLabelText("Email");
+    const passwordInput = screen.getByLabelText("Password");
     const formElement = container.children[1].children[0].children[2];
-    const inputs = screen.getAllByRole("textbox");
     const svgElement = container.children[1].children[0].children[1];
     const p1Element = container.children[2].children[0].children[0];
     const p2Element = container.children[2].children[0].children[1];
@@ -30,6 +53,7 @@ describe("login page tests", () => {
     expect(p2Element.textContent).toEqual("Forgot your password? go here");
     expect(links[0]).toHaveAttribute("href", "/auth/signup");
     expect(links[1]).toHaveAttribute("href", "/auth/forgotPassword");
-    expect(inputs.length).toEqual(2);
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
   });
 });

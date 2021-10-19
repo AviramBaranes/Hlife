@@ -24,13 +24,6 @@ jest.mock("react-dom", () => {
     },
   };
 });
-jest.mock("nookies", () => ({
-  destroyCookie: jest.fn().mockImplementation(() => ({})),
-  parseCookies: jest
-    .fn()
-    .mockImplementationOnce(() => ({ redirected: "true" }))
-    .mockImplementationOnce(() => ({ redirected: "" })),
-}));
 
 describe("get server side props tests", () => {
   beforeAll(() => {
@@ -41,28 +34,14 @@ describe("get server side props tests", () => {
   });
 
   test("should handle redirect", async () => {
-    const setHeader = jest.fn();
-    const { redirect } = (await getServerSideProps({
-      res: { setHeader },
-    } as any)) as any;
+    const { redirect } = (await getServerSideProps({} as any)) as any;
 
-    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(redirect.destination).toBe("wrong path");
   });
   test("should return props with redirect set to true", async () => {
-    const { props } = (await getServerSideProps({
-      req: { url: "redirected" },
-    } as any)) as any;
+    const { props } = (await getServerSideProps({} as any)) as any;
 
-    expect(props.redirected).toBe(true);
-  });
-
-  test("should return props", async () => {
-    const { props } = (await getServerSideProps({
-      req: { url: "/auth/registration/create-workout" },
-    } as any)) as any;
-
-    expect(props.redirected).toBe(false);
+    expect(props).toStrictEqual({});
   });
 });
 
@@ -90,7 +69,7 @@ describe("Create workout tests", () => {
 
     render(
       <Provider store={store}>
-        <CreateWorkout redirected={false} />
+        <CreateWorkout />
       </Provider>
     );
 
@@ -109,7 +88,7 @@ describe("Create workout tests", () => {
 
     render(
       <Provider store={store}>
-        <CreateWorkout redirected={false} />
+        <CreateWorkout />
       </Provider>
     );
 
@@ -122,8 +101,8 @@ describe("Create workout tests", () => {
     expect(fbTitle).not.toBeInTheDocument();
     expect(aerobicTitle).toBeInTheDocument();
 
-    userEvent.type(screen.getByLabelText("Workout Name:"), "boxing");
-    userEvent.type(screen.getByLabelText("Total Time:"), "01:30");
+    userEvent.type(screen.getByLabelText("Workout name"), "boxing");
+    userEvent.type(screen.getByLabelText("Total time"), "01:30");
     userEvent.click(screen.getByText("Submit"));
 
     await waitFor(() => {
@@ -142,7 +121,7 @@ describe("Create workout tests", () => {
 
     render(
       <Provider store={store}>
-        <CreateWorkout redirected={false} />
+        <CreateWorkout />
       </Provider>
     );
 
@@ -161,7 +140,7 @@ describe("Create workout tests", () => {
 
     render(
       <Provider store={store}>
-        <CreateWorkout redirected={false} />
+        <CreateWorkout />
       </Provider>
     );
 

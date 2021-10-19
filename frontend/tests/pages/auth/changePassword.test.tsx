@@ -11,23 +11,18 @@ import { getDefaultMiddleware } from "@reduxjs/toolkit";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import { AxiosRequestConfig } from "axios";
 import Router from "next/router";
-
-jest.mock("../../../utils/Axios/axiosInstance");
-
-const middlewares = getDefaultMiddleware();
-const mockStore = configureStore(middlewares);
+import store from "../../../redux/store/reduxStore";
 
 describe("Reset Password 'getServerSideProps' tests", () => {
-  let mockedAxiosInstance: jest.SpyInstance<
-    Promise<unknown>,
-    [url: string, config?: AxiosRequestConfig | undefined]
-  >;
+  let mockedAxiosInstance: jest.SpyInstance;
 
   beforeAll(() => {
-    mockedAxiosInstance = jest.spyOn(axiosInstance, "get");
+    mockedAxiosInstance = jest
+      .spyOn(axiosInstance, "get")
+      .mockImplementation(async () => "");
   });
 
-  it("should send a token in props", async () => {
+  test("should send a token in props", async () => {
     const ctx = { params: { token: ["token123"] } };
 
     const result = (await getServerSideProps(ctx as any)) as any;
@@ -40,11 +35,8 @@ describe("Reset Password 'getServerSideProps' tests", () => {
 });
 
 describe("Reset Password page tests", () => {
-  let mockedAxiosInstance: jest.SpyInstance<
-    Promise<unknown>,
-    [url: string, data?: any, config?: AxiosRequestConfig | undefined]
-  >;
-  let spiedRouter: jest.SpyInstance<any, any>;
+  let mockedAxiosInstance: jest.SpyInstance;
+  let spiedRouter: jest.SpyInstance;
 
   beforeAll(() => {
     mockedAxiosInstance = jest
@@ -60,7 +52,6 @@ describe("Reset Password page tests", () => {
   });
 
   test("should render the dom", () => {
-    const store = mockStore({});
     const { container } = render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
@@ -70,147 +61,131 @@ describe("Reset Password page tests", () => {
     const h5Element = container.children[0].children[1];
     const h1Element = container.children[0].children[0];
     const form = container.children[1].children[0];
-    const inputs = screen.getAllByRole("textbox");
+    const input_1 = screen.getByLabelText("Password");
+    const input_2 = screen.getByLabelText("Confirm password");
 
     expect(h1Element).toBeInTheDocument();
     expect(h5Element).toBeInTheDocument();
     expect(form).toBeInTheDocument();
-    inputs.forEach((input) => expect(input).toBeInTheDocument);
+    expect(input_1).toBeInTheDocument();
+    expect(input_2).toBeInTheDocument();
   });
+
   test("should handle validation (first password invalid)", () => {
-    const store = mockStore({});
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "pass");
-    userEvent.type(formIndicator[0], "password");
+    userEvent.type(screen.getByLabelText("Password"), "pass");
+    userEvent.type(screen.getByLabelText("Confirm password"), "password");
 
     expect(button).toBeDisabled();
   });
   test("should handle validation (second password invalid)", () => {
-    const store = mockStore({});
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "password");
-    userEvent.type(formIndicator[0], "pa   ss");
+    userEvent.type(screen.getByLabelText("Password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm password"), "pass");
 
     expect(button).toBeDisabled();
   });
-  test("should handle validation (second password invalid)", () => {
-    const store = mockStore({});
+  test("should failed to submit for different passwords", () => {
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "password1");
-    userEvent.type(formIndicator[1], "password2");
+    userEvent.type(screen.getByLabelText("Password"), "password1");
+    userEvent.type(screen.getByLabelText("Confirm password"), "password2");
     userEvent.click(button);
 
-    const action = store.getActions()[0];
+    const errorState = store.getState().errorsReducer;
 
-    expect(action.type).toBe("errors/newError");
-    expect(action.payload.errorTitle).toBe("Reset Failed");
-    expect(action.payload.errorMessage).toBe("Passwords need to be a match");
+    expect(errorState.errorTitle).toBe("Passwords need to be a match");
+    expect(errorState.errorMessage).toBe("");
   });
+
   test("should handle form submission failed", async () => {
-    const store = mockStore({});
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "password");
-    userEvent.type(formIndicator[1], "password");
+    userEvent.type(screen.getByLabelText("Password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm password"), "password");
     userEvent.click(button);
 
-    const actions = store.getActions();
+    const errorState = store.getState().errorsReducer;
 
     const expectedPayload = {
-      errorTitle: "Reset Failed",
+      newError: true,
+      errorTitle: "Changing Password Failed",
       errorMessage: "data",
-      errorStatusCode: 555,
+      errorStatusCode: null,
     };
 
     await waitFor(() => {
-      expect(actions[0].type).toBe("users/changeLoadingState");
-      expect(actions[0].payload).toBe(true);
-      expect(actions[1].type).toBe("users/changeLoadingState");
-      expect(actions[1].payload).toBe(false);
-      expect(actions[2].type).toBe("errors/newError");
-      expect(actions[2].payload).toStrictEqual(expectedPayload);
+      expect(errorState).toStrictEqual(expectedPayload);
       expect(mockedAxiosInstance.mock.calls[0][0]).toEqual(
         "/auth/reset/password-reset"
       );
     });
   });
+
   test("should handle form submission succeed", async () => {
-    const store = mockStore({});
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "password");
-    userEvent.type(formIndicator[1], "password");
+    userEvent.type(screen.getByLabelText("Password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm password"), "password");
     userEvent.click(button);
 
-    const actions = store.getActions();
+    const messageState = store.getState().messagesReducer;
 
     const expectedPayload = {
-      messageTitle: "Success!",
+      newMessage: true,
+      messageTitle: "Password Changed Successfully",
       message: "message",
     };
 
     await waitFor(() => {
-      expect(actions[0].type).toBe("users/changeLoadingState");
-      expect(actions[0].payload).toBe(true);
-      expect(actions[1].type).toBe("users/changeLoadingState");
-      expect(actions[1].payload).toBe(false);
-      expect(actions[2].type).toBe("errors/errorConfirmed");
-      expect(actions[3].type).toBe("messages/newMessage");
-      expect(actions[3].payload).toStrictEqual(expectedPayload); //for objects
+      expect(messageState).toStrictEqual(expectedPayload);
       expect(spiedRouter.mock.calls[0][0]).toEqual("/auth/login");
     });
   });
+
   test("should call axios with the correct payload", async () => {
-    const store = mockStore({});
     render(
       <Provider store={store}>
         <ResetPassword token={"token"} />
       </Provider>
     );
 
-    const formIndicator = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
 
-    userEvent.type(formIndicator[0], "password");
-    userEvent.type(formIndicator[1], "password");
+    userEvent.type(screen.getByLabelText("Password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm password"), "password");
     userEvent.click(button);
 
     const expectedFields = {
@@ -220,10 +195,10 @@ describe("Reset Password page tests", () => {
     };
 
     await waitFor(() => {
-      expect(mockedAxiosInstance.mock.calls[0][0]).toEqual(
+      expect(mockedAxiosInstance.mock.calls[2][0]).toEqual(
         "/auth/reset/password-reset"
       );
-      expect(mockedAxiosInstance.mock.calls[0][1]).toStrictEqual(
+      expect(mockedAxiosInstance.mock.calls[2][1]).toStrictEqual(
         expectedFields
       );
     });

@@ -22,14 +22,6 @@ jest.mock(
   })
 );
 
-jest.mock("nookies", () => ({
-  destroyCookie: jest.fn().mockImplementation(() => ({})),
-  parseCookies: jest
-    .fn()
-    .mockImplementationOnce(() => ({ redirected: "true" }))
-    .mockImplementationOnce(() => ({ redirected: "" })),
-}));
-
 describe("set-initial-stats page server side", () => {
   beforeAll(() => {
     jest
@@ -39,27 +31,16 @@ describe("set-initial-stats page server side", () => {
   });
 
   test("should redirect if the wrong destination is returned", async () => {
-    const setHeader = jest.fn();
-    const result = (await getServerSideProps({
-      res: { setHeader },
-    } as any)) as any;
+    const result = (await getServerSideProps({} as any)) as any;
 
-    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(result.redirect.permanent).toEqual(false);
     expect(result.redirect.destination).toEqual("wrong path");
   });
 
-  test("should return props with redirected set to true", async () => {
+  test("should return props ", async () => {
     const result = (await getServerSideProps({} as any)) as any;
 
-    expect(result.props).toStrictEqual({ redirected: true });
-    expect(result.redirect).toEqual(undefined);
-  });
-
-  test("should return props with redirected set to false", async () => {
-    const result = (await getServerSideProps({} as any)) as any;
-
-    expect(result.props).toStrictEqual({ redirected: false });
+    expect(result.props).toStrictEqual({});
     expect(result.redirect).toEqual(undefined);
   });
 });
@@ -92,7 +73,7 @@ describe("set-initial-stats page tests", () => {
   test("should render the correct dom", () => {
     const { container } = render(
       <Provider store={store}>
-        <SetInitialStats redirected={false} />
+        <SetInitialStats />
       </Provider>
     );
 
@@ -120,7 +101,7 @@ describe("set-initial-stats page tests", () => {
   test("should display only one field each time in chronological order and change the state accordingly", async () => {
     render(
       <Provider store={store}>
-        <SetInitialStats redirected={false} />
+        <SetInitialStats />
       </Provider>
     );
 
@@ -246,7 +227,7 @@ describe("set-initial-stats page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetInitialStats redirected={false} />
+        <SetInitialStats />
       </Provider>
     );
 
@@ -271,12 +252,12 @@ describe("set-initial-stats page tests", () => {
   test("should allow to skip the optional fields", async () => {
     render(
       <Provider store={store}>
-        <SetInitialStats redirected={false} />
+        <SetInitialStats />
       </Provider>
     );
 
     const rankSelection = screen.getByText("Beginner");
-    const input = screen.getByPlaceholderText("weight");
+    const input = screen.getByLabelText("Weight");
     const continueButtons = screen.getAllByText("Continue");
     const skipButtons = screen.getAllByText("Skip");
 

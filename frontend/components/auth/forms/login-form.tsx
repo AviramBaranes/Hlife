@@ -10,6 +10,7 @@ import router from "next/router";
 function loginForm() {
   const dispatch = useDispatch();
 
+  const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
   const [fields, setFields] = useState({
     email: { valid: false, touched: false, value: "" },
     password: { valid: false, touched: false, value: "" },
@@ -51,6 +52,21 @@ function loginForm() {
     }
   }, [fields]);
 
+  function mouseOverBtnHandler(e: React.MouseEvent) {
+    if (formValidity) return;
+
+    setErrorDiv(
+      <>
+        <h4>Some of the fields are invalid</h4>
+        <h6>Please make sure you follow the following instructions</h6>
+        <ul>
+          <li>email needs to be a valid email</li>
+          <li>password must contain at least 6 characters</li>
+        </ul>
+      </>
+    );
+  }
+
   async function loginSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -80,29 +96,40 @@ function loginForm() {
 
   return (
     <form aria-label="form" onSubmit={loginSubmitHandler}>
-      <label htmlFor="email">Email:</label>
-      <input
-        className={classes.emailInputClass}
-        name="email"
-        type="email"
-        id="email"
-        required
-        value={fields.email.value}
-        onChange={inputChangeHandler}
-      />
-      <label htmlFor="password">Password:</label>
-      <input
-        className={classes.passwordInputClass}
-        name="password"
-        type="password"
-        id="password"
-        required
-        value={fields.password.value}
-        onChange={inputChangeHandler}
-      />
-      <button disabled={!formValidity} type="submit">
-        Login
-      </button>
+      <div className="input-container">
+        <input
+          className={classes.emailInputClass}
+          name="email"
+          type="email"
+          id="email"
+          required
+          value={fields.email.value}
+          onChange={inputChangeHandler}
+        />
+        <label htmlFor="email">Email</label>
+      </div>
+
+      <div className="input-container">
+        <input
+          className={classes.passwordInputClass}
+          name="password"
+          type="password"
+          id="password"
+          required
+          value={fields.password.value}
+          onChange={inputChangeHandler}
+        />
+        <label htmlFor="password">Password</label>
+      </div>
+      <div>{errorDiv}</div>
+      <div
+        onMouseOver={mouseOverBtnHandler}
+        onMouseLeave={() => setErrorDiv(null)}
+      >
+        <button disabled={!formValidity} type="submit">
+          Login
+        </button>
+      </div>
     </form>
   );
 }

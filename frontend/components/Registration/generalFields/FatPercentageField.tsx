@@ -49,23 +49,21 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
       />
       {currentImage && <Image src={currentImage} />}
       <div>
-        <Button
+        <button
           type="button"
           disabled={!inputTouched}
-          clicked={() => buttonsEvents.continue(+desiredFatPercentage)}
+          onClick={() => buttonsEvents.continue(+desiredFatPercentage)}
         >
           Continue
-        </Button>
-        <Button
-          elementConfig={{
-            style: { display: `${allowedToSkip ? "block" : "none"}` },
-          }}
+        </button>
+        <button
+          style={{ display: `${allowedToSkip ? "block" : "none"}` }}
           type="button"
           disabled={!allowedToSkip}
-          clicked={buttonsEvents.skip}
+          onClick={buttonsEvents.skip}
         >
           Skip
-        </Button>
+        </button>
       </div>
     </section>
   );

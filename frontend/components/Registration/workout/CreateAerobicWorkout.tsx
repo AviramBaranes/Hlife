@@ -1,12 +1,10 @@
 import router from "next/router";
 import React, { SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { usersActions } from "../../../redux/slices/auth/authSlice";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import Button from "../../UI/Button/Button";
-import Input from "../../UI/Input/Input";
 import Modal from "../../UI/Modal/Modal";
 import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
 
@@ -139,13 +137,13 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         <Modal onClose={() => setShowModal(false)}>
           While creating workout dont refresh the page or data you entered will
           be lost.
-          <Button
+          <button
             type="button"
             disabled={false}
-            clicked={() => setShowModal(false)}
+            onClick={() => setShowModal(false)}
           >
             OK
-          </Button>
+          </button>
         </Modal>
       )}
       <h3>Create aerobic workout</h3>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import slimBody from "../../../assets/images/slim-body.png";
 import muscleBody from "../../../assets/images/muscle-body.png";
 import RangeInput from "../../UI/RangeInput/RangeInput";
-import Button from "../../UI/Button/Button";
 import { useDispatch } from "react-redux";
 import { goalsActions } from "../../../redux/slices/goals/goalsSlice";
 
@@ -74,13 +73,13 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             onChange={rangeChangeHandler}
           />
         </div>
-        <Button
+        <button
           disabled={!basicGoal && !touched}
           type="button"
-          clicked={submitFieldsHandler}
+          onClick={submitFieldsHandler}
         >
           Continue
-        </Button>
+        </button>
       </section>
     </>
   );

@@ -98,6 +98,7 @@ describe("stats required fields tests", () => {
     expect(section.tagName).toEqual("SECTION");
     expect(section).toHaveStyle("display: none;");
   });
+
   test("button should not be disabled", () => {
     const props = {
       shouldDisplay: false,
@@ -110,8 +111,8 @@ describe("stats required fields tests", () => {
 
     const continueButton = screen.getByText("Continue");
     const rankSelection = screen.getByText("Pro");
-    const weightInput = screen.getByPlaceholderText("weight");
-    const heightInput = screen.getByPlaceholderText("height");
+    const weightInput = screen.getByLabelText("Weight");
+    const heightInput = screen.getByLabelText("Height");
 
     //nothing was filled
     expect(continueButton).toBeDisabled();

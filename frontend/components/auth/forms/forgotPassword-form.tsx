@@ -1,59 +1,95 @@
-import React, { useState } from "react";
+import router from "next/router";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-
-import { ComplexInputListObject } from "../../../types/inputConfig";
-import {
-  inputChangeHandler,
-  submitSendEmailFormHandler,
-} from "../../../utils/formsHelpers/authHelpers";
-import Button from "../../UI/Button/Button";
-import Input from "../../UI/Input/Input";
+import isEmail from "validator/lib/isEmail";
+import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
+import axiosInstance from "../../../utils/axios/axiosInstance";
 
 function forgotPasswordForm() {
   const dispatch = useDispatch();
 
-  const [formValidity, setFormValidity] = useState(false);
+  const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
+  const [inputClass, setInputClass] = useState("");
   const [email, setEmail] = useState("");
-  //need to be an array to be suitable with global inputChangeHandler function
-  const [inputConfig, setInputConfig] = useState<ComplexInputListObject[]>([
-    {
-      value: email,
-      valid: false,
-      touched: false,
-      rules: {
-        isEmail: true,
-      },
-    },
-  ]);
+  const [emailValidity, setEmailValidity] = useState({
+    valid: false,
+    touched: false,
+  });
+
+  useEffect(() => {
+    setEmailValidity((prevState) => ({ ...prevState, valid: isEmail(email) }));
+
+    if (emailValidity.touched && !emailValidity.valid) {
+      setInputClass("inValid");
+    } else {
+      setInputClass("");
+    }
+  }, [email]);
+
+  function mouseOverBtnHandler(e: React.MouseEvent) {
+    if (emailValidity.valid) return;
+    setErrorDiv(
+      <>
+        <h4>Email field is invalid</h4>
+        <h6>Please make sure you enter a valid email</h6>
+      </>
+    );
+  }
+
+  async function submitSendEmailFormHandler(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const {
+        data: { message },
+      } = await axiosInstance.post("/auth/password/send-token", { email });
+
+      await router.push("/auth/login");
+      dispatch(
+        messagesActions.newMessage({ messageTitle: "Email Sent!", message })
+      );
+    } catch (err: any) {
+      dispatch(
+        errorsActions.newError({
+          errorTitle: "Sending Email Failed",
+          errorMessage: err.response.message,
+        })
+      );
+    }
+  }
 
   return (
-    <form
-      aria-label="form"
-      onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-        submitSendEmailFormHandler(e, dispatch, email)
-      }
-    >
-      <Input
-        htmlFor="email"
-        label="Email"
-        value={email}
-        type="email"
-        touched={inputConfig[0].touched}
-        inValid={!inputConfig[0].valid}
-        inputChangeHandler={(event: React.ChangeEvent<HTMLInputElement>) =>
-          inputChangeHandler(
-            event,
-            0,
-            inputConfig,
-            setInputConfig,
-            setEmail as React.Dispatch<React.SetStateAction<string | object>>,
-            setFormValidity
-          )
-        }
-      />
-      <Button disabled={!formValidity} type="submit">
-        Send
-      </Button>
+    <form aria-label="form" onSubmit={submitSendEmailFormHandler}>
+      <div>
+        <input
+          className={inputClass}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value),
+              setEmailValidity((prevState) => ({
+                ...prevState,
+                touched: true,
+              }));
+          }}
+          name="email"
+          role="textbox"
+          type="email"
+          id="email"
+        />
+        <label htmlFor="email">Email:</label>
+      </div>
+
+      <div>{errorDiv}</div>
+
+      <div
+        onMouseOver={mouseOverBtnHandler}
+        onMouseLeave={() => setErrorDiv(null)}
+      >
+        <button disabled={!emailValidity.valid} type="submit">
+          Send
+        </button>
+      </div>
     </form>
   );
 }

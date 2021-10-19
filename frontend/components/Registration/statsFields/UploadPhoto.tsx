@@ -58,16 +58,16 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         name="media"
         ref={inputRef}
       />
-      <Button
-        clicked={() => photo && buttonsEvents.continue(photo)}
+      <button
+        onClick={() => photo && buttonsEvents.continue(photo)}
         type="button"
         disabled={!photo}
       >
         Continue
-      </Button>
-      <Button disabled={false} type="button" clicked={buttonsEvents.skip}>
+      </button>
+      <button disabled={false} type="button" onClick={buttonsEvents.skip}>
         Skip
-      </Button>
+      </button>
     </div>
   );
 };

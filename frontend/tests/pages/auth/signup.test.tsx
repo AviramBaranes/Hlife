@@ -1,9 +1,33 @@
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 
-import Signup from "../../../pages/auth/registration/signup";
+import * as protectedRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
+import Signup, {
+  getServerSideProps,
+} from "../../../pages/auth/registration/signup";
 import { Provider } from "react-redux";
 import store from "../../../redux/store/reduxStore";
+
+describe("signup get server side props test", () => {
+  beforeAll(() => {
+    jest
+      .spyOn(protectedRouteHandler, "default")
+      .mockImplementationOnce(async () => "wrong destination")
+      .mockImplementation(async () => "/auth/login");
+  });
+
+  test("should handle redirect", async () => {
+    const { redirect } = (await getServerSideProps({} as any)) as any;
+
+    expect(redirect.destination).toBe("wrong destination");
+  });
+
+  test("should return recommendation in props", async () => {
+    const result = (await getServerSideProps({} as any)) as any;
+
+    expect(result.props).toStrictEqual({});
+  });
+});
 
 describe("signup page tests", () => {
   test("should render the dom correctly", () => {

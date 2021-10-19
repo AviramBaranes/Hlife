@@ -13,14 +13,6 @@ import * as protectedRouteHandler from "../../../../utils/protectedRoutes/protec
 import * as calculateRecommendationWorkout from "../../../../utils/registration/workout/chooseWorkoutHelper";
 import CustomWorkout from "../../../../components/Registration/workout/CustomWorkout";
 
-jest.mock("nookies", () => ({
-  destroyCookie: jest.fn().mockImplementation(() => ({})),
-  parseCookies: jest
-    .fn()
-    .mockImplementationOnce(() => ({ redirected: "true" }))
-    .mockImplementationOnce(() => ({ redirected: "" })),
-}));
-
 describe("choose workout get server side props test", () => {
   beforeAll(() => {
     jest
@@ -41,16 +33,12 @@ describe("choose workout get server side props test", () => {
   });
 
   test("should handle redirect", async () => {
-    const setHeader = jest.fn();
-    const { redirect } = (await getServerSideProps({
-      res: { setHeader },
-    } as any)) as any;
+    const { redirect } = (await getServerSideProps({} as any)) as any;
 
-    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(redirect.destination).toBe("wrong destination");
   });
 
-  test("should return recommendation in props (redirect is true)", async () => {
+  test("should return recommendation in props", async () => {
     const result = (await getServerSideProps({
       req: { url: "" },
     } as any)) as any;
@@ -58,18 +46,6 @@ describe("choose workout get server side props test", () => {
     expect(result.props.order).toBe("order");
     expect(result.props.description).toBe("description");
     expect(result.props.restDaysPerWeek).toBe(1);
-    expect(result.props.redirected).toBe(true);
-  });
-
-  test("should return recommendation in props (redirect is false)", async () => {
-    const result = (await getServerSideProps({
-      req: { url: "/auth/registration/choose-workout" },
-    } as any)) as any;
-
-    expect(result.props.order).toBe("order");
-    expect(result.props.description).toBe("description");
-    expect(result.props.restDaysPerWeek).toBe(1);
-    expect(result.props.redirected).toBe(false);
   });
 });
 
@@ -80,7 +56,6 @@ describe("choose workout tests", () => {
     workoutDaysPerWeek: 5,
     restDaysPerWeek: 0,
     order: "order",
-    redirected: false,
     multiProgramStyles: true,
   };
   let spiedAxios: jest.SpyInstance;

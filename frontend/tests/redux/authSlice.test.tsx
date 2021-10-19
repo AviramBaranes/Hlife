@@ -2,12 +2,9 @@ import { waitFor } from "@testing-library/react";
 
 import store from "../../redux/store/reduxStore";
 import {
-  sendPasswordResetEmailAction,
   validateAuthenticationAction,
   usersActions,
-  signupUserAction,
   logoutAction,
-  loginUserAction,
 } from "../../redux/slices/auth/authSlice";
 
 jest.mock("../../utils/axios/axiosInstance", () => {
@@ -38,78 +35,18 @@ describe("Auth slice tests", () => {
   test("should have the right initialState", () => {
     const initialState = store.getState().usersReducer;
     const expectedInitialState = {
-      username: null,
       hasProgram: null,
-      loading: null,
-      error: {},
       isAuthenticated: null,
     };
     expect(initialState).toStrictEqual(expectedInitialState);
   });
-  test("should change loading state when sends reset email", async () => {
-    store.dispatch(sendPasswordResetEmailAction("email"));
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(true);
-    });
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(false);
-    });
-  });
-  test("should change the state when signup", async () => {
-    store.dispatch(signupUserAction({ username: "username" }));
-
-    const expectedState = {
-      username: "username",
-      hasProgram: false,
-      loading: false,
-      error: {},
-      isAuthenticated: true,
-    };
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(true);
-    });
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer).toStrictEqual(expectedState);
-    });
-  });
-  test("should change the state when login", async () => {
-    store.dispatch(loginUserAction({ username: "avi123", hasProgram: true }));
-
-    const expectedState = {
-      username: "avi123",
-      hasProgram: true,
-      loading: false,
-      error: {},
-      isAuthenticated: true,
-    };
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(true);
-    });
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer).toStrictEqual(expectedState);
-    });
-  });
   test("should change the state when validateAuthenticationAction is called", async () => {
-    store.dispatch(usersActions.changeLoadingState({ loading: null }));
     store.dispatch(validateAuthenticationAction());
 
     const expectedState = {
-      username: "avi1234",
       hasProgram: false,
-      loading: false,
-      error: {},
       isAuthenticated: true,
     };
-
-    await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(true);
-    });
 
     await waitFor(() => {
       expect(store.getState().usersReducer).toStrictEqual(expectedState);
@@ -119,28 +56,12 @@ describe("Auth slice tests", () => {
     store.dispatch(logoutAction());
 
     const expectedState = {
-      username: "",
       hasProgram: null,
-      loading: null,
-      error: {},
       isAuthenticated: false,
     };
 
     await waitFor(() => {
-      expect(store.getState().usersReducer.loading).toBe(true);
-    });
-
-    await waitFor(() => {
       expect(store.getState().usersReducer).toStrictEqual(expectedState);
     });
-  });
-  test("should change the state when changeLoadingState is called", async () => {
-    store.dispatch(usersActions.changeLoadingState({ loading: false }));
-
-    expect(store.getState().usersReducer.loading).toBe(false);
-
-    store.dispatch(usersActions.changeLoadingState({ loading: true }));
-
-    expect(store.getState().usersReducer.loading).toBe(true);
   });
 });

@@ -32,8 +32,8 @@ describe("Create default workout tests", () => {
 
     const generalForm = screen.getAllByTestId("GeneralForm");
 
-    const workoutNameInput_A = generalForm[0].children[0].children[1];
-    const timeInput_A = generalForm[0].children[1].children[1];
+    const workoutNameInput_A = generalForm[0].children[0].children[0];
+    const timeInput_A = generalForm[0].children[1].children[0];
 
     userEvent.type(workoutNameInput_A, "Legs");
     userEvent.type(timeInput_A, "01:30");
@@ -102,8 +102,8 @@ describe("Create default workout tests", () => {
       expect(spiedAxios.mock.calls[0][1]).toStrictEqual(expectedBodyRequest_A);
     });
 
-    const workoutNameInput_B = generalForm[1].children[0].children[1];
-    const timeInput_B = generalForm[1].children[1].children[1];
+    const workoutNameInput_B = generalForm[1].children[0].children[0];
+    const timeInput_B = generalForm[1].children[1].children[0];
 
     userEvent.type(workoutNameInput_B, "Chest");
     userEvent.type(timeInput_B, "03:00");

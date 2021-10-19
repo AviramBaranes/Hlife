@@ -1,28 +1,21 @@
 import { GetServerSideProps } from "next";
-import { destroyCookie, parseCookies } from "nookies";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/statsFields/RequiredFields";
 import UploadPhoto from "../../../components/Registration/statsFields/UploadPhoto";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { RootState } from "../../../redux/store/reduxStore";
-import { redirectedError } from "../../../utils/errors/redirectedError";
 import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
 import { createStatsProps } from "../../../utils/registration/stats/setInitialStatsHelpers";
 
-const SetInitialStats: React.FC<{ redirected: boolean }> = ({ redirected }) => {
+const SetInitialStats: React.FC = () => {
   //state
   const dispatch = useDispatch();
 
-  if (redirected) {
-    dispatch(errorsActions.newError(redirectedError));
-  }
-
   const { statsReducer } = useSelector((state: RootState) => state);
-  const { fatPercentage, musclesMass, weight, rank, height, photo } =
-    statsReducer;
+  const { fatPercentage, musclesMass, weight, rank, height } = statsReducer;
   const [shouldSkipFatPercentage, setShouldSkipFatPercentage] = useState(false);
   const [shouldSkipMusclesMass, setShouldSkipMusclesMass] = useState(false);
 
@@ -95,17 +88,8 @@ export default SetInitialStats;
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const destination = await protectRouteHandler(ctx);
   if (destination === "/auth/registration/set-initial-stats") {
-    let redirected = false;
-    const cookies = parseCookies(ctx);
-
-    if (cookies.redirected) redirected = true;
-    destroyCookie(ctx, "redirected", {
-      path: "/",
-    });
-
-    return { props: { redirected } };
+    return { props: {} };
   } else {
-    ctx.res.setHeader("set-cookie", "redirected=true");
     return { redirect: { destination, permanent: false } };
   }
 };

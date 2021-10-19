@@ -1,8 +1,6 @@
-import React, { useState } from "react";
-
-import Button from "../../UI/Button/Button";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Input from "../../UI/Input/Input";
+
 import { statsActions } from "../../../redux/slices/stats/statsSlice";
 
 const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
@@ -10,19 +8,32 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
 }) => {
   const dispatch = useDispatch();
 
+  const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
   const [rank, setRank] = useState("");
-
+  const [inputClasses, setInputClasses] = useState({ weight: "", height: "" });
   const [weight, setWeight] = useState({
     value: "",
     valid: false,
     touched: false,
   });
-
   const [height, setHeight] = useState({
     value: "",
     valid: false,
     touched: false,
   });
+
+  useEffect(() => {
+    if (!weight.valid && weight.touched) {
+      setInputClasses((prevState) => ({ ...prevState, weight: "inValid" }));
+    } else {
+      setInputClasses((prevState) => ({ ...prevState, weight: "" }));
+    }
+    if (!height.valid && height.touched && height.value.length) {
+      setInputClasses((prevState) => ({ ...prevState, height: "inValid" }));
+    } else {
+      setInputClasses((prevState) => ({ ...prevState, height: "" }));
+    }
+  }, [weight, height]);
 
   const buttonDisabled =
     !rank || !weight.valid || (!height.valid && height.touched);
@@ -31,32 +42,36 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
     const { name, value } = e.target;
 
     if (name === "weight") {
-      let valid = false;
-      setWeight((prevState) => {
-        const newState = { ...prevState };
-        newState.touched = true;
-        newState.value = value;
-        if (+value < 250 && +value > 35) {
-          valid = true;
-        }
-        newState.valid = valid;
-        return newState;
-      });
+      setWeight((prevState) => ({
+        ...prevState,
+        touched: true,
+        value,
+        valid: +value < 250 && +value > 35,
+      }));
     } else {
-      let valid = false;
-      setHeight((prevState) => {
-        const newState = { ...prevState };
-        newState.touched = true;
-        newState.value = value;
-        if (+value < 250 && +value > 100) {
-          valid = true;
-        }
-        if (!value) valid = true;
-        newState.valid = valid;
-        return newState;
-      });
+      setHeight((prevState) => ({
+        ...prevState,
+        value,
+        touched: true,
+        valid: +value < 250 && +value > 100,
+      }));
     }
   };
+
+  function mouseOverBtnHandler(e: React.MouseEvent) {
+    if (!buttonDisabled) return;
+
+    setErrorDiv(
+      <>
+        <h4>Some of the fields are invalid</h4>
+        <h6>Please make sure you follow the following instructions</h6>
+        <ul>
+          <li>weight must be between 35Kg to 250Kg</li>
+          <li>height (if provided) must be in the rang of 100cm-250cm</li>
+        </ul>
+      </>
+    );
+  }
 
   const submitFieldsHandler = () => {
     dispatch(
@@ -89,33 +104,45 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
       </div>
       <span></span>
       <div>
-        <Input
-          label="Weight"
-          type="text"
-          value={weight.value}
-          inputChangeHandler={inputChangeHandler}
-          inValid={!weight.valid}
-          touched={weight.touched}
-          htmlFor="weight"
-        />
+        <div>
+          <input
+            name="weight"
+            className={inputClasses.weight}
+            required
+            id="weight"
+            type="text"
+            value={weight.value}
+            onChange={inputChangeHandler}
+          />
+          <label htmlFor="weight">Weight</label>
+        </div>
 
-        <Input
-          label="Height"
-          type="text"
-          value={height.value}
-          inputChangeHandler={inputChangeHandler}
-          inValid={!height.valid && height.touched}
-          touched={height.touched}
-          htmlFor="height"
-        />
+        <div>
+          <input
+            name="height"
+            id="height"
+            className={inputClasses.height}
+            type="text"
+            value={height.value}
+            onChange={inputChangeHandler}
+          />
+          <label htmlFor="height">Height</label>
+        </div>
       </div>
-      <Button
-        disabled={buttonDisabled}
-        type="button"
-        clicked={submitFieldsHandler}
+
+      <div>{errorDiv}</div>
+      <div
+        onMouseOver={mouseOverBtnHandler}
+        onMouseLeave={() => setErrorDiv(null)}
       >
-        Continue
-      </Button>
+        <button
+          disabled={buttonDisabled}
+          type="button"
+          onClick={submitFieldsHandler}
+        >
+          Continue
+        </button>
+      </div>
     </section>
   );
 };

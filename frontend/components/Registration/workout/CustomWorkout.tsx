@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
-import Button from "../../UI/Button/Button";
 
 interface FormState {
   programStyle: string;
@@ -121,13 +120,13 @@ const CustomWorkout: React.FC<{
           max={7}
           step={1}
         />
-        <Button type="submit" disabled={!formState.isFormValid}>
+        <button type="submit" disabled={!formState.isFormValid}>
           Continue
-        </Button>
+        </button>
       </form>
-      <Button disabled={false} type="button" clicked={() => setDisplay(true)}>
+      <button disabled={false} type="button" onClick={() => setDisplay(true)}>
         Back
-      </Button>
+      </button>
     </div>
   );
 };

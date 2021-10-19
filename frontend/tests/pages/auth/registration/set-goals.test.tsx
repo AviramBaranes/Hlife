@@ -20,14 +20,6 @@ jest.mock(
   })
 );
 
-jest.mock("nookies", () => ({
-  destroyCookie: jest.fn().mockImplementation(() => ({})),
-  parseCookies: jest
-    .fn()
-    .mockImplementationOnce(() => ({ redirected: "true" }))
-    .mockImplementationOnce(() => ({ redirected: "" })),
-}));
-
 describe("set-goals page server side", () => {
   beforeAll(() => {
     jest
@@ -37,27 +29,16 @@ describe("set-goals page server side", () => {
   });
 
   test("should redirect if the wrong destination is returned", async () => {
-    const setHeader = jest.fn();
-    const result = (await getServerSideProps({
-      res: { setHeader },
-    } as any)) as any;
+    const result = (await getServerSideProps({} as any)) as any;
 
-    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(result.redirect.permanent).toEqual(false);
     expect(result.redirect.destination).toEqual("wrong path");
   });
 
-  test("should return props with redirected set to true", async () => {
+  test("should return props", async () => {
     const result = (await getServerSideProps({} as any)) as any;
 
-    expect(result.props).toStrictEqual({ redirected: true });
-    expect(result.redirect).toEqual(undefined);
-  });
-
-  test("should return props with redirected set to false", async () => {
-    const result = (await getServerSideProps({} as any)) as any;
-
-    expect(result.props).toStrictEqual({ redirected: false });
+    expect(result.props).toStrictEqual({});
     expect(result.redirect).toEqual(undefined);
   });
 });
@@ -84,7 +65,7 @@ describe("set-goals page tests", () => {
   test("should render the correct dom", () => {
     const { container } = render(
       <Provider store={store}>
-        <SetGoals redirected={false} />
+        <SetGoals />
       </Provider>
     );
 
@@ -111,7 +92,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals redirected={false} />
+        <SetGoals />
       </Provider>
     );
 
@@ -202,7 +183,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals redirected={false} />
+        <SetGoals />
       </Provider>
     );
 
@@ -267,7 +248,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals redirected={false} />
+        <SetGoals />
       </Provider>
     );
 
@@ -312,7 +293,7 @@ describe("set-goals page tests", () => {
     //display only requiredField
     render(
       <Provider store={store}>
-        <SetGoals redirected={false} />
+        <SetGoals />
       </Provider>
     );
 

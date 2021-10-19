@@ -1,5 +1,4 @@
 import React, { SetStateAction, useEffect, useState } from "react";
-import Input from "../../../UI/Input/Input";
 
 interface WorkoutGeneralInfoFormProps {
   workoutName: string;
@@ -22,6 +21,10 @@ const WorkoutGeneralInfoForm: React.FC<WorkoutGeneralInfoFormProps> = ({
   formSubmitted,
   setFormSubmitted,
 }) => {
+  const [inputClasses, setInputClasses] = useState({
+    workoutName: "",
+    totalTime: "",
+  });
   const [touched, setTouched] = useState({
     workoutName: false,
     totalTime: false,
@@ -37,33 +40,65 @@ const WorkoutGeneralInfoForm: React.FC<WorkoutGeneralInfoFormProps> = ({
     setFormSubmitted && setFormSubmitted(false);
   }, [formSubmitted]);
 
+  useEffect(() => {
+    if (touched.workoutName && workoutName.length < 4) {
+      setInputClasses((prevState) => ({
+        ...prevState,
+        workoutName: "inValid",
+      }));
+    } else {
+      setInputClasses((prevState) => ({
+        ...prevState,
+        workoutName: "",
+      }));
+    }
+
+    if (touched.totalTime && !totalTime) {
+      setInputClasses((prevState) => ({
+        ...prevState,
+        totalTime: "inValid",
+      }));
+    } else {
+      setInputClasses((prevState) => ({
+        ...prevState,
+        totalTime: "",
+      }));
+    }
+  }, [workoutName, totalTime]);
+
   return (
     <div data-testid="GeneralForm">
-      <Input
-        htmlFor="workoutName"
-        inValid={workoutName.length < 4}
-        label="Workout Name"
-        inputChangeHandler={(e) => {
-          setWorkoutName(e.target.value);
-          setTouched((prevState) => ({ ...prevState, workoutName: true }));
-        }}
-        touched={touched.workoutName}
-        type="text"
-        value={workoutName}
-      />
-      <Input
-        htmlFor="totalTime"
-        inValid={!totalTime}
-        label="Total Time"
-        inputChangeHandler={(e) => {
-          setTotalTime(e.target.value);
-          setTouched((prevState) => ({ ...prevState, totalTime: true }));
-        }}
-        touched={touched.totalTime}
-        type="time"
-        value={totalTime!}
-      />
-      <label htmlFor="description">Description:</label>
+      <div>
+        <input
+          className={inputClasses.workoutName}
+          required
+          id="workoutName"
+          onChange={(e) => {
+            setWorkoutName(e.target.value);
+            setTouched((prevState) => ({ ...prevState, workoutName: true }));
+          }}
+          type="text"
+          value={workoutName}
+        />
+        <label htmlFor="workoutName">Workout name</label>
+      </div>
+
+      <div>
+        <input
+          className={inputClasses.totalTime}
+          required
+          id="totalTime"
+          onChange={(e) => {
+            setTotalTime(e.target.value);
+            setTouched((prevState) => ({ ...prevState, totalTime: true }));
+          }}
+          type="time"
+          value={totalTime!}
+        />
+        <label htmlFor="totalTime">Total time</label>
+      </div>
+
+      <label htmlFor="description">Description</label>
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}

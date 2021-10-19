@@ -11,14 +11,12 @@ import axiosInstance from "../../../../utils/axios/axiosInstance";
 import * as protectedRoute from "../../../../utils/protectedRoutes/protectedRoutes";
 
 jest.mock("nookies", () => ({
-  destroyCookie: jest.fn().mockImplementation(() => ({})),
   parseCookies: jest
     .fn()
     .mockImplementationOnce(() => ({
       _csrf: "_csrf",
       jon: "jon",
       XSRF_TOKEN: "token",
-      redirected: "true",
     }))
     .mockImplementationOnce(() => ({
       _csrf: "_csrf",
@@ -50,37 +48,21 @@ describe("schedule program get server side props tests", () => {
   });
 
   test("should redirect", async () => {
-    const setHeader = jest.fn();
-    const { redirect } = (await getServerSideProps({
-      res: { setHeader },
-    } as any)) as any;
+    const { redirect } = (await getServerSideProps({} as any)) as any;
 
-    expect(setHeader.mock.calls[0]).toEqual(["set-cookie", "redirected=true"]);
     expect(redirect.destination).toBe("wrong path");
   });
 
-  test("should request all workouts and return them with redirect true", async () => {
-    const { props } = (await getServerSideProps({
-      req: { url: "not the current path" },
-    } as any)) as any;
+  test("should request all workouts and return them in props", async () => {
+    const { props } = (await getServerSideProps({} as any)) as any;
 
     expect(props.workouts).toStrictEqual(dummyWorkouts);
-    expect(props.redirected).toBe(true);
     expect(spiedAxios.mock.calls[0][0]).toBe("/workout/all");
     expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
       headers: {
         Cookie: `_csrf=_csrf; jon=jon; XSRF-TOKEN=token;`,
       },
     });
-  });
-
-  test("should request all workouts and return them with redirect false", async () => {
-    const { props } = (await getServerSideProps({
-      req: { url: "/auth/registration/schedule-program" },
-    } as any)) as any;
-
-    expect(props.workouts).toStrictEqual(dummyWorkouts);
-    expect(props.redirected).toBe(false);
   });
 });
 
@@ -100,7 +82,7 @@ describe("schedule program page tests", () => {
 
     render(
       <Provider store={store}>
-        <ScheduleProgram redirected={false} workouts={dummyWorkouts} />
+        <ScheduleProgram workouts={dummyWorkouts} />
       </Provider>
     );
 
@@ -112,7 +94,7 @@ describe("schedule program page tests", () => {
 
     render(
       <Provider store={store}>
-        <ScheduleProgram redirected={false} workouts={dummyWorkouts} />
+        <ScheduleProgram workouts={dummyWorkouts} />
       </Provider>
     );
 
@@ -123,7 +105,7 @@ describe("schedule program page tests", () => {
     localStorage.setItem("order", "A,B,X,A,B,X,X");
     render(
       <Provider store={store}>
-        <ScheduleProgram workouts={dummyWorkouts} redirected={false} />
+        <ScheduleProgram workouts={dummyWorkouts} />
       </Provider>
     );
     //DOM
@@ -176,7 +158,7 @@ describe("schedule program page tests", () => {
 
     render(
       <Provider store={store}>
-        <ScheduleProgram workouts={aerobicWorkout} redirected={false} />
+        <ScheduleProgram workouts={aerobicWorkout} />
       </Provider>
     );
 
@@ -225,7 +207,7 @@ describe("schedule program page tests", () => {
     localStorage.clear();
     render(
       <Provider store={store}>
-        <ScheduleProgram workouts={dummyWorkouts} redirected={false} />
+        <ScheduleProgram workouts={dummyWorkouts} />
       </Provider>
     );
 

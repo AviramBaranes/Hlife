@@ -55,8 +55,8 @@ describe("Create single workout tests", () => {
         <CreateSingleWorkout trainingDayName="FB" />
       </Provider>
     );
-    userEvent.type(screen.getByLabelText("Workout Name:"), "Back");
-    userEvent.type(screen.getByLabelText("Total Time:"), "01:30");
+    userEvent.type(screen.getByLabelText("Workout name"), "Back");
+    userEvent.type(screen.getByLabelText("Total time"), "01:30");
 
     const submitBtn = screen.getByText("Submit");
     const addBtn = screen.getAllByText("Add");

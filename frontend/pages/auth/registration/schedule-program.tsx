@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
-import { destroyCookie, parseCookies } from "nookies";
-import React, { useEffect, useState } from "react";
+import { parseCookies } from "nookies";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import CustomOrder from "../../../components/Registration/program/CustomOrder";
 import RecommendedOrder from "../../../components/Registration/program/RecommendedOrder";
@@ -16,13 +16,7 @@ export interface Workout {
 
 const scheduleProgram: React.FC<{
   workouts: Workout[];
-  redirected: boolean;
-}> = ({ workouts, redirected }) => {
-  if (redirected) {
-    const dispatch = useDispatch();
-    dispatch(errorsActions.newError(redirectedError));
-  }
-
+}> = ({ workouts }) => {
   const [order, setOrder] = useState(localStorage.getItem("order")!);
 
   return (
@@ -66,18 +60,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         return { name, trainingDayName };
       });
 
-      let redirected = false;
-      if (cookies.redirected) redirected = true;
-      destroyCookie(ctx, "redirected", {
-        path: "/",
-      });
-
-      return { props: { workouts, redirected } };
+      return { props: { workouts } };
     } catch (err) {
       return { redirect: { destination: "/error-occur", permanent: false } };
     }
   } else {
-    ctx.res.setHeader("set-cookie", "redirected=true");
     return { redirect: { destination, permanent: false } };
   }
 };

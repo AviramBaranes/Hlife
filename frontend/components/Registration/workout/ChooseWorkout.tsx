@@ -1,7 +1,6 @@
 import router from "next/router";
 import React, { Dispatch } from "react";
 import { useDispatch } from "react-redux";
-import Button from "../../../components/UI/Button/Button";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 
@@ -73,23 +72,23 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
           <strong>Order:</strong>
           {order}
         </h5>
-        <Button clicked={ConfirmBtnHandler} disabled={false} type="button">
+        <button onClick={ConfirmBtnHandler} disabled={false} type="button">
           Confirm
-        </Button>
+        </button>
       </section>
       <section>
         <h5>
           <strong>Do you want to make your own custom workout?</strong>
         </h5>
-        <Button
+        <button
           disabled={false}
           type="button"
-          clicked={() => {
+          onClick={() => {
             setDisplay(false);
           }}
         >
           Yes
-        </Button>
+        </button>
       </section>
     </div>
   );
