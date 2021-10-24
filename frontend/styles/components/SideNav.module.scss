@@ -1,15 +1,18 @@
+@import "../variables.scss";
+@import "../breakpoints.scss";
 .SideNav {
-  background: #fffcc1;
+  background: $cream-color;
   color: black;
   height: 50vh;
-  width: 30vw;
+  width: 70%;
   position: absolute;
   top: 0%;
   right: 0%;
   z-index: 20;
   border-radius: 0rem 0rem 0rem 1rem;
-  box-shadow: -0.5rem 0.5rem 2rem black;
-  animation: slide-down 300ms ease-out forwards;
+  box-shadow: -1rem 1rem 2rem black;
+  animation: slide-down 400ms ease-out forwards;
+  
   ul {
     height: 40vh;
     text-align: center;
@@ -17,6 +20,18 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+  }
+
+  @include media(">tablet", "<desktop") {
+    width: 50%;
+  }
+
+  @include media(">desktop") {
+    width: 40%;
+    height: 60vh;
+    ul {
+      height: 50vh;
+    }
   }
 }
 .XBtn {

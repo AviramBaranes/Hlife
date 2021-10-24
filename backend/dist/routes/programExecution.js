@@ -28,14 +28,14 @@ const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware")
 const programExecutionController = __importStar(require("../controller/programExecution"));
 const customValidationHelpers_1 = require("../utils/helpers/validation/customValidationHelpers");
 const router = express_1.default.Router();
-router.get("/exercises-to-do/:date?", authMiddleware_1.default, express_validator_1.param("date", "The parameter that provided is not a valid date")
+router.get("/exercises-to-do/:date?", authMiddleware_1.default, (0, express_validator_1.param)("date", "The parameter that provided is not a valid date")
     .optional()
     .isDate({ format: "DD-MM-YYYY" }), programExecutionController.getExercisesByDate);
 router.post("/:date?", authMiddleware_1.default, [
-    express_validator_1.param("date", "The parameter that provided is not a valid date")
+    (0, express_validator_1.param)("date", "The parameter that provided is not a valid date")
         .optional()
         .isDate({ format: "DD-MM-YYYY" }),
-    express_validator_1.body("exercises", "Each exercise need to have a boolean value").custom((value) => {
+    (0, express_validator_1.body)("exercises", "Each exercise need to have a boolean value").custom((value) => {
         for (let key in value) {
             if (typeof value[key] === "boolean") {
                 continue;
@@ -45,9 +45,9 @@ router.post("/:date?", authMiddleware_1.default, [
         return true;
     }),
 ], programExecutionController.declareAnExecution);
-router.get("/:date", authMiddleware_1.default, [express_validator_1.param("date", "This date is invalid").isDate({ format: "DD-MM-YYYY" })], programExecutionController.getSingleExecution);
+router.get("/:date", authMiddleware_1.default, [(0, express_validator_1.param)("date", "This date is invalid").isDate({ format: "DD-MM-YYYY" })], programExecutionController.getSingleExecution);
 router.get("/by-range/:range/:date", authMiddleware_1.default, [
-    express_validator_1.param("range", "a range can only be a week, a month, a year or all").custom((value) => customValidationHelpers_1.validateEnums(value, ["week", "month", "year", "all"])),
-    express_validator_1.param("date", "date is invalid").isDate({ format: "DD-MM-YYYY" }),
+    (0, express_validator_1.param)("range", "a range can only be a week, a month, a year or all").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, ["week", "month", "year", "all"])),
+    (0, express_validator_1.param)("date", "date is invalid").isDate({ format: "DD-MM-YYYY" }),
 ], programExecutionController.getExecutionsByRange);
 exports.default = router;

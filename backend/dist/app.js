@@ -21,24 +21,24 @@ const workout_1 = __importDefault(require("./routes/workout"));
 const program_1 = __importDefault(require("./routes/program"));
 const programExecution_1 = __importDefault(require("./routes/programExecution"));
 const csrfProtection = process.env.NODE_ENV === "test"
-    ? csurf_1.default({
+    ? (0, csurf_1.default)({
         cookie: true,
         ignoreMethods: ["GET", "HEAD", "OPTIONS", "POST", "PUT", "DELETE"],
     })
-    : csurf_1.default({ cookie: true });
-const app = express_1.default();
-database_1.default();
+    : (0, csurf_1.default)({ cookie: true });
+const app = (0, express_1.default)();
+(0, database_1.default)();
 const limiter = new express_rate_limit_1.default({
     max: 100,
     windowMs: 15 * 60 * 1000,
 });
 app.disable("x-powered-by");
-app.use(cors_1.default({ credentials: true, origin: "http://localhost:3000" }));
-app.use(cookie_parser_1.default());
-app.use(helmet_1.default()); //a collection of middleware functions that improve the security of HTTP headers
+app.use((0, cors_1.default)({ credentials: true, origin: "http://localhost:3000" }));
+app.use((0, cookie_parser_1.default)());
+app.use((0, helmet_1.default)()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express_1.default.json());
-app.use(hpp_1.default()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
-app.use(express_mongo_sanitize_1.default({
+app.use((0, hpp_1.default)()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
+app.use((0, express_mongo_sanitize_1.default)({
     replaceWith: "_",
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
@@ -58,6 +58,7 @@ app.use("/workout", workout_1.default);
 app.use("/program", program_1.default);
 app.use("/program-exec", programExecution_1.default);
 app.use((error, req, res, next) => {
+    console.log(error);
     let { statusCode, message, data } = error;
     if (!statusCode)
         statusCode = 500;

@@ -28,11 +28,10 @@ describe("SignupForm Tests", () => {
     );
 
     const nameLabelElement = screen.getByLabelText("Name");
-    const usernameLabelElement = screen.getByLabelText("Username");
     const emailLabelElement = screen.getByLabelText("Email");
     const passwordLabelElement = screen.getByLabelText("Password");
     const passwordConfirmationLabelElement =
-      screen.getByLabelText("Confirm password");
+      screen.getByLabelText("Confirm");
     const genderLabelElement = screen.getByLabelText("Gender");
     const dateLabelElement = screen.getByLabelText("Date of birth");
     const formElement = screen.getByRole("form");
@@ -43,7 +42,6 @@ describe("SignupForm Tests", () => {
     expect(selectElement).toBeInTheDocument();
     expect(buttonElement).toBeInTheDocument();
     expect(nameLabelElement).toBeInTheDocument();
-    expect(usernameLabelElement).toBeInTheDocument();
     expect(emailLabelElement).toBeInTheDocument();
     expect(passwordLabelElement).toBeInTheDocument();
     expect(passwordConfirmationLabelElement).toBeInTheDocument();
@@ -56,33 +54,29 @@ describe("SignupForm Tests", () => {
       <Provider store={store}>
         <SignupForm />
       </Provider>
-    );
+    ); 
 
     const nameLabelElement = screen.getByLabelText("Name");
-    const usernameLabelElement = screen.getByLabelText("Username");
     const emailLabelElement = screen.getByLabelText("Email");
     const passwordLabelElement = screen.getByLabelText("Password");
     const passwordConfirmationLabelElement =
-      screen.getByLabelText("Confirm password");
+      screen.getByLabelText("Confirm");
     const dateLabelElement = screen.getByLabelText("Date of birth");
     const btn = screen.getByRole("button");
 
     expect(nameLabelElement.className).toBe("");
-    expect(usernameLabelElement.className).toBe("");
     expect(emailLabelElement.className).toBe("");
     expect(passwordLabelElement.className).toBe("");
     expect(passwordConfirmationLabelElement.className).toBe("");
     expect(dateLabelElement.className).toBe("");
 
     userEvent.type(nameLabelElement, "av");
-    userEvent.type(usernameLabelElement, "av");
     userEvent.type(emailLabelElement, "av");
     userEvent.type(passwordLabelElement, "12");
     userEvent.type(passwordConfirmationLabelElement, "12");
     userEvent.type(dateLabelElement, "1900-01-01");
 
     expect(nameLabelElement.className).toBe("inValid");
-    expect(usernameLabelElement.className).toBe("inValid");
     expect(emailLabelElement.className).toBe("inValid");
     expect(passwordLabelElement.className).toBe("inValid");
     expect(passwordConfirmationLabelElement.className).toBe("inValid");
@@ -90,35 +84,35 @@ describe("SignupForm Tests", () => {
     expect(btn).toBeDisabled();
   });
 
-  test("should be valid (name valid)", () => {
+  test("should be valid (name valid)",async () => {
     render(
       <Provider store={store}>
         <SignupForm />
       </Provider>
     );
-
+ 
     const nameLabelElement = screen.getByLabelText("Name");
-    const usernameLabelElement = screen.getByLabelText("Username");
     const emailLabelElement = screen.getByLabelText("Email");
     const passwordLabelElement = screen.getByLabelText("Password");
     const passwordConfirmationLabelElement =
-      screen.getByLabelText("Confirm password");
+      screen.getByLabelText("Confirm");
     const dateLabelElement = screen.getByLabelText("Date of birth");
+    const genderSelect = screen.getByLabelText('Gender')
     const btn = screen.getByRole("button");
 
     userEvent.type(nameLabelElement, "avi");
-    userEvent.type(usernameLabelElement, "avi");
     userEvent.type(emailLabelElement, "avi@avi.com");
     userEvent.type(passwordLabelElement, "123123");
     userEvent.type(passwordConfirmationLabelElement, "123123");
     userEvent.type(dateLabelElement, "2001-11-11");
+    userEvent.selectOptions(genderSelect, genderSelect.children[1].textContent!);
 
     expect(nameLabelElement.className).toBe("");
-    expect(usernameLabelElement.className).toBe("");
     expect(emailLabelElement.className).toBe("");
     expect(passwordLabelElement.className).toBe("");
     expect(passwordConfirmationLabelElement.className).toBe("");
     expect(dateLabelElement.className).toBe("");
+    expect(genderSelect.className).toBe("");
     expect(btn).not.toBeDisabled();
   });
 
@@ -130,20 +124,20 @@ describe("SignupForm Tests", () => {
     );
 
     const nameLabelElement = screen.getByLabelText("Name");
-    const usernameLabelElement = screen.getByLabelText("Username");
     const emailLabelElement = screen.getByLabelText("Email");
     const passwordLabelElement = screen.getByLabelText("Password");
     const passwordConfirmationLabelElement =
-      screen.getByLabelText("Confirm password");
+      screen.getByLabelText("Confirm");
     const dateLabelElement = screen.getByLabelText("Date of birth");
+    const genderSelect = screen.getByLabelText('Gender')
     const btn = screen.getByRole("button");
 
     userEvent.type(nameLabelElement, "avi");
-    userEvent.type(usernameLabelElement, "avi");
     userEvent.type(emailLabelElement, "avi@avi.com");
     userEvent.type(passwordLabelElement, "123123");
     userEvent.type(passwordConfirmationLabelElement, "1231234");
     userEvent.type(dateLabelElement, "2001-11-11");
+    userEvent.selectOptions(genderSelect, "male");
 
     //passwords do not match
     userEvent.click(btn);
@@ -158,7 +152,6 @@ describe("SignupForm Tests", () => {
       expect(spiedAxios.mock.calls[0][0]).toEqual("/auth/signup");
       expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
         name: "avi",
-        username: "avi",
         email: "avi@avi.com",
         password: "123123",
         passwordConfirmation: "123123",

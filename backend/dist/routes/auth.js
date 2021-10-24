@@ -29,34 +29,29 @@ const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware")
 const router = express_1.default.Router();
 //signup
 router.post("/signup", [
-    express_validator_1.body("name")
+    (0, express_validator_1.body)("name")
         .isAlpha()
         .withMessage("name only allow letters")
         .isLength({ min: 3 })
         .withMessage("name must be at least 3 characters"),
-    express_validator_1.body("username")
-        .isLength({ min: 3 })
-        .withMessage("username must be at least 3 characters")
-        .isAlphanumeric()
-        .withMessage("username only allow letters and numbers"),
-    express_validator_1.body("email", "please enter a correct email").isEmail().normalizeEmail(),
-    express_validator_1.body("password")
+    (0, express_validator_1.body)("email", "please enter a correct email").isEmail().normalizeEmail(),
+    (0, express_validator_1.body)("password")
         .isLength({ min: 6 })
         .withMessage("password need to be at least 6 characters")
         .isAlphanumeric()
         .withMessage("password only allow letters and numbers"),
-    express_validator_1.body("passwordConfirmation")
+    (0, express_validator_1.body)("passwordConfirmation")
         .isLength({ min: 6 })
         .withMessage("password need to be at least 6 characters")
         .isAlphanumeric()
         .withMessage("password only allow letters and numbers"),
-    express_validator_1.body("gender", "gender is invalid").custom((value) => {
+    (0, express_validator_1.body)("gender", "gender is invalid").custom((value) => {
         if (value === "male" || value === "female") {
             return true;
         }
         return false;
     }),
-    express_validator_1.body("dateOfBirth", 'The field must be a date between "01/01/1920" and "01/01/2005"')
+    (0, express_validator_1.body)("dateOfBirth", 'The field must be a date between "01/01/1920" and "01/01/2005"')
         .isDate()
         .custom((value) => {
         const limit = new Date("01/01/1920");
@@ -71,27 +66,27 @@ router.post("/signup", [
 ], authController.signup);
 //login
 router.post("/login", [
-    express_validator_1.body("email", "please enter a correct email").isEmail().normalizeEmail(),
-    express_validator_1.body("password", "Invalid password, At least 6 characters for a password").isLength({ min: 6 }),
+    (0, express_validator_1.body)("email", "please enter a correct email").isEmail().normalizeEmail(),
+    (0, express_validator_1.body)("password", "Invalid password, At least 6 characters for a password").isLength({ min: 6 }),
 ], authController.login);
 //logout
 router.post("/logout", authMiddleware_1.default, authController.logout);
 //reset via settings
-router.post("/settings/password-reset", authMiddleware_1.default, express_validator_1.body(["currentPassword", "newPassword", "newPasswordConfirmation"])
+router.post("/settings/password-reset", authMiddleware_1.default, (0, express_validator_1.body)(["currentPassword", "newPassword", "newPasswordConfirmation"])
     .isLength({ min: 6 })
     .withMessage("password need to be at least 6 characters")
     .isAlphanumeric()
     .withMessage("password only allow letters and numbers"), authController.resetPassword);
 //send email reset token
-router.post("/password/send-token", express_validator_1.body("email").isEmail().withMessage("Invalid Email").normalizeEmail(), authController.sendResetEmail);
+router.post("/password/send-token", (0, express_validator_1.body)("email").isEmail().withMessage("Invalid Email").normalizeEmail(), authController.sendResetEmail);
 //reset via email
-router.put("/reset/password-reset", express_validator_1.body(["password", "passwordConfirmation"])
+router.put("/reset/password-reset", (0, express_validator_1.body)(["password", "passwordConfirmation"])
     .isLength({ min: 6 })
     .withMessage("password need to be at least 6 characters")
     .isAlphanumeric()
     .withMessage("password only allow letters and numbers"), authController.resetPasswordViaToken);
 //validate token
-router.get("/reset/validate-token/:token", express_validator_1.param("token")
+router.get("/reset/validate-token/:token", (0, express_validator_1.param)("token")
     .isLength({ min: 64, max: 64 })
     .withMessage("Invalid Token, too short"), authController.validateResetToken);
 //validate auth

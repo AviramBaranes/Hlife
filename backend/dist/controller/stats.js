@@ -12,7 +12,7 @@ const User_1 = __importDefault(require("../models/User"));
 const statsHelpers_1 = require("../utils/helpers/stats/statsHelpers");
 const addStats = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { userId } = req;
         const { weight, height, fatPercentage, musclesMass } = req.body;
         let bodyImageUrl;
@@ -44,7 +44,7 @@ const addStats = async (req, res, next) => {
                     .send("You can only declare stats change once in 7 days");
                 return;
             }
-            const { failureMessages, goalsAchieved, calculatedGrade } = statsHelpers_1.calculateGrade(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoal, userGoals.detailGoals, weight, messages);
+            const { failureMessages, goalsAchieved, calculatedGrade } = (0, statsHelpers_1.calculateGrade)(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoal, userGoals.detailGoals, weight, messages);
             grade += calculatedGrade;
             messages = [...failureMessages];
             accomplishments = { ...goalsAchieved };
@@ -68,7 +68,7 @@ const addStats = async (req, res, next) => {
             .json({ messages, currentGrade: user.grade, accomplishments });
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.addStats = addStats;
@@ -90,7 +90,7 @@ const getAllStatsDates = async (req, res, next) => {
         res.status(200).json({ statsDates: [...statsDates] });
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getAllStatsDates = getAllStatsDates;
@@ -98,7 +98,7 @@ const getStatsByDate = async (req, res, next) => {
     try {
         const { userId } = req;
         const { date } = req.params;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const userStats = (await PhysicalStats_1.default.findOne({
             user: userId,
         }));
@@ -114,7 +114,7 @@ const getStatsByDate = async (req, res, next) => {
         res.status(200).json({ ...requestedStats });
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getStatsByDate = getStatsByDate;
@@ -135,7 +135,7 @@ const getAllStats = async (req, res, next) => {
         res.status(200).json({ stats: [...userStats.stats] });
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getAllStats = getAllStats;
@@ -170,7 +170,7 @@ const deleteLastStats = async (req, res, next) => {
         res.status(200).send("The last stats were deleted");
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.deleteLastStats = deleteLastStats;
@@ -178,7 +178,7 @@ const changeLastStats = async (req, res, next) => {
     try {
         const { userId } = req;
         const { weight, height, fatPercentage, musclesMass, bodyImageUrl } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const userStats = (await PhysicalStats_1.default.findOne({
             user: userId,
         }));
@@ -221,7 +221,7 @@ const changeLastStats = async (req, res, next) => {
         res.status(200).send("The last stats were updated");
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeLastStats = changeLastStats;
@@ -229,7 +229,7 @@ const setRanking = async (req, res, next) => {
     try {
         const { userId } = req;
         const { selfRank } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const physicalStats = (await PhysicalStats_1.default.findOne({
             user: userId,
         }));
@@ -245,7 +245,7 @@ const setRanking = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.setRanking = setRanking;

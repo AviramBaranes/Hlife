@@ -1,4 +1,4 @@
-import classes from "./Backdrop.module.scss";
+import classes from "../../../styles/components/Backdrop.module.scss";
 
 type BackdropProps = { onClose: Function; background?: string };
 

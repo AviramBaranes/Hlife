@@ -1,12 +1,15 @@
 import router from "next/router";
 import React, { SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+
+import classes from '../../../styles/pages/create-workout.module.scss'
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
-import Button from "../../UI/Button/Button";
 import Modal from "../../UI/Modal/Modal";
 import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface Workout {
   name: string;
@@ -21,7 +24,10 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
   setShouldDisplaySecondForm,
 }) => {
   const dispatch = useDispatch();
-  const timesPerWeek = +localStorage.getItem("timesPerWeek")!;
+  const isMultyProgram = !!(localStorage.getItem('multiProgramStyles'))
+  let timesPerWeek = +localStorage.getItem("timesPerWeek")!;
+  isMultyProgram && timesPerWeek--
+  console.log(timesPerWeek,isMultyProgram)
 
   const [showModal, setShowModal] = useState(true);
   const [workout, setWorkout] = useState<Workout[]>([]);
@@ -135,15 +141,20 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
     <div>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
+          <div className={classes.ModalMsg}>
+        <p>
           While creating workout dont refresh the page or data you entered will
           be lost.
+        </p>
           <button
+          className='success-button'
             type="button"
             disabled={false}
             onClick={() => setShowModal(false)}
-          >
+            >
             OK
           </button>
+            </div>
         </Modal>
       )}
       <h3>Create aerobic workout</h3>
@@ -159,7 +170,9 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
           formSubmitted={formSubmitted}
           setFormSubmitted={setFormSubmitted}
         />
+
         <button
+        className={`skip-button ${classes.skipButton}`}
           disabled={
             workoutName.length < 4 ||
             !totalTime ||
@@ -173,15 +186,22 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
           }}
         >
           Add another
+          <span>
+            <FontAwesomeIcon icon={faPlus}/>
+          </span>
         </button>
       </form>
+
+      <div className={classes.AerobicButton}>
       <button
-        onClick={createWorkoutHandler}
-        type="submit"
-        disabled={workoutName.length < 4 || !totalTime}
+      className='primary-button'
+      onClick={createWorkoutHandler}
+      type="submit"
+      disabled={workoutName.length < 4 || !totalTime}
       >
         Submit
       </button>
+        </div>
     </div>
   );
 };

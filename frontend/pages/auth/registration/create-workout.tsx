@@ -1,5 +1,7 @@
 import { GetServerSideProps } from "next";
 import React, { useEffect, useState } from "react";
+
+import classes from '../../../styles/pages/create-workout.module.scss'
 import CreateAerobicWorkout from "../../../components/Registration/workout/CreateAerobicWorkout";
 import CreateDefaultWorkout from "../../../components/Registration/workout/CreateDefaultWorkout";
 import CreateFullBodyWorkout from "../../../components/Registration/workout/CreateFullBodyWorkout";
@@ -21,8 +23,10 @@ const CreateWorkout: React.FC = () => {
 
   return (
     <>
+    <div className={classes.Title}>
       <h3>Create a workout program</h3>
       <p>Choose your exercises for your workouts</p>
+    </div>
       {isMultiProgramStyles && (
         <>
           {!shouldDisplaySecondForm ? (

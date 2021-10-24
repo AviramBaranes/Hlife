@@ -24,9 +24,9 @@ const token = jsonwebtoken_1.default.sign(payload, process.env.jwtSecret, {
 });
 describe("post workout route", () => {
     it("should send an error response if unauthorized", async () => {
-        const response = await supertest_1.default(app_1.default).post("/workout");
-        chai_1.expect(response.statusCode).equal(401);
-        chai_1.expect(response.body.message).equal("Unauthorized cookie is invalid");
+        const response = await (0, supertest_1.default)(app_1.default).post("/workout");
+        (0, chai_1.expect)(response.statusCode).equal(401);
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized cookie is invalid");
     });
     it("should send an error response for failing validation ", async () => {
         const payload = JSON.stringify({
@@ -39,21 +39,21 @@ describe("post workout route", () => {
             ],
             time: 1,
         });
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .post("/workout")
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
-        chai_1.expect(response.statusCode).equal(422);
-        chai_1.expect(response.body.message).equal("Validation Failed");
-        chai_1.expect(response.body.data[0].value).equal("W");
-        chai_1.expect(response.body.data[0].msg).equal("Invalid training day name");
-        chai_1.expect(response.body.data[1].value).equal("1-");
-        chai_1.expect(response.body.data[1].msg).equal("Name can contain only letters");
-        chai_1.expect(response.body.data[2].msg).equal("Name must be at least 3 letters");
-        chai_1.expect(response.body.data[3].msg).equal("Exercises are invalid");
-        chai_1.expect(response.body.data[4].value).equal(1);
-        chai_1.expect(response.body.data[4].msg).equal("Time is invalid");
+        (0, chai_1.expect)(response.statusCode).equal(422);
+        (0, chai_1.expect)(response.body.message).equal("Validation Failed");
+        (0, chai_1.expect)(response.body.data[0].value).equal("W");
+        (0, chai_1.expect)(response.body.data[0].msg).equal("Invalid training day name");
+        (0, chai_1.expect)(response.body.data[1].value).equal("1-");
+        (0, chai_1.expect)(response.body.data[1].msg).equal("Name can contain only letters");
+        (0, chai_1.expect)(response.body.data[2].msg).equal("Name must be at least 3 letters");
+        (0, chai_1.expect)(response.body.data[3].msg).equal("Exercises are invalid");
+        (0, chai_1.expect)(response.body.data[4].value).equal(1);
+        (0, chai_1.expect)(response.body.data[4].msg).equal("Time is invalid");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
@@ -72,64 +72,64 @@ describe("post workout route", () => {
             ],
             time: 20,
         });
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .post("/workout")
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
-        chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("Each workout need to have a unique name");
+        (0, chai_1.expect)(response.statusCode).equal(403);
+        (0, chai_1.expect)(response.text).equal("Each workout need to have a unique name");
         stubedUserModel.restore();
     });
 });
 describe("get workout by name route", () => {
     it("should send an error response if unauthorized", async () => {
-        const response = await supertest_1.default(app_1.default).get("/workout/?trainingDay=W");
-        chai_1.expect(response.statusCode).equal(401);
-        chai_1.expect(response.body.message).equal("Unauthorized cookie is invalid");
+        const response = await (0, supertest_1.default)(app_1.default).get("/workout/?trainingDay=W");
+        (0, chai_1.expect)(response.statusCode).equal(401);
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized cookie is invalid");
     });
     it("should send an error response for failing validation ", async () => {
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .get("/workout/?trainingDayName=W")
             .set("Cookie", [`jon=${token}`]);
-        chai_1.expect(response.statusCode).equal(422);
-        chai_1.expect(response.body.message).equal("Validation Failed");
-        chai_1.expect(response.body.data[0].value).equal("W");
-        chai_1.expect(response.body.data[0].msg).equal("Invalid training day name");
+        (0, chai_1.expect)(response.statusCode).equal(422);
+        (0, chai_1.expect)(response.body.message).equal("Validation Failed");
+        (0, chai_1.expect)(response.body.data[0].value).equal("W");
+        (0, chai_1.expect)(response.body.data[0].msg).equal("Invalid training day name");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findOne");
         stubedWorkoutModel.returns(false);
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .get("/workout/?trainingDayName=A")
             .set("Cookie", [`jon=${token}`]);
-        chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(response.statusCode).equal(403);
+        (0, chai_1.expect)(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
         stubedWorkoutModel.restore();
     });
 });
 describe("get workout by id route", () => {
     it("should send an error response if unauthorized", async () => {
-        const response = await supertest_1.default(app_1.default).get("/workout/id");
-        chai_1.expect(response.statusCode).equal(401);
-        chai_1.expect(response.body.message).equal("Unauthorized cookie is invalid");
+        const response = await (0, supertest_1.default)(app_1.default).get("/workout/id");
+        (0, chai_1.expect)(response.statusCode).equal(401);
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized cookie is invalid");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findById");
         stubedWorkoutModel.returns(false);
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .get("/workout/id")
             .set("Cookie", [`jon=${token}`]);
-        chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("No workout with this id");
+        (0, chai_1.expect)(response.statusCode).equal(403);
+        (0, chai_1.expect)(response.text).equal("No workout with this id");
         stubedWorkoutModel.restore();
     });
 });
 describe("change workout route", () => {
     it("should send an error response if unauthorized", async () => {
-        const response = await supertest_1.default(app_1.default).put("/workout");
-        chai_1.expect(response.statusCode).equal(401);
-        chai_1.expect(response.body.message).equal("Unauthorized cookie is invalid");
+        const response = await (0, supertest_1.default)(app_1.default).put("/workout");
+        (0, chai_1.expect)(response.statusCode).equal(401);
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized cookie is invalid");
     });
     it("should send an error response for failing validation ", async () => {
         const payload = JSON.stringify({
@@ -142,23 +142,23 @@ describe("change workout route", () => {
             ],
             time: 1,
         });
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .put("/workout")
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
-        chai_1.expect(response.statusCode).equal(422);
-        chai_1.expect(response.body.message).equal("Validation Failed");
-        chai_1.expect(response.body.data[0].value).equal("W");
-        chai_1.expect(response.body.data[0].msg).equal("Invalid training day name");
-        chai_1.expect(response.body.data[1].value).equal("1-");
-        chai_1.expect(response.body.data[1].msg).equal("Name can contain only letters");
-        chai_1.expect(response.body.data[2].msg).equal("Name must be at least 3 letters");
-        chai_1.expect(response.body.data[3].value).equal("too-short");
-        chai_1.expect(response.body.data[3].msg).equal("Description too short");
-        chai_1.expect(response.body.data[4].msg).equal("Exercises are invalid");
-        chai_1.expect(response.body.data[5].value).equal(1);
-        chai_1.expect(response.body.data[5].msg).equal("Time is invalid");
+        (0, chai_1.expect)(response.statusCode).equal(422);
+        (0, chai_1.expect)(response.body.message).equal("Validation Failed");
+        (0, chai_1.expect)(response.body.data[0].value).equal("W");
+        (0, chai_1.expect)(response.body.data[0].msg).equal("Invalid training day name");
+        (0, chai_1.expect)(response.body.data[1].value).equal("1-");
+        (0, chai_1.expect)(response.body.data[1].msg).equal("Name can contain only letters");
+        (0, chai_1.expect)(response.body.data[2].msg).equal("Name must be at least 3 letters");
+        (0, chai_1.expect)(response.body.data[3].value).equal("too-short");
+        (0, chai_1.expect)(response.body.data[3].msg).equal("Description too short");
+        (0, chai_1.expect)(response.body.data[4].msg).equal("Exercises are invalid");
+        (0, chai_1.expect)(response.body.data[5].value).equal(1);
+        (0, chai_1.expect)(response.body.data[5].msg).equal("Time is invalid");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findOne");
@@ -173,41 +173,41 @@ describe("change workout route", () => {
             ],
             time: 20,
         });
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .put("/workout")
             .set("Cookie", [`jon=${token}`])
             .set("Content-type", "application/json")
             .send(payload);
-        chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(response.statusCode).equal(403);
+        (0, chai_1.expect)(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
         stubedWorkoutModel.restore();
     });
 });
 describe("delete workout route", () => {
     it("should send an error response if unauthorized", async () => {
-        const response = await supertest_1.default(app_1.default).delete("/workout/trainingDayName");
-        chai_1.expect(response.statusCode).equal(401);
-        chai_1.expect(response.body.message).equal("Unauthorized cookie is invalid");
+        const response = await (0, supertest_1.default)(app_1.default).delete("/workout/trainingDayName");
+        (0, chai_1.expect)(response.statusCode).equal(401);
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized cookie is invalid");
     });
     it("should send an error response for failing validation ", async () => {
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .delete("/workout/W")
             .set("Cookie", [`jon=${token}`])
             .send(payload);
-        chai_1.expect(response.statusCode).equal(422);
-        chai_1.expect(response.body.message).equal("Validation Failed");
-        chai_1.expect(response.body.data[0].value).equal("W");
-        chai_1.expect(response.body.data[0].msg).equal("Invalid training day name");
+        (0, chai_1.expect)(response.statusCode).equal(422);
+        (0, chai_1.expect)(response.body.message).equal("Validation Failed");
+        (0, chai_1.expect)(response.body.data[0].value).equal("W");
+        (0, chai_1.expect)(response.body.data[0].msg).equal("Invalid training day name");
     });
     it("should move from validation middleware successfully", async () => {
         const stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findOneAndDelete");
         stubedWorkoutModel.returns(false);
-        const response = await supertest_1.default(app_1.default)
+        const response = await (0, supertest_1.default)(app_1.default)
             .delete("/workout/A")
             .set("Cookie", [`jon=${token}`])
             .send(payload);
-        chai_1.expect(response.statusCode).equal(403);
-        chai_1.expect(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(response.statusCode).equal(403);
+        (0, chai_1.expect)(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
         stubedWorkoutModel.restore();
     });
 });

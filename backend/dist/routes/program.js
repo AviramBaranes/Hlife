@@ -40,11 +40,11 @@ const days = [
 ];
 router.get("/recommendation", authMiddleware_1.default, programController.getRecommendationProgram);
 router.post("/:day", authMiddleware_1.default, [
-    express_validator_1.param("day", "Invalid day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
-    express_validator_1.body("trainingDayName", "Training day is invalid")
+    (0, express_validator_1.param)("day", "Invalid day").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
+    (0, express_validator_1.body)("trainingDayName", "Training day is invalid")
         .optional()
-        .custom((value) => customValidationHelpers_1.validateEnums(value, trainingDayNames)),
-    express_validator_1.body("workoutName")
+        .custom((value) => (0, customValidationHelpers_1.validateEnums)(value, trainingDayNames)),
+    (0, express_validator_1.body)("workoutName")
         .optional()
         .isAlpha("en-US", { ignore: " " })
         .withMessage("Name can contain only letters")
@@ -52,12 +52,12 @@ router.post("/:day", authMiddleware_1.default, [
         .withMessage("Name must be at least 3 letters"),
 ], programController.createProgram);
 router.get("/", authMiddleware_1.default, programController.getAllPrograms);
-router.get("/:day", authMiddleware_1.default, express_validator_1.param("day", "Day is invalid").custom((value) => customValidationHelpers_1.validateEnums(value, days)), programController.getProgram);
+router.get("/:day", authMiddleware_1.default, (0, express_validator_1.param)("day", "Day is invalid").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)), programController.getProgram);
 router.put("/:day", authMiddleware_1.default, [
-    express_validator_1.param("day", "Invalid day").custom((value) => customValidationHelpers_1.validateEnums(value, days)),
-    express_validator_1.body("trainingDayName", "Training day is invalid")
+    (0, express_validator_1.param)("day", "Invalid day").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
+    (0, express_validator_1.body)("trainingDayName", "Training day is invalid")
         .optional()
-        .custom((value) => customValidationHelpers_1.validateEnums(value, trainingDayNames)),
-    express_validator_1.body("restDay", "rest day needs to be a boolean").isBoolean(),
+        .custom((value) => (0, customValidationHelpers_1.validateEnums)(value, trainingDayNames)),
+    (0, express_validator_1.body)("restDay", "rest day needs to be a boolean").isBoolean(),
 ], programController.changeProgram);
 exports.default = router;

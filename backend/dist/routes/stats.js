@@ -30,7 +30,7 @@ const customValidationHelpers_1 = require("../utils/helpers/validation/customVal
 const multer_1 = __importDefault(require("multer"));
 const router = express_1.default.Router();
 const ranksOptionsEnum = ["Beginner", "Intermediate", "Advanced", "Pro"];
-const upload = multer_1.default({
+const upload = (0, multer_1.default)({
     storage: multer_1.default.diskStorage({
         destination(req, file, cb) {
             cb(null, "./images");
@@ -40,7 +40,7 @@ const upload = multer_1.default({
         },
     }),
     limits: {
-        fileSize: 1000000, // max file size 1MB = 1000000 bytes
+        fileSize: 10000000, // max file size 1MB = 1000000 bytes
     },
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/\.(jpeg|jpg|png|svg)$/)) {
@@ -51,23 +51,23 @@ const upload = multer_1.default({
 });
 //add stat
 router.post("/", authMiddleware_1.default, upload.single("file"), [
-    express_validator_1.body("weight", "Weight needs to be in range 35kg-250kg").isFloat({
+    (0, express_validator_1.body)("weight", "Weight needs to be in range 35kg-250kg").isFloat({
         min: 35,
         max: 250,
     }),
-    express_validator_1.body("height", "Height needs to be in a range of 100cm-250cm")
+    (0, express_validator_1.body)("height", "Height needs to be in a range of 100cm-250cm")
         .optional()
         .isInt({
         min: 100,
         max: 250,
     }),
-    express_validator_1.body("fatPercentage", "Fat Percentage needs to be lower than 40%")
+    (0, express_validator_1.body)("fatPercentage", "Fat Percentage needs to be lower than 40%")
         .optional()
         .isInt({
         min: 0,
         max: 40,
     }),
-    express_validator_1.body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
+    (0, express_validator_1.body)("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
         .optional()
         .isInt({
         min: 0,
@@ -77,39 +77,39 @@ router.post("/", authMiddleware_1.default, upload.single("file"), [
 //get all stats dates
 router.get("/all-stats-dates", authMiddleware_1.default, statsController.getAllStatsDates);
 //get a stat
-router.get("/:date", authMiddleware_1.default, express_validator_1.param("date", "invalid date").isDate({ format: "DD-MM-YYYY" }), statsController.getStatsByDate);
+router.get("/:date", authMiddleware_1.default, (0, express_validator_1.param)("date", "invalid date").isDate({ format: "DD-MM-YYYY" }), statsController.getStatsByDate);
 //get all stats
 router.get("/", authMiddleware_1.default, statsController.getAllStats);
 //change the last stat
 router.put("/", authMiddleware_1.default, [
-    express_validator_1.body("weight", "Weight needs to be in range 35kg-250kg")
+    (0, express_validator_1.body)("weight", "Weight needs to be in range 35kg-250kg")
         .optional()
         .isFloat({
         min: 35,
         max: 250,
     }),
-    express_validator_1.body("height", "Height needs to be in a range of 100cm-250cm")
+    (0, express_validator_1.body)("height", "Height needs to be in a range of 100cm-250cm")
         .optional()
         .isInt({
         min: 100,
         max: 250,
     }),
-    express_validator_1.body("fatPercentage", "Fat Percentage needs to be lower than 80%")
+    (0, express_validator_1.body)("fatPercentage", "Fat Percentage needs to be lower than 80%")
         .optional()
         .isInt({
         min: 0,
         max: 80,
     }),
-    express_validator_1.body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
+    (0, express_validator_1.body)("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
         .optional()
         .isInt({
         min: 0,
         max: 120,
     }),
-    express_validator_1.body("bodyImageUrl", "Image is invalid").optional().isURL(),
+    (0, express_validator_1.body)("bodyImageUrl", "Image is invalid").optional().isURL(),
 ], statsController.changeLastStats);
 //delete the last stat
 router.delete("/", authMiddleware_1.default, statsController.deleteLastStats);
 //set a ranking to user
-router.post("/set-ranking", authMiddleware_1.default, express_validator_1.body("selfRank", "Ranking is invalid").custom((value) => customValidationHelpers_1.validateEnums(value, ranksOptionsEnum)), statsController.setRanking);
+router.post("/set-ranking", authMiddleware_1.default, (0, express_validator_1.body)("selfRank", "Ranking is invalid").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, ranksOptionsEnum)), statsController.setRanking);
 exports.default = router;

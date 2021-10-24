@@ -37,7 +37,7 @@ describe("create goals tests", () => {
             weight: 1,
         },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedUser;
     beforeEach(() => {
         stubedUser = sinon_1.default.stub(User_1.default, "findById");
@@ -49,19 +49,19 @@ describe("create goals tests", () => {
     it("should send an error response if goal already created", async () => {
         stubedUser.returns({ hasGoals: true });
         await goalsController.createGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("User already created goals");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("User already created goals");
     });
     it("should send an error response if basic goal is lose fat and there is no fatPercentage data", async () => {
         await goalsController.createGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("If you want to lose fat you need to provide your fat percentage");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("If you want to lose fat you need to provide your fat percentage");
     });
     it("should send an error response if basic goal is gain muscle mass and there is no musclesMass data", async () => {
         req.body.basicGoal = "increase muscles mass";
         await goalsController.createGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("If you want to increase muscles mass you need to provide your muscles mass");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("If you want to increase muscles mass you need to provide your muscles mass");
     });
     it("create the right goals model", async () => {
         const stubedGoalsModel = sinon_1.default.stub(Goals_1.default.prototype, "save");
@@ -69,22 +69,22 @@ describe("create goals tests", () => {
         req.body.musclesMass = 3;
         await goalsController.createGoal(req, res, () => { });
         const argumentForConstructor = stubedGoalsModel.firstCall.thisValue;
-        chai_1.expect(argumentForConstructor.basicGoal).equal("increase muscles mass");
-        chai_1.expect(argumentForConstructor.detailGoals.weight).equal(1);
-        chai_1.expect(argumentForConstructor.detailGoals.fatPercentage).equal(2);
-        chai_1.expect(argumentForConstructor.detailGoals.musclesMass).equal(3);
+        (0, chai_1.expect)(argumentForConstructor.basicGoal).equal("increase muscles mass");
+        (0, chai_1.expect)(argumentForConstructor.detailGoals.weight).equal(1);
+        (0, chai_1.expect)(argumentForConstructor.detailGoals.fatPercentage).equal(2);
+        (0, chai_1.expect)(argumentForConstructor.detailGoals.musclesMass).equal(3);
         stubedGoalsModel.restore();
     });
     it("should return with success response", () => {
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals created successfully");
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals created successfully");
     });
 });
 describe("get goals tests", () => {
     const req = {
         userId: "123",
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedGoalsModel;
     beforeEach(() => {
         stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
@@ -92,15 +92,15 @@ describe("get goals tests", () => {
     it("send error response if no model was found", async () => {
         stubedGoalsModel.returns(false);
         await goalsController.getGoals(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Goals have not created yet for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Goals have not created yet for this user");
     });
     it("send error response if no model was found", async () => {
         stubedGoalsModel.returns({ data1: "data1", data2: "data2" });
         await goalsController.getGoals(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.jsonObj.data1).equal("data1");
-        chai_1.expect(res.jsonObj.data2).equal("data2");
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.jsonObj.data1).equal("data1");
+        (0, chai_1.expect)(res.jsonObj.data2).equal("data2");
     });
     afterEach(() => {
         stubedGoalsModel.restore();
@@ -111,7 +111,7 @@ describe("change basic goal tests", () => {
         userId: "123",
         body: {},
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedGoalsModel;
     beforeEach(() => {
         stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
@@ -119,8 +119,8 @@ describe("change basic goal tests", () => {
     it("should send an error response if no model was found", async () => {
         stubedGoalsModel.returns(false);
         await goalsController.changeBasicGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Goals have not created yet for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Goals have not created yet for this user");
     });
     it("should send an error response if no fatPercentage provided", async () => {
         stubedGoalsModel.returns({
@@ -128,8 +128,8 @@ describe("change basic goal tests", () => {
             detailGoals: {},
         });
         await goalsController.changeBasicGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("If you want to lose fat you need to provide your fat percentage");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("If you want to lose fat you need to provide your fat percentage");
     });
     it("should send an error response if no muscles mass provided", async () => {
         stubedGoalsModel.returns({
@@ -137,8 +137,8 @@ describe("change basic goal tests", () => {
             detailGoals: {},
         });
         await goalsController.changeBasicGoal(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("If you want to increase muscles mass you need to provide your muscles mass");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("If you want to increase muscles mass you need to provide your muscles mass");
     });
     it("should not change fatPercentage if already exist", async () => {
         stubedGoalsModel.returns({
@@ -148,11 +148,11 @@ describe("change basic goal tests", () => {
         });
         await goalsController.changeBasicGoal(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.basicGoal).equal("lose fat");
-        chai_1.expect(userGoal.detailGoals.fatPercentage).equal(10);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.basicGoal).equal("lose fat");
+        (0, chai_1.expect)(userGoal.detailGoals.fatPercentage).equal(10);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should not change musclesMass if already exist", async () => {
         stubedGoalsModel.returns({
@@ -162,11 +162,11 @@ describe("change basic goal tests", () => {
         });
         await goalsController.changeBasicGoal(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.basicGoal).equal("increase muscles mass");
-        chai_1.expect(userGoal.detailGoals.musclesMass).equal(10);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.basicGoal).equal("increase muscles mass");
+        (0, chai_1.expect)(userGoal.detailGoals.musclesMass).equal(10);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should change basicGoal to increase muscles mass and enter muscles mass goal", async () => {
         stubedGoalsModel.returns({
@@ -177,11 +177,11 @@ describe("change basic goal tests", () => {
         req.body.musclesMass = 10;
         await goalsController.changeBasicGoal(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.basicGoal).equal("increase muscles mass");
-        chai_1.expect(userGoal.detailGoals.musclesMass).equal(10);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.basicGoal).equal("increase muscles mass");
+        (0, chai_1.expect)(userGoal.detailGoals.musclesMass).equal(10);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should change basicGoal to lose fat and enter new fatPercentage field", async () => {
         stubedGoalsModel.returns({
@@ -192,11 +192,11 @@ describe("change basic goal tests", () => {
         req.body.fatPercentage = 10;
         await goalsController.changeBasicGoal(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.basicGoal).equal("lose fat");
-        chai_1.expect(userGoal.detailGoals.fatPercentage).equal(10);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.basicGoal).equal("lose fat");
+        (0, chai_1.expect)(userGoal.detailGoals.fatPercentage).equal(10);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     afterEach(() => {
         stubedGoalsModel.restore();
@@ -207,7 +207,7 @@ describe("change goals tests", () => {
         userId: "123",
         body: {},
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedGoalsModel;
     beforeEach(() => {
         stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
@@ -215,44 +215,44 @@ describe("change goals tests", () => {
     it("send error response if no model was found", async () => {
         stubedGoalsModel.returns(false);
         await goalsController.changeGoals(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Goals have not created yet for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Goals have not created yet for this user");
     });
     it("should send error response if no data found", async () => {
         stubedGoalsModel.returns(true);
         await goalsController.changeGoals(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No parameters were provided");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No parameters were provided");
     });
     it("should update weight property in user goals", async () => {
         stubedGoalsModel.returns({ detailGoals: {}, save: sinon_1.default.spy() });
         req.body.weight = 1;
         await goalsController.changeGoals(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.detailGoals.weight).equal(1);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.detailGoals.weight).equal(1);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should update fatPercentage property in user goals", async () => {
         stubedGoalsModel.returns({ detailGoals: {}, save: sinon_1.default.spy() });
         req.body.fatPercentage = 1;
         await goalsController.changeGoals(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.detailGoals.fatPercentage).equal(1);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.detailGoals.fatPercentage).equal(1);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should update musclesMass property in user goals", async () => {
         stubedGoalsModel.returns({ detailGoals: {}, save: sinon_1.default.spy() });
         req.body.musclesMass = 1;
         await goalsController.changeGoals(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.detailGoals.musclesMass).equal(1);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.detailGoals.musclesMass).equal(1);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     it("should update all property in user goals", async () => {
         stubedGoalsModel.returns({ detailGoals: {}, save: sinon_1.default.spy() });
@@ -261,12 +261,12 @@ describe("change goals tests", () => {
         req.body.weight = 3;
         await goalsController.changeGoals(req, res, () => { });
         const userGoal = Goals_1.default.findOne();
-        chai_1.expect(userGoal.save.called).equal(true);
-        chai_1.expect(userGoal.detailGoals.musclesMass).equal(1);
-        chai_1.expect(userGoal.detailGoals.fatPercentage).equal(2);
-        chai_1.expect(userGoal.detailGoals.weight).equal(3);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Goals updated");
+        (0, chai_1.expect)(userGoal.save.called).equal(true);
+        (0, chai_1.expect)(userGoal.detailGoals.musclesMass).equal(1);
+        (0, chai_1.expect)(userGoal.detailGoals.fatPercentage).equal(2);
+        (0, chai_1.expect)(userGoal.detailGoals.weight).equal(3);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Goals updated");
     });
     afterEach(() => {
         stubedGoalsModel.restore();

@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import ReactDom from "react-dom";
 
 import Backdrop from "../Backdrop/Backdrop";
-import classes from "./Modal.module.scss";
+import classes from "../../../styles/components/Modal.module.scss";
 
 type BackdropProps = { onClose: Function };
 type ModalOverlayProps = { children: ReactNode };

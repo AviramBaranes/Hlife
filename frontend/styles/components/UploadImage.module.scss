@@ -1,0 +1,113 @@
+@import '../breakpoints.scss';
+
+.Title{
+    margin-block: 2rem;
+    h3{
+        font-size: 1.5rem;
+    }
+}
+
+.DropDiv{
+    position: relative;
+    width: 85%;
+    margin-inline: auto;
+    margin-block: 4rem;
+    border: var(--text-color) solid 1px;
+    padding-bottom: 10rem;
+    h4{
+        font-size: 1.2rem;
+        font-weight: lighter;
+    }
+    svg{
+        position: absolute;
+        top:50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+
+    }
+}
+
+.Active{
+    h4{
+        display: none;
+    }
+    padding: unset !important;
+    border: 2px solid var(--primary-color);
+    img{
+        object-fit: cover;
+        max-width: 100%;
+        max-height:auto;
+    }
+}
+
+.Highlight{
+    h4{
+        font-weight: bolder;
+    }
+    border: 2px solid var(--primary-color);
+}
+
+.Buttons{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@include media('>bigPhone','<=tablet'){
+    .Title{
+        h3{
+            font-size: 1.7rem;
+        }
+    }
+    .DropDiv{
+        padding-bottom: 18rem;
+        h4{
+            font-size: 1.4rem;
+        }
+    }
+    .Active{
+        max-width: 60%;
+    }
+}
+
+@include media('>tablet','<desktop'){
+    .Title{
+        h3{
+            font-size: 2.2rem;
+        }
+        p{
+            font-size: 1.1rem;
+        }
+    }
+    .DropDiv{
+        width: 60%;
+        padding-bottom: 18rem;
+        h4{
+            font-size: 1.4rem;
+        }
+    }
+    .Active{
+        max-width: 35%;
+    }
+}
+
+@include media('>=desktop'){
+    .Title{
+        h3{
+            font-size: 2.2rem;
+        }
+        p{
+            font-size: 1.1rem;
+        }
+    }
+    .DropDiv{
+        width: 50%;
+        padding-bottom: 18rem;
+        h4{
+            font-size: 1.4rem;
+        }
+    }
+    .Active{
+        max-width: 23%;
+    }
+}

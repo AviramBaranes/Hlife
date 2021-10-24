@@ -3,12 +3,13 @@ import { GetServerSideProps } from "next";
 
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import { useDispatch } from "react-redux";
-import classes from "../../../styles/pages/changePassword.module.scss";
+import classes from "../../../styles/pages/[...token].module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import router from "next/router";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
+import { handleAxiosError } from "../../../utils/errors/handleRequestErrors";
 
 function ResetPassword({ token }: { token: string }) {
   const dispatch = useDispatch();
@@ -52,10 +53,10 @@ function ResetPassword({ token }: { token: string }) {
     if (formValidity) return;
 
     setErrorDiv(
-      <>
+      <section>
         <h4>Some of the fields are invalid</h4>
         <h6>Please make sure the passwords contain at least 6 characters</h6>
-      </>
+      </section>
     );
   }
 
@@ -94,25 +95,21 @@ function ResetPassword({ token }: { token: string }) {
         })
       );
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Changing Password Failed",
-          errorMessage: err.response.data,
-        })
-      );
+      handleAxiosError(err,dispatch,"Changing Password Failed")
     }
   }
 
   return (
     <>
+    
       <section className={classes.Title}>
         <h1>Change Password</h1>
         <h5>Fill the fields with your new strong password</h5>
       </section>
 
       <section className={classes.Main}>
-        <form onSubmit={submitFormHandler}>
-          <div>
+        <form className={classes.Form} onSubmit={submitFormHandler}>
+          <div className='input-container'>
             <input
               name="password"
               type="password"
@@ -124,7 +121,7 @@ function ResetPassword({ token }: { token: string }) {
             <label htmlFor="password">Password</label>
           </div>
 
-          <div>
+          <div className='input-container'>
             <input
               name="passwordConfirmation"
               type="password"
@@ -133,14 +130,16 @@ function ResetPassword({ token }: { token: string }) {
               value={passwordsFields.passwordConfirmation.value}
               id="passwordConfirmation"
             />
-            <label htmlFor="passwordConfirmation">Confirm password</label>
+            <label htmlFor="passwordConfirmation">Confirm</label>
           </div>
-          <div>{errorDiv}</div>
+          {errorDiv&&<div className='error-div'>{errorDiv}</div>
+}
           <div
+          className='error-detector-div'
             onMouseOver={mouseOverBtnHandler}
             onMouseLeave={() => setErrorDiv(null)}
           >
-            <button disabled={!formValidity} type="submit">
+            <button className='primary-button' disabled={!formValidity} type="submit">
               Reset Password
             </button>
           </div>

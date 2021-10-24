@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import classes from "../../../styles/pages/login.module.scss";
 import isEmail from "validator/lib/isEmail";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import router from "next/router";
+import { handleAxiosError } from "../../../utils/errors/handleRequestErrors";
 
 function loginForm() {
   const dispatch = useDispatch();
 
   const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
   const [fields, setFields] = useState({
-    email: { valid: false, touched: false, value: "" },
-    password: { valid: false, touched: false, value: "" },
+    email: { valid: false, touched: false, value: "", active: false },
+    password: { valid: false, touched: false, value: "", active: false },
   });
-  const [classes, setClasses] = useState({
+  const [inputClasses, setInputClasses] = useState({
     emailInputClass: "",
     passwordInputClass: "",
   });
@@ -29,6 +30,7 @@ function loginForm() {
         value,
         touched: true,
         valid: name === "email" ? isEmail(value) : value.length > 5,
+        active: value !== "",
       },
     }));
   }
@@ -37,18 +39,24 @@ function loginForm() {
     setFormValidity(fields.email.valid && fields.password.valid);
 
     if (!fields.password.valid && fields.password.touched) {
-      setClasses((prevState) => ({
+      setInputClasses((prevState) => ({
         ...prevState,
         passwordInputClass: "inValid",
       }));
     } else {
-      setClasses((prevState) => ({ ...prevState, passwordInputClass: "" }));
+      setInputClasses((prevState) => ({
+        ...prevState,
+        passwordInputClass: "",
+      }));
     }
 
     if (!fields.email.valid && fields.email.touched) {
-      setClasses((prevState) => ({ ...prevState, emailInputClass: "inValid" }));
+      setInputClasses((prevState) => ({
+        ...prevState,
+        emailInputClass: "inValid",
+      }));
     } else {
-      setClasses((prevState) => ({ ...prevState, emailInputClass: "" }));
+      setInputClasses((prevState) => ({ ...prevState, emailInputClass: "" }));
     }
   }, [fields]);
 
@@ -57,11 +65,13 @@ function loginForm() {
 
     setErrorDiv(
       <>
-        <h4>Some of the fields are invalid</h4>
-        <h6>Please make sure you follow the following instructions</h6>
+        <section>
+          <h4>Some of the fields are invalid</h4>
+          <h6>Please make sure you follow the following instructions</h6>
+        </section>
         <ul>
-          <li>email needs to be a valid email</li>
-          <li>password must contain at least 6 characters</li>
+          <li>Email needs to be a valid email</li>
+          <li>Password must contain at least 6 characters</li>
         </ul>
       </>
     );
@@ -85,20 +95,18 @@ function loginForm() {
         })
       );
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Login Failed",
-          errorMessage: err.response.data,
-        })
-      );
-    }
+     handleAxiosError(err,dispatch,'Login Failed')
   }
-
+  }
   return (
-    <form aria-label="form" onSubmit={loginSubmitHandler}>
+    <form
+      className={classes.Form}
+      aria-label="form"
+      onSubmit={loginSubmitHandler}
+    >
       <div className="input-container">
         <input
-          className={classes.emailInputClass}
+          className={inputClasses.emailInputClass}
           name="email"
           type="email"
           id="email"
@@ -106,12 +114,14 @@ function loginForm() {
           value={fields.email.value}
           onChange={inputChangeHandler}
         />
-        <label htmlFor="email">Email</label>
+        <label className={fields.email.active ? "Active" : ""} htmlFor="email">
+          Email
+        </label>
       </div>
 
       <div className="input-container">
         <input
-          className={classes.passwordInputClass}
+          className={inputClasses.passwordInputClass}
           name="password"
           type="password"
           id="password"
@@ -119,15 +129,25 @@ function loginForm() {
           value={fields.password.value}
           onChange={inputChangeHandler}
         />
-        <label htmlFor="password">Password</label>
+        <label
+          className={fields.password.active ? "Active" : ""}
+          htmlFor="password"
+        >
+          Password
+        </label>
       </div>
-      <div>{errorDiv}</div>
+      {errorDiv && <div className="error-div">{errorDiv}</div>}
       <div
+        className="error-detector-div"
         onMouseOver={mouseOverBtnHandler}
         onMouseLeave={() => setErrorDiv(null)}
       >
-        <button disabled={!formValidity} type="submit">
-          Login
+        <button
+          className="primary-button"
+          disabled={!formValidity}
+          type="submit"
+        >
+        Login
         </button>
       </div>
     </form>

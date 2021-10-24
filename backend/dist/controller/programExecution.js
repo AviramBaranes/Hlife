@@ -17,7 +17,7 @@ const getExercisesByDate = async (req, res, next) => {
     try {
         const { userId } = req;
         const date = req.params.date || new Date();
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const day = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(date)); //get the day as a name
         const user = (await User_1.default.findById(userId));
         //TODO add program logic to program endpoints
@@ -41,7 +41,7 @@ const getExercisesByDate = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getExercisesByDate = getExercisesByDate;
@@ -50,7 +50,7 @@ const declareAnExecution = async (req, res, next) => {
         const { userId } = req;
         const { exercises } = req.body;
         const date = req.params.date || new Date();
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const day = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(date)); //get the day as a name
         const user = (await User_1.default.findById(userId));
         if (!user.hasProgram) {
@@ -97,7 +97,7 @@ const declareAnExecution = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.declareAnExecution = declareAnExecution;
@@ -105,7 +105,7 @@ const getSingleExecution = async (req, res, next) => {
     try {
         const { userId } = req;
         const stringDate = req.params.date;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const programExecution = (await ProgramExecution_1.default.findOne({
             user: userId,
         }));
@@ -123,7 +123,7 @@ const getSingleExecution = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getSingleExecution = getSingleExecution;
@@ -131,7 +131,7 @@ const getExecutionsByRange = async (req, res, next) => {
     try {
         const { userId } = req;
         const { date, range } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const user = (await User_1.default.findById(userId));
         if (!user.hasProgram) {
             res.status(403).send("This user doesn't has a full program yet");
@@ -141,16 +141,16 @@ const getExecutionsByRange = async (req, res, next) => {
         let executions;
         switch (range) {
             case "week":
-                executions = await progExecHelpers_1.getExecutionsOfWeek(dateObj, userId);
+                executions = await (0, progExecHelpers_1.getExecutionsOfWeek)(dateObj, userId);
                 break;
             case "month":
-                executions = await progExecHelpers_1.getExecutionsOfMonth(dateObj, userId);
+                executions = await (0, progExecHelpers_1.getExecutionsOfMonth)(dateObj, userId);
                 break;
             case "year":
-                executions = await progExecHelpers_1.getExecutionsOfYear(dateObj, userId);
+                executions = await (0, progExecHelpers_1.getExecutionsOfYear)(dateObj, userId);
                 break;
             case "all":
-                executions = await progExecHelpers_1.getAllExecutions(userId);
+                executions = await (0, progExecHelpers_1.getAllExecutions)(userId);
                 break;
             default:
                 executions = [];
@@ -163,7 +163,7 @@ const getExecutionsByRange = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getExecutionsByRange = getExecutionsByRange;

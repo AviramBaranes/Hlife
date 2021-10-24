@@ -6,7 +6,6 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema({
   name: { type: String, required: true },
 
-  username: { type: String, required: true },
 
   email: { type: String, required: true, unique: true },
 
@@ -45,7 +44,6 @@ export default User;
 
 export interface UserType extends Document {
   name: string;
-  username: string;
   email: string;
   password: string;
   gender: "male" | "female";

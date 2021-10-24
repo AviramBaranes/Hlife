@@ -7,7 +7,6 @@ import { calculateRecommendationWorkout } from "../../../utils/registration/work
 import { useDispatch } from "react-redux";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import CustomWorkout from "../../../components/Registration/workout/CustomWorkout";
-import { redirectedError } from "../../../utils/errors/redirectedError";
 import { parseCookies } from "nookies";
 
 interface ChooseWorkoutProps {

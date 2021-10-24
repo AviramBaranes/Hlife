@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
+import classes from '../../../styles/components/PhysicalGoalsFields.module.scss'
 import RangeInput from "../../UI/RangeInput/RangeInput";
 import personFat_15 from "../../../assets/images/fat-percentage-images/fatPercentage15.png";
-import Button from "../../UI/Button/Button";
 import { fatPercentageChangeHandler } from "../../../utils/registration/fields/fatPercentageFieldHelpers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faForward } from "@fortawesome/free-solid-svg-icons";
 
 interface FatPercentageFieldProps {
   instructions: string | null;
@@ -32,24 +34,30 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
     basicGoal === "increase muscles mass" || basicGoal === undefined;
 
   return (
-    <section style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
+    <section className={classes.Main}  style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
       <h3>{title}</h3>
       <p>{instructions}</p>
+      <div className={classes.Field} >
+
+      {currentImage && <Image src={currentImage} />}
       <RangeInput
         testId="fatPercentageInput"
         min="5"
         max="40"
         step="5"
         value={desiredFatPercentage}
+        unit='%'
         onChange={(event) => {
           setInputTouched(true);
           setDesiredFatPercentage(event.target.value);
           fatPercentageChangeHandler(event, setCurrentImage);
         }}
-      />
-      {currentImage && <Image src={currentImage} />}
-      <div>
+        />
+        <h5>{desiredFatPercentage}%</h5>
+        </div>
+      <div className={classes.Buttons} >
         <button
+          className='primary-button'
           type="button"
           disabled={!inputTouched}
           onClick={() => buttonsEvents.continue(+desiredFatPercentage)}
@@ -59,10 +67,14 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
         <button
           style={{ display: `${allowedToSkip ? "block" : "none"}` }}
           type="button"
+          className='skip-button'
           disabled={!allowedToSkip}
           onClick={buttonsEvents.skip}
         >
           Skip
+          <span>
+            <FontAwesomeIcon icon={faForward}/>
+          </span>
         </button>
       </div>
     </section>

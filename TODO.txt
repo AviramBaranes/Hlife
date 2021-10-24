@@ -1,2 +1,11 @@
 1.style
+    fix date in sign Up
+    Registration:
+        default
+        fb
+        aerobic
+    FontFamily:
+    
 2.test errorDiv
+
+3. authorized without program have different navbar

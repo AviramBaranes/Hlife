@@ -1,3 +1,7 @@
+@import "./breakpoints.scss";
+@import "./globalClasses/inputContainer.scss";
+@import "./globalClasses/buttons.scss";
+@import "./globalClasses/errorDiv.scss";
 * {
   box-sizing: border-box;
   padding: 0;
@@ -16,17 +20,12 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    letter-spacing:1px;
   .DarkMode {
     background-image: url("../assets/Hlife-background\ .png");
-    --primary-color: rgb(0, 221, 11);
-    --text-color: white;
-    --opposite-text: black;
   }
   .LightMode {
     background-image: url("../assets/lighted-theme-background.svg");
-    --primary-color: rgb(0, 94, 0);
-    --text-color: black;
-    --opposite-text: white;
   }
 }
 
@@ -38,94 +37,3 @@ a {
 ul {
   list-style: none;
 }
-
-button {
-  text-align: center;
-  background-color: transparent;
-  border: 1px solid var(--primary-color);
-  border-radius: 2rem;
-  color: var(--text-color);
-  outline: none;
-  cursor: pointer;
-  font: inherit;
-  padding-left: 2rem;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
-  margin: 2rem auto;
-  width: 27%;
-
-  &:first-of-type {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    color: var(--text-color);
-  }
-  &:hover {
-    background: var(--opposite-text);
-  }
-  &:active {
-    background: var(--primary-color);
-  }
-}
-
-@media (max-width: 720px) {
-  button {
-    padding-left: 4rem;
-  }
-}
-@media (max-width: 335px) {
-  button {
-    padding-left: 4rem;
-  }
-}
-
-.inValid {
-  background-color: red;
-}
-
-input {
-  &:focus {
-    background-color: black;
-    color: white;
-  }
-}
-
-// .input-container {
-//   margin: 1rem auto;
-//   padding: 1rem;
-//   position: relative;
-//   display: flex;
-//   flex-direction: column;
-
-//   input {
-//     width: 100%;
-//     height: 2.5rem;
-//     padding: 0.5rem 0;
-//     outline: 0;
-//     border: 1px solid #ddd;
-//     border-radius: 4px;
-//     background: #fff;
-//     font-family: Arial, Helvetica, sans-serif;
-//     font-size: 16px;
-//   }
-
-//   label {
-//     position: absolute;
-//     pointer-events: none;
-//     transform: translate(0, 23px) scale(1);
-//     transform-origin: top left;
-//     transition: 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
-//     color: #6f81a5;
-//     font-size: 16px;
-//     line-height: 1;
-//     left: 16px;
-//   }
-
-//   &:focus-within label {
-//     transform: translate(0, 12px) scale(0.8);
-//     color: #0a53e4;
-//   }
-// }

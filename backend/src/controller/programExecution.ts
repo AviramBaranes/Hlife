@@ -59,7 +59,7 @@ export const getExercisesByDate: RequestHandler = async (req, res, next) => {
 
     res.status(200).json({ exercises });
     return;
-  } catch (err) {
+  } catch (err:any) {
     catchErrorHandler(err, next);
   }
 };
@@ -131,7 +131,7 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
 
     res.status(201).send("Wonderful! Your execution has been declared");
     return;
-  } catch (err) {
+  } catch (err:any) {
     catchErrorHandler(err, next);
   }
 };
@@ -166,7 +166,7 @@ export const getSingleExecution: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(requestedExecution);
     return;
-  } catch (err) {
+  } catch (err:any) {
     catchErrorHandler(err, next);
   }
 };
@@ -213,7 +213,7 @@ export const getExecutionsByRange: RequestHandler = async (req, res, next) => {
 
     res.status(200).json(executions);
     return;
-  } catch (err) {
+  } catch (err:any) {
     catchErrorHandler(err, next);
   }
 };

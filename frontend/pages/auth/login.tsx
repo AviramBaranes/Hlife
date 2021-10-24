@@ -16,9 +16,11 @@ const Login: React.FC = () => {
         <h1>Welcome Back!</h1>
       </div>
       <div className={classes.Main}>
-        <section>
-          <h2>Log In</h2>
-          <Line />
+        <section className={classes.FormSection}>
+          <div className={classes.subTitle}>
+            <h2>Log In</h2>
+            <Line />
+          </div>
           <LoginForm />
         </section>
         {dumbbellsPic.src && <Image src={dumbbellsPic} />}

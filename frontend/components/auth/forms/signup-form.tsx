@@ -1,5 +1,5 @@
 import router from "next/router";
-import React, { useState, Dispatch, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import isEmail from "validator/lib/isEmail";
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
@@ -7,10 +7,10 @@ import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 
 import classes from "../../../styles/pages/signup.module.scss";
 import axiosInstance from "../../../utils/axios/axiosInstance";
+import { handleAxiosError } from "../../../utils/errors/handleRequestErrors";
 
 type InputName =
   | "name"
-  | "username"
   | "email"
   | "password"
   | "passwordConfirmation"
@@ -25,34 +25,35 @@ function signupForm() {
       value: "",
       valid: false,
       touched: false,
-    },
-    username: {
-      value: "",
-      valid: false,
-      touched: false,
+      active:false,
     },
     email: {
       value: "",
       valid: false,
       touched: false,
+      active:false,
     },
     password: {
       value: "",
       valid: false,
       touched: false,
+      active:false,
     },
     passwordConfirmation: {
       value: "",
       valid: false,
       touched: false,
+      active:false,
     },
     dateOfBirth: {
       value: "",
       valid: false,
       touched: false,
+      active:false,
     },
     gender: {
-      value: "male",
+      value: "",
+      active:false,
     },
   });
   const [formValidity, setFormValidity] = useState(false);
@@ -66,12 +67,12 @@ function signupForm() {
   });
   useEffect(() => {
     setFormValidity(
-      fields.name.valid &&
-        fields.username.valid &&
+      !!(fields.name.valid &&
         fields.email.valid &&
         fields.password.valid &&
         fields.passwordConfirmation.valid &&
-        fields.dateOfBirth.valid
+        fields.dateOfBirth.valid && 
+        fields.gender.value)
     );
 
     for (let field in fields) {
@@ -92,9 +93,6 @@ function signupForm() {
 
     switch (name) {
       case "name":
-        isValid = value.length > 2;
-        break;
-      case "username":
         isValid = value.length > 2;
         break;
       case "email":
@@ -121,6 +119,7 @@ function signupForm() {
         value,
         touched: true,
         valid: isValid,
+        active:value!=='',
       },
     }));
   }
@@ -130,12 +129,16 @@ function signupForm() {
 
     setErrorDiv(
       <>
-        <h4>Some of the fields are invalid</h4>
-        <h6>Please make sure you follow the following instructions</h6>
+        <section>
+          <h4>Some of the fields are invalid</h4>
+          <h6>Please make sure you follow the following instructions</h6>
+        </section>
         <ul>
-          <li>Name and username must be at least 3 characters</li>
-          <li>email needs to be a valid email</li>
-          <li>password must contain at least 6 characters</li>
+          <li>Name must be at least 3 characters.</li>
+          <li>Email needs to be a valid email.</li>
+          <li>Password must contain at least 6 characters.</li>
+          <li>You allowed to have an account only if you were born before 2005.</li>
+          <li>You need to choose your gender.</li>
         </ul>
       </>
     );
@@ -157,7 +160,6 @@ function signupForm() {
     try {
       const bodyRequest = {
         name: fields.name.value,
-        username: fields.username.value,
         email: fields.email.value,
         password: fields.password.value,
         passwordConfirmation: fields.passwordConfirmation.value,
@@ -177,18 +179,13 @@ function signupForm() {
         })
       );
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Sign Up Failed",
-          errorMessage: err.response.data,
-        })
-      );
+      handleAxiosError(err,dispatch,"Sign Up Failed")
     }
   }
-
+// console.log(fields)
   return (
-    <form aria-label="form" onSubmit={signupSubmitHandler}>
-      <div>
+    <form className={classes.Form} aria-label="form" onSubmit={signupSubmitHandler}>
+      <div className="input-container">
         <input
           className={fieldsClasses.name}
           value={fields.name.value}
@@ -198,23 +195,10 @@ function signupForm() {
           type="text"
           id="name"
         />
-        <label htmlFor="name">Name</label>
+        <label className={fields.name.active?'Active':''} htmlFor="name">Name</label>
       </div>
 
-      <div>
-        <input
-          className={fieldsClasses.username}
-          value={fields.username.value}
-          onChange={inputChangeHandler}
-          name="username"
-          role="textbox"
-          type="text"
-          id="username"
-        />
-        <label htmlFor="username">Username</label>
-      </div>
-
-      <div>
+      <div className="input-container">
         <input
           className={fieldsClasses.email}
           value={fields.email.value}
@@ -224,10 +208,10 @@ function signupForm() {
           type="email"
           id="email"
         />
-        <label htmlFor="email">Email</label>
+        <label className={fields.email.active?'Active':''} htmlFor="email">Email</label>
       </div>
 
-      <div>
+      <div className="input-container">
         <input
           className={fieldsClasses.password}
           value={fields.password.value}
@@ -237,10 +221,10 @@ function signupForm() {
           type="password"
           id="password"
         />
-        <label htmlFor="password">Password</label>
+        <label className={fields.password.active?'Active':''} htmlFor="password">Password</label>
       </div>
 
-      <div>
+      <div className="input-container">
         <input
           className={fieldsClasses.passwordConfirmation}
           value={fields.passwordConfirmation.value}
@@ -250,52 +234,59 @@ function signupForm() {
           type="password"
           id="passwordConfirmation"
         />
-        <label htmlFor="passwordConfirmation">Confirm password</label>
+        <label className={fields.passwordConfirmation.active?'Active':''} htmlFor="passwordConfirmation">Confirm</label>
       </div>
 
-      <div>
+      <div className="input-container">
         <input
+        onFocus={e=>e.target.type = 'date'}
+        onBlur={e=>e.target.type='text'}
           className={fieldsClasses.dateOfBirth}
           onChange={inputChangeHandler}
           value={fields.dateOfBirth.value}
           name="dateOfBirth"
           role="textbox"
-          type="date"
+          type={fields.dateOfBirth.active?'date':'text'}
           id="date"
           min="1920-01-01"
           max="2005-01-01"
         />
-        <label htmlFor="date">Date of birth</label>
+        <label className={fields.dateOfBirth.active?'Active':'NotActive'} htmlFor="date">Date of birth</label>
       </div>
 
-      <div>
-        <label htmlFor="gender">Gender</label>
+      <div className="input-container">
         <select
-          onChange={(e) =>
-            setFields((prevState) => ({
+          onChange={(e) =>{
+            const {value} = e.target
+            setFields((prevState) => {
+              return{
               ...prevState,
-              gender: { value: e.target.value },
-            }))
+              gender: {active:value!=='', value },
+            }})
+          }
           }
           value={fields.gender.value}
           required
           role="listbox"
           id="gender"
           name="gender"
-        >
+        > 
+          <option value='' style={{display:"none"}}></option>
           <option value="male">male</option>
           <option value="female">female</option>
         </select>
+        <label className={fields.gender.active?'Active':''} htmlFor="gender">Gender</label>
       </div>
 
-      <div>{errorDiv}</div>
+      {errorDiv && <div className="error-div">{errorDiv}</div>}
 
       <div
+      className='error-detector-div'
         onMouseOver={mouseOverBtnHandler}
         onMouseLeave={() => setErrorDiv(null)}
       >
-        <button disabled={!formValidity} type="submit">
-          Create User
+        <button className="primary-button" disabled={!formValidity} type="submit">
+        Sign Up
         </button>
       </div>
     </form>

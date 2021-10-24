@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCsrfToken } from "../../redux/slices/tokens";
 
 import Navigation from "./MainNav/Navigation";
-import LoadingSpinner from "../UI/Spinner/Spinner";
-import classes from "./Layout.module.scss";
+import classes from "../../styles/components/Layout.module.scss";
 import { errorsActions } from "../../redux/slices/errors/errorsSlice";
 import { RootState } from "../../redux/store/reduxStore";
 import SideNav from "./NavComponents/SideNav";
@@ -20,19 +19,21 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   const { themeClass } = useSelector(
     (state: RootState) => state.settingsReducer
   );
-  const { loading } = useSelector((state: RootState) => state.usersReducer);
 
+  //#30a954
   //handle app theme
   const theme = [
     {
       "primary-color": "rgb(0, 211, 0)",
       "text-color": "white",
       "opposite-text": "black",
+      "secondary-color": "rgb(1, 110, 6)",
     },
     {
       "primary-color": "rgb(0, 136, 0)",
       "text-color": "black",
       "opposite-text": "white",
+      "secondary-color": "rgb(3, 189, 13)",
     },
   ];
 
@@ -74,7 +75,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
         <div className={`${classes.Layout} Dark`}>
           <Navigation setDisplaySideNav={setDisplaySideNav} />
           {displaySideNav && <SideNav setShouldDisplay={setDisplaySideNav} />}
-          <main>{loading ? <LoadingSpinner /> : children}</main>
+          <main>{children}</main>
         </div>
       )}
     </>

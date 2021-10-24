@@ -29,7 +29,7 @@ export const calculateRecommendationWorkout = async (cookies: {
         description: `${data[0].workoutName}: ${aerobicParsedData.description},\n${data[1].workoutName}: ${fbParsedData.description}`,
         workoutDaysPerWeek,
         restDaysPerWeek,
-        order: "Aerobic,FB,Aerobic,X,Aerobic,X,Aerobic",
+        order: "aerobic,FB,aerobic,X,aerobic,X,aerobic",
       };
     }
     if (data.length === 1) {

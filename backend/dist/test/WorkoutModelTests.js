@@ -10,12 +10,12 @@ describe("ProgramExecution model tests", () => {
     it("should be invalid if required fields are empty", () => {
         const workout = new Workout_1.default({ exercises: [{}] });
         workout.validate((err) => {
-            chai_1.expect(err.errors.user.properties.message).equal("Path `user` is required.");
-            chai_1.expect(err.errors.trainingDayName.properties.message).equal("Path `trainingDayName` is required.");
-            chai_1.expect(err.errors.name.properties.message).equal("Path `name` is required.");
-            chai_1.expect(err.errors["exercises.0.name"].properties.message).equal("Path `name` is required.");
-            chai_1.expect(err.errors["exercises.0.sets"].properties.message).equal("Path `sets` is required.");
-            chai_1.expect(err.errors["exercises.0.reps"].properties.message).equal("Path `reps` is required.");
+            (0, chai_1.expect)(err.errors.user.properties.message).equal("Path `user` is required.");
+            (0, chai_1.expect)(err.errors.trainingDayName.properties.message).equal("Path `trainingDayName` is required.");
+            (0, chai_1.expect)(err.errors.name.properties.message).equal("Path `name` is required.");
+            (0, chai_1.expect)(err.errors["exercises.0.name"].properties.message).equal("Path `name` is required.");
+            (0, chai_1.expect)(err.errors["exercises.0.sets"].properties.message).equal("Path `sets` is required.");
+            (0, chai_1.expect)(err.errors["exercises.0.reps"].properties.message).equal("Path `reps` is required.");
         });
     });
     it("should be invalid if fields are not correct ", () => {
@@ -28,10 +28,10 @@ describe("ProgramExecution model tests", () => {
         };
         const workout = new Workout_1.default(workoutFields);
         workout.validate((err) => {
-            chai_1.expect(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
-            chai_1.expect(err.errors.trainingDayName.properties.message).equal("`-` is not a valid enum value for path `trainingDayName`.");
-            chai_1.expect(err.errors["exercises.0.sets"].properties.message).equal("Path `sets` (0) is less than minimum allowed value (1).");
-            chai_1.expect(err.errors["exercises.0.reps"].properties.message).equal("Path `reps` (0) is less than minimum allowed value (1).");
+            (0, chai_1.expect)(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
+            (0, chai_1.expect)(err.errors.trainingDayName.properties.message).equal("`-` is not a valid enum value for path `trainingDayName`.");
+            (0, chai_1.expect)(err.errors["exercises.0.sets"].properties.message).equal("Path `sets` (0) is less than minimum allowed value (1).");
+            (0, chai_1.expect)(err.errors["exercises.0.reps"].properties.message).equal("Path `reps` (0) is less than minimum allowed value (1).");
         });
     });
     it("should be a valid model with defaults", () => {
@@ -52,7 +52,7 @@ describe("ProgramExecution model tests", () => {
         };
         const workout = new Workout_1.default(workoutFields);
         workout.validate((err) => {
-            chai_1.expect(err).equal(null);
+            (0, chai_1.expect)(err).equal(null);
         });
     });
 });

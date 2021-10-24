@@ -1,0 +1,134 @@
+@import '../breakpoints.scss';
+.Title{
+    margin-block: 2rem;
+    text-align: center;
+    p{
+        max-width: 80%;
+        margin: auto;
+    }
+}
+
+.Recommendations{
+    h4{
+        font-size: 1.4rem;
+        border-bottom: var(--primary-color) solid 1px;
+        width: 13.5rem;
+        margin-bottom: 2rem;
+    }
+    h5{
+        strong{
+            font-size: 1.2rem;
+            color: rgb(45, 155, 78);
+        }
+        font-weight: lighter;
+        color: var(--text-color);
+    }
+}
+
+.Button{
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+.Form{
+    margin: auto;
+    margin-block: 5rem;
+    text-align: center;
+    max-width: 20rem;
+}
+
+
+@include media('>bigPhone','<=tablet'){
+    .Title{
+        margin-bottom: 4rem;
+        h3{
+            font-size: 1.7rem;
+        }
+    }
+    .Recommendations{
+        h5{
+            strong{
+                font-size: 1.4rem;
+                color: rgb(45, 155, 78);
+            }
+            font-size: 1rem;
+            font-weight: lighter;
+            color: var(--text-color);
+            margin-bottom: 0.8rem;
+        }
+    }
+
+    .Footer{
+        h5{
+            font-size: 1rem;
+        }
+    }
+    
+}
+
+@include media('>tablet','<desktop'){
+    .Title{
+        margin-bottom: 5rem;
+        h3{
+            font-size: 2rem;
+        }
+    }
+    .Recommendations{
+        h4{
+            font-size: 1.8rem;
+            width: 17rem;
+        }
+        h5{
+            strong{
+                font-size: 1.5rem;
+                color: rgb(45, 155, 78);
+            }
+            font-size: 1.2rem;
+            font-weight: lighter;
+            color: var(--text-color);
+            margin-bottom: 0.8rem;
+        }
+    }
+
+    .Footer{
+        h5{
+            font-size: 1rem;
+        }
+    }
+}
+
+@include media('>=desktop'){
+    .Title{
+        margin-bottom: 5rem;
+        h3{
+            font-size: 2rem;
+        }
+    }
+    .Recommendations{
+        h4{
+            font-size: 1.8rem;
+            width: 17rem;
+        }
+        h5{
+            strong{
+                font-size: 1.5rem;
+                color: rgb(45, 155, 78);
+            }
+            font-size: 1.2rem;
+            font-weight: lighter;
+            color: var(--text-color);
+            margin-bottom: 0.8rem;
+        }
+    }
+
+    .Footer{
+        h5{
+            font-size: 1rem;
+        }
+    }
+
+    .Form{
+        margin-block: 8rem;
+    }
+}
+

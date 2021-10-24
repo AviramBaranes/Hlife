@@ -32,7 +32,7 @@ const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
 const Goals_1 = __importDefault(require("../models/Goals"));
 const User_1 = __importDefault(require("../models/User"));
 describe("addStats endpoint general tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = {
         userId: "123",
         body: {
@@ -54,15 +54,15 @@ describe("addStats endpoint general tests", () => {
     it("should handle user goal not found", async () => {
         stubedGoalsModel.returns(false);
         await statsController.addStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("User's goals not found");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("User's goals not found");
     });
     it("should not add stats more then once in 7 days", async () => {
         stubedGoalsModel.returns(true);
         stubedStatsModel.returns({ stats: [{ date: new Date() }] });
         await statsController.addStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("You can only declare stats change once in 7 days");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("You can only declare stats change once in 7 days");
     });
     it("should create stats model", async () => {
         stubedStatsModel.returns({ stats: [], save: sinon_1.default.spy() });
@@ -72,25 +72,25 @@ describe("addStats endpoint general tests", () => {
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
         const newStats = stats.stats[0];
-        chai_1.expect(newStats.date).instanceOf(Date);
-        chai_1.expect(newStats.deservedGrade).equal(15);
-        chai_1.expect(newStats.weight).equal(100);
-        chai_1.expect(newStats.height).equal(180);
-        chai_1.expect(newStats.fatPercentage).equal(20);
-        chai_1.expect(newStats.musclesMass).equal(30);
-        chai_1.expect(user.grade).equal(15);
-        chai_1.expect(user.hasInitialStats).equal(true);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.stats.length).equal(1);
-        chai_1.expect(stats.save.called).equal(true);
+        (0, chai_1.expect)(newStats.date).instanceOf(Date);
+        (0, chai_1.expect)(newStats.deservedGrade).equal(15);
+        (0, chai_1.expect)(newStats.weight).equal(100);
+        (0, chai_1.expect)(newStats.height).equal(180);
+        (0, chai_1.expect)(newStats.fatPercentage).equal(20);
+        (0, chai_1.expect)(newStats.musclesMass).equal(30);
+        (0, chai_1.expect)(user.grade).equal(15);
+        (0, chai_1.expect)(user.hasInitialStats).equal(true);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.stats.length).equal(1);
+        (0, chai_1.expect)(stats.save.called).equal(true);
     });
     it("should return the right response", () => {
         const data = res.jsonObj;
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(data.messages).eql([]);
-        chai_1.expect(data.currentGrade).equal(15);
-        chai_1.expect(data.messages).eql([]);
-        chai_1.expect(data.accomplishments).eql({});
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(data.messages).eql([]);
+        (0, chai_1.expect)(data.currentGrade).equal(15);
+        (0, chai_1.expect)(data.messages).eql([]);
+        (0, chai_1.expect)(data.accomplishments).eql({});
     });
     afterEach(() => {
         stubedUserModel.restore();
@@ -99,7 +99,7 @@ describe("addStats endpoint general tests", () => {
     });
 });
 describe("addStats endpoint deeply tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = {
         userId: "123",
         body: {
@@ -145,15 +145,15 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(30);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.stats.length).equal(2);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
-        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
-        chai_1.expect(res.jsonObj.messages[2]).equal("You failed to lose weight");
-        chai_1.expect(res.jsonObj.accomplishments).eql({});
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(30);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.stats.length).equal(2);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
+        (0, chai_1.expect)(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
+        (0, chai_1.expect)(res.jsonObj.messages[2]).equal("You failed to lose weight");
+        (0, chai_1.expect)(res.jsonObj.accomplishments).eql({});
     });
     it("should add the grade and send messages (weight improved)", async () => {
         const statsArray = [];
@@ -170,15 +170,15 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(35);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.stats.length).equal(2);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
-        chai_1.expect(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
-        chai_1.expect(res.jsonObj.messages.length).equal(2);
-        chai_1.expect(res.jsonObj.accomplishments).eql({});
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(35);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.stats.length).equal(2);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
+        (0, chai_1.expect)(res.jsonObj.messages[1]).equal("Unfortunately you didn't gain more muscles mass this time");
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(2);
+        (0, chai_1.expect)(res.jsonObj.accomplishments).eql({});
     });
     it("should add the grade and send messages (musclesMass improved)", async () => {
         const statsArray = [];
@@ -195,13 +195,13 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(40);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
-        chai_1.expect(res.jsonObj.messages.length).equal(1);
-        chai_1.expect(res.jsonObj.accomplishments).eql({});
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(40);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages[0]).equal("Unfortunately you didn't reduced your fat percentage this time");
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(1);
+        (0, chai_1.expect)(res.jsonObj.accomplishments).eql({});
     });
     it("should add the grade and send messages (all improved)", async () => {
         const statsArray = [];
@@ -218,12 +218,12 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(45);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages.length).equal(0);
-        chai_1.expect(res.jsonObj.accomplishments).eql({});
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(45);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(0);
+        (0, chai_1.expect)(res.jsonObj.accomplishments).eql({});
     });
     it("should add the grade and send messages (weight reached goal)", async () => {
         const statsArray = [];
@@ -240,14 +240,14 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(50);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages.length).equal(0);
-        chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(undefined);
-        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(50);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(0);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.weight).equal(true);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.fatPercentage).equal(undefined);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.musclesMass).equal(undefined);
     });
     it("should add the grade and send messages (fatPercentage reached goal)", async () => {
         const statsArray = [];
@@ -264,14 +264,14 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(55);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages.length).equal(0);
-        chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(55);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(0);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.weight).equal(true);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.fatPercentage).equal(true);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.musclesMass).equal(undefined);
     });
     it("should add the grade and send messages (fatPercentage reached goal)", async () => {
         const statsArray = [];
@@ -288,14 +288,14 @@ describe("addStats endpoint deeply tests", () => {
         await statsController.addStats(req, res, () => { });
         const user = User_1.default.findById({});
         const stats = PhysicalStats_1.default.findOne();
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(user.grade).equal(60);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(stats.save.called).equal(true);
-        chai_1.expect(res.jsonObj.messages.length).equal(0);
-        chai_1.expect(res.jsonObj.accomplishments.weight).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.fatPercentage).equal(true);
-        chai_1.expect(res.jsonObj.accomplishments.musclesMass).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(user.grade).equal(60);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(stats.save.called).equal(true);
+        (0, chai_1.expect)(res.jsonObj.messages.length).equal(0);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.weight).equal(true);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.fatPercentage).equal(true);
+        (0, chai_1.expect)(res.jsonObj.accomplishments.musclesMass).equal(true);
     });
     afterEach(() => {
         stubedUserModel.restore();
@@ -310,22 +310,22 @@ describe("getAllStatsDates endpoint tests", () => {
     let res;
     let stubedStatsModel;
     beforeEach(() => {
-        res = responseDefaultObj_1.default();
+        res = (0, responseDefaultObj_1.default)();
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
     });
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getAllStatsDates(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were found for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
         stubedStatsModel.returns({
             stats: [],
         });
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were created yet");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were created yet");
     });
     it("should send success response with all the stats", async () => {
         const stats = [
@@ -338,8 +338,8 @@ describe("getAllStatsDates endpoint tests", () => {
         });
         const expectedData = [1, 2, 3];
         await statsController.getAllStatsDates(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj.statsDates).eql(expectedData);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj.statsDates).eql(expectedData);
     });
     afterEach(() => {
         stubedStatsModel.restore();
@@ -353,14 +353,14 @@ describe("getStatsByDate endpoint tests", () => {
     let res;
     let stubedStatsModel;
     beforeEach(() => {
-        res = responseDefaultObj_1.default();
+        res = (0, responseDefaultObj_1.default)();
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
     });
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getStatsByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were found for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats found by date", async () => {
         stubedStatsModel.returns({
@@ -368,8 +368,8 @@ describe("getStatsByDate endpoint tests", () => {
         });
         req.params.date = "11/11/2001";
         await statsController.getStatsByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Invalid date, no stats were entered at this date");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Invalid date, no stats were entered at this date");
     });
     it("should send success response with the requested stats", async () => {
         stubedStatsModel.returns({
@@ -380,9 +380,9 @@ describe("getStatsByDate endpoint tests", () => {
             ],
         });
         await statsController.getStatsByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj.moreData).equal("data");
-        chai_1.expect(res.jsonObj.date).equal("11/11/2001");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj.moreData).equal("data");
+        (0, chai_1.expect)(res.jsonObj.date).equal("11/11/2001");
     });
     afterEach(() => {
         stubedStatsModel.restore();
@@ -395,22 +395,22 @@ describe("getAllStats endpoint tests", () => {
     let res;
     let stubedStatsModel;
     beforeEach(() => {
-        res = responseDefaultObj_1.default();
+        res = (0, responseDefaultObj_1.default)();
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
     });
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were found for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
         stubedStatsModel.returns({
             stats: [],
         });
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were created yet");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were created yet");
     });
     it("should send success response with all the stats", async () => {
         const stats = [
@@ -422,8 +422,8 @@ describe("getAllStats endpoint tests", () => {
             stats,
         });
         await statsController.getAllStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj.stats).eql(stats);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj.stats).eql(stats);
     });
     afterEach(() => {
         stubedStatsModel.restore();
@@ -436,30 +436,30 @@ describe("deleteLastStats endpoint tests", () => {
     let res;
     let stubedStatsModel;
     beforeEach(() => {
-        res = responseDefaultObj_1.default();
+        res = (0, responseDefaultObj_1.default)();
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
     });
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were found for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
         stubedStatsModel.returns({
             stats: [],
         });
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were created yet");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were created yet");
     });
     it("should send error response if stats were created over 24 hours ago", async () => {
         stubedStatsModel.returns({
             stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
         });
         await statsController.deleteLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("It's been over 24 hours since the last stats were created, You can't delete them");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("It's been over 24 hours since the last stats were created, You can't delete them");
     });
     it("should send success response and delete the last stats", async () => {
         stubedStatsModel.returns({
@@ -470,10 +470,10 @@ describe("deleteLastStats endpoint tests", () => {
         const userStats = PhysicalStats_1.default.findOne();
         const lastStatsIndex = userStats.stats.length - 1;
         const lastStats = userStats.stats[lastStatsIndex];
-        chai_1.expect(lastStats.data).equal("first data");
-        chai_1.expect(userStats.save.called).equal(true);
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("The last stats were deleted");
+        (0, chai_1.expect)(lastStats.data).equal("first data");
+        (0, chai_1.expect)(userStats.save.called).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("The last stats were deleted");
     });
     afterEach(() => {
         stubedStatsModel.restore();
@@ -487,38 +487,38 @@ describe("changeLastStats endpoint tests", () => {
     let res;
     let stubedStatsModel;
     beforeEach(() => {
-        res = responseDefaultObj_1.default();
+        res = (0, responseDefaultObj_1.default)();
         stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
     });
     it("should send error response if no userStats found", async () => {
         stubedStatsModel.returns(false);
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were found for this user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were found for this user");
     });
     it("should send error response if no stats were yet to be created", async () => {
         stubedStatsModel.returns({
             stats: [],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No stats were created yet");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No stats were created yet");
     });
     it("should send error response if stats were created over 24 hours ago", async () => {
         stubedStatsModel.returns({
             stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("It's been over 24 hours since the last stats were created, You can't change them");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("It's been over 24 hours since the last stats were created, You can't change them");
     });
     it("should send error response if no data was sent", async () => {
         stubedStatsModel.returns({
             stats: [{ date: new Date() }],
         });
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No data was provided");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No data was provided");
     });
     it("should change the last stats and send success response", async () => {
         stubedStatsModel.returns({
@@ -534,12 +534,12 @@ describe("changeLastStats endpoint tests", () => {
         const userStats = PhysicalStats_1.default.findOne();
         const lastStatsIndex = userStats.stats.length - 1;
         const lastStats = userStats.stats[lastStatsIndex];
-        chai_1.expect(lastStats.weight).equal(1);
-        chai_1.expect(lastStats.height).equal(2);
-        chai_1.expect(lastStats.fatPercentage).equal(3);
-        chai_1.expect(lastStats.musclesMass).equal(4);
-        chai_1.expect(lastStats.bodyImageUrl).equal("image");
-        chai_1.expect(userStats.save.called).equal(true);
+        (0, chai_1.expect)(lastStats.weight).equal(1);
+        (0, chai_1.expect)(lastStats.height).equal(2);
+        (0, chai_1.expect)(lastStats.fatPercentage).equal(3);
+        (0, chai_1.expect)(lastStats.musclesMass).equal(4);
+        (0, chai_1.expect)(lastStats.bodyImageUrl).equal("image");
+        (0, chai_1.expect)(userStats.save.called).equal(true);
     });
     it("should send success response and change the last stats", async () => {
         stubedStatsModel.returns({
@@ -548,8 +548,8 @@ describe("changeLastStats endpoint tests", () => {
         });
         req.body.weight = 1;
         await statsController.changeLastStats(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("The last stats were updated");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("The last stats were updated");
     });
     afterEach(() => {
         stubedStatsModel.restore();
@@ -557,7 +557,7 @@ describe("changeLastStats endpoint tests", () => {
 });
 describe("set ranks tests", () => {
     const req = { userId: "123", body: { selfRank: "new rank" } };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedStats;
     before(() => {
         stubedStats = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
@@ -565,19 +565,19 @@ describe("set ranks tests", () => {
     it("should send an error response if physical stats was not found", async () => {
         stubedStats.returns(false);
         await statsController.setRanking(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Something went wrong... Couldn't find stats that match the user");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Something went wrong... Couldn't find stats that match the user");
     });
     it("should save the new rank", async () => {
         stubedStats.returns({ save: sinon_1.default.spy() });
         await statsController.setRanking(req, res, () => { });
         const stats = await PhysicalStats_1.default.findOne();
-        chai_1.expect(stats.rank).equal("new rank");
-        chai_1.expect(stats.save.called).equal(true);
+        (0, chai_1.expect)(stats.rank).equal("new rank");
+        (0, chai_1.expect)(stats.save.called).equal(true);
     });
     it("should send a success response", () => {
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Ranking the user successfully");
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Ranking the user successfully");
     });
     after(() => {
         stubedStats.restore();

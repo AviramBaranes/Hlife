@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import classes from "../MainNav/Navigation.module.scss";
+import classes from "../../../styles/components/Navigation.module.scss";
 
 function RegistrationsNav() {
   const router = useRouter();
@@ -10,7 +10,11 @@ function RegistrationsNav() {
 
   return (
     <ul>
-      <li className={pathname === "/auth/login" ? classes.Active : ""}>
+      <li
+        className={
+          pathname === "/auth/login" ? classes.Active : classes.NotActive
+        }
+      >
         <Link href="/auth/login">
           <h2>Log-In</h2>
         </Link>
@@ -18,7 +22,9 @@ function RegistrationsNav() {
 
       <li
         className={
-          pathname === "/auth/registration/signup" ? classes.Active : ""
+          pathname === "/auth/registration/signup"
+            ? classes.Active
+            : classes.NotActive
         }
       >
         <Link href="/auth/registration/signup">

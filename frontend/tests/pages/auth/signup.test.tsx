@@ -40,7 +40,7 @@ describe("signup page tests", () => {
     const inputs = screen.getAllByRole("textbox");
     const h1Title = screen.getByText("Welcome");
     const h5Title = screen.getByText("Start changing your life today!");
-    const h2Title = screen.getByText("Sign Up");
+    const h2Title = screen.getByText("Create User");
     const formElement = container.children[1].children[0].children[1];
     const svgElement =
       container.children[1].children[0].children[0].children[1];
@@ -48,7 +48,7 @@ describe("signup page tests", () => {
       exact: false,
     });
 
-    expect(inputs.length).toEqual(6);
+    expect(inputs.length).toEqual(5);
     expect(h1Title.tagName).toEqual("H1");
     expect(h5Title.tagName).toEqual("H5");
     expect(h2Title.tagName).toEqual("H2");

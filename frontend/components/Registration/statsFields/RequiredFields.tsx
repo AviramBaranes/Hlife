@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import classes from '../../../styles/pages/set-initial-stats.module.scss'
 import { statsActions } from "../../../redux/slices/stats/statsSlice";
 
 const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
@@ -15,11 +16,13 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
     value: "",
     valid: false,
     touched: false,
+    active:false
   });
   const [height, setHeight] = useState({
     value: "",
     valid: false,
     touched: false,
+    active:false
   });
 
   useEffect(() => {
@@ -47,6 +50,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
         touched: true,
         value,
         valid: +value < 250 && +value > 35,
+        active:value!==''
       }));
     } else {
       setHeight((prevState) => ({
@@ -54,6 +58,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
         value,
         touched: true,
         valid: +value < 250 && +value > 100,
+        active:value!==''
       }));
     }
   };
@@ -63,9 +68,12 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
 
     setErrorDiv(
       <>
+      <section>
         <h4>Some of the fields are invalid</h4>
         <h6>Please make sure you follow the following instructions</h6>
+      </section>
         <ul>
+          <li>You need to choose your current level</li>
           <li>weight must be between 35Kg to 250Kg</li>
           <li>height (if provided) must be in the rang of 100cm-250cm</li>
         </ul>
@@ -83,28 +91,37 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
     );
   };
 
+  function getClassName(text:string){
+    let initialClass = classes.Rank + ' '
+    rank === text && (initialClass+=classes.Active)
+    return initialClass
+  }
+
   return (
-    <section style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
+    <section className={classes.RequiredField} style={{ display: `${shouldDisplay ? "block" : "none"}` }}>
+      <div className={classes.Title}>
+      <h1>Fill your current stats</h1>
+      <p>This action will gain you 15 points!</p>
+    </div>
       <h3>
         What is your current level?<span>*</span>
       </h3>
-      <div>
-        <div onClick={(e) => setRank(e.currentTarget.textContent!)}>
+      <div className={classes.Ranks}>
+        <div className={getClassName('Beginner')}  onClick={(e) => setRank(e.currentTarget.textContent!)}>
           <h4>Beginner</h4>
         </div>
-        <div onClick={(e) => setRank(e.currentTarget.textContent!)}>
+        <div className={getClassName('Intermediate')}  onClick={(e) => setRank(e.currentTarget.textContent!)}>
           <h4>Intermediate</h4>
         </div>
-        <div onClick={(e) => setRank(e.currentTarget.textContent!)}>
+        <div className={getClassName('Advanced')}  onClick={(e) => setRank(e.currentTarget.textContent!)}>
           <h4>Advanced</h4>
         </div>
-        <div onClick={(e) => setRank(e.currentTarget.textContent!)}>
+        <div className={getClassName('Pro')}  onClick={(e) => setRank(e.currentTarget.textContent!)}>
           <h4>Pro</h4>
         </div>
       </div>
-      <span></span>
-      <div>
-        <div>
+      <div className={classes.Inputs}>
+        <div className='input-container' >
           <input
             name="weight"
             className={inputClasses.weight}
@@ -114,11 +131,12 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             value={weight.value}
             onChange={inputChangeHandler}
           />
-          <label htmlFor="weight">Weight</label>
+          <label className={weight.active?'Active':''} htmlFor="weight">Weight (KG)</label>
         </div>
 
-        <div>
+        <div className='input-container'>
           <input
+           
             name="height"
             id="height"
             className={inputClasses.height}
@@ -126,12 +144,13 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             value={height.value}
             onChange={inputChangeHandler}
           />
-          <label htmlFor="height">Height</label>
+          <label className={height.active?'Active':''} htmlFor="height">Height (Cm)</label>
         </div>
       </div>
 
-      <div>{errorDiv}</div>
+      {errorDiv &&<div className={'error-div'+' '+classes.ErrorDiv}>{errorDiv}</div>}
       <div
+      className='error-detector-div'
         onMouseOver={mouseOverBtnHandler}
         onMouseLeave={() => setErrorDiv(null)}
       >
@@ -139,6 +158,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
           disabled={buttonDisabled}
           type="button"
           onClick={submitFieldsHandler}
+          className='primary-button'
         >
           Continue
         </button>

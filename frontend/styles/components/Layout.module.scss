@@ -1,11 +1,5 @@
 .Layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
   main {
-    height: 90vh;
-    position: relative;
     width: 90%;
     margin: auto;
   }
@@ -21,12 +15,12 @@
   color: var(--text-color);
 }
 
-@media (max-width: 444px) {
-  .Layout {
-    main {
-      height: 80vh;
-      margin: auto;
-      width: 100%;
-    }
-  }
-}
+// @media (max-width: 444px) {
+//   .Layout {
+//     main {
+//       height: 80vh;
+//       margin: auto;
+//       width: 100%;
+//     }
+//   }
+// }

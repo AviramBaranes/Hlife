@@ -6,10 +6,7 @@ import ResetPassword, {
   getServerSideProps,
 } from "../../../pages/auth/reset-password/[...token]";
 import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
-import { getDefaultMiddleware } from "@reduxjs/toolkit";
 import axiosInstance from "../../../utils/axios/axiosInstance";
-import { AxiosRequestConfig } from "axios";
 import Router from "next/router";
 import store from "../../../redux/store/reduxStore";
 
@@ -62,7 +59,7 @@ describe("Reset Password page tests", () => {
     const h1Element = container.children[0].children[0];
     const form = container.children[1].children[0];
     const input_1 = screen.getByLabelText("Password");
-    const input_2 = screen.getByLabelText("Confirm password");
+    const input_2 = screen.getByLabelText("Confirm");
 
     expect(h1Element).toBeInTheDocument();
     expect(h5Element).toBeInTheDocument();
@@ -81,7 +78,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "pass");
-    userEvent.type(screen.getByLabelText("Confirm password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm"), "password");
 
     expect(button).toBeDisabled();
   });
@@ -95,7 +92,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "password");
-    userEvent.type(screen.getByLabelText("Confirm password"), "pass");
+    userEvent.type(screen.getByLabelText("Confirm"), "pass");
 
     expect(button).toBeDisabled();
   });
@@ -109,7 +106,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "password1");
-    userEvent.type(screen.getByLabelText("Confirm password"), "password2");
+    userEvent.type(screen.getByLabelText("Confirm"), "password2");
     userEvent.click(button);
 
     const errorState = store.getState().errorsReducer;
@@ -128,7 +125,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "password");
-    userEvent.type(screen.getByLabelText("Confirm password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm"), "password");
     userEvent.click(button);
 
     const errorState = store.getState().errorsReducer;
@@ -158,7 +155,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "password");
-    userEvent.type(screen.getByLabelText("Confirm password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm"), "password");
     userEvent.click(button);
 
     const messageState = store.getState().messagesReducer;
@@ -185,7 +182,7 @@ describe("Reset Password page tests", () => {
     const button = screen.getByRole("button");
 
     userEvent.type(screen.getByLabelText("Password"), "password");
-    userEvent.type(screen.getByLabelText("Confirm password"), "password");
+    userEvent.type(screen.getByLabelText("Confirm"), "password");
     userEvent.click(button);
 
     const expectedFields = {

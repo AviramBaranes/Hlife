@@ -15,9 +15,9 @@ describe("auth middleware tests", function () {
                 cookie: "",
             },
         };
-        const error = authMiddleware_1.default(req, {}, () => { });
-        chai_1.expect(error.statusCode).equal(401);
-        chai_1.expect(error.message).equal("Unauthorized Couldn't find cookie");
+        const error = (0, authMiddleware_1.default)(req, {}, () => { });
+        (0, chai_1.expect)(error.statusCode).equal(401);
+        (0, chai_1.expect)(error.message).equal("Unauthorized Couldn't find cookie");
     });
     it("should throw error if cookie is invalid", function () {
         const req = {
@@ -25,9 +25,9 @@ describe("auth middleware tests", function () {
                 cookie: "jon=fake", //it splits at 'joh='
             },
         };
-        const error = authMiddleware_1.default(req, {}, () => { });
-        chai_1.expect(error.statusCode).equal(401);
-        chai_1.expect(error.message).equal("Unauthorized cookie is invalid");
+        const error = (0, authMiddleware_1.default)(req, {}, () => { });
+        (0, chai_1.expect)(error.statusCode).equal(401);
+        (0, chai_1.expect)(error.message).equal("Unauthorized cookie is invalid");
     });
     it("should add a userId field to request", function () {
         const payload = { userId: "123" };
@@ -38,8 +38,8 @@ describe("auth middleware tests", function () {
                 cookie: `jon=${testToken}`,
             },
         };
-        authMiddleware_1.default(req, {}, () => { });
-        chai_1.expect(req.userId).equal("123");
+        (0, authMiddleware_1.default)(req, {}, () => { });
+        (0, chai_1.expect)(req.userId).equal("123");
     });
 });
 //3 tests

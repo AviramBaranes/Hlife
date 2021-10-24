@@ -2,6 +2,7 @@ import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import classes from '../../../styles/pages/set-initial-stats.module.scss'
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/statsFields/RequiredFields";
@@ -55,11 +56,8 @@ const SetInitialStats: React.FC = () => {
   );
 
   return (
-    <>
-      <h1>Create your initial stats</h1>
-      <p>This action will gain you 15 points!</p>
-
-      <RequiredFields shouldDisplay={displayRequiredFields} />
+    <section className={classes.Main}>
+          <RequiredFields shouldDisplay={displayRequiredFields} />
 
       <FatPercentageField
         instructions="This field is optional"
@@ -79,7 +77,7 @@ const SetInitialStats: React.FC = () => {
         buttonsEvents={buttonEventsForPhotoField}
         shouldDisplay={shouldDisplayUploadPhotoField}
       />
-    </>
+    </section>
   );
 };
 

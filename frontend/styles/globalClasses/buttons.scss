@@ -1,0 +1,157 @@
+
+
+.primary-button {
+  padding: 0.5rem 2.4rem;
+  border-radius: 0.5rem;
+    margin: 1rem;
+    cursor: pointer;
+    position: relative;
+  color: var(--text-color);
+  font-weight: bold;
+  background-color: rgb(73, 73, 73);
+  border: white 2px solid;
+  
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover,
+  &:focus {
+    border: rgba(255, 255, 255, 0) solid 2px;
+    background-color: var(--opposite-text);
+    transition: background-color 400ms ease-in-out;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: 0%;
+    height: 0%;
+    z-index: -2;
+    border: 2px solid var(--primary-color);
+    border-radius: 0.5rem;
+    opacity: 0;
+    transition: width, height, 400ms ease-in-out;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 0%;
+    height: 0%;
+    z-index: -1;
+    border: 2px solid var(--primary-color);
+    border-radius: 0.5rem;
+    transition: right, bottom, 400ms ease-in-out;
+    opacity: 0;
+  }
+
+  &:hover::before,
+  &:focus::before {
+    width: 103%;
+    height: 103%;
+    opacity: 1;
+  }
+
+  &:hover::after,
+  &:focus::after {
+    width: 103%;
+    height: 103%;
+    opacity: 1;
+  }
+}
+@mixin hoverEffect($shadow-color,$background){
+  transform: translateY(-2.5px);
+  box-shadow: 0rem 1rem 0.7rem -0.3rem $shadow-color ;
+  background-color: $background;
+  font-weight: bolder;
+  transition: transform,box-shadow,background-color,font-weight, 300ms ease-in-out;
+}
+.success-button{
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  cursor: pointer;
+  position: relative;
+  background-color: var(--secondary-color);
+  border: black 2px solid;
+
+  &:hover{
+    @include hoverEffect($shadow-color:rgb(2, 112, 2),$background:var(--primary-color))
+  }
+
+  &:disabled{
+    color: black;
+    cursor: not-allowed;
+  }
+}
+
+.danger-button{
+  padding: 0.5rem 1.8rem;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  cursor: pointer;
+  position: relative;
+  background-color: rgb(247, 57, 36);
+  border: black 2px solid;
+
+  &:hover{
+    @include hoverEffect($shadow-color:salmon,$background:rgb(255, 25, 0))
+  }
+
+}
+
+.skip-button{
+  padding: 0.4rem 3.2rem;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  cursor: pointer;
+  position: relative;
+  color: black;
+  font-size: 1rem;
+  font-weight: bolder;
+  background-color: rgb(36, 103, 247);
+  border: black 2px solid;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  span{
+    position: absolute;
+    right: 20px;
+    display: none;
+    animation: showIcon 340ms  ease-out;
+  }
+
+  &:hover{
+    transform: scale(1.05);
+    span{
+      display: inline;
+    }
+  }
+
+  &:disabled{
+    cursor: not-allowed;
+  }
+
+  
+
+  @keyframes showIcon {
+    from{
+      right:-20px;
+      opacity: 0;
+    }
+
+    to{
+      right: 20px;
+      opacity: 1;
+    }
+  }
+}
+
+
+

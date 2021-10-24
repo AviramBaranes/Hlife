@@ -38,16 +38,16 @@ const getRecommendationProgram = async (req, res, next) => {
         let recommendation;
         switch (user.gender) {
             case "female":
-                recommendation = programHelpers_1.calculateFemaleRecommendationProgram(goals.basicGoal, physicalStats.rank);
+                recommendation = (0, programHelpers_1.calculateFemaleRecommendationProgram)(goals.basicGoal, physicalStats.rank);
                 break;
             case "male":
-                recommendation = programHelpers_1.calculateMaleRecommendationProgram(goals.basicGoal, physicalStats.rank);
+                recommendation = (0, programHelpers_1.calculateMaleRecommendationProgram)(goals.basicGoal, physicalStats.rank);
                 break;
         }
         res.status(200).json(recommendation);
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getRecommendationProgram = getRecommendationProgram;
@@ -56,7 +56,7 @@ const createProgram = async (req, res, next) => {
         const { userId } = req;
         const { day } = req.params;
         const { trainingDayName, workoutName } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         let workout;
         if (trainingDayName) {
             workout = (await Workout_1.default.findOne({
@@ -122,8 +122,7 @@ const createProgram = async (req, res, next) => {
         return;
     }
     catch (err) {
-        console.log(err);
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.createProgram = createProgram;
@@ -146,7 +145,7 @@ const getAllPrograms = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getAllPrograms = getAllPrograms;
@@ -154,7 +153,7 @@ const getProgram = async (req, res, next) => {
     try {
         const { userId } = req;
         const { day } = req.params;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const program = (await Program_1.default.findOne({ user: userId }));
         if (program.program.length === 0) {
             res.status(403).send("No program was found for the user");
@@ -172,7 +171,7 @@ const getProgram = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getProgram = getProgram;
@@ -181,7 +180,7 @@ const changeProgram = async (req, res, next) => {
         const { userId } = req;
         const { day } = req.params;
         const { trainingDayName, restDay } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         if (trainingDayName && restDay) {
             res.status(403).send("You can't set a workout day as a rest day");
             return;
@@ -226,7 +225,7 @@ const changeProgram = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeProgram = changeProgram;

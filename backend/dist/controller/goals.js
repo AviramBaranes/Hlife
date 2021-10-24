@@ -10,7 +10,7 @@ const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler
 const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
 const createGoal = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { userId } = req;
         const { basicGoal, weight, fatPercentage, musclesMass } = req.body;
         const user = (await User_1.default.findById(userId));
@@ -45,13 +45,13 @@ const createGoal = async (req, res, next) => {
         res.status(201).send("Goals created successfully");
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.createGoal = createGoal;
 const changeBasicGoal = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { userId } = req;
         const { fatPercentage, musclesMass } = req.body;
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
@@ -91,13 +91,13 @@ const changeBasicGoal = async (req, res, next) => {
         res.status(201).send("Goals updated");
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeBasicGoal = changeBasicGoal;
 const changeGoals = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { userId } = req;
         const { weight, fatPercentage, musclesMass } = req.body;
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
@@ -119,7 +119,7 @@ const changeGoals = async (req, res, next) => {
         res.status(201).send("Goals updated");
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeGoals = changeGoals;
@@ -134,7 +134,7 @@ const getGoals = async (req, res, next) => {
         res.status(201).json({ ...userGoals });
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getGoals = getGoals;

@@ -1,38 +1,62 @@
 @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
 
-.Navbar {
-  height: 10vh;
-  width: 90%;
-  margin: 2rem auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+@mixin scaleAnimation($size :1.2) {
+  transition: all 0.2s ease-in-out;
+  &:hover{
+    transform: scale($size);
+  }
 }
 
-.Navbar ul {
+.Navbar {
+  min-height: 5vh;
+  width: 90%;
+  margin: 0.5rem 5% 0.5rem 5% ;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  li {
+    cursor: pointer;
+    margin: 0rem 2rem;
+  }
 }
-.Navbar li {
-  cursor: pointer;
-  margin: 0rem 2rem;
-}
+
 .Logo {
   cursor: pointer;
   font-size: 2.5rem;
   color: var(--primary-color);
+  @include scaleAnimation()
 }
 
 .BarsIcon {
   cursor: pointer;
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.5rem; 
+  @include scaleAnimation($size:1.5)
+}
+
+.NotActive {
+  &::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background-color: var(--primary-color);
+    width: 0;
+    transition: width 0.3s;
+  }
+  &:hover::after {
+    width: 100%;
+    transition: width 0.3s;
+  }
 }
 
 .Active {
-  border-bottom: 2px solid var(--primary-color);
+  border-bottom: 4px solid var(--primary-color);
 }
 
 @media (max-width: 555px) {
@@ -40,8 +64,7 @@
     font-size: 2rem;
   }
   .Navbar {
-    width: 80%;
-    height: 5vh;
+    height: 3vh;
     li {
       margin: 0rem 1rem;
     }
@@ -56,8 +79,6 @@
 
 @media (max-width: 335px) {
   .Navbar {
-    width: 95%;
-    margin: 1rem auto;
     li {
       margin: 0rem 0.6rem;
     }

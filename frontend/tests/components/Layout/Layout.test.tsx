@@ -16,43 +16,11 @@ jest.mock("../../../components/UI/containers/Errors/ErrorContainer", () =>
 );
 
 describe("Layout component", () => {
-  test("should render loading spinner", () => {
-    const initialState = {
-      usersReducer: {
-        loading: true,
-      },
-      tokensReducer: {
-        error: { message: "" },
-      },
-      settingsReducer: {
-        themeClass: "DarkMode",
-      },
-    };
-
-    const store = mockStore(initialState);
-
-    const children = [<h1 key={1}>not here</h1>];
-
-    render(
-      <Provider store={store}>
-        <Layout children={children} />
-      </Provider>
-    );
-
-    const loadingDiv = screen.getByText("Loading...");
-
-    const aChildren = screen.queryByText("not here");
-    const navigationText = screen.queryByText("Hlife");
-
-    expect(loadingDiv).toBeInTheDocument();
-    expect(navigationText).toBeInTheDocument();
-    expect(aChildren).not.toBeInTheDocument();
-  });
-
   test("should render children", () => {
     const initialState = {
       usersReducer: {
-        loading: false,
+        isAuthenticated:false,
+        hasProgram:false
       },
       tokensReducer: {
         error: { message: "" },
@@ -86,7 +54,8 @@ describe("Layout component", () => {
     const message = "this is an error";
     const initialState = {
       usersReducer: {
-        loading: false,
+        isAuthenticated:false,
+        hasProgram:false
       },
       tokensReducer: {
         error: { message },
@@ -115,7 +84,8 @@ describe("Layout component", () => {
   test("should render error container", () => {
     const initialState = {
       usersReducer: {
-        loading: false,
+        isAuthenticated:false,
+        hasProgram:false
       },
       tokensReducer: {
         error: { message: "error message" },

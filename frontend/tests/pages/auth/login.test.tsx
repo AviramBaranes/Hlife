@@ -31,7 +31,7 @@ describe("login page tests", () => {
   test("should render the dom correctly", () => {
     const { container } = render(
       <Provider store={store}>
-        <Login redirected={false} />
+        <Login />
       </Provider>
     );
 
@@ -40,8 +40,8 @@ describe("login page tests", () => {
     const h2Title = screen.getByText("Log In");
     const emailInput = screen.getByLabelText("Email");
     const passwordInput = screen.getByLabelText("Password");
-    const formElement = container.children[1].children[0].children[2];
-    const svgElement = container.children[1].children[0].children[1];
+    const formElement = container.children[1].children[0].children[1];
+    const svgElement = container.children[1].children[0].children[0].children[1]
     const p1Element = container.children[2].children[0].children[0];
     const p2Element = container.children[2].children[0].children[1];
 

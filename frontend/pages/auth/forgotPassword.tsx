@@ -9,6 +9,9 @@ import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
 function SendEmail() {
   return (
     <>
+
+
+
       <div className={classes.Title}>
         <h1>Reset Password</h1>
         <h5>
@@ -23,6 +26,7 @@ function SendEmail() {
       </section>
     </>
   );
+
 }
 
 export default SendEmail;

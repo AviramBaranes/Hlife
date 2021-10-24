@@ -8,9 +8,6 @@ import store from "../../../redux/store/reduxStore";
 import Logout from "../../../components/auth/logout/Logout";
 import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 
-jest.mock("../../../redux/slices/auth/authSlice");
-jest.unmock("react-redux");
-
 describe("Logout", () => {
   test("should render the dom correctly (tags roles)", () => {
     const { container } = render(
@@ -71,25 +68,6 @@ describe("Logout", () => {
 
     expect(mockedSetShowModal.mock.calls.length).toBe(1);
     expect((mockedSetShowModal.mock.calls[0] as any)[0]).toBe(false);
-  });
-
-  test("should handle correctly the logout button (logout failed)", async () => {
-    render(
-      <Provider store={store}>
-        <ErrorContainer />
-        <Logout setShowNav={() => {}} setShowModal={() => {}} />
-      </Provider>
-    );
-
-    const logoutButton = screen.getAllByRole("button")[0];
-
-    userEvent.click(logoutButton);
-
-    const titleElement = await screen.findByText("Logout failed");
-    const messageElement = await screen.findByText("error data");
-
-    expect(titleElement).toBeInTheDocument();
-    expect(messageElement).toBeInTheDocument();
   });
 
   test("should handle correctly the logout button (logout success)", async () => {

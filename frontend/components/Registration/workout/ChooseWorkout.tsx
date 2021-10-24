@@ -1,6 +1,8 @@
 import router from "next/router";
 import React, { Dispatch } from "react";
 import { useDispatch } from "react-redux";
+
+import classes from '../../../styles/pages/choose-workout.module.scss'
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
 
@@ -47,45 +49,49 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
 
   return (
     <div>
-      <section>
+      <section className={classes.Title}>
         <h3>Choose a workout program</h3>
         <p>
-          You can follow our recommendations or continue with your own custom
+          You can follow our recommendations or create a custom
           program.
         </p>
       </section>
-      <section>
-        <h4>Our Recommendations:</h4>
+      <section className={classes.Recommendations}>
+        <h4>Recommendations:</h4>
         <h5>
-          <strong>Program Style:</strong>
+          <strong>Program Style: </strong>
           {programStyle}
         </h5>
         <h5>
-          <strong>Description:</strong>
+          <strong>Description: </strong>
           {description}
         </h5>
         <h5>
-          <strong>Times Per Week:</strong>
+          <strong>Times Per Week: </strong>
           {workoutDaysPerWeek} workout days, and {restDaysPerWeek} rest days.
         </h5>
         <h5>
-          <strong>Order:</strong>
+          <strong>Order: </strong>
           {order}
         </h5>
-        <button onClick={ConfirmBtnHandler} disabled={false} type="button">
+      </section>
+      <div className={classes.Button}>
+
+        <button className='primary-button' onClick={ConfirmBtnHandler} disabled={false} type="button">
           Confirm
         </button>
-      </section>
-      <section>
+          </div>
+      <section className={classes.Footer} >
         <h5>
           <strong>Do you want to make your own custom workout?</strong>
         </h5>
         <button
-          disabled={false}
-          type="button"
-          onClick={() => {
-            setDisplay(false);
-          }}
+        className='success-button'
+        disabled={false}
+        type="button"
+        onClick={() => {
+          setDisplay(false);
+        }}
         >
           Yes
         </button>

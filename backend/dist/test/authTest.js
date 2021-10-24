@@ -28,9 +28,9 @@ dotenv_1.default.config({ path: "./config.env" });
 const sinon_1 = __importDefault(require("sinon"));
 const chai_1 = require("chai");
 //packages
-const mail_1 = __importDefault(require("@sendgrid/mail"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 //controller to test
 const authController = __importStar(require("../controller/auth"));
 //models and connections
@@ -56,23 +56,23 @@ describe("signup Controller error handling", () => {
             dateOfBirth: "02/01/2000",
         },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     it("should throw an error if user exist", async function () {
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
         stubedUser.returns(true);
         await authController.signup(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("user already exist with this email!");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("user already exist with this email!");
     });
     it("should throw an error if password do not match", async function () {
         stubedUser.returns(false);
         await authController.signup(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("passwords do not match");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("passwords do not match");
     });
     it("should throw a default error", async function () {
         const error = (await authController.signup({}, {}, () => { }));
-        chai_1.expect(error.statusCode).equal(500);
+        (0, chai_1.expect)(error.statusCode).equal(500);
         stubedUser.restore();
     });
 });
@@ -83,7 +83,7 @@ describe("signup Controller creating the correct models", () => {
     createdProgramArgs, createdProgramExecutionArgs;
     // createdDietExecutionArgs: CreatedModelsArgs;
     before(async () => {
-        const res = responseDefaultObj_1.default();
+        const res = (0, responseDefaultObj_1.default)();
         const req = {
             body: {
                 name: "Avirambr",
@@ -116,19 +116,18 @@ describe("signup Controller creating the correct models", () => {
         // createdDietExecutionArgs = stubedDietExecution.firstCall.thisValue;
     });
     it("should create a user model with the right arguments", async () => {
-        chai_1.expect(createdUserArgs._id).to.be.an("object");
-        chai_1.expect(createdUserArgs.name).equal("Avirambr");
-        chai_1.expect(createdUserArgs.username).equal("aviramSport2");
-        chai_1.expect(createdUserArgs.email).equal("test2@test.com");
-        chai_1.expect(createdUserArgs.gender).equal("male");
-        chai_1.expect(createdUserArgs.grade).equal(0);
-        chai_1.expect(createdUserArgs.dateOfBirth).eql(new Date("02/01/2000"));
+        (0, chai_1.expect)(createdUserArgs._id).to.be.an("object");
+        (0, chai_1.expect)(createdUserArgs.name).equal("Avirambr");
+        (0, chai_1.expect)(createdUserArgs.email).equal("test2@test.com");
+        (0, chai_1.expect)(createdUserArgs.gender).equal("male");
+        (0, chai_1.expect)(createdUserArgs.grade).equal(0);
+        (0, chai_1.expect)(createdUserArgs.dateOfBirth).eql(new Date("02/01/2000"));
     });
     it("should create a PhysicalStats model", async () => {
-        chai_1.expect(createdPhysicalStatsArgs._id).to.be.an("object");
-        chai_1.expect(createdPhysicalStatsArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdPhysicalStatsArgs.age).equal(2021 - 2000);
-        chai_1.expect(createdPhysicalStatsArgs.stats).eql([]);
+        (0, chai_1.expect)(createdPhysicalStatsArgs._id).to.be.an("object");
+        (0, chai_1.expect)(createdPhysicalStatsArgs.user).eql(createdUserArgs._id);
+        (0, chai_1.expect)(createdPhysicalStatsArgs.age).equal(2021 - 2000);
+        (0, chai_1.expect)(createdPhysicalStatsArgs.stats).eql([]);
     });
     // it("should create a Diet model", async () => {
     //   expect(createdDietArgs._id).to.be.an("object");
@@ -136,14 +135,14 @@ describe("signup Controller creating the correct models", () => {
     //   expect(createdDietArgs.ingredients).eql([]);
     // });
     it("should create a Program model", async () => {
-        chai_1.expect(createdProgramArgs._id).to.be.an("object");
-        chai_1.expect(createdProgramArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdProgramArgs.program).eql([]);
+        (0, chai_1.expect)(createdProgramArgs._id).to.be.an("object");
+        (0, chai_1.expect)(createdProgramArgs.user).eql(createdUserArgs._id);
+        (0, chai_1.expect)(createdProgramArgs.program).eql([]);
     });
     it("should create a ProgramExecution model", async () => {
-        chai_1.expect(createdProgramExecutionArgs._id).to.be.an("object");
-        chai_1.expect(createdProgramExecutionArgs.user).eql(createdUserArgs._id);
-        chai_1.expect(createdProgramExecutionArgs.executions).eql([]);
+        (0, chai_1.expect)(createdProgramExecutionArgs._id).to.be.an("object");
+        (0, chai_1.expect)(createdProgramExecutionArgs.user).eql(createdUserArgs._id);
+        (0, chai_1.expect)(createdProgramExecutionArgs.executions).eql([]);
     });
     // it("should create a UserDietExecution model", async () => {
     //   expect(createdDietExecutionArgs._id).to.be.an("object");
@@ -169,7 +168,7 @@ describe("signup controller testing respones", () => {
             dateOfBirth: "02/01/2000",
         },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     before(async () => {
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
         stubedUserPrototype = sinon_1.default.stub(User_1.default.prototype, "save");
@@ -178,28 +177,27 @@ describe("signup controller testing respones", () => {
         await authController.signup(req, res, () => { });
     });
     it("should send the correct response", () => {
-        chai_1.expect(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.statusCode).equal(200);
     });
     it("should set the correct cookie name", () => {
-        chai_1.expect(res.cookieName).equal("jon");
+        (0, chai_1.expect)(res.cookieName).equal("jon");
     });
     it("should set the correct token", async () => {
         const userData = stubedUserPrototype.firstCall.thisValue;
         const tokenTester = jsonwebtoken_1.default.verify(res.cookieToken, process.env.jwtSecret);
-        chai_1.expect(tokenTester.userId).equal(userData._id.toString());
+        (0, chai_1.expect)(tokenTester.userId).equal(userData._id.toString());
     });
     it("should set the correct cookie configs", () => {
-        chai_1.expect(res.cookieConfig.sameSite).equal("strict");
-        chai_1.expect(res.cookieConfig.path).equal("/");
+        (0, chai_1.expect)(res.cookieConfig.sameSite).equal("strict");
+        (0, chai_1.expect)(res.cookieConfig.path).equal("/");
         const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2 + 100);
         const currentTime = currentDate.getTime();
         const cookieExperetionTime = res.cookieConfig.expires.getTime();
-        chai_1.expect(cookieExperetionTime).below(currentTime);
-        chai_1.expect(res.cookieConfig.httpOnly).equal(true);
+        (0, chai_1.expect)(cookieExperetionTime).below(currentTime);
+        (0, chai_1.expect)(res.cookieConfig.httpOnly).equal(true);
     });
     it("should send the correct message and data", () => {
-        chai_1.expect(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
-        chai_1.expect(res.jsonObj.username).equal("aviramSport2");
+        (0, chai_1.expect)(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
     });
     after(() => {
         stubedUserPrototype.restore();
@@ -218,15 +216,15 @@ describe("login controller error handling tests", () => {
     const req = {
         body: { email: "fakeEmail@fake.com", password: "123456" },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     it("should return an error response if email not exist", async function () {
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
         stubedUser.returns({
             select: sinon_1.default.stub().returns(false),
         });
         await authController.login(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("User not found, Make sure the email is correct");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("User not found, Make sure the email is correct");
     });
     it("should return an error response if password is incorrect", async () => {
         req.body.email = "test@test.com";
@@ -237,20 +235,20 @@ describe("login controller error handling tests", () => {
         });
         stubedBcrypt.returns(false);
         await authController.login(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Password is invalid");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Password is invalid");
         stubedBcrypt.restore();
     });
     it("should throw a default error", async () => {
         stubedUser.throws();
         const error = (await authController.login(req, {}, () => { }));
-        chai_1.expect(error.statusCode).equal(500);
+        (0, chai_1.expect)(error.statusCode).equal(500);
         stubedUser.restore();
     });
 });
 describe("login controller testing response", () => {
     let stubedUser, req;
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     it("should return 200 status code", async () => {
         req = {
             body: {
@@ -271,28 +269,27 @@ describe("login controller testing response", () => {
         });
         stubedBcrypt.returns(true);
         await authController.login(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.statusCode).equal(200);
         stubedUser.restore();
         stubedBcrypt.restore();
     });
     it("should return the correct cookie", () => {
         const { userId } = jsonwebtoken_1.default.verify(res.cookieToken, process.env.jwtSecret);
-        chai_1.expect(res.cookieName).equal("jon");
-        chai_1.expect(userId).equal(1);
+        (0, chai_1.expect)(res.cookieName).equal("jon");
+        (0, chai_1.expect)(userId).equal(1);
     });
     it("should return the correct cookie settings", function () {
-        chai_1.expect(res.cookieConfig.sameSite).equal("strict");
-        chai_1.expect(res.cookieConfig.path).equal("/");
+        (0, chai_1.expect)(res.cookieConfig.sameSite).equal("strict");
+        (0, chai_1.expect)(res.cookieConfig.path).equal("/");
         const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
         const currentTime = currentDate.getTime();
         const cookieExperetionTime = res.cookieConfig.expires.getTime();
-        chai_1.expect(cookieExperetionTime).below(currentTime);
-        chai_1.expect(res.cookieConfig.httpOnly).equal(true);
+        (0, chai_1.expect)(cookieExperetionTime).below(currentTime);
+        (0, chai_1.expect)(res.cookieConfig.httpOnly).equal(true);
     });
     it("should send the correct message and data", function () {
-        chai_1.expect(res.jsonObj.message).equal("aviram Logged In Successfully!");
-        chai_1.expect(res.jsonObj.username).equal("avi123");
-        chai_1.expect(res.jsonObj.hasProgram).equal(true);
+        (0, chai_1.expect)(res.jsonObj.message).equal("aviram Logged In Successfully!");
+        (0, chai_1.expect)(res.jsonObj.hasProgram).equal(true);
     });
 });
 describe("resetPassword in settings tests", () => {
@@ -304,7 +301,7 @@ describe("resetPassword in settings tests", () => {
             newPasswordConfirmation: "not match",
         },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedUser;
     it("should response with 401 if user not found", async function () {
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
@@ -312,16 +309,16 @@ describe("resetPassword in settings tests", () => {
             select: sinon_1.default.stub().returns(false),
         });
         await authController.resetPassword(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(401);
-        chai_1.expect(res.msg).equal("Unauthorized");
+        (0, chai_1.expect)(res.statusCode).equal(401);
+        (0, chai_1.expect)(res.msg).equal("Unauthorized");
     });
     it("should response with 403 if passwords do not match", async function () {
         stubedUser.returns({
             select: sinon_1.default.stub().returns(true),
         });
         await authController.resetPassword(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Passwords do not match");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Passwords do not match");
     });
     it("should fail to compare passwords", async function () {
         req.body.newPasswordConfirmation = "1234567";
@@ -331,8 +328,8 @@ describe("resetPassword in settings tests", () => {
             select: sinon_1.default.stub().returns(true),
         });
         await authController.resetPassword(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Password is invalid");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Password is invalid");
         stubedBcrypt.restore();
     });
     it("should change user password and send correct response", async function () {
@@ -346,9 +343,9 @@ describe("resetPassword in settings tests", () => {
         stubedBcryptHash.returns("new password");
         await authController.resetPassword(req, res, () => { });
         const user = User_1.default.findOne().select();
-        chai_1.expect(user.password).equal("new password");
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("password reseted successfully!");
+        (0, chai_1.expect)(user.password).equal("new password");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("password reseted successfully!");
         stubedUser.restore();
         stubedBcryptCompare.restore();
         stubedBcryptHash.restore();
@@ -357,51 +354,56 @@ describe("resetPassword in settings tests", () => {
 describe("sendResetEmail tests", function () {
     let user;
     let stubedUser;
-    let stubedSendGridSend;
+    let stubedNodemailer;
     const req = {
         body: { email: "fakeEmail@fake.com" },
         headers: { cookie: "not a csrf cookie" },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
+    before(() => {
+        stubedNodemailer = sinon_1.default.stub(nodemailer_1.default, "createTransport");
+    });
+    after(() => {
+        stubedNodemailer.restore();
+    });
     it("should send a csrf error if cant find token in cookie", async function () {
         await authController.sendResetEmail(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("CSRF ERROR");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("CSRF ERROR");
     });
     it("should send a User not found error if user not found", async function () {
         req.headers.cookie = "XSRF-TOKEN=123";
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
         stubedUser.returns(false);
         await authController.sendResetEmail(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("User not found, Make sure the email is correct");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("User not found, Make sure the email is correct");
     });
     it("should set a reset token", async function () {
-        sinon_1.default.stub(mail_1.default, "setApiKey");
-        stubedSendGridSend = sinon_1.default.stub(mail_1.default, "send");
+        stubedNodemailer.returns({ sendMail: sinon_1.default.spy() });
         stubedUser.returns({ name: "aviram", save: sinon_1.default.stub() });
         await authController.sendResetEmail(req, res, () => { });
         user = await User_1.default.findOne();
-        chai_1.expect(user.resetToken.length).equal(64);
-        chai_1.expect(user.tokenExpiration).below(new Date(Date.now() + 36000000));
+        (0, chai_1.expect)(user.resetToken.length).equal(64);
+        (0, chai_1.expect)(user.tokenExpiration).below(new Date(Date.now() + 36000000));
         stubedUser.restore();
     });
     it("should call sendgrid.send with the right message", async () => {
         const link = `http://localhost:3000/auth/reset-password/${user.resetToken}`;
         const html = `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.</p><p>This token is valid for only 1 hour.</p>`;
-        chai_1.expect(stubedSendGridSend.lastCall.firstArg.to).equal("fakeEmail@fake.com");
-        chai_1.expect(stubedSendGridSend.lastCall.firstArg.subject).equal("Hlife reset password");
-        chai_1.expect(stubedSendGridSend.lastCall.firstArg.html).equal(html);
+        (0, chai_1.expect)(stubedNodemailer().sendMail.firstCall.args[0].to).equal("fakeEmail@fake.com");
+        (0, chai_1.expect)(stubedNodemailer().sendMail.firstCall.args[0].subject).equal("Hlife reset password");
+        (0, chai_1.expect)(stubedNodemailer().sendMail.firstCall.args[0].html).equal(html);
     });
     it("should response 200", async function () {
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("Reset Email Sent!");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("Reset Email Sent!");
     });
 });
 describe("resetPasswordViaToken tests", function () {
     let user;
     let stubedUser;
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = {
         body: {
             password: "they are",
@@ -414,8 +416,8 @@ describe("resetPasswordViaToken tests", function () {
     });
     it("should send an error response for not matching passwords", async function () {
         await authController.resetPasswordViaToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Passwords do not match");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Passwords do not match");
     });
     it("should send an error response for wrong token", async function () {
         req.body = {
@@ -425,8 +427,8 @@ describe("resetPasswordViaToken tests", function () {
         };
         stubedUser.returns(false);
         await authController.resetPasswordViaToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Invalid Token");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Invalid Token");
     });
     it("should send an error response for expired token", async function () {
         stubedUser.returns({
@@ -437,8 +439,8 @@ describe("resetPasswordViaToken tests", function () {
             },
         });
         await authController.resetPasswordViaToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Token Expired");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Token Expired");
     });
     it("should update the user's token", async function () {
         const stubedDate = sinon_1.default.stub(Date, "now");
@@ -456,17 +458,17 @@ describe("resetPasswordViaToken tests", function () {
         stubedBcrypt.returns("123456");
         await authController.resetPasswordViaToken(req, res, () => { });
         user = User_1.default.findOne();
-        chai_1.expect(user.resetToken).equal("");
-        chai_1.expect(user.tokenExpiration).equal(undefined);
+        (0, chai_1.expect)(user.resetToken).equal("");
+        (0, chai_1.expect)(user.tokenExpiration).equal(undefined);
         stubedDate.restore();
         stubedBcrypt.restore();
     });
     it("should update the user password", async function () {
-        chai_1.expect(user.password).equal("123456");
+        (0, chai_1.expect)(user.password).equal("123456");
     });
     it("should return a 200 response", async function () {
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal(`${user.name}'s password successfully changed!`);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal(`${user.name}'s password successfully changed!`);
     });
     afterEach(() => {
         stubedUser.restore();
@@ -476,7 +478,7 @@ describe("validateResetToken tests", function () {
     const req = {
         params: { token: "not match" },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedUser;
     beforeEach(() => {
         stubedUser = sinon_1.default.stub(User_1.default, "findOne");
@@ -487,8 +489,8 @@ describe("validateResetToken tests", function () {
     it("should send an error response for invalid token", async function () {
         stubedUser.returns(false);
         await authController.validateResetToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Invalid Token");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Invalid Token");
     });
     it("should send an error response for expired token", async function () {
         req.params.token = "123456";
@@ -500,8 +502,8 @@ describe("validateResetToken tests", function () {
             },
         });
         await authController.validateResetToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Token Expired");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Token Expired");
     });
     it("should return a 200 response", async function () {
         stubedUser.returns({
@@ -512,13 +514,13 @@ describe("validateResetToken tests", function () {
             },
         });
         await authController.validateResetToken(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("Token Verified Successfully");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("Token Verified Successfully");
     });
 });
 describe("validateUser tests", () => {
     const req = { userId: 1 };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedUser;
     before(async () => {
         stubedUser = sinon_1.default.stub(User_1.default, "findById");
@@ -531,14 +533,13 @@ describe("validateUser tests", () => {
         await authController.validateUser(req, res, () => { });
     });
     it("should set the right status code in res", () => {
-        chai_1.expect(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.statusCode).equal(200);
     });
     it("should set the right json data in res", () => {
-        chai_1.expect(res.jsonObj.isAuthenticated).equal(true);
-        chai_1.expect(res.jsonObj.hasProgram).equal(false);
-        chai_1.expect(res.jsonObj.hasInitialStats).equal(true);
-        chai_1.expect(res.jsonObj.hasGoals).equal(true);
-        chai_1.expect(res.jsonObj.username).equal("aviram");
+        (0, chai_1.expect)(res.jsonObj.isAuthenticated).equal(true);
+        (0, chai_1.expect)(res.jsonObj.hasProgram).equal(false);
+        (0, chai_1.expect)(res.jsonObj.hasInitialStats).equal(true);
+        (0, chai_1.expect)(res.jsonObj.hasGoals).equal(true);
     });
     after(() => {
         stubedUser.restore();

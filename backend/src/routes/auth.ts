@@ -16,12 +16,6 @@ router.post(
       .isLength({ min: 3 })
       .withMessage("name must be at least 3 characters"),
 
-    body("username")
-      .isLength({ min: 3 })
-      .withMessage("username must be at least 3 characters")
-      .isAlphanumeric()
-      .withMessage("username only allow letters and numbers"),
-
     body("email", "please enter a correct email").isEmail().normalizeEmail(),
 
     body("password")

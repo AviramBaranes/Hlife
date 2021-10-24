@@ -12,7 +12,7 @@ const createWorkout = async (req, res, next) => {
     try {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const user = (await User_1.default.findById(userId).populate());
         let isNamesValid = true;
         if (!user.workouts) {
@@ -49,8 +49,7 @@ const createWorkout = async (req, res, next) => {
             .send(`${trainingDayName}-workout created successfully`);
     }
     catch (err) {
-        console.log(err);
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.createWorkout = createWorkout;
@@ -64,7 +63,7 @@ const changeHasAllWorkout = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeHasAllWorkout = changeHasAllWorkout;
@@ -72,7 +71,7 @@ const getWorkoutByName = async (req, res, next) => {
     try {
         const { userId } = req;
         const { trainingDayName } = req.query;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const workout = (await Workout_1.default.findOne({
             user: userId,
             trainingDayName,
@@ -87,7 +86,7 @@ const getWorkoutByName = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getWorkoutByName = getWorkoutByName;
@@ -105,7 +104,7 @@ const getAllWorkouts = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getAllWorkouts = getAllWorkouts;
@@ -121,7 +120,7 @@ const getById = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.getById = getById;
@@ -129,7 +128,7 @@ const changeWorkout = async (req, res, next) => {
     try {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const workout = (await Workout_1.default.findOne({
             user: userId,
             trainingDayName,
@@ -159,7 +158,7 @@ const changeWorkout = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.changeWorkout = changeWorkout;
@@ -167,7 +166,7 @@ const deleteWorkout = async (req, res, next) => {
     try {
         const { userId } = req;
         const { name } = req.params;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const workout = (await Workout_1.default.findOneAndDelete({
             user: userId,
             name,
@@ -182,7 +181,7 @@ const deleteWorkout = async (req, res, next) => {
         return;
     }
     catch (err) {
-        catchErrorsHandler_1.catchErrorHandler(err, next);
+        (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.deleteWorkout = deleteWorkout;

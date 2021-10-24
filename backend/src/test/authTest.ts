@@ -6,9 +6,9 @@ import sinon, { SinonStub } from "sinon";
 import { expect } from "chai";
 
 //packages
-import sendGridMail from "@sendgrid/mail";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import nodemailer from 'nodemailer'
 
 //controller to test
 import * as authController from "../controller/auth";
@@ -145,7 +145,6 @@ describe("signup Controller creating the correct models", () => {
   it("should create a user model with the right arguments", async () => {
     expect(createdUserArgs._id).to.be.an("object");
     expect(createdUserArgs.name).equal("Avirambr");
-    expect(createdUserArgs.username).equal("aviramSport2");
     expect(createdUserArgs.email).equal("test2@test.com");
     expect(createdUserArgs.gender).equal("male");
     expect(createdUserArgs.grade).equal(0);
@@ -245,7 +244,6 @@ describe("signup controller testing respones", () => {
 
   it("should send the correct message and data", () => {
     expect(res.jsonObj.message).equal("Avirambr Sign Up Successfully");
-    expect(res.jsonObj.username).equal("aviramSport2");
   });
 
   after(() => {
@@ -366,7 +364,6 @@ describe("login controller testing response", () => {
   });
   it("should send the correct message and data", function () {
     expect(res.jsonObj.message).equal("aviram Logged In Successfully!");
-    expect(res.jsonObj.username).equal("avi123");
     expect(res.jsonObj.hasProgram).equal(true);
   });
 });
@@ -465,12 +462,20 @@ describe("resetPassword in settings tests", () => {
 describe("sendResetEmail tests", function () {
   let user: UserForTest;
   let stubedUser: sinon.SinonStub;
-  let stubedSendGridSend: sinon.SinonStub;
+  let stubedNodemailer:sinon.SinonStub;
   const req = {
     body: { email: "fakeEmail@fake.com" },
     headers: { cookie: "not a csrf cookie" },
   };
   const res = createCustomResponseObj();
+
+  before(()=>{
+    stubedNodemailer = sinon.stub(nodemailer, "createTransport")
+  })
+
+  after(()=>{
+    stubedNodemailer.restore()
+  })
 
   it("should send a csrf error if cant find token in cookie", async function () {
     await authController.sendResetEmail(req as any, res as any, () => {});
@@ -493,8 +498,7 @@ describe("sendResetEmail tests", function () {
   });
 
   it("should set a reset token", async function () {
-    sinon.stub(sendGridMail, "setApiKey");
-    stubedSendGridSend = sinon.stub(sendGridMail, "send");
+    stubedNodemailer.returns({sendMail:sinon.spy()})
 
     stubedUser.returns({ name: "aviram", save: sinon.stub() });
 
@@ -511,11 +515,11 @@ describe("sendResetEmail tests", function () {
     const link = `http://localhost:3000/auth/reset-password/${user.resetToken}`;
     const html = `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.</p><p>This token is valid for only 1 hour.</p>`;
 
-    expect(stubedSendGridSend.lastCall.firstArg.to).equal("fakeEmail@fake.com");
-    expect(stubedSendGridSend.lastCall.firstArg.subject).equal(
+    expect(stubedNodemailer().sendMail.firstCall.args[0].to).equal("fakeEmail@fake.com");
+    expect(stubedNodemailer().sendMail.firstCall.args[0].subject).equal(
       "Hlife reset password"
     );
-    expect(stubedSendGridSend.lastCall.firstArg.html).equal(html);
+    expect(stubedNodemailer().sendMail.firstCall.args[0].html).equal(html);
   });
 
   it("should response 200", async function () {
@@ -717,7 +721,6 @@ describe("validateUser tests", () => {
     expect(res.jsonObj.hasProgram).equal(false);
     expect(res.jsonObj.hasInitialStats).equal(true);
     expect(res.jsonObj.hasGoals).equal(true);
-    expect(res.jsonObj.username).equal("aviram");
   });
 
   after(() => {

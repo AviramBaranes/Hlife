@@ -2,12 +2,14 @@ import { NextFunction, Request, Response, RequestHandler } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import sendGridMail from "@sendgrid/mail";
+import nodemailer from 'nodemailer'
+
 
 import User, { UserType } from "../models/User";
 import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
 import createModels from "../utils/helpers/auth/createModels";
 import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
+
 
 export const signup = async (
   req: Request,
@@ -19,7 +21,6 @@ export const signup = async (
 
     const {
       name,
-      username,
       email,
       password,
       passwordConfirmation,
@@ -43,7 +44,6 @@ export const signup = async (
 
     const newUser = new User({
       name,
-      username,
       email,
       password: hashedPassword,
       gender,
@@ -71,7 +71,7 @@ export const signup = async (
         expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
         httpOnly: true,
       })
-      .json({ message, username });
+      .json({ message });
     //
   } catch (err: any) {
     return catchErrorHandler(err, next);
@@ -121,7 +121,6 @@ export const login = async (
       })
       .json({
         message,
-        username: user.username,
         hasProgram: user.hasProgram,
       });
   } catch (err: any) {
@@ -200,20 +199,35 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
 
     await user.save();
 
-    sendGridMail.setApiKey(process.env.sendGrid_api as string);
+    const transporter = nodemailer.createTransport({
+      service: 'hotmail',
+      auth: {
+        user: process.env.OUTLOOK_USER,
+        pass: process.env.OUTLOOK_PASSWORD
+      }
+    });
+
+    // sendGridMail.setApiKey(process.env.sendGrid_api as string);
 
     const link = `http://localhost:3000/auth/reset-password/${token}`;
     const message = {
-      from: process.env.WALLA_USER as string,
+      from: process.env.OUTLOOK_USER,
       to: email,
       subject: "Hlife reset password",
       html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.</p><p>This token is valid for only 1 hour.</p>`,
     };
 
     try {
-      await sendGridMail.send(message);
+      transporter.sendMail(message, function(error, info){
+        if (error) {
+          console.log(error);
+          throw error
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
       res.status(200).send("Reset Email Sent!");
-      return;
+      return; 
     } catch (error) {
       process.env.Node_ENV !== "test" && console.log(error);
       throw error;
@@ -281,7 +295,7 @@ export const validateUser: RequestHandler = async (req, res, next) => {
 
     const user = (await User.findById(userId)) as UserType;
 
-    const { hasProgram, username, hasGoals, hasInitialStats, hasAllWorkouts } =
+    const { hasProgram, hasGoals, hasInitialStats, hasAllWorkouts } =
       user;
 
     res.status(200).json({
@@ -290,7 +304,6 @@ export const validateUser: RequestHandler = async (req, res, next) => {
       hasInitialStats,
       hasAllWorkouts,
       hasGoals,
-      username,
     });
   } catch (err: any) {
     return catchErrorHandler(err, next);

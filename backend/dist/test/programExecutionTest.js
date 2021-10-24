@@ -33,7 +33,7 @@ const User_1 = __importDefault(require("../models/User"));
 const Program_1 = __importDefault(require("../models/Program"));
 const ProgramExecution_1 = __importDefault(require("../models/ProgramExecution"));
 describe("getExercisesByDate endpoint test", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = {
         userId: "61196b0a38af7615d0aed56e",
         params: {},
@@ -49,8 +49,8 @@ describe("getExercisesByDate endpoint test", () => {
     it("should send an error response if user does not have a full program", async () => {
         stubedUserModel.returns({ hasProgram: false });
         await programExecutionController.getExercisesByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("You need to create a full program before you declare about execution");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("You need to create a full program before you declare about execution");
     });
     it("should send a success response if this day is rest day (no date in params)", async () => {
         // I needed to make sure that program returns an array of objects,
@@ -70,8 +70,8 @@ describe("getExercisesByDate endpoint test", () => {
             ],
         });
         await programExecutionController.getExercisesByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("This is a rest day, You have no exercises to complete!");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("This is a rest day, You have no exercises to complete!");
     });
     it("should send a success response if this day is rest day (date in params)", async () => {
         req.params.date = new Date("2021-08-15"); //A random sunday
@@ -83,8 +83,8 @@ describe("getExercisesByDate endpoint test", () => {
             ],
         });
         await programExecutionController.getExercisesByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).equal("This is a rest day, You have no exercises to complete!");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).equal("This is a rest day, You have no exercises to complete!");
     });
     it("should send a success response with the exercises", async () => {
         stubedUserModel.returns({ hasProgram: true });
@@ -101,8 +101,8 @@ describe("getExercisesByDate endpoint test", () => {
             ],
         });
         await programExecutionController.getExercisesByDate(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj.exercises).eql(["name1", "name2"]);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj.exercises).eql(["name1", "name2"]);
     });
     afterEach(() => {
         stubedProgramModel.restore();
@@ -111,7 +111,7 @@ describe("getExercisesByDate endpoint test", () => {
     });
 });
 describe("declareAnExecution endpoint test", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = {
         userId: "61196b0a38af7615d0aed56e",
         params: {},
@@ -130,8 +130,8 @@ describe("declareAnExecution endpoint test", () => {
     it("should send an error response if user does not have a full program", async () => {
         stubedUserModel.returns({ hasProgram: false });
         await programExecutionController.declareAnExecution(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("You need to create a full program before you declare about execution");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("You need to create a full program before you declare about execution");
     });
     it("should send a success response and update the model if this day is rest day (no date in params)", async () => {
         // I needed to make sure that program returns an array of objects,
@@ -154,15 +154,15 @@ describe("declareAnExecution endpoint test", () => {
         await programExecutionController.declareAnExecution(req, res, () => { });
         const programExecution = await ProgramExecution_1.default.findOne();
         const user = await User_1.default.findById({});
-        chai_1.expect(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
-        chai_1.expect(programExecution.executions[0].date.getTime()).to.be.closeTo(day.getTime(), 2);
-        chai_1.expect(programExecution.executions[0].executionRate).equal(100);
-        chai_1.expect(programExecution.executions[0].grade).equal(10);
-        chai_1.expect(programExecution.save.called).equal(true);
-        chai_1.expect(user.grade).equal(15);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Wonderful! Your execution has been declared");
+        (0, chai_1.expect)(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
+        (0, chai_1.expect)(programExecution.executions[0].date.getTime()).to.be.closeTo(day.getTime(), 2);
+        (0, chai_1.expect)(programExecution.executions[0].executionRate).equal(100);
+        (0, chai_1.expect)(programExecution.executions[0].grade).equal(10);
+        (0, chai_1.expect)(programExecution.save.called).equal(true);
+        (0, chai_1.expect)(user.grade).equal(15);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Wonderful! Your execution has been declared");
     });
     it("should send a success response if this day is rest day (date in params)", async () => {
         req.params.date = new Date("2021-08-15"); //A random sunday
@@ -177,15 +177,15 @@ describe("declareAnExecution endpoint test", () => {
         await programExecutionController.declareAnExecution(req, res, () => { });
         const programExecution = await ProgramExecution_1.default.findOne();
         const user = await User_1.default.findById({});
-        chai_1.expect(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
-        chai_1.expect(programExecution.executions[0].date).equal(req.params.date);
-        chai_1.expect(programExecution.executions[0].executionRate).equal(100);
-        chai_1.expect(programExecution.executions[0].grade).equal(10);
-        chai_1.expect(programExecution.save.called).equal(true);
-        chai_1.expect(user.grade).equal(15);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Wonderful! Your execution has been declared");
+        (0, chai_1.expect)(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
+        (0, chai_1.expect)(programExecution.executions[0].date).equal(req.params.date);
+        (0, chai_1.expect)(programExecution.executions[0].executionRate).equal(100);
+        (0, chai_1.expect)(programExecution.executions[0].grade).equal(10);
+        (0, chai_1.expect)(programExecution.save.called).equal(true);
+        (0, chai_1.expect)(user.grade).equal(15);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Wonderful! Your execution has been declared");
     });
     it("should add an execution of 100%", async () => {
         req.body.exercises = { exercise1: true, exercise2: true, exercise3: true };
@@ -200,15 +200,15 @@ describe("declareAnExecution endpoint test", () => {
         await programExecutionController.declareAnExecution(req, res, () => { });
         const programExecution = await ProgramExecution_1.default.findOne();
         const user = await User_1.default.findById({});
-        chai_1.expect(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
-        chai_1.expect(programExecution.executions[0].date).equal(req.params.date);
-        chai_1.expect(programExecution.executions[0].executionRate).equal(100);
-        chai_1.expect(programExecution.executions[0].grade).equal(10);
-        chai_1.expect(programExecution.save.called).equal(true);
-        chai_1.expect(user.grade).equal(15);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Wonderful! Your execution has been declared");
+        (0, chai_1.expect)(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
+        (0, chai_1.expect)(programExecution.executions[0].date).equal(req.params.date);
+        (0, chai_1.expect)(programExecution.executions[0].executionRate).equal(100);
+        (0, chai_1.expect)(programExecution.executions[0].grade).equal(10);
+        (0, chai_1.expect)(programExecution.save.called).equal(true);
+        (0, chai_1.expect)(user.grade).equal(15);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Wonderful! Your execution has been declared");
     });
     it("should add an execution of 75%", async () => {
         req.body.exercises = {
@@ -228,15 +228,15 @@ describe("declareAnExecution endpoint test", () => {
         await programExecutionController.declareAnExecution(req, res, () => { });
         const programExecution = await ProgramExecution_1.default.findOne();
         const user = await User_1.default.findById({});
-        chai_1.expect(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
-        chai_1.expect(programExecution.executions[0].date).equal(req.params.date);
-        chai_1.expect(programExecution.executions[0].executionRate).equal(75);
-        chai_1.expect(programExecution.executions[0].grade).equal(8);
-        chai_1.expect(programExecution.save.called).equal(true);
-        chai_1.expect(user.grade).equal(13);
-        chai_1.expect(user.save.called).equal(true);
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("Wonderful! Your execution has been declared");
+        (0, chai_1.expect)(programExecution.executions[0].programId).equal("61196b0a38af7615d0aed56f");
+        (0, chai_1.expect)(programExecution.executions[0].date).equal(req.params.date);
+        (0, chai_1.expect)(programExecution.executions[0].executionRate).equal(75);
+        (0, chai_1.expect)(programExecution.executions[0].grade).equal(8);
+        (0, chai_1.expect)(programExecution.save.called).equal(true);
+        (0, chai_1.expect)(user.grade).equal(13);
+        (0, chai_1.expect)(user.save.called).equal(true);
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("Wonderful! Your execution has been declared");
     });
     afterEach(() => {
         stubedProgramModel.restore();
@@ -251,7 +251,7 @@ describe("getSingleExecution endpoint tests", () => {
         userId: "61196b0a38af7615d0aed56e",
         params: { date },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedProgramExecutionModel;
     beforeEach(() => {
         stubedProgramExecutionModel = sinon_1.default.stub(ProgramExecution_1.default, "findOne");
@@ -259,16 +259,16 @@ describe("getSingleExecution endpoint tests", () => {
     it("should send an error response if programExecution is empty", async () => {
         stubedProgramExecutionModel.returns({ executions: [] });
         await programExecutionController.getSingleExecution(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("User doesn't has any declared executions");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("User doesn't has any declared executions");
     });
     it("should send an error response if programExecution was not found on this date", async () => {
         stubedProgramExecutionModel.returns({
             executions: [{ date: new Date() }],
         });
         await programExecutionController.getSingleExecution(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No execution was found at this date");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No execution was found at this date");
     });
     it("should send a success response with the requested execution", async () => {
         const currentDate = new Date(date);
@@ -276,8 +276,8 @@ describe("getSingleExecution endpoint tests", () => {
             executions: [{ date: new Date() }, { date: currentDate, data: "data" }],
         });
         await programExecutionController.getSingleExecution(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj).eql({ date: currentDate, data: "data" });
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj).eql({ date: currentDate, data: "data" });
     });
     afterEach(() => {
         stubedProgramExecutionModel.restore();
@@ -289,7 +289,7 @@ describe("getExecutionsByRange endpoint tests", () => {
         userId: "61196b0a38af7615d0aed56e",
         body: { date: new Date(date), range: "week" },
     };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedProgramExecutionModel;
     let stubedUserModel;
     beforeEach(() => {
@@ -299,8 +299,8 @@ describe("getExecutionsByRange endpoint tests", () => {
     it("should send an error response if user don't have a full program", async () => {
         stubedUserModel.returns({ hasProgram: false });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("This user doesn't has a full program yet");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("This user doesn't has a full program yet");
     });
     it("should send an error response if no executions were found (week)", async () => {
         const dateNotInWeek = new Date(date);
@@ -310,8 +310,8 @@ describe("getExecutionsByRange endpoint tests", () => {
             executions: [{ date: dateNotInWeek, data: "data" }],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No Executions were found in this dates");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No Executions were found in this dates");
     });
     it("should send a success response with the executions (week)", async () => {
         const dateNotInWeek = new Date(date);
@@ -327,9 +327,9 @@ describe("getExecutionsByRange endpoint tests", () => {
             ],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj[0].data).equal("data2");
-        chai_1.expect(res.jsonObj[1].data).equal("data3");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj[0].data).equal("data2");
+        (0, chai_1.expect)(res.jsonObj[1].data).equal("data3");
     });
     it("should send an error response if no executions were found (month)", async () => {
         req.body.range = "month";
@@ -340,8 +340,8 @@ describe("getExecutionsByRange endpoint tests", () => {
             executions: [{ date: dateNotInWeek, data: "data" }],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No Executions were found in this dates");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No Executions were found in this dates");
     });
     it("should send a success response with the executions (month)", async () => {
         const dateNotInMonth = new Date(date);
@@ -357,9 +357,9 @@ describe("getExecutionsByRange endpoint tests", () => {
             ],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj[0].data).equal("data2");
-        chai_1.expect(res.jsonObj[1].data).equal("data3");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj[0].data).equal("data2");
+        (0, chai_1.expect)(res.jsonObj[1].data).equal("data3");
     });
     it("should send an error response if no executions were found (year)", async () => {
         req.body.range = "year";
@@ -370,8 +370,8 @@ describe("getExecutionsByRange endpoint tests", () => {
             executions: [{ date: dateNotInYear, data: "data" }],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No Executions were found in this dates");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No Executions were found in this dates");
     });
     it("should send a success response with the executions (year)", async () => {
         const dateNotInYear = new Date(date);
@@ -387,9 +387,9 @@ describe("getExecutionsByRange endpoint tests", () => {
             ],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj[0].data).equal("data2");
-        chai_1.expect(res.jsonObj[1].data).equal("data3");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj[0].data).equal("data2");
+        (0, chai_1.expect)(res.jsonObj[1].data).equal("data3");
     });
     it("should send an error response if no executions were found (all)", async () => {
         req.body.range = "all";
@@ -398,8 +398,8 @@ describe("getExecutionsByRange endpoint tests", () => {
             executions: [],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No Executions were found in this dates");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No Executions were found in this dates");
     });
     it("should send a success response with the executions (all)", async () => {
         stubedUserModel.returns({ hasProgram: true });
@@ -411,10 +411,10 @@ describe("getExecutionsByRange endpoint tests", () => {
             ],
         });
         await programExecutionController.getExecutionsByRange(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj[0].data).equal("data");
-        chai_1.expect(res.jsonObj[1].data).equal("data2");
-        chai_1.expect(res.jsonObj[2].data).equal("data3");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj[0].data).equal("data");
+        (0, chai_1.expect)(res.jsonObj[1].data).equal("data2");
+        (0, chai_1.expect)(res.jsonObj[2].data).equal("data3");
     });
     afterEach(() => {
         stubedProgramExecutionModel.restore();

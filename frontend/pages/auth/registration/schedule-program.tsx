@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import CustomOrder from "../../../components/Registration/program/CustomOrder";
 import RecommendedOrder from "../../../components/Registration/program/RecommendedOrder";
@@ -17,7 +17,11 @@ export interface Workout {
 const scheduleProgram: React.FC<{
   workouts: Workout[];
 }> = ({ workouts }) => {
-  const [order, setOrder] = useState(localStorage.getItem("order")!);
+  const [order, setOrder] = useState<string|null>(null);
+
+  useEffect(()=>{
+    setOrder(localStorage.getItem("order"))
+  },[])
 
   return (
     <div>

@@ -7,15 +7,15 @@ exports.validateUser = exports.validateResetToken = exports.resetPasswordViaToke
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const crypto_1 = __importDefault(require("crypto"));
-const mail_1 = __importDefault(require("@sendgrid/mail"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const User_1 = __importDefault(require("../models/User"));
 const validationErrors_1 = require("../utils/helpers/Errors/validationErrors");
 const createModels_1 = __importDefault(require("../utils/helpers/auth/createModels"));
 const catchErrorsHandler_1 = require("../utils/helpers/Errors/catchErrorsHandler");
 const signup = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
-        const { name, username, email, password, passwordConfirmation, gender, dateOfBirth, } = req.body;
+        (0, validationErrors_1.validationErrorsHandler)(req);
+        const { name, email, password, passwordConfirmation, gender, dateOfBirth, } = req.body;
         const user = (await User_1.default.findOne({ email }));
         if (user) {
             res.status(403).send("user already exist with this email!");
@@ -28,7 +28,6 @@ const signup = async (req, res, next) => {
         const hashedPassword = await bcryptjs_1.default.hash(password, 12);
         const newUser = new User_1.default({
             name,
-            username,
             email,
             password: hashedPassword,
             gender,
@@ -37,7 +36,7 @@ const signup = async (req, res, next) => {
             workouts: [],
         });
         await newUser.save();
-        await createModels_1.default(newUser);
+        await (0, createModels_1.default)(newUser);
         const payload = { userId: newUser._id.toString() };
         const token = jsonwebtoken_1.default.sign(payload, process.env.jwtSecret, {
             expiresIn: "2d",
@@ -51,17 +50,17 @@ const signup = async (req, res, next) => {
             expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
             httpOnly: true,
         })
-            .json({ message, username });
+            .json({ message });
         //
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.signup = signup;
 const login = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { email, password } = req.body;
         const user = (await User_1.default.findOne({ email }).select("+password"));
         if (!user) {
@@ -88,12 +87,11 @@ const login = async (req, res, next) => {
         })
             .json({
             message,
-            username: user.username,
             hasProgram: user.hasProgram,
         });
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.login = login;
@@ -107,13 +105,13 @@ const logout = (req, res, next) => {
             .send("success");
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.logout = logout;
 const resetPassword = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { userId } = req;
         const { currentPassword, newPassword, newPasswordConfirmation } = req.body;
         const user = (await User_1.default.findById(userId).select("+password"));
@@ -131,13 +129,13 @@ const resetPassword = async (req, res, next) => {
         res.status(200).send("password reseted successfully!");
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.resetPassword = resetPassword;
 const sendResetEmail = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { email } = req.body;
         const tokenSlice = req.headers.cookie.split("XSRF-TOKEN=");
         if (tokenSlice.length < 2)
@@ -152,16 +150,31 @@ const sendResetEmail = async (req, res, next) => {
         user.resetToken = token;
         user.tokenExpiration = new Date(Date.now() + 3600000);
         await user.save();
-        mail_1.default.setApiKey(process.env.sendGrid_api);
+        const transporter = nodemailer_1.default.createTransport({
+            service: 'hotmail',
+            auth: {
+                user: process.env.OUTLOOK_USER,
+                pass: process.env.OUTLOOK_PASSWORD
+            }
+        });
+        // sendGridMail.setApiKey(process.env.sendGrid_api as string);
         const link = `http://localhost:3000/auth/reset-password/${token}`;
         const message = {
-            from: process.env.WALLA_USER,
+            from: process.env.OUTLOOK_USER,
             to: email,
             subject: "Hlife reset password",
             html: `<p>Hey ${user.name.toString()}, Please visit this <a href=${link}>link</a> in order to reset your Hlife account Password.</p><p>This token is valid for only 1 hour.</p>`,
         };
         try {
-            await mail_1.default.send(message);
+            transporter.sendMail(message, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    throw error;
+                }
+                else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
             res.status(200).send("Reset Email Sent!");
             return;
         }
@@ -171,13 +184,13 @@ const sendResetEmail = async (req, res, next) => {
         }
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.sendResetEmail = sendResetEmail;
 const resetPasswordViaToken = async (req, res, next) => {
     try {
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const { password, passwordConfirmation, resetToken } = req.body;
         const isMatch = password === passwordConfirmation;
         if (!isMatch)
@@ -196,14 +209,14 @@ const resetPasswordViaToken = async (req, res, next) => {
         res.status(200).send(`${user.name}'s password successfully changed!`);
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.resetPasswordViaToken = resetPasswordViaToken;
 const validateResetToken = async (req, res, next) => {
     try {
         const { token } = req.params;
-        validationErrors_1.validationErrorsHandler(req);
+        (0, validationErrors_1.validationErrorsHandler)(req);
         const user = (await User_1.default.findOne({ resetToken: token }));
         if (!user)
             return res.status(403).send("Invalid Token");
@@ -213,7 +226,7 @@ const validateResetToken = async (req, res, next) => {
         return res.status(200).send("Token Verified Successfully");
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.validateResetToken = validateResetToken;
@@ -221,18 +234,17 @@ const validateUser = async (req, res, next) => {
     try {
         const { userId } = req;
         const user = (await User_1.default.findById(userId));
-        const { hasProgram, username, hasGoals, hasInitialStats, hasAllWorkouts } = user;
+        const { hasProgram, hasGoals, hasInitialStats, hasAllWorkouts } = user;
         res.status(200).json({
             isAuthenticated: true,
             hasProgram,
             hasInitialStats,
             hasAllWorkouts,
             hasGoals,
-            username,
         });
     }
     catch (err) {
-        return catchErrorsHandler_1.catchErrorHandler(err, next);
+        return (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.validateUser = validateUser;

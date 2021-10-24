@@ -9,7 +9,7 @@ import axiosInstance from "../../../utils/axios/axiosInstance";
 
 const RecommendedOrder: React.FC<{
   order: string;
-  setOrder: React.Dispatch<SetStateAction<string>>;
+  setOrder: React.Dispatch<SetStateAction<string|null>>;
   workouts: Workout[];
 }> = ({ order, setOrder, workouts }) => {
   const dispatch = useDispatch();
@@ -38,6 +38,7 @@ const RecommendedOrder: React.FC<{
           programDay = "rest (X)";
         } else {
           // if enough items shift else use the last and keep it
+          console.log(lastWorkoutMemory)
           let item: Workout;
           item =
             lastWorkoutMemory.length > 1

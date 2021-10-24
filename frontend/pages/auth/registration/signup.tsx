@@ -17,16 +17,14 @@ const Signup: React.FC = () => {
         <h5>Start changing your life today!</h5>
       </div>
       <div className={classes.Main}>
-        <section>
+        <section className={classes.FormSection} >
           <div className={classes.FormTitle}>
-            <h2>Sign Up</h2>
+            <h2>Create User</h2>
             <Line />
           </div>
           <SignupForm />
         </section>
-        <div className={classes.Image}>
           {signupSvg.src && <Image src={signupSvg} />}
-        </div>
       </div>
       <div className={classes.Footer}>
         <p>

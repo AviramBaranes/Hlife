@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-import classes from "./Navigation.module.scss";
+import classes from "../../../styles/components/Navigation.module.scss";
 import { RootState } from "../../../redux/store/reduxStore";
 import AuthorizedNav from "../NavComponents/AuthorizeNav";
 import RegistrationsNav from "../NavComponents/RegistrationsNav";

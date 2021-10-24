@@ -1,4 +1,6 @@
-import React, { SetStateAction, useRef, useState } from "react";
+import React, { SetStateAction, useState } from "react";
+
+import classes from '../../../../styles/pages/create-workout.module.scss'
 import { Exercise } from "./Exercise";
 import ExerciseSelect from "./ExerciseSelect";
 
@@ -12,6 +14,13 @@ const WorkoutExerciseForm: React.FC<{
   const [sets, setSets] = useState(0);
   const [description, setDescription] = useState("");
   const [selectedExercise, setSelectedExercise] = useState<string | null>(null);
+  const [activeInputs,setActiveInputs] = useState({
+    exerciseName:false,
+    reps:false,
+    sets:false,
+    selectedExercise:false,
+    description:false,
+  })
 
   const submitExerciseFormHandler = (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -27,76 +36,104 @@ const WorkoutExerciseForm: React.FC<{
     setFormSubmitted(true);
   };
   return (
-    <>
+    <section>
       {!formSubmitted ? (
-        <div data-testid="ExerciseForm">
-          <div>
-            <label htmlFor="exercise">Exercise:</label>
+      <div className={classes.Form}>
+        <div className={classes.ExerciseForm} data-testid="ExerciseForm">
+          <div className={classes.Required}>
+            <div className='input-container'>
+
             <ExerciseSelect
               setMuscles={setMuscles}
               setSelectedExercise={setSelectedExercise}
-            />
-            <label htmlFor="reps">Reps:</label>
+              selectedExercise={selectedExercise}
+              setActiveInputs={setActiveInputs}
+              />
+            <label className={activeInputs.selectedExercise?'Active':''} htmlFor="exercise">Exercise:</label>
+              </div>
+              <div className='input-container'>
             <input
               onChange={(e) => {
+                setActiveInputs(prev=>({...prev,reps:e.target.value!==''}))
                 setReps(+e.target.value);
               }}
               required
-              placeholder="reps"
               id="reps"
               type="number"
               min={1}
               max={50}
             />
-            <label htmlFor="sets">Sets:</label>
+
+              <label className={activeInputs.reps?'Active':''} htmlFor="reps">Reps</label>
+            </div>
+            <div className='input-container'>
+
             <input
               onChange={(e) => {
+                setActiveInputs(prev=>({...prev,sets:e.target.value!==''}))
                 setSets(+e.target.value);
               }}
               required
-              placeholder="sets"
               id="sets"
               type="number"
               min={1}
               max={7}
-            />
+              />
+              <label className={activeInputs.sets?'Active':''} htmlFor="sets">Sets</label>
+              </div>
           </div>
 
-          <div>
-            <label htmlFor="customExercise">Custom Exercise:</label>
+          <div className={classes.Optional}>
+            <div className='input-container'>
+
             <input
-              onChange={(e) => setExerciseName(e.target.value)}
-              placeholder="exercise"
+              onChange={(e) =>{
+                setActiveInputs(prev=>({...prev,exerciseName:e.target.value!==''}))
+                setExerciseName(e.target.value)}
+                }
               type="text"
               id="customExercise"
-            />
-            <label htmlFor="description">Description</label>
+              />
+            <label className={activeInputs.exerciseName?'Active':''} htmlFor="customExercise">Custom</label>
+              </div>
+
+              <div className='input-container'>
             <textarea
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) =>{
+                setActiveInputs(prev=>({...prev,description:e.target.value!==''}))
+                 setDescription(e.target.value)
+              }}
               name="description"
               id="description"
               cols={30}
               rows={5}
-            ></textarea>
+              ></textarea>
+            <label className={activeInputs.description?'Active':''} htmlFor="description">Description</label>
+              </div>
           </div>
-          <button
-            disabled={!reps || !sets || (!exerciseName && !selectedExercise)}
-            type="button"
-            onClick={submitExerciseFormHandler}
-          >
-            Add
-          </button>
+          
+        </div>
+        <button
+          className='success-button'
+          disabled={!reps || !sets || (!exerciseName && !selectedExercise)}
+          type="button"
+          onClick={submitExerciseFormHandler}
+        >
+          Add
+        </button>
         </div>
       ) : (
-        <div>
-          <h4>Exercise: {exerciseName || selectedExercise}</h4>
-          {!!muscles.length && <h4>Muscles: {muscles.join(", ")}</h4>}
-          <h4>Reps: {reps}</h4>
-          <h4>Sets: {sets}</h4>
-          {description && <h4>Description: {description}</h4>}
+        <div className={classes.ReadyExercise}>
+          <h4>
+            <strong>Exercise: </strong>
+             {exerciseName || selectedExercise}</h4>
+          {!!muscles.length && <h4> <strong>Muscles: </strong>{muscles.join(", ")}</h4>}
+          <h4><strong>Reps: </strong>{reps}</h4>
+          <h4><strong>Sets: </strong>{sets}</h4>
+          {description && <h4><strong>Description: </strong>{description}</h4>}
         </div>
       )}
-    </>
+    </section>
   );
 };
 

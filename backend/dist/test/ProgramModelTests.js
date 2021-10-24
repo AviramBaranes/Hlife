@@ -10,7 +10,7 @@ describe("Program model tests", () => {
     it("should be invalid if required fields are empty", () => {
         const program = new Program_1.default({});
         program.validate((err) => {
-            chai_1.expect(err.errors.user.properties.message).equal("Path `user` is required.");
+            (0, chai_1.expect)(err.errors.user.properties.message).equal("Path `user` is required.");
         });
     });
     it("should be invalid if fields are not correct", () => {
@@ -20,9 +20,9 @@ describe("Program model tests", () => {
         };
         const program = new Program_1.default(programFields);
         program.validate((err) => {
-            chai_1.expect(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
-            chai_1.expect(err.errors["program.0.day"].properties.message).equal("`-` is not a valid enum value for path `day`.");
-            chai_1.expect(err.errors["program.0.workout"].reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
+            (0, chai_1.expect)(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
+            (0, chai_1.expect)(err.errors["program.0.day"].properties.message).equal("`-` is not a valid enum value for path `day`.");
+            (0, chai_1.expect)(err.errors["program.0.workout"].reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         });
     });
     it("should be a valid model with defaults", () => {
@@ -41,7 +41,7 @@ describe("Program model tests", () => {
         };
         const stats = new Program_1.default(programFields);
         stats.validate((err) => {
-            chai_1.expect(err).equal(null);
+            (0, chai_1.expect)(err).equal(null);
         });
     });
 });

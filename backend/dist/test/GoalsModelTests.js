@@ -10,9 +10,9 @@ describe("Goals model tests", () => {
     it("should be invalid if required fields are empty", () => {
         const goals = new Goals_1.default();
         goals.validate((err) => {
-            chai_1.expect(err.errors.user.properties.message).equal("Path `user` is required.");
-            chai_1.expect(err.errors.basicGoal.properties.message).equal("Path `basicGoal` is required.");
-            chai_1.expect(err.errors["detailGoals.weight"].properties.message).equal("Path `detailGoals.weight` is required.");
+            (0, chai_1.expect)(err.errors.user.properties.message).equal("Path `user` is required.");
+            (0, chai_1.expect)(err.errors.basicGoal.properties.message).equal("Path `basicGoal` is required.");
+            (0, chai_1.expect)(err.errors["detailGoals.weight"].properties.message).equal("Path `detailGoals.weight` is required.");
         });
     });
     it("should be invalid if fields are not correct", () => {
@@ -22,8 +22,8 @@ describe("Goals model tests", () => {
         };
         const goals = new Goals_1.default(goalsFields);
         goals.validate((err) => {
-            chai_1.expect(err.errors.basicGoal.properties.message).equal("`-` is not a valid enum value for path `basicGoal`.");
-            chai_1.expect(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
+            (0, chai_1.expect)(err.errors.basicGoal.properties.message).equal("`-` is not a valid enum value for path `basicGoal`.");
+            (0, chai_1.expect)(err.errors.user.reason.message).equal("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         });
     });
     it("should be a valid model", () => {
@@ -43,7 +43,7 @@ describe("Goals model tests", () => {
         };
         const goals = new Goals_1.default(goalsFields);
         goals.validate((err) => {
-            chai_1.expect(err).equal(null);
+            (0, chai_1.expect)(err).equal(null);
         });
     });
 });

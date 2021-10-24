@@ -1,0 +1,61 @@
+@import "../variables.scss";
+@import "../breakpoints.scss";
+
+.error-detector-div {
+  display: inline-block;
+}
+
+.error-div {
+  color: black;
+  background-color: salmon;
+  position: absolute;
+  margin: 1rem;
+  top: 0;
+  width: 80%;
+  z-index: 50;
+  padding-bottom: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0rem 1rem 1rem rgba(250, 43, 43, 0.63);
+  animation: slide-down 300ms ease-out;
+  margin-left: 2rem;
+  section {
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    h4 {
+      font-size: 1.2rem;
+    }
+  }
+
+  ul {
+    list-style: unset;
+    margin-left: 2rem;
+    text-align: left;
+    li {
+      margin: 1rem 0rem;
+    }
+  }
+
+  @include media("<desktop", ">tablet") {
+    width: 60%;
+    margin-left: 8rem;
+    ul {
+      margin-left: 5rem;
+    }
+  } @include media(">=desktop") {
+    width: 40%;
+    margin-left: 18rem;
+    ul {
+      margin-left: 5rem;
+    }
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}

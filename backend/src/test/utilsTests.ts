@@ -13,7 +13,7 @@ describe("validation helpers tests", () => {
   it("should throw error if value is not in enum", () => {
     try {
       validateEnums("A", ["a", "b", "c"]);
-    } catch (err) {
+    } catch (err:any) {
       expect(err).to.be.an("error");
       expect(err.message).equal("Invalid value");
     }

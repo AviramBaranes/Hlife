@@ -1,59 +1,60 @@
-.Main {
-  h3 {
-    width: 120px;
-    text-align: center;
-    padding-bottom: 0.3rem;
-    margin: 1rem auto;
-    font-size: 2rem;
-    border-bottom: var(--primary-color) 1px solid;
+@import '../breakpoints.scss';
+
+
+.ErrorDiv{
+  right: 20%;
+  left: 20%;
+  margin-inline:auto ;
+  @include media('<tablet'){
+    transform: translateX(-10%);
+  margin-inline:auto ;
   }
-  h4 {
-    font-size: 1.2rem;
+  }
+
+.Main{
+  text-align: center;
+  h3{
+    margin-block:1rem ;
+    font-size: 2rem;
+    &::after{
+      content: '';
+      background-color: var(--primary-color);
+      display: block;
+      height: 2px;
+      width: 9rem;
+      margin: auto;
+    }
   }
 }
 
-.ModeSection,
-.PasswordSection {
-  width: 75vw;
-  margin: 1rem auto;
+@mixin sectionStyles($setBorder:true){
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem;
-  border-bottom: var(--text-color) 1px solid;
+  margin-block:4rem ;
+  h4{
+    font-size: 1.4rem;
+  }
+  @if $setBorder{
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--text-color);
+  }
 }
-.Title {
-  display: flex;
-  align-items: center;
-  width: 75vw;
-  justify-content: space-between;
+
+.ModeSection{
+  @include sectionStyles()
 }
-.PasswordSection {
-  // border: none;
-  flex-direction: column;
-  svg {
+.Title{
+  @include sectionStyles($setBorder:false)
+}
+
+.PasswordSection{
+    svg {
     cursor: pointer;
     animation: rotateArrow 500ms ease-in-out;
   }
-  form {
-    width: 60vw;
-    margin-left: 15rem;
-  }
-  button {
-    width: 12rem;
-    position: absolute;
-    left: 38%;
-    margin-bottom: 1rem;
-  }
 }
 
-.Form {
-  animation: formDropDown 500ms ease-in-out;
-}
-
-.FormClosing {
-  animation: formDropDownReverse 500ms ease-in-out;
-}
 
 @keyframes rotateArrow {
   from {
@@ -63,6 +64,16 @@
     transform: rotate(0deg);
   }
 }
+
+
+.Form {
+  animation: formDropDown 600ms ease-in-out;
+}
+
+.FormClosing {
+  animation: formDropDownReverse 600ms ease-in-out;
+}
+
 
 @keyframes formDropDown {
   from {
@@ -81,25 +92,6 @@
   }
   to {
     transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
-@keyframes mobile {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes mobileReverse {
-  from {
-    transform: translateX(-10%);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(-10%);
     opacity: 0;
   }
 }
@@ -131,72 +123,33 @@
 }
 
 .Checkbox:checked + .SwitchLabel:after {
-  transform: translateX(115%);
+  transform: translateX(-115%);
 }
 
 .Checkbox:checked + .SwitchLabel {
   background-color: #243d42;
 }
-@media (max-width: 1028px) {
-  .Form {
-    animation: mobile 500ms ease-in-out;
-    transform: translateX(-30%);
-    form {
-      div {
-        width: 80vw;
-        justify-content: space-between;
-      }
-      button {
-        transform: translateX(140%);
-      }
-    }
-  }
-  .FormClosing {
-    animation: mobileReverse 500ms ease-in-out;
-  }
-}
-@media (max-width: 858px) {
-  .Form {
-    transform: translateX(-35%);
-    form {
-      div {
-        width: 90vw;
-        justify-content: space-between;
-      }
-      button {
-        transform: translateX(120%);
+
+@include media('>=desktop'){
+  .Main{
+    margin-inline:auto;
+    width: 80%;
+    h3{
+      font-size: 3rem;
+      margin-block: 3rem;
+      &::after{
+        width: 12rem;
       }
     }
   }
-}
-@media (max-width: 555px) {
-  .Form {
-    transform: translateX(-40%);
-    form {
-      button {
-        transform: translateX(100%);
-      }
-    }
+  .Form{
+    margin-inline:auto;
+    width: 60%;
+    padding-top: 4rem;
   }
-  .Main {
-    h3 {
-      font-size: 1.5rem;
-      width: 95px;
-    }
-  }
-}
-@media (max-width: 314px) {
-  .ModeSection,
-  .PasswordSection {
-    h4 {
-      font-size: 1rem;
-    }
-    width: 80vw;
-    margin: 1rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    border-bottom: var(--text-color) 1px solid;
+  .FormClosing{
+    padding-top: 4rem;
+    margin-inline:auto;
+    width: 60%;
   }
 }

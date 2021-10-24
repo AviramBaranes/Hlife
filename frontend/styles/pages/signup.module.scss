@@ -1,178 +1,77 @@
+@import '../breakpoints.scss';
+
 .Title {
-  display: grid;
-  place-items: center;
-  h1 {
-    font-size: 3rem;
-  }
-  h5 {
-    font-weight: normal;
-  }
+ text-align: center;
 }
 
-.Main {
-  min-height: 80vh;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h2 {
-    font-size: 2.4rem;
-  }
-  section {
-    margin: 0rem 5rem;
-    height: 100%;
-    width: 50%;
-  }
-  form {
-    border-right: var(--text-color) 1px solid;
-  }
-}
-
-.Image {
-  display: grid;
-  place-items: center;
-  width: 50%;
-  margin-top: 15rem;
-}
-
-.Line {
-  margin-bottom: 2rem;
-}
-
-.GenderSelect {
-  position: relative;
-  display: flex;
-  margin: 2rem;
-  margin-bottom: 0rem;
-  transform: translateX(-10%);
-
-  label {
-    color: var(--text-color);
-    font-weight: bold;
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-  }
-  select {
-    position: absolute;
-    left: 30%;
-    font: inherit;
-    background-color: black;
-    color: white;
-    border-radius: 4px;
-    border: 1px white solid;
-    width: 50%;
-    text-align: left;
-    padding: 0.25rem;
-  }
-}
-
-.Footer {
+.FormTitle{
   text-align: center;
-  display: grid;
-  place-items: center;
-  p {
-    margin-bottom: 2rem;
+  margin-top: 2rem;
+  svg{
+    width: 8rem;
   }
 }
 
-@media (max-width: 1385px) {
-  .Main {
-    min-height: 120vh;
-    label {
-      font-size: 1rem;
-      font-weight: normal;
-    }
-    input {
-      padding: 0.2rem;
-    }
-  }
-}
-
-@media (max-width: 1385px) {
-  .Main {
-    min-height: 90vh;
-    label {
-      font-size: 1rem;
-    }
-    input {
-      padding: 0rem;
-    }
-  }
-}
-
-@media (max-width: 1040px) {
-  .Main {
-    flex-direction: column;
-    min-height: 90vh;
-    width: 80%;
+.Main{
+  text-align: center;
+  img{
     margin: auto;
-    section {
-      width: 100%;
-    }
-    form {
-      border: none;
-    }
-    label {
-      font-size: 1rem;
-    }
-    input {
-      padding: 0rem;
-    }
-    select {
-      padding: 0rem;
-    }
-    button {
-      transform: translateX(130%);
-    }
-    form {
-      height: 30vh;
-    }
-  }
-  .GenderSelect {
-    transform: translateX(10%);
-  }
-  .FormTitle {
-    margin: 3rem auto;
-    transform: translateX(40%);
-    h2 {
-      font-size: 1.5rem;
-    }
-    svg {
-      width: 15%;
-    }
+    width: 60%;
   }
 }
 
-@media (max-width: 726px) {
-  .Main {
-    min-height: 100vh;
+.Footer{
+  text-align: center;
+  margin-bottom: 1rem;
+}
 
-    form {
-      height: 40vh;
+@include media('>phone','<=tablet'){
+  .Title{
+    font-size: 1.24rem;
+  }
+}
+
+
+@include media("<desktop", ">tablet") {
+  .Title{
+  font-size: 1.5rem;
+  }
+  .FormTitle{
+    font-size: 1.2rem; 
+  }
+}
+
+
+@include media('>=desktop'){
+  .Title{
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .Main{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-basis: 100%;
+    img{
+      width: 18rem;
     }
   }
-}
 
-@media (max-width: 555px) {
-  .Main {
-    select {
-      margin: inherit auto;
-      transform: translateX(-20%);
-    }
-    label {
-      display: none;
+  .FormTitle{
+    font-size: 1.3rem;
+    svg{
+      width: 10rem;
     }
   }
+  .FormSection{
+    border-right:1px white solid  ;
+    padding-right:18%;
+    width: 40%;
+  }
+
+  .Footer{
+    margin: 1rem 0rem;
+  }
+  
 }
 
-@media (max-width: 557px) {
-  .Main {
-    width: 100%;
-  }
-}
-
-@media (max-width: 325px) {
-  .Main {
-    width: 100%;
-  }
-}

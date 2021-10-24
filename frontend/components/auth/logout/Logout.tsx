@@ -1,7 +1,7 @@
 import React, { SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 
-import classes from "./Logout.module.scss";
+import classes from "../../../styles/components/Logout.module.scss";
 import router from "next/router";
 import { logoutAction } from "../../../redux/slices/auth/authSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -41,7 +41,7 @@ const Logout: React.FC<LogoutProps> = ({ setShowModal, setShowNav }) => {
       <p>Are you sure you want to logout?</p>
       <div className={classes.Buttons}>
         <button
-          className={classes.Red}
+          className='danger-button'
           onClick={() => {
             setShowNav(false);
             logoutHandler();
@@ -49,8 +49,8 @@ const Logout: React.FC<LogoutProps> = ({ setShowModal, setShowNav }) => {
         >
           Logout
         </button>
-        <button onClick={() => setShowModal(false)} className={classes.Green}>
-          Cancel
+        <button onClick={() => setShowModal(false)} className='success-button'>
+          Back
         </button>
       </div>
     </div>

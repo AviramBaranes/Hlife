@@ -7,11 +7,12 @@ const RangeInput: React.FC<{
   value: string;
   testId?: string;
   name?: string;
+  unit?:string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-}> = ({ min, max, step, value, onChange, testId, name }) => {
+}> = ({ min, max, step, value, onChange, testId, name,unit='' }) => {
   return (
-    <>
-      <p>{min}</p>
+    <div className='range-input' >
+      <p>{min}{unit}</p>
       <input
         name={name}
         data-testid={testId}
@@ -22,8 +23,8 @@ const RangeInput: React.FC<{
         value={value}
         onChange={onChange}
       />
-      <p>{max}</p>
-    </>
+      <p>{max}{unit}</p>
+    </div>
   );
 };
 

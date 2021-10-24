@@ -45,28 +45,22 @@ describe("signup route test", () => {
     expect(response.body.data[1].msg).equal(
       "name must be at least 3 characters"
     );
-    expect(response.body.data[2].msg).equal(
-      "username must be at least 3 characters"
-    );
-    expect(response.body.data[2].value).equal("4-");
+    
+    expect(response.body.data[2].msg).equal("please enter a correct email");
+    expect(response.body.data[2].value).equal("not-an-email");
     expect(response.body.data[3].msg).equal(
-      "username only allow letters and numbers"
-    );
-    expect(response.body.data[4].msg).equal("please enter a correct email");
-    expect(response.body.data[4].value).equal("not-an-email");
-    expect(response.body.data[5].msg).equal(
       "password need to be at least 6 characters"
     );
-    expect(response.body.data[5].value).equal("123-");
-    expect(response.body.data[6].msg).equal(
+    expect(response.body.data[3].value).equal("123-");
+    expect(response.body.data[4].msg).equal(
       "password only allow letters and numbers"
     );
-    expect(response.body.data[7].msg).equal("gender is invalid");
-    expect(response.body.data[7].value).equal("not-valid");
-    expect(response.body.data[8].msg).equal(
+    expect(response.body.data[5].msg).equal("gender is invalid");
+    expect(response.body.data[5].value).equal("not-valid");
+    expect(response.body.data[6].msg).equal(
       'The field must be a date between "01/01/1920" and "01/01/2005"'
     );
-    expect(response.body.data[8].value).equal("01-01-2006");
+    expect(response.body.data[6].value).equal("01-01-2006");
   });
 
   it("should finish validation middleware successfully", async () => {

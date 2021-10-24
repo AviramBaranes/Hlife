@@ -1,7 +1,10 @@
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import router from "next/router";
 import React, { SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 
+import classes from '../../../styles/pages/create-workout.module.scss'
 import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import axiosInstance from "../../../utils/axios/axiosInstance";
@@ -48,6 +51,7 @@ const CreateSingleWorkout: React.FC<{
       await axiosInstance.post("/workout", bodyRequest);
 
       if (setSubmitCount) {
+        window.scrollTo(0, 0)
         setSubmitCount((prevState) => ++prevState);
       }
 
@@ -72,7 +76,7 @@ const CreateSingleWorkout: React.FC<{
   }
 
   return (
-    <div>
+    <div className={classes.CreateSingleWorkout}>
       <form onSubmit={submitWorkoutHandler}>
         <WorkoutGeneralInfoForm
           description={description}
@@ -85,33 +89,42 @@ const CreateSingleWorkout: React.FC<{
 
         {numberOfFields.map((field, i) => {
           return (
-            <div key={field * i}>
+            <div className={classes.ExerciseSection} key={field * i}>
               <h4>{field}</h4>
+              <hr />
               <WorkoutExerciseForm setExercises={setExercises} />
             </div>
           );
         })}
 
-        <div>
+<div className={classes.Buttons}>
+
           <button
             type="button"
+            className={`skip-button ${classes.skipButton}`}
             onClick={() =>
               setNumberOfFields((prevState) => [
                 ...prevState,
                 prevState[prevState.length - 1] + 1,
               ])
             }
-          >
+            >
             More
+            <span>
+              <FontAwesomeIcon icon={faPlus}/>
+            </span>
           </button>
-        </div>
-        <div></div>
+
+
         <button
-          type="submit"
-          disabled={!exercises.length || !totalTime || !workoutName}
+        className='primary-button'
+        type="submit"
+        disabled={!exercises.length || !totalTime || !workoutName}
         >
           Submit
         </button>
+
+          </div>
       </form>
     </div>
   );

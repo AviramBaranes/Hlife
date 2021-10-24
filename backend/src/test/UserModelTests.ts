@@ -10,9 +10,6 @@ describe("User model tests", () => {
       expect(err.errors.name.properties.message).equal(
         "Path `name` is required."
       );
-      expect(err.errors.username.properties.message).equal(
-        "Path `username` is required."
-      );
       expect(err.errors.email.properties.message).equal(
         "Path `email` is required."
       );

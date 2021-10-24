@@ -1,9 +1,9 @@
 import router from "next/router";
 import { Dispatch } from "react";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { goalsActions } from "../../../redux/slices/goals/goalsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import axiosInstance from "../../axios/axiosInstance";
+import { handleAxiosError } from "../../errors/handleRequestErrors";
 
 export const getDisplayRequirements = (
   basicGoal: string,
@@ -86,19 +86,13 @@ export const createGoalsFieldsProps = (
       dispatch(
         messagesActions.newMessage({
           messageTitle: "Goals created!",
-          message: res.data,
+          message: 'Great job! We submited your goals',
         })
       );
 
       router.push("/auth/registration/set-initial-stats");
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Creating goals failed",
-          errorMessage: err.response.data,
-          errorStatusCode: err.response.status,
-        })
-      );
+      handleAxiosError(err,dispatch,"Creating goals failed")
     }
   };
   return {

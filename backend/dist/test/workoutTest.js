@@ -31,7 +31,7 @@ const User_1 = __importDefault(require("../models/User"));
 const Workout_1 = __importDefault(require("../models/Workout"));
 const responseDefaultObj_1 = __importDefault(require("../utils/helpers/forTests/responseDefaultObj"));
 describe("create workout tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = { userId: "61196b0a38af7615d0aed56e", body: {} };
     let stubedUser;
     before(async () => {
@@ -51,8 +51,8 @@ describe("create workout tests", () => {
             },
         });
         await workoutController.createWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("Each workout need to have a unique name");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("Each workout need to have a unique name");
     });
     it("should create a workout model", async () => {
         req.body.description = "description";
@@ -65,13 +65,13 @@ describe("create workout tests", () => {
         });
         await workoutController.createWorkout(req, res, () => { });
         const newWorkoutArgs = stubedWorkout.firstCall.thisValue;
-        chai_1.expect(newWorkoutArgs.user).to.be.an("object");
-        chai_1.expect(newWorkoutArgs.trainingDayName).equal("A");
-        chai_1.expect(newWorkoutArgs.name).equal("chest");
-        chai_1.expect(newWorkoutArgs.exercises[0].name).equal("name");
-        chai_1.expect(newWorkoutArgs.exercises[0].sets).equal(1);
-        chai_1.expect(newWorkoutArgs.exercises[0].reps).equal(1);
-        chai_1.expect(newWorkoutArgs.description).equal("description");
+        (0, chai_1.expect)(newWorkoutArgs.user).to.be.an("object");
+        (0, chai_1.expect)(newWorkoutArgs.trainingDayName).equal("A");
+        (0, chai_1.expect)(newWorkoutArgs.name).equal("chest");
+        (0, chai_1.expect)(newWorkoutArgs.exercises[0].name).equal("name");
+        (0, chai_1.expect)(newWorkoutArgs.exercises[0].sets).equal(1);
+        (0, chai_1.expect)(newWorkoutArgs.exercises[0].reps).equal(1);
+        (0, chai_1.expect)(newWorkoutArgs.description).equal("description");
     });
     it("should save user model with new workout", async () => {
         const workouts = [];
@@ -85,19 +85,19 @@ describe("create workout tests", () => {
             },
         });
         await workoutController.createWorkout(req, res, () => { });
-        chai_1.expect(workouts[0]).to.be.an("object");
-        chai_1.expect(save.called).equal(true);
+        (0, chai_1.expect)(workouts[0]).to.be.an("object");
+        (0, chai_1.expect)(save.called).equal(true);
     });
     it("should return a success response", async () => {
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).equal("A-workout created successfully");
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).equal("A-workout created successfully");
     });
     after(() => {
         stubedUser.restore();
     });
 });
 describe("get workout by name tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = { userId: "61196b0a38af7615d0aed56e", query: {} };
     let stubedWorkout;
     before(async () => {
@@ -106,15 +106,15 @@ describe("get workout by name tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.getWorkoutByName(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return success response and the workout object", async () => {
         const workout = { _id: 1, name: "name", data: "data" };
         stubedWorkout.returns(workout);
         await workoutController.getWorkoutByName(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj).eql(workout);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj).eql(workout);
     });
     after(() => {
         stubedWorkout.restore();
@@ -122,7 +122,7 @@ describe("get workout by name tests", () => {
 });
 describe("get workout by id test", () => {
     const req = { params: "id" };
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     let stubedWorkout;
     beforeEach(() => {
         stubedWorkout = sinon_1.default.stub(Workout_1.default, "findById");
@@ -130,22 +130,22 @@ describe("get workout by id test", () => {
     it("should send an error response if no workout was found", async () => {
         stubedWorkout.returns(false);
         await workoutController.getById(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("No workout with this id");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("No workout with this id");
     });
     it("should send a success response with the workout object", async () => {
         const data = { id: "123", name: "name", data: "data" };
         stubedWorkout.returns(data);
         await workoutController.getById(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.jsonObj).eql(data);
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.jsonObj).eql(data);
     });
     afterEach(() => {
         stubedWorkout.restore();
     });
 });
 describe("change workout tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = { userId: "61196b0a38af7615d0aed56e", body: {} };
     let stubedWorkout;
     before(async () => {
@@ -154,14 +154,14 @@ describe("change workout tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.changeWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return error response if no data was provided", async () => {
         stubedWorkout.returns(true);
         await workoutController.changeWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("You need to provide data in order to change the workout");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("You need to provide data in order to change the workout");
     });
     it("should save the updated workout", async () => {
         stubedWorkout.returns({ save: sinon_1.default.spy() });
@@ -170,21 +170,21 @@ describe("change workout tests", () => {
         req.body.exercises = "exercises";
         await workoutController.changeWorkout(req, res, () => { });
         const workout = await Workout_1.default.findOne();
-        chai_1.expect(workout.save.called).equal(true);
-        chai_1.expect(workout.name).equal("name");
-        chai_1.expect(workout.description).equal("description");
-        chai_1.expect(workout.exercises).equal("exercises");
+        (0, chai_1.expect)(workout.save.called).equal(true);
+        (0, chai_1.expect)(workout.name).equal("name");
+        (0, chai_1.expect)(workout.description).equal("description");
+        (0, chai_1.expect)(workout.exercises).equal("exercises");
     });
     it("should return success response", async () => {
-        chai_1.expect(res.statusCode).equal(201);
-        chai_1.expect(res.msg).eql("Workout changed successfully");
+        (0, chai_1.expect)(res.statusCode).equal(201);
+        (0, chai_1.expect)(res.msg).eql("Workout changed successfully");
     });
     after(() => {
         stubedWorkout.restore();
     });
 });
 describe("delete workout tests", () => {
-    const res = responseDefaultObj_1.default();
+    const res = (0, responseDefaultObj_1.default)();
     const req = { userId: "61196b0a38af7615d0aed56e", params: {} };
     let stubedWorkout;
     before(async () => {
@@ -193,14 +193,14 @@ describe("delete workout tests", () => {
     it("should return error response if workout was not found", async () => {
         stubedWorkout.returns(false);
         await workoutController.deleteWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(403);
-        chai_1.expect(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal("couldn't find workout, make sure you create a workout with this name first.");
     });
     it("should return success response and the workout object", async () => {
         stubedWorkout.returns(true);
         await workoutController.deleteWorkout(req, res, () => { });
-        chai_1.expect(res.statusCode).equal(200);
-        chai_1.expect(res.msg).eql("Workout deleted successfully");
+        (0, chai_1.expect)(res.statusCode).equal(200);
+        (0, chai_1.expect)(res.msg).eql("Workout deleted successfully");
     });
     after(() => {
         stubedWorkout.restore();

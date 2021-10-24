@@ -1,0 +1,36 @@
+@import '../breakpoints.scss';
+.Title {
+    text-align: center;
+    margin:4rem 0rem;
+    h5{
+        font-weight: lighter;
+    }
+}
+
+.Main{
+    text-align: center;
+    svg{
+        width: 40% !important;
+    }
+}
+
+.Form{
+    margin-bottom: 5rem;
+}
+
+@include media('<tablet','>phone'){
+    .Title{
+        font-size: 1.5rem;
+        margin-bottom: 5rem;
+    }
+}
+@include media('>tablet','<desktop'){
+    .Title{
+        font-size: 1.7rem;
+    }
+    .Form{
+        width: 80%;
+        margin: auto;
+        margin-bottom: 3rem;
+    }
+}

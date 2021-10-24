@@ -1,10 +1,10 @@
 import router from "next/router";
 import React from "react";
 import { Dispatch } from "redux";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
 import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
 import { statsActions } from "../../../redux/slices/stats/statsSlice";
 import axiosInstance from "../../axios/axiosInstance";
+import { handleAxiosError } from "../../errors/handleRequestErrors";
 
 export const createStatsProps = (
   setShouldSkipFatPercentage: React.Dispatch<React.SetStateAction<boolean>>,
@@ -55,24 +55,18 @@ export const createStatsProps = (
       if (photo) formData.append("file", photo);
 
       await axiosInstance.post("/stats/set-ranking", { selfRank: rank });
-      const res = await axiosInstance.post("/stats", formData);
+      await axiosInstance.post("/stats", formData);
 
       dispatch(
         messagesActions.newMessage({
           messageTitle: "Initial Stats created!",
-          message: res.data,
+          message: 'Your stats have been successfully uploaded',
         })
       );
 
       router.push("/auth/registration/choose-workout");
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Creating initial stats failed",
-          errorMessage: err.response.data,
-          errorStatusCode: err.response.status,
-        })
-      );
+      handleAxiosError(err,dispatch,"Creating initial stats failed")
     }
   };
 

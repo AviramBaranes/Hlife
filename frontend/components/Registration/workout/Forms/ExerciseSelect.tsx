@@ -1,9 +1,19 @@
 import React, { ReactEventHandler, SetStateAction } from "react";
 
-const ExerciseSelect: React.FC<{
+interface ExerciseSelectProps {
   setSelectedExercise: React.Dispatch<SetStateAction<string | null>>;
   setMuscles: React.Dispatch<SetStateAction<string[]>>;
-}> = ({ setSelectedExercise, setMuscles }) => {
+  selectedExercise:string|null;
+  setActiveInputs:React.Dispatch<React.SetStateAction<{
+    exerciseName: boolean;
+    reps: boolean;
+    sets: boolean;
+    selectedExercise: boolean;
+    description: boolean;
+}>>;
+}
+
+const ExerciseSelect: React.FC<ExerciseSelectProps> = ({ setSelectedExercise, setMuscles ,selectedExercise,setActiveInputs}) => {
   const lowerBodyExercises = ["squat", "deadlift", "calf raise", "wall sit"];
   const absExercises = ["sit ups", "v ups", "leg raises"];
   const shouldersExercises = ["shoulder press", "lateral raise"];
@@ -32,7 +42,7 @@ const ExerciseSelect: React.FC<{
     const { value } = e.target;
 
     setSelectedExercise(value);
-
+    setActiveInputs(prev=>({...prev,selectedExercise:value!==''}))
     if (bicepsExercises.includes(value)) {
       setMuscles(["biceps curl"]); //can be in backAndBicepsExercises so need to return
       return;
@@ -50,14 +60,16 @@ const ExerciseSelect: React.FC<{
 
     if (shouldersExercises.includes(value)) setMuscles(["Chest", "Triceps"]);
   };
+  console.log(selectedExercise)
 
   return (
     <select
       data-testid="exerciseSelect"
-      value="squat"
       onChange={exerciseSelectedHandler}
+      value={selectedExercise || ''}
       id="exercise"
     >
+      <option value="" style={{display:'none'}}></option>
       <option value="squat">squat</option>
       <option value="deadlift">deadlift</option>
       <option value="calf raise">calf raise</option>

@@ -1,6 +1,8 @@
 import { GetServerSideProps } from "next";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import classes from '../../../styles/pages/set-goals.module.scss'
 import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
 import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
 import RequiredFields from "../../../components/Registration/goalsFields/RequiredFields";
@@ -46,11 +48,7 @@ const setGoals: React.FC = () => {
   );
   return (
     <>
-      <h1>Create Your Goals</h1>
-      <p>
-        this will help us create for you a program that suits you, and to track
-        your progress
-      </p>
+    
       <RequiredFields shouldDisplay={shouldDisplayRequiredFields} />
 
       <FatPercentageField
