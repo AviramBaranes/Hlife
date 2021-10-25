@@ -1,15 +1,17 @@
-import router from "next/router";
-import React, { SetStateAction, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import router from 'next/router';
+import React, { SetStateAction, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import classes from '../../../styles/pages/create-workout.module.scss'
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import axiosInstance from "../../../utils/axios/axiosInstance";
-import Modal from "../../UI/Modal/Modal";
-import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import classes from '../../../styles/pages/create-workout.module.scss';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import Modal from '../../UI/Modal/Modal';
+import WorkoutGeneralInfoForm from './Forms/WorkoutGeneralInfoForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 
 interface Workout {
   name: string;
@@ -24,23 +26,24 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
   setShouldDisplaySecondForm,
 }) => {
   const dispatch = useDispatch();
-  const isMultyProgram = !!(localStorage.getItem('multiProgramStyles'))
-  let timesPerWeek = +localStorage.getItem("timesPerWeek")!;
-  isMultyProgram && timesPerWeek--
-  console.log(timesPerWeek,isMultyProgram)
+  const isMultiProgram = !!localStorage.getItem('multiProgramStyles');
+  let timesPerWeek = +localStorage.getItem('timesPerWeek')!;
+  isMultiProgram && timesPerWeek--;
+  console.log(timesPerWeek, isMultiProgram);
 
   const [showModal, setShowModal] = useState(true);
   const [workout, setWorkout] = useState<Workout[]>([]);
-  const [description, setDescription] = useState("");
-  const [totalTime, setTotalTime] = useState("");
-  const [workoutName, setWorkoutName] = useState("");
+  const [description, setDescription] = useState('');
+  const [totalTime, setTotalTime] = useState('');
+  const [workoutName, setWorkoutName] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const createWorkoutHandler = async () => {
     try {
+      dispatch(loadingAction.setToTrue());
       workout.forEach(async (singleWorkout) => {
         const requestBody = {
-          trainingDayName: "aerobic",
+          trainingDayName: 'aerobic',
           name: singleWorkout.name,
           time: singleWorkout.time,
           exercises: [],
@@ -54,15 +57,15 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         if (singleWorkout.description)
           requestBody.description = singleWorkout.description;
 
-        await axiosInstance.post("/workout/", requestBody);
+        await axiosInstance.post('/workout/', requestBody);
       });
 
       // the last workout is not in the state so I need to post it manually
-      const [hours, minutes] = totalTime.split(":");
+      const [hours, minutes] = totalTime.split(':');
       const time = +hours * 60 + +minutes;
 
       const requestBody = {
-        trainingDayName: "aerobic",
+        trainingDayName: 'aerobic',
         name: workoutName,
         time,
         exercises: [],
@@ -75,37 +78,32 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
 
       if (description) requestBody.description = description;
 
-      const { data } = await axiosInstance.post("/workout/", requestBody);
+      const { data } = await axiosInstance.post('/workout/', requestBody);
 
       if (!setShouldDisplaySecondForm) {
-        const { data } = await axiosInstance.post("/workout/hasAllWorkout");
+        const { data } = await axiosInstance.post('/workout/hasAllWorkout');
 
         dispatch(
           messagesActions.newMessage({
-            messageTitle: "Workout created successfully!",
+            messageTitle: 'Workout created successfully!',
             message: data,
           })
         );
-        router.push("/auth/registration/schedule-program");
+        router.push('/auth/registration/schedule-program');
       }
 
       if (setShouldDisplaySecondForm) {
         dispatch(
           messagesActions.newMessage({
-            messageTitle: "Workout created successfully!",
+            messageTitle: 'Workout created successfully!',
             message: data,
           })
         );
         setShouldDisplaySecondForm(true);
       }
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Failed to create workout",
-          errorMessage: err.response.data,
-          errorStatusCode: err.response.status,
-        })
-      );
+      handleAxiosError(err, dispatch, 'Create Workout Failed');
     }
   };
 
@@ -113,7 +111,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
     e.preventDefault();
 
     setWorkout((prevState) => {
-      const [hours, minutes] = totalTime.split(":");
+      const [hours, minutes] = totalTime.split(':');
       const time = +hours * 60 + +minutes;
       return [
         ...prevState,
@@ -124,15 +122,15 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         },
       ];
     });
-    setWorkoutName("");
-    setTotalTime("");
-    setDescription("");
+    setWorkoutName('');
+    setTotalTime('');
+    setDescription('');
     setFormSubmitted(true);
 
     dispatch(
       messagesActions.newMessage({
-        messageTitle: "Workout Added",
-        message: "Workout added successfully you can now enter another one",
+        messageTitle: 'Workout Added',
+        message: 'Workout added successfully you can now enter another one',
       })
     );
   };
@@ -142,19 +140,19 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <div className={classes.ModalMsg}>
-        <p>
-          While creating workout dont refresh the page or data you entered will
-          be lost.
-        </p>
-          <button
-          className='success-button'
-            type="button"
-            disabled={false}
-            onClick={() => setShowModal(false)}
+            <p>
+              While creating workout dont refresh the page or data you entered
+              will be lost.
+            </p>
+            <button
+              className='success-button'
+              type='button'
+              disabled={false}
+              onClick={() => setShowModal(false)}
             >
-            OK
-          </button>
-            </div>
+              OK
+            </button>
+          </div>
         </Modal>
       )}
       <h3>Create aerobic workout</h3>
@@ -172,36 +170,36 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         />
 
         <button
-        className={`skip-button ${classes.skipButton}`}
+          className={`skip-button ${classes.skipButton}`}
           disabled={
             workoutName.length < 4 ||
             !totalTime ||
             workout.length + 1 >= timesPerWeek!
           }
-          type="submit"
+          type='submit'
           style={{
             display: `${
-              workout.length + 1 >= timesPerWeek! ? "none" : "block"
+              workout.length + 1 >= timesPerWeek! ? 'none' : 'block'
             }`,
           }}
         >
           Add another
           <span>
-            <FontAwesomeIcon icon={faPlus}/>
+            <FontAwesomeIcon icon={faPlus} />
           </span>
         </button>
       </form>
 
       <div className={classes.AerobicButton}>
-      <button
-      className='primary-button'
-      onClick={createWorkoutHandler}
-      type="submit"
-      disabled={workoutName.length < 4 || !totalTime}
-      >
-        Submit
-      </button>
-        </div>
+        <button
+          className='primary-button'
+          onClick={createWorkoutHandler}
+          type='submit'
+          disabled={workoutName.length < 4 || !totalTime}
+        >
+          Submit
+        </button>
+      </div>
     </div>
   );
 };

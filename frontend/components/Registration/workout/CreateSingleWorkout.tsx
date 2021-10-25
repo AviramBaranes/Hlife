@@ -1,16 +1,18 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import router from "next/router";
-import React, { SetStateAction, useState } from "react";
-import { useDispatch } from "react-redux";
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import router from 'next/router';
+import React, { SetStateAction, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import classes from '../../../styles/pages/create-workout.module.scss'
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import axiosInstance from "../../../utils/axios/axiosInstance";
-import { Exercise } from "./Forms/Exercise";
-import WorkoutExerciseForm from "./Forms/WorkoutExerciseForm";
-import WorkoutGeneralInfoForm from "./Forms/WorkoutGeneralInfoForm";
+import classes from '../../../styles/pages/create-workout.module.scss';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { Exercise } from './Forms/Exercise';
+import WorkoutExerciseForm from './Forms/WorkoutExerciseForm';
+import WorkoutGeneralInfoForm from './Forms/WorkoutGeneralInfoForm';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 
 const CreateSingleWorkout: React.FC<{
   trainingDayName: string;
@@ -19,9 +21,9 @@ const CreateSingleWorkout: React.FC<{
 }> = ({ trainingDayName, setSubmitCount, last }) => {
   const dispatch = useDispatch();
 
-  const [description, setDescription] = useState("");
-  const [totalTime, setTotalTime] = useState("");
-  const [workoutName, setWorkoutName] = useState("");
+  const [description, setDescription] = useState('');
+  const [totalTime, setTotalTime] = useState('');
+  const [workoutName, setWorkoutName] = useState('');
 
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [numberOfFields, setNumberOfFields] = useState([1, 2, 3]);
@@ -29,7 +31,7 @@ const CreateSingleWorkout: React.FC<{
   async function submitWorkoutHandler(e: React.FormEvent) {
     e.preventDefault();
 
-    const [hours, minutes] = totalTime.split(":");
+    const [hours, minutes] = totalTime.split(':');
     const time = +hours * 60 + +minutes;
 
     try {
@@ -48,30 +50,27 @@ const CreateSingleWorkout: React.FC<{
 
       if (description) bodyRequest.description = description;
 
-      await axiosInstance.post("/workout", bodyRequest);
+      dispatch(loadingAction.setToTrue());
+      await axiosInstance.post('/workout', bodyRequest);
 
       if (setSubmitCount) {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
         setSubmitCount((prevState) => ++prevState);
       }
 
-      if (trainingDayName === "FB" || last) {
-        const { data } = await axiosInstance.post("/workout/hasAllWorkout");
+      if (trainingDayName === 'FB' || last) {
+        const { data } = await axiosInstance.post('/workout/hasAllWorkout');
         dispatch(
           messagesActions.newMessage({
-            messageTitle: "Created workout successfully",
+            messageTitle: 'Created workout successfully',
             message: data,
           })
         );
-        router.push("/auth/registration/schedule-program");
+        dispatch(loadingAction.setToFalse());
+        router.push('/auth/registration/schedule-program');
       }
     } catch (err: any) {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Failed to create workout",
-          errorMessage: err.response.data,
-        })
-      );
+      handleAxiosError(err, dispatch, 'Failed to create workout');
     }
   }
 
@@ -97,10 +96,9 @@ const CreateSingleWorkout: React.FC<{
           );
         })}
 
-<div className={classes.Buttons}>
-
+        <div className={classes.Buttons}>
           <button
-            type="button"
+            type='button'
             className={`skip-button ${classes.skipButton}`}
             onClick={() =>
               setNumberOfFields((prevState) => [
@@ -108,23 +106,21 @@ const CreateSingleWorkout: React.FC<{
                 prevState[prevState.length - 1] + 1,
               ])
             }
-            >
+          >
             More
             <span>
-              <FontAwesomeIcon icon={faPlus}/>
+              <FontAwesomeIcon icon={faPlus} />
             </span>
           </button>
 
-
-        <button
-        className='primary-button'
-        type="submit"
-        disabled={!exercises.length || !totalTime || !workoutName}
-        >
-          Submit
-        </button>
-
-          </div>
+          <button
+            className='primary-button'
+            type='submit'
+            disabled={!exercises.length || !totalTime || !workoutName}
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,7 +1,7 @@
-@import "./breakpoints.scss";
-@import "./globalClasses/inputContainer.scss";
-@import "./globalClasses/buttons.scss";
-@import "./globalClasses/errorDiv.scss";
+@import './breakpoints.scss';
+@import './globalClasses/inputContainer.scss';
+@import './globalClasses/buttons.scss';
+@import './globalClasses/errorDiv.scss';
 * {
   box-sizing: border-box;
   padding: 0;
@@ -20,12 +20,12 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-    letter-spacing:1px;
+  letter-spacing: 1px;
   .DarkMode {
-    background-image: url("../assets/Hlife-background\ .png");
+    background-image: url('../assets/Hlife-background\ .png');
   }
   .LightMode {
-    background-image: url("../assets/lighted-theme-background.svg");
+    background-image: url('../assets/lighted-theme-background.svg');
   }
 }
 

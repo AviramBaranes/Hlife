@@ -1,12 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import tokensReducer from "../slices/tokens";
-import usersReducer from "../slices/auth/authSlice";
-import errorsReducer from "../slices/errors/errorsSlice";
-import messagesReducer from "../slices/messages/messagesSlice";
-import goalsReducer from "../slices/goals/goalsSlice";
-import statsReducer from "../slices/stats/statsSlice";
-import settingsReducer from "../slices/settings/settingsSlice";
+import tokensReducer from '../slices/tokens';
+import usersReducer from '../slices/auth/authSlice';
+import errorsReducer from '../slices/errors/errorsSlice';
+import messagesReducer from '../slices/messages/messagesSlice';
+import goalsReducer from '../slices/goals/goalsSlice';
+import statsReducer from '../slices/stats/statsSlice';
+import settingsReducer from '../slices/settings/settingsSlice';
+import loadingReducer from '../slices/loading/loadingSlice';
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     goalsReducer,
     statsReducer,
     settingsReducer,
+    loadingReducer,
   },
 });
 export default store;

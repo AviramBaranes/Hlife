@@ -1,0 +1,173 @@
+@import '../breakpoints.scss';
+
+.Title {
+  text-align: center;
+  max-width: 90%;
+  margin: 1rem auto;
+  h3 {
+    font-size: 1rem;
+    font-weight: lighter;
+  }
+  p {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+}
+
+.RecommendationSec {
+  text-align: center;
+  strong {
+    border-bottom: var(--primary-color) 1px solid;
+    width: 8rem;
+    margin-left: 2rem;
+    font-size: 1.2rem;
+  }
+}
+
+.Recommendation {
+  text-align: left;
+}
+
+.RecommendationList {
+  margin: 1.2rem 0rem 1rem 2.3rem;
+  p {
+    font-size: 1rem;
+    margin-block: 0.4rem;
+  }
+}
+
+.RecommendationBtn {
+  hr {
+    margin-block: 1rem;
+  }
+}
+
+.CustomOrderBtn {
+  text-align: center;
+}
+
+.CustomOrder {
+  text-align: center;
+  h3 {
+    margin-top: 2rem;
+    margin-bottom: 1.3rem;
+  }
+}
+
+@include media('>bigPhone', '<=tablet') {
+  .Title {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    p {
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  .Recommendation {
+    strong {
+      font-size: 1.4rem;
+    }
+  }
+
+  .RecommendationList {
+    p {
+      font-size: 1.2rem;
+    }
+    margin-bottom: 2.2rem;
+  }
+
+  .RecommendationBtn {
+    hr {
+      margin-top: 2.4rem;
+    }
+  }
+
+  .CustomOrder {
+    h3 {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+@include media('>tablet', '<desktop') {
+  .Title {
+    font-size: 1.5rem;
+    margin-bottom: 2.2rem;
+    p {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  .Recommendation {
+    strong {
+      font-size: 1.5rem;
+    }
+  }
+
+  .RecommendationList {
+    p {
+      font-size: 1.4rem;
+    }
+    margin-bottom: 2.4rem;
+  }
+
+  .RecommendationBtn {
+    hr {
+      margin-top: 2.6rem;
+    }
+  }
+
+  .CustomOrder {
+    h3 {
+      font-size: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    form {
+      width: 60%;
+      margin: auto;
+    }
+  }
+}
+
+@include media('>=desktop') {
+  .Title {
+    font-size: 2.2rem;
+    margin-bottom: 2.4rem;
+    p {
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  .Recommendation {
+    strong {
+      font-size: 2rem;
+    }
+  }
+
+  .RecommendationList {
+    p {
+      font-size: 1.4rem;
+    }
+    margin-bottom: 2.4rem;
+  }
+
+  .RecommendationBtn {
+    hr {
+      margin-top: 2.6rem;
+    }
+  }
+
+  .CustomOrder {
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 4rem;
+    }
+    form {
+      width: 35%;
+      margin: auto;
+    }
+  }
+}

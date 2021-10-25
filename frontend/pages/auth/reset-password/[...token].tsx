@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { GetServerSideProps } from "next";
+import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
 
-import axiosInstance from "../../../utils/axios/axiosInstance";
-import { useDispatch } from "react-redux";
-import classes from "../../../styles/pages/[...token].module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import router from "next/router";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import { handleAxiosError } from "../../../utils/errors/handleRequestErrors";
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { useDispatch } from 'react-redux';
+import classes from '../../../styles/pages/[...token].module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import router from 'next/router';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 
 function ResetPassword({ token }: { token: string }) {
   const dispatch = useDispatch();
@@ -17,12 +18,12 @@ function ResetPassword({ token }: { token: string }) {
   const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
   const [passwordsFields, setPasswordsFields] = useState({
     password: {
-      value: "",
+      value: '',
       valid: false,
       touched: false,
     },
     passwordConfirmation: {
-      value: "",
+      value: '',
       valid: false,
       touched: false,
     },
@@ -69,8 +70,8 @@ function ResetPassword({ token }: { token: string }) {
     ) {
       dispatch(
         errorsActions.newError({
-          errorTitle: "Passwords need to be a match",
-          errorMessage: "",
+          errorTitle: 'Passwords need to be a match',
+          errorMessage: '',
         })
       );
     }
@@ -82,26 +83,27 @@ function ResetPassword({ token }: { token: string }) {
         resetToken: token,
       };
 
+      dispatch(loadingAction.setToTrue());
       const { data } = await axiosInstance.put(
-        "/auth/reset/password-reset",
+        '/auth/reset/password-reset',
         bodyRequest
       );
 
-      await router.push("/auth/login");
+      await router.push('/auth/login');
       dispatch(
         messagesActions.newMessage({
-          messageTitle: "Password Changed Successfully",
+          messageTitle: 'Password Changed Successfully',
           message: data,
         })
       );
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      handleAxiosError(err,dispatch,"Changing Password Failed")
+      handleAxiosError(err, dispatch, 'Changing Password Failed');
     }
   }
 
   return (
     <>
-    
       <section className={classes.Title}>
         <h1>Change Password</h1>
         <h5>Fill the fields with your new strong password</h5>
@@ -111,41 +113,44 @@ function ResetPassword({ token }: { token: string }) {
         <form className={classes.Form} onSubmit={submitFormHandler}>
           <div className='input-container'>
             <input
-              name="password"
-              type="password"
+              name='password'
+              type='password'
               required
               onChange={inputChangeHandler}
               value={passwordsFields.password.value}
-              id="password"
+              id='password'
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor='password'>Password</label>
           </div>
 
           <div className='input-container'>
             <input
-              name="passwordConfirmation"
-              type="password"
+              name='passwordConfirmation'
+              type='password'
               required
               onChange={inputChangeHandler}
               value={passwordsFields.passwordConfirmation.value}
-              id="passwordConfirmation"
+              id='passwordConfirmation'
             />
-            <label htmlFor="passwordConfirmation">Confirm</label>
+            <label htmlFor='passwordConfirmation'>Confirm</label>
           </div>
-          {errorDiv&&<div className='error-div'>{errorDiv}</div>
-}
+          {errorDiv && <div className='error-div'>{errorDiv}</div>}
           <div
-          className='error-detector-div'
+            className='error-detector-div'
             onMouseOver={mouseOverBtnHandler}
             onMouseLeave={() => setErrorDiv(null)}
           >
-            <button className='primary-button' disabled={!formValidity} type="submit">
+            <button
+              className='primary-button'
+              disabled={!formValidity}
+              type='submit'
+            >
               Reset Password
             </button>
           </div>
         </form>
 
-        <FontAwesomeIcon icon={faLock} className="fa-10x" />
+        <FontAwesomeIcon icon={faLock} className='fa-10x' />
       </section>
     </>
   );
@@ -165,7 +170,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   } catch (err) {
     return {
       redirect: {
-        destination: "/auth/login",
+        destination: '/auth/login',
         permanent: false,
       },
     };

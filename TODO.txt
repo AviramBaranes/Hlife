@@ -1,10 +1,8 @@
+
+if has program delete cookie and local storage
 1.style
-    fix date in sign Up
-    Registration:
-        default
-        fb
-        aerobic
     FontFamily:
+    colors:
     
 2.test errorDiv
 

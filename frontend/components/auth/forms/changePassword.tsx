@@ -1,17 +1,18 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useReducer, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import classes from '../../../styles/pages/settings.module.scss'
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import axiosInstance from "../../../utils/axios/axiosInstance";
-import { handleAxiosError } from "../../../utils/errors/handleRequestErrors";
+import classes from '../../../styles/pages/settings.module.scss';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 
 interface FieldObj {
   value: string;
   valid: boolean;
   touched: boolean;
   class: string;
-  active:boolean;
+  active: boolean;
 }
 
 interface StateType {
@@ -22,24 +23,42 @@ interface StateType {
 
 interface ActionType {
   type:
-    | "Validity Check"
-    | "currentPassChange"
-    | "newPassChange"
-    | "confirmPassChange"
-    | "appropriateClassCheck";
+    | 'Validity Check'
+    | 'currentPassChange'
+    | 'newPassChange'
+    | 'confirmPassChange'
+    | 'appropriateClassCheck';
   value: string;
 }
 
 const initialState = {
-  currentPassword: { value: "", valid: false, touched: false, class: "",active:false },
-  newPassword: { value: "", valid: false, touched: false, class: "",active:false },
-  passwordConfirmation: { value: "", valid: false, touched: false, class: "",active:false },
+  currentPassword: {
+    value: '',
+    valid: false,
+    touched: false,
+    class: '',
+    active: false,
+  },
+  newPassword: {
+    value: '',
+    valid: false,
+    touched: false,
+    class: '',
+    active: false,
+  },
+  passwordConfirmation: {
+    value: '',
+    valid: false,
+    touched: false,
+    class: '',
+    active: false,
+  },
 };
 
 const reducer = (state: StateType, action: ActionType) => {
-  const {value} = action;
+  const { value } = action;
   switch (action.type) {
-    case "Validity Check":
+    case 'Validity Check':
       return {
         currentPassword: {
           ...state.currentPassword,
@@ -60,60 +79,60 @@ const reducer = (state: StateType, action: ActionType) => {
             state.newPassword.value.length > 5,
         },
       };
-    case "currentPassChange":
+    case 'currentPassChange':
       return {
         ...state,
         currentPassword: {
           ...state.currentPassword,
           value,
           touched: true,
-          active:value !== '',
+          active: value !== '',
         },
       };
-    case "newPassChange":
+    case 'newPassChange':
       const newState = {
         ...state,
         newPassword: {
           ...state.newPassword,
           value,
           touched: true,
-          active:value !== '',
+          active: value !== '',
         },
       };
       return newState;
-    case "confirmPassChange":
+    case 'confirmPassChange':
       return {
         ...state,
         passwordConfirmation: {
           ...state.passwordConfirmation,
           value,
           touched: true,
-          active:value !== '',
+          active: value !== '',
         },
       };
-    case "appropriateClassCheck":
+    case 'appropriateClassCheck':
       return {
         currentPassword: {
           ...state.currentPassword,
           class:
             !state.currentPassword.valid && state.currentPassword.touched
-              ? "inValid"
-              : "",
+              ? 'inValid'
+              : '',
         },
         newPassword: {
           ...state.newPassword,
           class:
             !state.newPassword.valid && state.newPassword.touched
-              ? "inValid"
-              : "",
+              ? 'inValid'
+              : '',
         },
         passwordConfirmation: {
           ...state.passwordConfirmation,
           class:
             !state.passwordConfirmation.valid &&
             state.passwordConfirmation.touched
-              ? "inValid"
-              : "",
+              ? 'inValid'
+              : '',
         },
       };
     default:
@@ -139,51 +158,51 @@ const ChangePassword: React.FC = () => {
   const fields = [
     {
       className: currentPassword.class,
-      htmlFor: "currentPassword",
+      htmlFor: 'currentPassword',
       inputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         const { value } = e.target;
-        dispatchLocalState({ type: "currentPassChange", value });
-        dispatchLocalState({ type: "Validity Check", value: "" });
-        dispatchLocalState({ type: "appropriateClassCheck", value: "" });
+        dispatchLocalState({ type: 'currentPassChange', value });
+        dispatchLocalState({ type: 'Validity Check', value: '' });
+        dispatchLocalState({ type: 'appropriateClassCheck', value: '' });
       },
-      label: "Current",
+      label: 'Current',
       value: currentPassword.value,
     },
     {
       className: newPassword.class,
-      htmlFor: "newPassword",
+      htmlFor: 'newPassword',
       inputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         const { value } = e.target;
-        dispatchLocalState({ type: "newPassChange", value });
-        dispatchLocalState({ type: "Validity Check", value: "" });
-        dispatchLocalState({ type: "appropriateClassCheck", value: "" });
+        dispatchLocalState({ type: 'newPassChange', value });
+        dispatchLocalState({ type: 'Validity Check', value: '' });
+        dispatchLocalState({ type: 'appropriateClassCheck', value: '' });
       },
-      label: "New Password",
+      label: 'New Password',
       value: newPassword.value,
     },
     {
       className: passwordConfirmation.class,
-      htmlFor: "passwordConfirmation",
+      htmlFor: 'passwordConfirmation',
       inputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         const { value } = e.target;
-        dispatchLocalState({ type: "confirmPassChange", value });
-        dispatchLocalState({ type: "Validity Check", value: "" });
-        dispatchLocalState({ type: "appropriateClassCheck", value: "" });
+        dispatchLocalState({ type: 'confirmPassChange', value });
+        dispatchLocalState({ type: 'Validity Check', value: '' });
+        dispatchLocalState({ type: 'appropriateClassCheck', value: '' });
       },
-      label: "Confirm",
+      label: 'Confirm',
       value: passwordConfirmation.value,
     },
   ];
 
   const mouseOverHandler = () => {
-    console.log('here')
-    if(formValidity) return
+    console.log('here');
+    if (formValidity) return;
     setErrorDiv(
       <>
-      <section>
-        <h4>Some of the fields you entered are invalid</h4>
-        <h6>Please make sure you follow the following instructions:</h6>
-      </section>
+        <section>
+          <h4>Some of the fields you entered are invalid</h4>
+          <h6>Please make sure you follow the following instructions:</h6>
+        </section>
         <ul>
           <li>your current password is correct</li>
           <li>your new password is at least 6 characters</li>
@@ -204,51 +223,70 @@ const ChangePassword: React.FC = () => {
         newPasswordConfirmation: passwordConfirmation.value,
       };
 
+      dispatch(loadingAction.setToTrue());
       const { data } = await axiosInstance.post(
-        "/auth/settings/password-reset",
+        '/auth/settings/password-reset',
         requestBody
       );
 
       dispatch(
         messagesActions.newMessage({
-          messageTitle: "Changed Password Successfully",
+          messageTitle: 'Changed Password Successfully',
           message: data,
         })
       );
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      handleAxiosError(err,dispatch,"Change Password Failed")
+      handleAxiosError(err, dispatch, 'Change Password Failed');
     }
   };
-console.log(errorDiv)
+  console.log(errorDiv);
   return (
     <form onSubmit={formSubmitHandler}>
       {fields.map((field) => {
         return (
           <div className='input-container' key={field.htmlFor}>
             <input
-              role="textbox"
+              role='textbox'
               required
               className={field.className}
               id={field.htmlFor}
               value={field.value}
               onChange={field.inputChangeHandler}
-              type="password"
+              type='password'
             />
-            <label className={localState[field.htmlFor as 'newPassword' |'newPassword' | 'passwordConfirmation'].active ? 'Active' : ''} htmlFor={field.htmlFor}>{field.label}</label>
+            <label
+              className={
+                localState[
+                  field.htmlFor as
+                    | 'newPassword'
+                    | 'newPassword'
+                    | 'passwordConfirmation'
+                ].active
+                  ? 'Active'
+                  : ''
+              }
+              htmlFor={field.htmlFor}
+            >
+              {field.label}
+            </label>
           </div>
         );
-        
-
       })}
-     {errorDiv && <div className={'error-div' + ' ' + classes.ErrorDiv} >{errorDiv}</div>}
-
+      {errorDiv && (
+        <div className={'error-div' + ' ' + classes.ErrorDiv}>{errorDiv}</div>
+      )}
 
       <div
         className='error-detector-div'
         onMouseOver={mouseOverHandler}
         onMouseLeave={(e) => setErrorDiv(null)}
       >
-        <button className='primary-button' disabled={!formValidity} type="submit">
+        <button
+          className='primary-button'
+          disabled={!formValidity}
+          type='submit'
+        >
           continue
         </button>
       </div>

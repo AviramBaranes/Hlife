@@ -1,12 +1,16 @@
-import { program } from "@babel/types";
-import { AxiosResponse } from "axios";
-import router from "next/router";
-import React, { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Workout } from "../../../pages/auth/registration/schedule-program";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import axiosInstance from "../../../utils/axios/axiosInstance";
+import { program } from '@babel/types';
+import { AxiosResponse } from 'axios';
+import router from 'next/router';
+import React, { FormEvent, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
+import classes from '../../../styles/pages/schedule-program.module.scss';
+import { Workout } from '../../../pages/auth/registration/schedule-program';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 
 interface Program {
   day: string;
@@ -14,24 +18,43 @@ interface Program {
   name?: string;
 }
 
+type Days =
+  | 'Sunday'
+  | 'Monday'
+  | 'Tuesday'
+  | 'Wednesday'
+  | 'Thursday'
+  | 'Friday'
+  | 'Saturday';
+
 const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
   const dispatch = useDispatch();
 
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+  const days: Days[] = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
   ];
+  const [activeInputs, setActiveInputs] = useState({
+    Sunday: false,
+    Monday: false,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+  });
   const [programs, setPrograms] = useState<Program[]>([]);
 
   const selectWorkoutHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const [name, trainingDayName] = e.target.value.split("trainingDayName:");
+    const { id, value } = e.target;
+    const [name, trainingDayName] = value.split('trainingDayName:');
     const newProgramDay: Program = {
-      day: e.target.id,
+      day: id,
       name,
       trainingDayName,
     };
@@ -39,7 +62,7 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
     //find if already has program at this day and update accordingly
 
     const currentProgramIndex = programs.findIndex(
-      (program) => program.day === e.target.id
+      (program) => program.day === id
     );
     const updatedProgramsList = [...programs];
 
@@ -47,7 +70,7 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       if (newProgramDay.trainingDayName) {
         updatedProgramsList[currentProgramIndex] = newProgramDay;
       } else {
-        updatedProgramsList[currentProgramIndex] = { day: e.target.id };
+        updatedProgramsList[currentProgramIndex] = { day: id };
       }
     } else {
       if (newProgramDay.trainingDayName) {
@@ -57,6 +80,7 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       }
     }
     setPrograms(updatedProgramsList);
+    setActiveInputs((prev) => ({ ...prev, [id]: value !== '' }));
   };
 
   const scheduleProgramHandler = async (e: FormEvent) => {
@@ -92,33 +116,30 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
     }
 
     p.then(() => {
+      dispatch(loadingAction.setToTrue());
       dispatch(
         messagesActions.newMessage({
-          messageTitle: "Congratulations",
-          message: " You finished all registration steps!",
+          messageTitle: 'Congratulations',
+          message: ' You finished all registration steps!',
         })
       );
-      router.push("/");
+      router.push('/');
     }).catch((err: any) => {
-      dispatch(
-        errorsActions.newError({
-          errorTitle: "Schedule your program failed",
-          errorMessage: err.response.data,
-        })
-      );
+      handleAxiosError(err, dispatch, 'Schedule your program failed');
     });
+    dispatch(loadingAction.setToFalse());
   };
 
   return (
-    <>
+    <section className={classes.CustomOrder}>
       <h3>Make your own schedule:</h3>
       <form onSubmit={scheduleProgramHandler}>
         {days.map((day) => {
           return (
-            <div key={day}>
-              <label htmlFor={day}>{day}</label>
-              <select value="rest" onChange={selectWorkoutHandler} id={day}>
-                <option value="rest">rest</option>
+            <div key={day} className='input-container'>
+              <select onChange={selectWorkoutHandler} id={day}>
+                <option value='' style={{ display: 'none' }}></option>
+                <option value='rest'>rest</option>
                 {workouts.map((workout) => (
                   <option
                     key={workout.name + workout.trainingDayName}
@@ -128,14 +149,26 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
                   </option>
                 ))}
               </select>
+              <label
+                className={`${activeInputs[day] ? 'Active' : ''}`}
+                htmlFor={day}
+              >
+                {day}
+              </label>
             </div>
           );
         })}
-        <button type="submit" disabled={programs.length < 7}>
-          Continue
-        </button>
+        <div className={classes.CustomOrderBtn}>
+          <button
+            className='primary-button'
+            type='submit'
+            disabled={programs.length < 7}
+          >
+            Continue
+          </button>
+        </div>
       </form>
-    </>
+    </section>
   );
 };
 

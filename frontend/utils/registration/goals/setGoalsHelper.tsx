@@ -1,9 +1,10 @@
-import router from "next/router";
-import { Dispatch } from "react";
-import { goalsActions } from "../../../redux/slices/goals/goalsSlice";
-import { messagesActions } from "../../../redux/slices/messages/messagesSlice";
-import axiosInstance from "../../axios/axiosInstance";
-import { handleAxiosError } from "../../errors/handleRequestErrors";
+import router from 'next/router';
+import { Dispatch } from 'react';
+import { goalsActions } from '../../../redux/slices/goals/goalsSlice';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
+import axiosInstance from '../../axios/axiosInstance';
+import { handleAxiosError } from '../../errors/handleRequestErrors';
 
 export const getDisplayRequirements = (
   basicGoal: string,
@@ -58,13 +59,13 @@ export const createGoalsFieldsProps = (
     },
   };
   const fatPercentageInstructions =
-    basicGoal === "lose fat"
-      ? "This field is required"
-      : "This field is optional";
+    basicGoal === 'lose fat'
+      ? 'This field is required'
+      : 'This field is optional';
   const musclesMassInstructions =
-    basicGoal === "lose fat"
-      ? "This field is optional"
-      : "This field is required";
+    basicGoal === 'lose fat'
+      ? 'This field is optional'
+      : 'This field is required';
 
   const submitGoalsHandler = async () => {
     const bodyRequest = {
@@ -81,18 +82,20 @@ export const createGoalsFieldsProps = (
     if (fatPercentage) bodyRequest.fatPercentage = fatPercentage;
 
     try {
-      const res = await axiosInstance.post("/goals", bodyRequest);
+      dispatch(loadingAction.setToTrue());
+      await axiosInstance.post('/goals', bodyRequest);
 
       dispatch(
         messagesActions.newMessage({
-          messageTitle: "Goals created!",
-          message: 'Great job! We submited your goals',
+          messageTitle: 'Goals created!',
+          message: 'Great job! We submitted your goals',
         })
       );
 
-      router.push("/auth/registration/set-initial-stats");
+      router.push('/auth/registration/set-initial-stats');
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      handleAxiosError(err,dispatch,"Creating goals failed")
+      handleAxiosError(err, dispatch, 'Creating goals failed');
     }
   };
   return {

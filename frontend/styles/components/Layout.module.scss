@@ -6,13 +6,20 @@
 }
 
 .DarkMode {
-  background-image: url("../../assets/Hlife-background\ .png");
+  background-image: url('../../assets/Hlife-background\ .png');
   color: var(--text-color);
 }
 
 .LightMode {
-  background-image: url("../../assets/lighted-theme-background.svg");
+  background-image: url('../../assets/lighted-theme-background.svg');
   color: var(--text-color);
+}
+
+.Loading {
+  text-align: center;
+  img {
+    width: 75%;
+  }
 }
 
 // @media (max-width: 444px) {

@@ -1,10 +1,11 @@
-import router from "next/router";
-import React, { Dispatch } from "react";
-import { useDispatch } from "react-redux";
+import router from 'next/router';
+import React, { Dispatch } from 'react';
+import { useDispatch } from 'react-redux';
 
-import classes from '../../../styles/pages/choose-workout.module.scss'
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import axiosInstance from "../../../utils/axios/axiosInstance";
+import classes from '../../../styles/pages/choose-workout.module.scss';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 
 interface ChooseWorkoutProps {
   programStyle: string;
@@ -29,21 +30,24 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
 
   const ConfirmBtnHandler = async () => {
     try {
-      await axiosInstance.get("/chose-workout");
+      dispatch(loadingAction.setToTrue());
+      await axiosInstance.get('/chose-workout');
 
-      multiProgramStyles && localStorage.setItem("multiProgramStyles", "true");
-      localStorage.setItem("programStyle", programStyle);
-      localStorage.setItem("timesPerWeek", workoutDaysPerWeek.toString());
-      localStorage.setItem("order", order);
+      multiProgramStyles && localStorage.setItem('multiProgramStyles', 'true');
+      localStorage.setItem('programStyle', programStyle);
+      localStorage.setItem('timesPerWeek', workoutDaysPerWeek.toString());
+      localStorage.setItem('order', order);
 
-      router.push("/auth/registration/create-workout");
+      await router.push('/auth/registration/create-workout');
+      dispatch(loadingAction.setToFalse());
     } catch (err) {
       dispatch(
         errorsActions.newError({
-          errorTitle: "Something went wrong",
-          errorMessage: "Try to refresh",
+          errorTitle: 'Something went wrong',
+          errorMessage: 'Try to refresh',
         })
       );
+      dispatch(loadingAction.setToFalse());
     }
   };
 
@@ -51,10 +55,7 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
     <div>
       <section className={classes.Title}>
         <h3>Choose a workout program</h3>
-        <p>
-          You can follow our recommendations or create a custom
-          program.
-        </p>
+        <p>You can follow our recommendations or create a custom program.</p>
       </section>
       <section className={classes.Recommendations}>
         <h4>Recommendations:</h4>
@@ -76,22 +77,26 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
         </h5>
       </section>
       <div className={classes.Button}>
-
-        <button className='primary-button' onClick={ConfirmBtnHandler} disabled={false} type="button">
+        <button
+          className='primary-button'
+          onClick={ConfirmBtnHandler}
+          disabled={false}
+          type='button'
+        >
           Confirm
         </button>
-          </div>
-      <section className={classes.Footer} >
+      </div>
+      <section className={classes.Footer}>
         <h5>
           <strong>Do you want to make your own custom workout?</strong>
         </h5>
         <button
-        className='success-button'
-        disabled={false}
-        type="button"
-        onClick={() => {
-          setDisplay(false);
-        }}
+          className='success-button'
+          disabled={false}
+          type='button'
+          onClick={() => {
+            setDisplay(false);
+          }}
         >
           Yes
         </button>

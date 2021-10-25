@@ -7,6 +7,7 @@ import classes from '../../../styles/pages/forgotPassword.module.scss';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 
 function forgotPasswordForm() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function forgotPasswordForm() {
     e.preventDefault();
 
     try {
+      dispatch(loadingAction.setToTrue());
       const {
         data: { message },
       } = await axiosInstance.post('/auth/password/send-token', {
@@ -59,8 +61,9 @@ function forgotPasswordForm() {
       dispatch(
         messagesActions.newMessage({ messageTitle: 'Email Sent!', message })
       );
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      handleAxiosError(err,dispatch,'Sending Email Failed')
+      handleAxiosError(err, dispatch, 'Sending Email Failed');
     }
   }
 
