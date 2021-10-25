@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --env=jsdom",
-    "watch": "jest --env=jsdom -- --watch"
+    "test": "jest --env=jsdom"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",

@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import '../breakpoints.scss';
 
 @mixin scaleAnimation($size :1.2) {
   transition: all 0.2s ease-in-out;
@@ -9,26 +8,27 @@
 }
 
 .Navbar {
-  min-height: 5vh;
-  width: 90%;
-  margin: 0.5rem 5% 0.5rem 5% ;
+  width: 95%;
+  margin: 0.5rem auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   ul {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
+    flex-basis: 100%;
   }
   li {
+    font-size: 0.5rem;
     cursor: pointer;
-    margin: 0rem 2rem;
+    margin: 0rem 0.8rem;
   }
 }
 
 .Logo {
   cursor: pointer;
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   color: var(--primary-color);
   @include scaleAnimation()
 }
@@ -37,7 +37,7 @@
   cursor: pointer;
   color: var(--primary-color);
   font-size: 1.5rem; 
-  @include scaleAnimation($size:1.5)
+  @include scaleAnimation($size:1.35)
 }
 
 .NotActive {
@@ -59,37 +59,59 @@
   border-bottom: 4px solid var(--primary-color);
 }
 
-@media (max-width: 555px) {
-  .Logo {
-    font-size: 2rem;
-  }
-  .Navbar {
-    height: 3vh;
-    li {
-      margin: 0rem 1rem;
+@include media('>bigPhone','<=tablet'){
+  .Navbar{
+  min-height: 5vh;
+  width: 90%;
+    ul{
+      flex-basis: 70%;
     }
-    h2 {
-      font-size: 1rem;
+    li{
+      font-size: 0.75rem;
     }
   }
-  .BarsIcon {
-    font-size: 1rem;
+  .Logo{
+    font-size: 1.8rem;
+  }
+  .BarsIcon{
+    font-size: 1.8rem;
   }
 }
 
-@media (max-width: 335px) {
-  .Navbar {
-    li {
-      margin: 0rem 0.6rem;
+@include media('>tablet','<desktop'){
+  .Navbar{
+  min-height: 7vh;
+  width: 90%;
+    ul{
+      flex-basis: 65%;
     }
-    h2 {
-      font-size: 0.8rem;
+    li{
+      font-size: 1rem;
     }
   }
-  .Logo {
-    font-size: 1.5rem;
+  .Logo{
+    font-size: 2rem;
   }
-  .BarsIcon {
-    font-size: 1.5rem;
+  .BarsIcon{
+    font-size: 2rem;
+  }
+}
+
+@include media('>=desktop'){
+  .Navbar{
+    min-height: 8vh;
+    width: 90%;
+    ul{
+      flex-basis: 50%;
+    }
+    li{
+      font-size: 1.2rem;
+    }
+  }
+  .Logo{
+    font-size: 2.4rem;
+  }
+  .BarsIcon{
+    font-size: 2.4rem;
   }
 }

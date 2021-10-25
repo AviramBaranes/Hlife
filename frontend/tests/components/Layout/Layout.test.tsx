@@ -1,12 +1,14 @@
 import "@testing-library/jest-dom/extend-expect";
-
 import { render, screen } from "@testing-library/react";
 
 import Layout from "../../../components/Layout/Layout";
-
+import Settings from "../../../pages/settings";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
+import userEvent from "@testing-library/user-event";
+import store from "../../../redux/store/reduxStore";
+import { loadingAction } from "../../../redux/slices/loading/loadingSlice";
 
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);
@@ -115,4 +117,60 @@ describe("Layout component", () => {
     expect(errorContainer).toBeInTheDocument();
     expect(secondChild).not.toBeInTheDocument();
   });
+  test('should change theme',()=>{
+    render(
+      <Provider store={store}>
+        <Layout>
+          <Settings isAuthenticated={false}/>
+          <p></p>
+        </Layout>
+      </Provider>
+    );
+
+    expect(document.body.className).toBe('DarkMode')
+    userEvent.click(screen.getByRole('checkbox'))
+    expect(document.body.className).toBe('LightMode')
+    userEvent.click(screen.getByRole('checkbox'))
+    expect(document.body.className).toBe('DarkMode')
+  
+  })
+  test('should display loading',()=>{
+    const initialState = {
+      loadingReducer:{loading:false},
+      usersReducer: {
+        isAuthenticated:false,
+        hasProgram:false
+      },
+      tokensReducer: {
+        error: { message: "" },
+      },
+      settingsReducer: {
+        themeClass: "DarkMode",
+      },
+    };
+
+    render(
+      <Provider store={mockStore(initialState)}>
+        <Layout>
+          <p></p>
+          <p></p>
+          </Layout>
+      </Provider>
+    );
+
+    expect(screen.queryByTestId('loading-animation-container')).not.toBeInTheDocument()
+    
+    initialState.loadingReducer.loading=true
+
+    render(
+      <Provider store={mockStore(initialState)}>
+        <Layout>
+          <p></p>
+          <p></p>
+          </Layout>
+      </Provider>
+    );
+    expect(screen.queryByTestId('loading-animation-container')).toBeInTheDocument()
+  })
 });
+ 

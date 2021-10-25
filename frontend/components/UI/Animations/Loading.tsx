@@ -7,10 +7,10 @@ import Backdrop from '../Backdrop/Backdrop'
 
 function Loading() {
     return (
-        <div>
+        <div data-testid='loading-animation-container'>
             <Backdrop onClose={()=>{}} background='rgba(32, 30, 30, 0.671)' />
             <div className={classes.Loading}>
-              <Image src={runningPerson} />
+             {runningPerson && <Image src={runningPerson} />}
             </div>
         </div>
     )

@@ -70,7 +70,6 @@ function Layout({ children }: { children: React.ReactNode[] }) {
       })
     );
   }
-
   return (
     <>
       {error.message ? (

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import classes from "../../../styles/components/Navigation.module.scss";
 
-function RegistrationsNav() {
+function AuthenticateNav() {
   const router = useRouter();
   const { pathname } = router;
 
@@ -35,4 +35,4 @@ function RegistrationsNav() {
   );
 }
 
-export default RegistrationsNav;
+export default AuthenticateNav;

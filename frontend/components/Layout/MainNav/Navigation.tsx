@@ -7,7 +7,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import classes from "../../../styles/components/Navigation.module.scss";
 import { RootState } from "../../../redux/store/reduxStore";
 import AuthorizedNav from "../NavComponents/AuthorizeNav";
-import RegistrationsNav from "../NavComponents/RegistrationsNav";
+import AuthenticateNav from "../NavComponents/AuthenticateNav";
 import { validateAuthenticationAction } from "../../../redux/slices/auth/authSlice";
 
 const Navigation: React.FC<{
@@ -28,12 +28,11 @@ const Navigation: React.FC<{
         <h1 className={classes.Logo}>
           <Link href="/">Hlife</Link>
         </h1>
-        {isAuthenticated && hasProgram ? (
-          <AuthorizedNav />
-        ) : (
-          <RegistrationsNav />
-        )}
+        {!isAuthenticated && <AuthenticateNav />}
+        {hasProgram && <AuthorizedNav />}
+        {isAuthenticated && !hasProgram && null}
         <div
+          data-testid='burgerLink'
           className={classes.BarsIcon}
           onClick={() => setDisplaySideNav(true)}
         >

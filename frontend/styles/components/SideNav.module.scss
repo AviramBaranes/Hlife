@@ -1,7 +1,7 @@
 @import "../variables.scss";
 @import "../breakpoints.scss";
 .SideNav {
-  background: $cream-color;
+  background: var(--primary-color);
   color: black;
   height: 50vh;
   width: 70%;
@@ -11,6 +11,8 @@
   z-index: 20;
   border-radius: 0rem 0rem 0rem 1rem;
   box-shadow: -1rem 1rem 2rem black;
+  font-size: 1.4rem;
+  font-weight: bolder;
   animation: slide-down 400ms ease-out forwards;
   
   ul {
