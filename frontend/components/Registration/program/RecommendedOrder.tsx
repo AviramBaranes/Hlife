@@ -9,6 +9,7 @@ import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
 const RecommendedOrder: React.FC<{
   order: string;
@@ -41,7 +42,6 @@ const RecommendedOrder: React.FC<{
           programDay = 'rest (X)';
         } else {
           // if enough items shift else use the last and keep it
-          console.log(lastWorkoutMemory);
           let item: Workout;
           item =
             lastWorkoutMemory.length > 1
@@ -146,10 +146,10 @@ const RecommendedOrder: React.FC<{
       localStorage.clear();
       document.cookie =
         'choseWorkout=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      dispatch(validateAuthenticationAction())
     }).catch((err) => {
       handleAxiosError(err, dispatch, 'Schedule program failed');
     });
-    dispatch(loadingAction.setToFalse());
   }
 
   return (

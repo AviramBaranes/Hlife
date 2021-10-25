@@ -195,7 +195,6 @@ const ChangePassword: React.FC = () => {
   ];
 
   const mouseOverHandler = () => {
-    console.log('here');
     if (formValidity) return;
     setErrorDiv(
       <>
@@ -240,7 +239,7 @@ const ChangePassword: React.FC = () => {
       handleAxiosError(err, dispatch, 'Change Password Failed');
     }
   };
-  console.log(errorDiv);
+  
   return (
     <form onSubmit={formSubmitHandler}>
       {fields.map((field) => {

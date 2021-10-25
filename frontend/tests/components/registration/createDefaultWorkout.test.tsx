@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor,MatcherFunction  } from "@testing-library/react";
 import { Provider } from "react-redux";
 
 import store from "../../../redux/store/reduxStore";
@@ -9,11 +9,24 @@ import axiosInstance from "../../../utils/axios/axiosInstance";
 import router from "next/router";
 import { act } from "react-dom/test-utils";
 
+jest.setTimeout(30000);
+
+const withMarkup = (query: any) => (text: string): HTMLElement =>
+  query((content: string, node: HTMLElement) => {
+    const hasText = (node: HTMLElement) => node.textContent === text
+    const childrenDontHaveText = Array.from(node.children).every(
+      child => !hasText(child as HTMLElement)
+    )
+    return hasText(node) && childrenDontHaveText
+  })
+
 describe("Create default workout tests", () => {
   let spiedAxios: jest.SpyInstance;
   let spiedRouter: jest.SpyInstance;
 
   beforeAll(() => {
+    window.scroll = jest.fn()
+    window.scrollTo = jest.fn()
     spiedAxios = jest
       .spyOn(axiosInstance, "post")
       .mockImplementation(async () => "");
@@ -27,46 +40,53 @@ describe("Create default workout tests", () => {
       </Provider>
     );
 
-    expect(container.children[0].getAttribute("style")).toBe("display: block;");
-    expect(container.children[1].getAttribute("style")).toBe("display: none;");
 
     const generalForm = screen.getAllByTestId("GeneralForm");
+    const title = screen.getByText('Create A-Workout :')
+    const notRenderedTitle = screen.queryByText('Create B-Workout :')
 
-    const workoutNameInput_A = generalForm[0].children[0].children[0];
-    const timeInput_A = generalForm[0].children[1].children[0];
+    expect(generalForm.length).toBe(1)
+    expect(title).toBeInTheDocument()
+    expect(notRenderedTitle).not.toBeInTheDocument()
+
+
+    const workoutNameInput_A =screen.getByLabelText('Workout name');
+    const timeInput_A = screen.getByLabelText('Total time')
 
     userEvent.type(workoutNameInput_A, "Legs");
     userEvent.type(timeInput_A, "01:30");
 
-    const submitBtn = screen.getAllByText("Submit");
-    const exerciseNameInput = screen.getAllByPlaceholderText("exercise");
-    const repsInput = screen.getAllByPlaceholderText("reps");
-    const setsInput = screen.getAllByPlaceholderText("sets");
-    const exerciseSelect = screen.getAllByTestId("exerciseSelect");
+    const submitBtn = screen.getByText("Submit");
+    const exerciseNameInput = screen.getAllByTestId('customInput')
+    const repsInput = screen.getAllByTestId('repsInput')
+    const setsInput = screen.getAllByTestId('setsInput')
     const addBtn = screen.getAllByText("Add");
 
     for (let i = 0; i <= 2; i++) {
-      userEvent.type(exerciseNameInput[i], "data" + i);
-      userEvent.type(repsInput[i], (1 + i).toString());
-      userEvent.type(setsInput[i], (1 + i).toString());
+      userEvent.type(exerciseNameInput[i].children[0], "data" + i);
+      userEvent.type(repsInput[i].children[0], (1 + i).toString());
+      userEvent.type(setsInput[i].children[0], (1 + i).toString());
       userEvent.click(addBtn[i]);
     }
+
+    const getByTextWithMarkup = withMarkup(screen.getByText)
+
     const domElements_A = [
-      screen.getByText("Exercise: data0"),
-      screen.getByText("Exercise: data1"),
-      screen.getByText("Exercise: data2"),
-      screen.getByText("Reps: 1"),
-      screen.getByText("Reps: 2"),
-      screen.getByText("Reps: 3"),
-      screen.getByText("Sets: 1"),
-      screen.getByText("Sets: 2"),
-      screen.getByText("Sets: 3"),
+      getByTextWithMarkup("Exercise: data0"),
+      getByTextWithMarkup("Exercise: data1"),
+      getByTextWithMarkup("Exercise: data2"),
+      getByTextWithMarkup("Reps: 1"),
+      getByTextWithMarkup("Reps: 2"),
+      getByTextWithMarkup("Reps: 3"),
+      getByTextWithMarkup("Sets: 1"),
+      getByTextWithMarkup("Sets: 2"),
+      getByTextWithMarkup("Sets: 3"),
     ];
 
     domElements_A.forEach((el) => expect(el).toBeInTheDocument());
 
     act(() => {
-      userEvent.click(submitBtn[0]);
+      userEvent.click(submitBtn);
     });
 
     const expectedBodyRequest_A = {
@@ -92,46 +112,51 @@ describe("Create default workout tests", () => {
       ],
     };
     await waitFor(() => {
-      expect(container.children[0].getAttribute("style")).toBe(
-        "display: none;"
-      );
-      expect(container.children[1].getAttribute("style")).toBe(
-        "display: block;"
-      );
       expect(spiedAxios.mock.calls[0][0]).toBe("/workout");
       expect(spiedAxios.mock.calls[0][1]).toStrictEqual(expectedBodyRequest_A);
     });
 
-    const workoutNameInput_B = generalForm[1].children[0].children[0];
-    const timeInput_B = generalForm[1].children[1].children[0];
+
+    const generalForm2 = screen.getAllByTestId("GeneralForm");
+    const title2 = screen.getByText('Create B-Workout :')
+    const notRenderedTitle2 = screen.queryByText('Create A-Workout :')
+
+    expect(generalForm2.length).toBe(1)
+    expect(title2).toBeInTheDocument() 
+    expect(notRenderedTitle2).not.toBeInTheDocument()
+
+    const workoutNameInput_B = screen.getByLabelText('Workout name')
+    const timeInput_B = screen.getByLabelText('Total time')
 
     userEvent.type(workoutNameInput_B, "Chest");
     userEvent.type(timeInput_B, "03:00");
 
-    const selectOptions = ["deadlift", "bench press", "biceps curl"];
-    for (let i = 3; i <= 5; i++) {
-      userEvent.selectOptions(exerciseSelect[i], selectOptions[i - 3]);
-      userEvent.type(repsInput[i], (1 + i).toString());
-      userEvent.type(setsInput[i], (1 + i).toString());
-      userEvent.click(addBtn[i]);
+    const exerciseNameInput_B = screen.getAllByTestId('customInput')
+    const submitBtn_B = screen.getByText("Submit");
+    const repsInput_B = screen.getAllByTestId('repsInput')
+    const setsInput_B = screen.getAllByTestId('setsInput')
+    const addBtn_B = screen.getAllByText("Add");
+
+    for (let i = 0; i <= 2; i++) {
+      userEvent.type(exerciseNameInput_B[i].children[0], "data" + (i+4));
+      userEvent.type(repsInput_B[i].children[0], (4 + i).toString());
+      userEvent.type(setsInput_B[i].children[0], (4 + i).toString());
+      userEvent.click(addBtn_B[i]);
     }
     const domElements_B = [
-      screen.getByText("Exercise: deadlift"),
-      screen.getByText("Exercise: bench press"),
-      screen.getByText("Exercise: biceps curl"),
-      screen.getByText("Reps: 4"),
-      screen.getByText("Reps: 5"),
-      screen.getByText("Reps: 6"),
-      screen.getByText("Sets: 4"),
-      screen.getByText("Sets: 5"),
-      screen.getByText("Sets: 6"),
-      screen.getByText("Muscles: Gluteus, Quads, Hamstrings, Claves"),
-      screen.getByText("Muscles: Chest, Triceps"),
-      screen.getByText("Muscles: biceps curl"),
+      getByTextWithMarkup("Exercise: data4"),
+      getByTextWithMarkup("Exercise: data5"),
+      getByTextWithMarkup("Exercise: data6"),
+      getByTextWithMarkup("Reps: 4"),
+      getByTextWithMarkup("Reps: 5"),
+      getByTextWithMarkup("Reps: 6"),
+      getByTextWithMarkup("Sets: 4"),
+      getByTextWithMarkup("Sets: 5"),
+      getByTextWithMarkup("Sets: 6"),
     ];
 
     domElements_B.forEach((el) => expect(el).toBeInTheDocument());
-    userEvent.click(submitBtn[1]);
+    userEvent.click(submitBtn_B);
 
     const expectedBodyRequest_B = {
       trainingDayName: "B",
@@ -139,22 +164,19 @@ describe("Create default workout tests", () => {
       time: 180,
       exercises: [
         {
-          name: "deadlift",
+          name: "data4",
           sets: 4,
           reps: 4,
-          muscles: ["Gluteus", "Quads", "Hamstrings", "Claves"],
         },
         {
-          name: "bench press",
+          name: "data5",
           sets: 5,
           reps: 5,
-          muscles: ["Chest", "Triceps"],
         },
         {
-          name: "biceps curl",
+          name: "data6",
           sets: 6,
           reps: 6,
-          muscles: ["biceps curl"],
         },
       ],
     };

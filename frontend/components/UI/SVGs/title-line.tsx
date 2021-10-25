@@ -11,7 +11,7 @@ function Line() {
     >
       <path
         d="M6.5 20.5C108.5 3.3 148.667 5.33333 156 8.5"
-        stroke="#00D508"
+        stroke="var(--primary-color)"
         strokeWidth="12"
         strokeLinecap="round"
         strokeLinejoin="round"

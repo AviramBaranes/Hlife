@@ -129,18 +129,18 @@ describe("choose workout tests", () => {
 
     expect(submitBtn).toBeDisabled();
 
-    userEvent.type(screen.getByLabelText("Times Per Week: *") as Element, "4");
+    userEvent.type(screen.getByLabelText("Times per week") as Element, "4");
 
     expect(submitBtn).toBeDisabled();
 
-    userEvent.clear(screen.getByLabelText("Times Per Week: *") as Element);
+    userEvent.clear(screen.getByLabelText("Times per week") as Element);
     userEvent.selectOptions(screen.getByRole("listbox"), "AB");
 
     expect(submitBtn).toBeDisabled();
 
-    userEvent.type(screen.getByLabelText("Times Per Week: *") as Element, "4");
+    userEvent.type(screen.getByLabelText("Times per week") as Element, "4");
     expect(submitBtn).not.toBeDisabled();
-  });
+  }); 
 
   test("should handle custom workout submission", async () => {
     render(
@@ -151,7 +151,7 @@ describe("choose workout tests", () => {
 
     userEvent.click(screen.getByText("Yes"));
     userEvent.selectOptions(screen.getByRole("listbox"), "AB");
-    userEvent.type(screen.getByLabelText("Times Per Week: *") as Element, "4");
+    userEvent.type(screen.getByLabelText("Times per week") as Element, "4");
     userEvent.click(screen.getByText("Continue"));
 
     expect(spiedAxios.mock.calls[0][0]).toBe("/chose-workout");

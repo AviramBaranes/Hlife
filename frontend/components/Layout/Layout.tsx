@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Image from 'next/image';
 import { getCsrfToken } from '../../redux/slices/tokens';
 
-import runningPerson from '../../assets/svg/runningPerson-loading.svg';
 import Navigation from './MainNav/Navigation';
 import classes from '../../styles/components/Layout.module.scss';
 import { errorsActions } from '../../redux/slices/errors/errorsSlice';
@@ -11,6 +9,7 @@ import { RootState } from '../../redux/store/reduxStore';
 import SideNav from './NavComponents/SideNav';
 import { settingsSliceActions } from '../../redux/slices/settings/settingsSlice';
 import useTheme from '../../utils/customHook/useTheme';
+import Loading from '../UI/Animations/Loading';
 
 function Layout({ children }: { children: React.ReactNode[] }) {
   const dispatch = useDispatch();
@@ -27,16 +26,18 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   //handle app theme
   const theme = [
     {
-      'primary-color': 'rgb(0, 211, 0)',
+      'primary-color': '#30a954',
       'text-color': 'white',
       'opposite-text': 'black',
       'secondary-color': 'rgb(1, 110, 6)',
+      'button-color':'rgb(73, 73, 73)'
     },
     {
       'primary-color': 'rgb(0, 136, 0)',
       'text-color': 'black',
       'opposite-text': 'white',
       'secondary-color': 'rgb(3, 189, 13)',
+      'button-color':'rgb(134, 113, 113)'
     },
   ];
 
@@ -78,13 +79,8 @@ function Layout({ children }: { children: React.ReactNode[] }) {
         <div className={`${classes.Layout} Dark`}>
           <Navigation setDisplaySideNav={setDisplaySideNav} />
           {displaySideNav && <SideNav setShouldDisplay={setDisplaySideNav} />}
-          {loading ? (
-            <div className={classes.Loading}>
-              <Image src={runningPerson} />
-            </div>
-          ) : (
-            <main>{children}</main>
-          )}
+          {loading && <Loading />}
+          <main>{children}</main>
         </div>
       )}
     </>

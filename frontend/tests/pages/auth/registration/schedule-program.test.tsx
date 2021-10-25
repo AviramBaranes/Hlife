@@ -112,9 +112,9 @@ describe("schedule program page tests", () => {
     expect(
       screen.getByTestId("recommended-order").children[0].textContent
     ).toBe(
-      "Recommended: \nSun: chest (A)\nMon: back (B)\nTue: rest (X)\nWed: chest (A)\nThu: back (B)\nFri: rest (X)\nSat: rest (X)\n"
+      "Recommendation: Sun: chest (A)Mon: back (B)Tue: rest (X)Wed: chest (A)Thu: back (B)Fri: rest (X)Sat: rest (X)"
     );
-
+ 
     //Submission
     userEvent.click(screen.getAllByText("Continue")[0]);
 
@@ -166,7 +166,7 @@ describe("schedule program page tests", () => {
     expect(
       screen.getByTestId("recommended-order").children[0].textContent
     ).toBe(
-      "Recommended: \nSun: boxing (aerobic)\nMon: rest (X)\nTue: running (aerobic)\nWed: rest (X)\nThu: boxing (aerobic)\nFri: running (aerobic)\nSat: rest (X)\n"
+      "Recommendation: Sun: boxing (aerobic)Mon: rest (X)Tue: running (aerobic)Wed: rest (X)Thu: boxing (aerobic)Fri: running (aerobic)Sat: rest (X)"
     );
 
     //Submission
@@ -224,9 +224,9 @@ describe("schedule program page tests", () => {
     const workouts = ["rest", "chest (A)", "back (B)"];
     days.forEach((day, i) => {
       const selectEl = screen.getByLabelText(day);
-      expect(selectEl.children[0].textContent).toBe(workouts[0]);
-      expect(selectEl.children[1].textContent).toBe(workouts[1]);
-      expect(selectEl.children[2].textContent).toBe(workouts[2]);
+      expect(selectEl.children[1].textContent).toBe(workouts[0]);
+      expect(selectEl.children[2].textContent).toBe(workouts[1]);
+      expect(selectEl.children[3].textContent).toBe(workouts[2]);
       userEvent.selectOptions(
         selectEl,
         workouts[i] || workouts[i - 3] || workouts[i - 6]

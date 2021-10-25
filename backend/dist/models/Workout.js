@@ -25,5 +25,5 @@ const WorkoutSchema = new Schema({
     ],
     time: { type: Number, min: 10, max: 300 },
 });
-const Workout = mongoose_1.default.model("Workout", WorkoutSchema);
+const Workout = mongoose_1.default.model("workout", WorkoutSchema);
 exports.default = Workout;

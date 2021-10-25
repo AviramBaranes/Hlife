@@ -16,10 +16,10 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const user = (await User.findById(userId).populate()) as UserWithWorkout;
+    const user = (await User.findById(userId).populate('Workout')) as UserWithWorkout;
 
     let isNamesValid = true;
-
+ 
     if (!user.workouts) {
       user.workouts = [];
     }
@@ -110,17 +110,15 @@ export const getWorkoutByName: RequestHandler = async (req, res, next) => {
 export const getAllWorkouts: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
-    const user = (await User.findById(userId).populate(
-      "workouts"
-    )) as UserWithWorkout;
+    const workouts = await Workout.find({user:userId})
 
-    if (!user.hasAllWorkouts) {
+    if (!workouts) {
       res
         .status(403)
         .send("You need to create all workouts and then request for them.");
       return;
     }
-    res.status(200).json(user.workouts);
+    res.status(200).json(workouts);
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);

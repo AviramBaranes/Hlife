@@ -55,6 +55,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         },
       });
 
+      console.log(data)
+
       const workouts = data.map(({ name, trainingDayName }: Workout) => {
         return { name, trainingDayName };
       });

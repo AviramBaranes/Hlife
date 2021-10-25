@@ -49,9 +49,9 @@ const WorkoutExerciseForm: React.FC<{
               selectedExercise={selectedExercise}
               setActiveInputs={setActiveInputs}
               />
-            <label className={activeInputs.selectedExercise?'Active':''} htmlFor="exercise">Exercise:</label>
+            <label className={activeInputs.selectedExercise?'Active':''} htmlFor="exercise">Exercise</label>
               </div>
-              <div className='input-container'>
+              <div data-testid='repsInput' className='input-container'>
             <input
               onChange={(e) => {
                 setActiveInputs(prev=>({...prev,reps:e.target.value!==''}))
@@ -66,7 +66,7 @@ const WorkoutExerciseForm: React.FC<{
 
               <label className={activeInputs.reps?'Active':''} htmlFor="reps">Reps</label>
             </div>
-            <div className='input-container'>
+            <div data-testid='setsInput'  className='input-container'>
 
             <input
               onChange={(e) => {
@@ -84,7 +84,7 @@ const WorkoutExerciseForm: React.FC<{
           </div>
 
           <div className={classes.Optional}>
-            <div className='input-container'>
+            <div data-testid='customInput'   className='input-container'>
 
             <input
               onChange={(e) =>{
@@ -94,10 +94,10 @@ const WorkoutExerciseForm: React.FC<{
               type="text"
               id="customExercise"
               />
-            <label className={activeInputs.exerciseName?'Active':''} htmlFor="customExercise">Custom</label>
+            <label className={activeInputs.exerciseName?'Active':'' + 'long-word'} htmlFor="customExercise">Custom Exercise</label>
               </div>
 
-              <div className='input-container'>
+              <div data-testid='descriptionInput'   className='input-container'>
             <textarea
               onChange={(e) =>{
                 setActiveInputs(prev=>({...prev,description:e.target.value!==''}))
@@ -124,9 +124,7 @@ const WorkoutExerciseForm: React.FC<{
         </div>
       ) : (
         <div className={classes.ReadyExercise}>
-          <h4>
-            <strong>Exercise: </strong>
-             {exerciseName || selectedExercise}</h4>
+          <h4><strong>Exercise: </strong>{exerciseName || selectedExercise}</h4>
           {!!muscles.length && <h4> <strong>Muscles: </strong>{muscles.join(", ")}</h4>}
           <h4><strong>Reps: </strong>{reps}</h4>
           <h4><strong>Sets: </strong>{sets}</h4>

@@ -5,7 +5,6 @@ import React, { SetStateAction, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../../styles/pages/create-workout.module.scss';
-import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { Exercise } from './Forms/Exercise';
@@ -30,7 +29,7 @@ const CreateSingleWorkout: React.FC<{
 
   async function submitWorkoutHandler(e: React.FormEvent) {
     e.preventDefault();
-
+    window.scroll(0,0)
     const [hours, minutes] = totalTime.split(':');
     const time = +hours * 60 + +minutes;
 
@@ -69,6 +68,7 @@ const CreateSingleWorkout: React.FC<{
         dispatch(loadingAction.setToFalse());
         router.push('/auth/registration/schedule-program');
       }
+      dispatch(loadingAction.setToFalse())
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Failed to create workout');
     }

@@ -8,6 +8,7 @@ import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import router from 'next/router';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
 function loginForm() {
   const dispatch = useDispatch();
@@ -97,6 +98,7 @@ function loginForm() {
         })
       );
       dispatch(loadingAction.setToFalse());
+      dispatch(validateAuthenticationAction())
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Login Failed');
     }

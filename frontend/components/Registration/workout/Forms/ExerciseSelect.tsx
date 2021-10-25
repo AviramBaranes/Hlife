@@ -60,7 +60,6 @@ const ExerciseSelect: React.FC<ExerciseSelectProps> = ({ setSelectedExercise, se
 
     if (shouldersExercises.includes(value)) setMuscles(["Chest", "Triceps"]);
   };
-  console.log(selectedExercise)
 
   return (
     <select

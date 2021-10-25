@@ -13,7 +13,7 @@ const createWorkout = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
         (0, validationErrors_1.validationErrorsHandler)(req);
-        const user = (await User_1.default.findById(userId).populate());
+        const user = (await User_1.default.findById(userId).populate('Workout'));
         let isNamesValid = true;
         if (!user.workouts) {
             user.workouts = [];
@@ -93,14 +93,14 @@ exports.getWorkoutByName = getWorkoutByName;
 const getAllWorkouts = async (req, res, next) => {
     try {
         const { userId } = req;
-        const user = (await User_1.default.findById(userId).populate("workouts"));
-        if (!user.hasAllWorkouts) {
+        const workouts = await Workout_1.default.find({ user: userId });
+        if (!workouts) {
             res
                 .status(403)
                 .send("You need to create all workouts and then request for them.");
             return;
         }
-        res.status(200).json(user.workouts);
+        res.status(200).json(workouts);
         return;
     }
     catch (err) {

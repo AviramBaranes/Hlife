@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 
@@ -69,23 +70,14 @@ describe("set-goals page tests", () => {
       </Provider>
     );
 
-    const mainTitle = container.children[0];
-    const subTitle = container.children[1];
-    const requiredFieldTitle = container.children[2].children[0];
-    const fatPercentageFieldTitle = container.children[3].children[0];
-    const musclesMassFieldTitle = container.children[4].children[0];
 
-    expect(mainTitle.textContent).toEqual("Create Your Goals");
-    expect(subTitle.textContent).toEqual(
-      "this will help us create for you a program that suits you, and to track your progress"
+    expect(screen.getByText("Fill Your Goals")).toBeInTheDocument();
+    expect(screen.getByText("This will help us create for you a program that suits you, And to track your progress")).toBeInTheDocument(
+      
     );
-    expect(requiredFieldTitle.textContent).toEqual("What is your basic goal?*");
-    expect(fatPercentageFieldTitle.textContent).toEqual(
-      "What is your desired fat percentage?"
-    );
-    expect(musclesMassFieldTitle.textContent).toEqual(
-      "What is your desired muscles mass?"
-    );
+    expect(screen.getByText("What is your basic goal ?")).toBeInTheDocument();
+    expect(screen.getByText("What is your desired fat percentage?")).toBeInTheDocument();
+    expect(screen.getByText("What is your desired muscles mass?")).toBeInTheDocument();
   });
 
   test("should display only one field each time in chronological order and change the state accordingly", async () => {
@@ -160,7 +152,7 @@ describe("set-goals page tests", () => {
     };
     const expectedMessageState = {
       messageTitle: "Goals created!",
-      message: "data",
+      message: "Great job! We submitted your goals",
       newMessage: true,
     };
 

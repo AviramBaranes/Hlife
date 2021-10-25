@@ -55,11 +55,11 @@ describe("Create workout tests", () => {
   const titlesExistence = (screen: Screen<typeof queries>) => {
     return {
       aerobicTitle: screen.queryByText("Create aerobic workout"),
-      fbTitle: screen.queryByText("Create Full Body Workout"),
+      fbTitle: screen.queryByText("Create A Full Body Workout"),
       defaultWorkoutTitles: [
-        screen.queryByText("Create A Workout"),
-        screen.queryByText("Create B Workout"),
-        screen.queryByText("Create C Workout"),
+        screen.queryByText("Create A-Workout :"),
+        screen.queryByText("Create B-Workout :"),
+        screen.queryByText("Create C-Workout :"),
       ],
     };
   };
@@ -110,7 +110,7 @@ describe("Create workout tests", () => {
         screen.queryByText("Create aerobic workout")
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByText("Create Full Body Workout")
+        screen.queryByText("Create A Full Body Workout")
       ).toBeInTheDocument();
       expect(screen.queryByText("Create ABC Workout")).not.toBeInTheDocument();
     });
@@ -147,7 +147,9 @@ describe("Create workout tests", () => {
     const { defaultWorkoutTitles, fbTitle, aerobicTitle } =
       titlesExistence(screen);
 
-    defaultWorkoutTitles.forEach((title) => expect(title).toBeInTheDocument());
+    expect(defaultWorkoutTitles[0]).toBeInTheDocument()
+    expect(defaultWorkoutTitles[1]).not.toBeInTheDocument()
+    expect(defaultWorkoutTitles[2]).not.toBeInTheDocument()
     expect(fbTitle).not.toBeInTheDocument();
     expect(aerobicTitle).not.toBeInTheDocument();
   });

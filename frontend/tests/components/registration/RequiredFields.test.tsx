@@ -17,9 +17,8 @@ describe("goals required fields tests", () => {
         <GoalsRequiredField {...props} />
       </Provider>
     );
-
     const section = container.children[0];
-    const titleElem = screen.getByText("What is your basic goal?");
+    const titleElem = screen.getByText("What is your basic goal ?");
     const basicGoal1 = screen.getByText("Lose Fat");
     const basicGoal2 = screen.getByText("Gain Muscle");
     const input = screen.getByTestId("goalsRequiredFields");
@@ -111,8 +110,8 @@ describe("stats required fields tests", () => {
 
     const continueButton = screen.getByText("Continue");
     const rankSelection = screen.getByText("Pro");
-    const weightInput = screen.getByLabelText("Weight");
-    const heightInput = screen.getByLabelText("Height");
+    const weightInput = screen.getByLabelText("Weight (KG)");
+    const heightInput = screen.getByLabelText("Height (Cm)");
 
     //nothing was filled
     expect(continueButton).toBeDisabled();

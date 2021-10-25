@@ -8,10 +8,9 @@
     position: relative;
   color: var(--text-color);
   font-weight: bold;
-  background-color: rgb(73, 73, 73);
-  border: white 2px solid;
+  background-color: var(--button-color);
+  border: var(--text-color) 2px solid;
   
-
   &:disabled {
     cursor: not-allowed;
   }

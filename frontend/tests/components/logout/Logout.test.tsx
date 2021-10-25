@@ -6,7 +6,6 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import store from "../../../redux/store/reduxStore";
 import Logout from "../../../components/auth/logout/Logout";
-import ErrorContainer from "../../../components/UI/containers/Errors/ErrorContainer";
 
 describe("Logout", () => {
   test("should render the dom correctly (tags roles)", () => {
@@ -50,7 +49,7 @@ describe("Logout", () => {
     expect(pTagElement.textContent).toBe("Are you sure you want to logout?");
     expect(buttonsContainer.children.length).toBe(2);
     expect(logoutButton.textContent).toBe("Logout");
-    expect(cancelButton.textContent).toBe("Cancel");
+    expect(cancelButton.textContent).toBe("Back");
   });
 
   test("should handle correctly the cancel button", () => {

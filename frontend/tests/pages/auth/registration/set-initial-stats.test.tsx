@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import * as nookies from "nookies";
@@ -71,31 +72,17 @@ describe("set-initial-stats page tests", () => {
   afterEach(() => store.dispatch(statsActions.resetState()));
 
   test("should render the correct dom", () => {
-    const { container } = render(
+    render(
       <Provider store={store}>
         <SetInitialStats />
       </Provider>
     );
 
-    const mainTitle = container.children[0];
-    const subTitle = container.children[1];
-    const requiredFieldTitle = container.children[2].children[0];
-    const fatPercentageFieldTitle = container.children[3].children[0];
-    const musclesMassFieldTitle = container.children[4].children[0];
-
-    expect(mainTitle.textContent).toEqual("Create your initial stats");
-    expect(subTitle.textContent).toEqual(
-      "This action will gain you 15 points!"
-    );
-    expect(requiredFieldTitle.textContent).toEqual(
-      "What is your current level?*"
-    );
-    expect(fatPercentageFieldTitle.textContent).toEqual(
-      "What is your current fat percentage?"
-    );
-    expect(musclesMassFieldTitle.textContent).toEqual(
-      "What is your current muscles mass?"
-    );
+    expect(screen.getByText('Fill your current stats')).toBeInTheDocument();
+    expect(screen.getByText('This action will gain you 15 points!')).toBeInTheDocument();
+    expect(screen.getByText("What is your current level?")).toBeInTheDocument();
+    expect(screen.getByText("What is your current fat percentage?")).toBeInTheDocument();
+    expect(screen.getByText("What is your current muscles mass?")).toBeInTheDocument();
   });
 
   test("should display only one field each time in chronological order and change the state accordingly", async () => {
@@ -209,10 +196,10 @@ describe("set-initial-stats page tests", () => {
 
     const expectedMessageState = {
       messageTitle: "Initial Stats created!",
-      message: "data",
+      message: "Your stats have been successfully uploaded",
       newMessage: true,
     };
-
+ 
     await waitFor(() => {
       expect(store.getState().messagesReducer).toStrictEqual(
         expectedMessageState
@@ -257,7 +244,7 @@ describe("set-initial-stats page tests", () => {
     );
 
     const rankSelection = screen.getByText("Beginner");
-    const input = screen.getByLabelText("Weight");
+    const input = screen.getByLabelText("Weight (KG)");
     const continueButtons = screen.getAllByText("Continue");
     const skipButtons = screen.getAllByText("Skip");
 
@@ -284,7 +271,7 @@ describe("set-initial-stats page tests", () => {
 
     const expectedMessageState = {
       messageTitle: "Initial Stats created!",
-      message: "data",
+      message: "Your stats have been successfully uploaded",
       newMessage: true,
     };
 

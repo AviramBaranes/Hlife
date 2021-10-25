@@ -133,7 +133,7 @@ describe("Reset Password page tests", () => {
     const expectedPayload = {
       newError: true,
       errorTitle: "Changing Password Failed",
-      errorMessage: "data",
+      errorMessage: "",
       errorStatusCode: null,
     };
 

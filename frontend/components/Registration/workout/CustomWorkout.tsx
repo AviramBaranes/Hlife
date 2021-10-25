@@ -107,8 +107,6 @@ const CustomWorkout: React.FC<{
     }
   };
 
-  console.log(formState);
-
   return (
     <div>
       <section className={classes.Title}>

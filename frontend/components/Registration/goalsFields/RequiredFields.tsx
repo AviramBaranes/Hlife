@@ -62,9 +62,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
         your progress
       </p>
     </section>
-        <h3>
-          What is your basic goal ?<span>*</span>
-        </h3>
+        <h3>What is your basic goal ?<span>*</span></h3>
         <div className={classes.GoalOptions} >
           <div className={`${classes.Option} ${active.loseFatOption? classes.Active : ''}`} onClick={basicGoalChangeHandler}>
             <h4>Lose Fat</h4>

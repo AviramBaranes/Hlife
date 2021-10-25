@@ -1,9 +1,5 @@
 
-if has program delete cookie and local storage
-1.style
-    FontFamily:
-    colors:
     
-2.test errorDiv
+1.test errorDiv
 
-3. authorized without program have different navbar
+2. authorized without program have different navbar

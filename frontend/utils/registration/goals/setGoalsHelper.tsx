@@ -85,6 +85,7 @@ export const createGoalsFieldsProps = (
       dispatch(loadingAction.setToTrue());
       await axiosInstance.post('/goals', bodyRequest);
 
+      await router.push('/auth/registration/set-initial-stats');
       dispatch(
         messagesActions.newMessage({
           messageTitle: 'Goals created!',
@@ -92,7 +93,6 @@ export const createGoalsFieldsProps = (
         })
       );
 
-      router.push('/auth/registration/set-initial-stats');
       dispatch(loadingAction.setToFalse());
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Creating goals failed');

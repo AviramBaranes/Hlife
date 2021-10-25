@@ -29,7 +29,6 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
   const isMultiProgram = !!localStorage.getItem('multiProgramStyles');
   let timesPerWeek = +localStorage.getItem('timesPerWeek')!;
   isMultiProgram && timesPerWeek--;
-  console.log(timesPerWeek, isMultiProgram);
 
   const [showModal, setShowModal] = useState(true);
   const [workout, setWorkout] = useState<Workout[]>([]);

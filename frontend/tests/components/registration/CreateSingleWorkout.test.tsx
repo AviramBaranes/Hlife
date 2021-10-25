@@ -60,9 +60,9 @@ describe("Create single workout tests", () => {
 
     const submitBtn = screen.getByText("Submit");
     const addBtn = screen.getAllByText("Add");
-    const nameInput = screen.getAllByLabelText("Custom Exercise:");
-    const repsInput = screen.getAllByLabelText("Reps:");
-    const setsInput = screen.getAllByLabelText("Sets:");
+    const nameInput = screen.getAllByLabelText("Custom Exercise");
+    const repsInput = screen.getAllByLabelText("Reps");
+    const setsInput = screen.getAllByLabelText("Sets");
 
     expect(submitBtn).toBeDisabled();
     addBtn.forEach((btn) => expect(btn).toBeDisabled());
@@ -81,5 +81,5 @@ describe("Create single workout tests", () => {
     expect(submitBtn).not.toBeDisabled();
   });
 
-  // submission is test in 'CreateDefaultWorkout.test.tsx'
+  // submission is test is in 'CreateDefaultWorkout.test.tsx'
 });

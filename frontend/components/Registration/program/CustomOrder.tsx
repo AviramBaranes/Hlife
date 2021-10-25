@@ -11,6 +11,7 @@ import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
 interface Program {
   day: string;
@@ -115,8 +116,9 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       });
     }
 
+    dispatch(loadingAction.setToTrue());
     p.then(() => {
-      dispatch(loadingAction.setToTrue());
+      dispatch(loadingAction.setToFalse());
       dispatch(
         messagesActions.newMessage({
           messageTitle: 'Congratulations',
@@ -124,19 +126,22 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
         })
       );
       router.push('/');
+      localStorage.clear();
+      document.cookie =
+        'choseWorkout=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      dispatch(validateAuthenticationAction())
     }).catch((err: any) => {
       handleAxiosError(err, dispatch, 'Schedule your program failed');
     });
-    dispatch(loadingAction.setToFalse());
   };
 
   return (
     <section className={classes.CustomOrder}>
       <h3>Make your own schedule:</h3>
       <form onSubmit={scheduleProgramHandler}>
-        {days.map((day) => {
+        {days.map((day,i) => {
           return (
-            <div key={day} className='input-container'>
+            <div key={day+i} className='input-container'>
               <select onChange={selectWorkoutHandler} id={day}>
                 <option value='' style={{ display: 'none' }}></option>
                 <option value='rest'>rest</option>

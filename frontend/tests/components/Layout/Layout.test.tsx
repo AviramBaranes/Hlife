@@ -18,6 +18,7 @@ jest.mock("../../../components/UI/containers/Errors/ErrorContainer", () =>
 describe("Layout component", () => {
   test("should render children", () => {
     const initialState = {
+      loadingReducer:{loading:false},
       usersReducer: {
         isAuthenticated:false,
         hasProgram:false
@@ -53,6 +54,7 @@ describe("Layout component", () => {
     const children = [<h1>first child</h1>, <h1>second child</h1>];
     const message = "this is an error";
     const initialState = {
+      loadingReducer:{loading:false},
       usersReducer: {
         isAuthenticated:false,
         hasProgram:false
@@ -83,6 +85,7 @@ describe("Layout component", () => {
   });
   test("should render error container", () => {
     const initialState = {
+      loadingReducer:{loading:false},
       usersReducer: {
         isAuthenticated:false,
         hasProgram:false
