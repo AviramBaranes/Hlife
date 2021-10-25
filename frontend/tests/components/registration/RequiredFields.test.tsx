@@ -98,6 +98,22 @@ describe("stats required fields tests", () => {
     expect(section).toHaveStyle("display: none;");
   });
 
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <StatsRequiredField shouldDisplay={false}  />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByText("Continue");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Some of the fields are invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you follow the following instructions')).toBeInTheDocument()
+  })
+
   test("button should not be disabled", () => {
     const props = {
       shouldDisplay: false,

@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 import SendEmail from "../../../pages/auth/forgotPassword";
 import { Provider } from "react-redux";
 import store from "../../../redux/store/reduxStore";
+import userEvent from "@testing-library/user-event";
 
 describe("send email page tests", () => {
   test("should render the dom correctly", () => {
@@ -29,4 +30,22 @@ describe("send email page tests", () => {
     expect(inputElement).toBeInTheDocument();
     expect(labelElement).toBeInTheDocument();
   });
+
+  
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <SendEmail />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Email field is invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you enter a valid email')).toBeInTheDocument()
+  })
+
 });

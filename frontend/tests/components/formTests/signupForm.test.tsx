@@ -116,6 +116,23 @@ describe("SignupForm Tests", () => {
     expect(btn).not.toBeDisabled();
   });
 
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <SignupForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Some of the fields are invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you follow the following instructions')).toBeInTheDocument()
+  })
+
+
   test("should display error message if passwords do not match ", async () => {
     render(
       <Provider store={store}>

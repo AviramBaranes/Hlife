@@ -14,6 +14,7 @@ describe("LoginForm", () => {
   let spiedAxios: jest.SpyInstance;
 
   beforeAll(() => {
+    jest.spyOn(axiosInstance,'get').mockImplementation(async()=>{})
     spiedAxios = jest
       .spyOn(axiosInstance, "post")
       .mockImplementation(async () => ({ data: "" }));
@@ -75,6 +76,22 @@ describe("LoginForm", () => {
     expect(passwordInputElement.className).toEqual("");
     expect(buttonElement).not.toBeDisabled();
   });
+
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <LoginForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Some of the fields are invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you follow the following instructions')).toBeInTheDocument()
+  })
 
   test("should handle form submission ", async () => {
     render(

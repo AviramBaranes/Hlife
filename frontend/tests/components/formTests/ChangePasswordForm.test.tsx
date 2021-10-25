@@ -46,6 +46,23 @@ describe("testing change password via settings", () => {
     expect(button).not.toBeDisabled();
   });
 
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <ChangePassword />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Some of the fields you entered are invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you follow the following instructions:')).toBeInTheDocument()
+  })
+
+
   test("should change the password by connecting to the server", () => {
     render(
       <Provider store={store}>

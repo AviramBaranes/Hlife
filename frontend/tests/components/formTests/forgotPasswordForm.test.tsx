@@ -68,6 +68,22 @@ describe("ForgotPasswordForm", () => {
     expect(buttonElement).not.toBeDisabled();
   });
 
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <ForgotPasswordForm />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Email field is invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure you enter a valid email')).toBeInTheDocument()
+  })
+
   test("should handle form submission", async () => {
     render(
       <Provider store={store}>

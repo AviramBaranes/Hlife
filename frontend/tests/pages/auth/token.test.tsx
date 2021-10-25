@@ -96,6 +96,23 @@ describe("Reset Password page tests", () => {
 
     expect(button).toBeDisabled();
   });
+
+  test('should open error div if button is disabled',()=>{
+    render(
+      <Provider store={store}>
+        <ResetPassword token='token' />
+      </Provider>
+    );
+
+    const buttonElement = screen.getByRole("button");
+
+    userEvent.hover(buttonElement.parentElement as Element)
+
+    expect(buttonElement).toBeDisabled();
+    expect(screen.getByText('Some of the fields are invalid')).toBeInTheDocument()
+    expect(screen.getByText('Please make sure the passwords contain at least 6 characters')).toBeInTheDocument()
+  })
+
   test("should failed to submit for different passwords", () => {
     render(
       <Provider store={store}>
