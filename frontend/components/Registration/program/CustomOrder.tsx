@@ -1,4 +1,3 @@
-import { program } from '@babel/types';
 import { AxiosResponse } from 'axios';
 import router from 'next/router';
 import React, { FormEvent, useState } from 'react';
@@ -6,7 +5,6 @@ import { useDispatch } from 'react-redux';
 
 import classes from '../../../styles/pages/schedule-program.module.scss';
 import { Workout } from '../../../pages/auth/registration/schedule-program';
-import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
@@ -145,9 +143,9 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
               <select onChange={selectWorkoutHandler} id={day}>
                 <option value='' style={{ display: 'none' }}></option>
                 <option value='rest'>rest</option>
-                {workouts.map((workout) => (
+                {workouts.map((workout,i) => (
                   <option
-                    key={workout.name + workout.trainingDayName}
+                    key={workout.name + workout.trainingDayName + i}
                     value={`${workout.name}trainingDayName:${workout.trainingDayName}`}
                   >
                     {workout.name} ({workout.trainingDayName})

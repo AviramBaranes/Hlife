@@ -2,7 +2,6 @@ import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 
 import Layout from '../components/Layout/Layout';
-import CreateSingleWorkout from '../components/Registration/workout/CreateSingleWorkout';
 import ErrorContainer from '../components/UI/containers/Errors/ErrorContainer';
 import MessageContainer from '../components/UI/containers/Messages/MessageContainer';
 import store from '../redux/store/reduxStore';

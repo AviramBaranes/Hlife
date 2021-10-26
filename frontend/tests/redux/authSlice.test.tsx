@@ -3,7 +3,6 @@ import { waitFor } from "@testing-library/react";
 import store from "../../redux/store/reduxStore";
 import {
   validateAuthenticationAction,
-  usersActions,
   logoutAction,
 } from "../../redux/slices/auth/authSlice";
 

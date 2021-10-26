@@ -14,7 +14,7 @@ export const getCsrfToken = createAsyncThunk(
 
       const csrf = document.cookie.split("XSRF-TOKEN=")[1].substring(0, 36);
       return csrf;
-    } catch (err) {
+    } catch (err:any) {
       return rejectWithValue(err.message);
     }
   },

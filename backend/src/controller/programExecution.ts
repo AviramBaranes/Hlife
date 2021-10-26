@@ -57,7 +57,9 @@ export const getExercisesByDate: RequestHandler = async (req, res, next) => {
       (exercise: { name: string }) => exercise.name
     );
 
-    res.status(200).json({ exercises });
+    const {name,trainingDayName,time} = workout
+
+    res.status(200).json({ exercises,name,trainingDayName,time });
     return;
   } catch (err:any) {
     catchErrorHandler(err, next);

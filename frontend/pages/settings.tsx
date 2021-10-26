@@ -19,7 +19,6 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
 
   const formRef = useRef() as any;
   const inputRef = useRef() as any;
-  // const ButtonElementRef = useRef() as any;
 
   const { themeClass } = useSelector(
     (state: RootState) => state.settingsReducer
@@ -73,11 +72,6 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
                 onClick={() => {
                   setShouldDisplayForm(true);
                   setArrowDirection("up");
-                  // setTimeout(() => {
-                  //   ButtonElementRef.current.scrollIntoView({
-                  //     behavior: "smooth",
-                  //   });
-                  // }, 450);
                 }}
               />
             )}

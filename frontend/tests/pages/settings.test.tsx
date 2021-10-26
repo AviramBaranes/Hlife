@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 
 import * as protectedRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
-import Layout from "../../components/Layout/Layout";
 import { getServerSideProps } from "../../pages/settings";
 import Settings from "../../pages/settings";
 import store from "../../redux/store/reduxStore";

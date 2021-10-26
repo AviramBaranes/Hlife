@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, SetStateAction } from "react";
+import React, {  SetStateAction } from "react";
 
 interface ExerciseSelectProps {
   setSelectedExercise: React.Dispatch<SetStateAction<string | null>>;

@@ -1,5 +1,3 @@
-import { faBackward, faForward } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import router from 'next/router';
 import React, { SetStateAction, useReducer } from 'react';
 import { useDispatch } from 'react-redux';

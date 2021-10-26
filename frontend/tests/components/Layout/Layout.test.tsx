@@ -8,7 +8,6 @@ import configureStore from "redux-mock-store";
 import { getDefaultMiddleware } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
 import store from "../../../redux/store/reduxStore";
-import { loadingAction } from "../../../redux/slices/loading/loadingSlice";
 
 const middlewares = getDefaultMiddleware();
 const mockStore = configureStore(middlewares);

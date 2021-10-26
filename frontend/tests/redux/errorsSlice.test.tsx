@@ -1,5 +1,3 @@
-import { waitFor } from "@testing-library/dom";
-
 import store from "../../redux/store/reduxStore";
 import { errorsActions } from "../../redux/slices/errors/errorsSlice";
 
