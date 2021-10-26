@@ -97,7 +97,6 @@ describe("ForgotPasswordForm", () => {
     userEvent.type(inputElement, "email@email.com");
     userEvent.click(buttonElement);
     await waitFor(() => {
-      // console.log(spiedRouter.mock.calls);
       expect(spiedAxios.mock.calls[0][0]).toEqual("/auth/password/send-token");
       expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
         email: "email@email.com",

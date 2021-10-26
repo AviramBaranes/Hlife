@@ -16,8 +16,8 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   const [displaySideNav, setDisplaySideNav] = useState(false);
   const [themeIndex, setThemeIndex] = useState(0);
 
-  const { loading } = useSelector((state: RootState) => state.loadingReducer);
-  const { error } = useSelector((state: RootState) => state.tokensReducer);
+  const { loading } = useSelector((state: RootState) => state.loadingReducer)as {loading:boolean};
+  const { error } = useSelector((state: RootState) => state.tokensReducer) ;
   const { themeClass } = useSelector(
     (state: RootState) => state.settingsReducer
   );
