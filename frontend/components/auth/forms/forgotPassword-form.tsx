@@ -57,11 +57,11 @@ function forgotPasswordForm() {
         email: email.value,
       });
 
-      dispatch(loadingAction.setToFalse());
       await router.push('/auth/login');
       dispatch(
         messagesActions.newMessage({ messageTitle: 'Email Sent!', message })
-      );
+        );
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Sending Email Failed');
     }
