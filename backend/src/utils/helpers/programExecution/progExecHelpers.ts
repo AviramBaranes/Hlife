@@ -1,4 +1,4 @@
-import ProgramExecution from "../../../models/ProgramExecution";
+import ProgramExecution from '../../../models/ProgramExecution';
 
 export const getExecutionsOfWeek = async (
   date: Date,
@@ -7,13 +7,15 @@ export const getExecutionsOfWeek = async (
   let executionsOfWeek = <any>[];
   const dates = getWeekDates(date);
 
-  const programExecutions = await ProgramExecution.findOne({ user: userId });
+  const programExecutions = await ProgramExecution.findOne({
+    user: userId,
+  });
   const noExecutions = programExecutions.executions.length === 0;
 
   if (noExecutions) return [];
 
   programExecutions.executions.forEach((execution: { date: Date }) => {
-    if (dates.includes(execution.date.toISOString())) {
+    if (dates.includes(execution.date.toLocaleString().split(',')[0])) {
       executionsOfWeek.push(execution);
     }
   });
@@ -28,7 +30,10 @@ export const getExecutionsOfMonth = async (
   let executionsOfMonth = <any>[];
   const dates = getMonthDates(date);
 
-  const programExecutions = await ProgramExecution.findOne({ user: userId });
+  const programExecutions = await ProgramExecution.findOne({
+    user: userId,
+  });
+
   const noExecutions = programExecutions.executions.length === 0;
 
   if (noExecutions) return [];
@@ -74,10 +79,10 @@ export const getAllExecutions = async (userId: string): Promise<any[]> => {
 
 function getWeekDates(date: Date) {
   const sunday = new Date(date.setDate(date.getDate() - date.getDay()));
-  const result = [new Date(sunday).toISOString()];
+  const result = [new Date(sunday).toLocaleString().split(',')[0]];
 
   while (sunday.setDate(sunday.getDate() + 1) && sunday.getDay() !== 0) {
-    result.push(new Date(sunday).toISOString());
+    result.push(new Date(sunday).toLocaleString().split(',')[0]);
   }
   return result;
 }

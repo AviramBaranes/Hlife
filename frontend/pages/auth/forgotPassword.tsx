@@ -1,17 +1,14 @@
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GetServerSideProps } from "next";
-import React from "react";
-import ForgotPasswordForm from "../../components/auth/forms/forgotPassword-form";
-import classes from "../../styles/pages/forgotPassword.module.scss";
-import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import ForgotPasswordForm from '../../components/auth/forms/forgotPassword-form';
+import classes from '../../styles/pages/forgotPassword.module.scss';
+import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
 
 function SendEmail() {
   return (
     <>
-
-
-
       <div className={classes.Title}>
         <h1>Reset Password</h1>
         <h5>
@@ -21,20 +18,19 @@ function SendEmail() {
       <section className={classes.Main}>
         <ForgotPasswordForm />
         <div>
-          <FontAwesomeIcon className="fa-10x" icon={faEnvelope} />
+          <FontAwesomeIcon className='fa-10x' icon={faEnvelope} />
         </div>
       </section>
     </>
   );
-
 }
 
 export default SendEmail;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const destination = await protectRouteHandler(ctx);
+  const { destination } = await protectRouteHandler(ctx);
 
-  if (destination === "/auth/login") {
+  if (destination === '/auth/login') {
     return { props: {} };
   } else {
     return { redirect: { permanent: false, destination } };

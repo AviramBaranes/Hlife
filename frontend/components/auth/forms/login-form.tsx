@@ -10,7 +10,7 @@ import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
-function loginForm() {
+function loginForm() { 
   const dispatch = useDispatch();
 
   const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);

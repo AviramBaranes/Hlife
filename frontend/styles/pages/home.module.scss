@@ -1,0 +1,86 @@
+@import '../breakpoints.scss';
+
+.UserScore {
+  width: 50%;
+  margin: 2rem auto;
+  text-align: center;
+  p {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+  }
+  svg {
+    width: 70%;
+  }
+}
+
+.AnimationStart {
+  width: 70%;
+  margin: auto;
+  border-radius: 1rem;
+  transform: scale(1.5);
+  box-shadow: 1rem 0rem 1rem var(--primary-color),
+    -1rem 0rem 1rem var(--primary-color);
+  transition: transform, box-shadow 400ms ease-in-out;
+}
+.AnimationEnd {
+  transform: scale(1);
+  transition: transform 400ms ease-in-out;
+}
+
+.ExecutionSection {
+  display: flex;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.chartToolTip {
+  padding: 1rem;
+  position: absolute;
+  background-color: red;
+}
+
+@include media('>bigPhone', '<=tablet') {
+  .UserScore {
+    width: 60%;
+    margin: 2.5rem auto;
+    h3 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 3rem;
+    }
+  }
+  .AnimationStart {
+    width: 60%;
+  }
+}
+@include media('>tablet', '<desktop') {
+  .UserScore {
+    margin: 2.5rem auto;
+    h3 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 4rem;
+    }
+  }
+  .AnimationStart {
+    width: 50%;
+  }
+}
+@include media('>=desktop') {
+  .UserScore {
+    margin: 2.5rem auto;
+    h3 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 5rem;
+    }
+  }
+  .AnimationStart {
+    width: 30%;
+  }
+}

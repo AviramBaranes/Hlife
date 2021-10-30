@@ -45,7 +45,7 @@ const scheduleProgram: React.FC<{
 export default scheduleProgram;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const destination = await protectRouteHandler(ctx);
+  const { destination } = await protectRouteHandler(ctx);
   if (destination === '/auth/registration/schedule-program') {
     try {
       const cookies = parseCookies(ctx);

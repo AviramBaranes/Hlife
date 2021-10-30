@@ -1,21 +1,21 @@
-import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { GetServerSideProps } from "next";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ChangePassword from "../components/auth/forms/changePassword";
-import { settingsSliceActions } from "../redux/slices/settings/settingsSlice";
-import { RootState } from "../redux/store/reduxStore";
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { GetServerSideProps } from 'next';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ChangePassword from '../components/auth/forms/changePassword';
+import { settingsSliceActions } from '../redux/slices/settings/settingsSlice';
+import { RootState } from '../redux/store/reduxStore';
 
-import classes from "../styles/pages/settings.module.scss";
-import protectRouteHandler from "../utils/protectedRoutes/protectedRoutes";
+import classes from '../styles/pages/settings.module.scss';
+import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
 const Settings: React.FC<{ isAuthenticated: boolean }> = ({
   isAuthenticated,
 }) => {
   const dispatch = useDispatch();
   const [shouldDisplayForm, setShouldDisplayForm] = useState(false);
-  const [arrowDirection, setArrowDirection] = useState<"down" | "up">("down");
+  const [arrowDirection, setArrowDirection] = useState<'down' | 'up'>('down');
 
   const formRef = useRef() as any;
   const inputRef = useRef() as any;
@@ -29,7 +29,7 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
 
   useEffect(() => {
     !inputTouched && dispatch(settingsSliceActions.getTheme());
-    if (themeClass === "LightMode") {
+    if (themeClass === 'LightMode') {
       inputRef.current.checked = true;
     }
   }, [themeClass]);
@@ -45,52 +45,56 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
       <div className={classes.ModeSection}>
         <h4>Light Mode</h4>
         <input
-          role="checkbox"
+          role='checkbox'
           ref={inputRef as any}
           onClick={themeHandler}
-          type="checkbox"
-          id="switch"
+          type='checkbox'
+          id='switch'
           className={classes.Checkbox}
         />
-        <label htmlFor="switch" className={classes.SwitchLabel}></label>
+        <label htmlFor='switch' className={classes.SwitchLabel}></label>
       </div>
 
       {isAuthenticated && (
         <div
           style={{
             borderBottom: `${
-              arrowDirection === "up" ? "none" : "var(--text-color) 1px solid"
+              arrowDirection === 'up' ? 'none' : 'var(--text-color) 1px solid'
             }`,
           }}
           className={classes.PasswordSection}
         >
           <div className={classes.Title}>
             <h4>Reset Password</h4>
-            {arrowDirection === "down" && (
+            {arrowDirection === 'down' && (
               <FontAwesomeIcon
                 icon={faAngleDown}
-                size="2x"
+                size='2x'
                 onClick={() => {
                   setShouldDisplayForm(true);
+<<<<<<< Updated upstream
                   setArrowDirection("up");
                   // setTimeout(() => {
                   //   ButtonElementRef.current.scrollIntoView({
                   //     behavior: "smooth",
                   //   });
                   // }, 450);
+=======
+                  setArrowDirection('up');
+>>>>>>> Stashed changes
                 }}
               />
             )}
-            {arrowDirection === "up" && (
+            {arrowDirection === 'up' && (
               <FontAwesomeIcon
-                size="2x"
+                size='2x'
                 icon={faAngleUp}
                 onClick={() => {
                   formRef.current.className = classes.FormClosing;
                   setTimeout(() => {
                     setShouldDisplayForm(false);
                   }, 480);
-                  setArrowDirection("down");
+                  setArrowDirection('down');
                 }}
               />
             )}
@@ -109,7 +113,8 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
 export default Settings;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const isAuthenticated = (await protectRouteHandler(ctx)) !== "/auth/login"; //if the user is not authenticated the destination will be '/auth/login'
+  const isAuthenticated =
+    (await (await protectRouteHandler(ctx)).destination) !== '/auth/login'; //if the user is not authenticated the destination will be '/auth/login'
 
   return { props: { isAuthenticated } };
 };

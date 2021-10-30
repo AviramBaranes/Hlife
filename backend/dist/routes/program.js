@@ -28,36 +28,36 @@ const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware")
 const programController = __importStar(require("../controller/program"));
 const customValidationHelpers_1 = require("../utils/helpers/validation/customValidationHelpers");
 const router = express_1.default.Router();
-const trainingDayNames = ["A", "B", "C", "D", "FB", "aerobic"];
+const trainingDayNames = ['A', 'B', 'C', 'D', 'FB', 'aerobic'];
 const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
 ];
-router.get("/recommendation", authMiddleware_1.default, programController.getRecommendationProgram);
-router.post("/:day", authMiddleware_1.default, [
-    (0, express_validator_1.param)("day", "Invalid day").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
-    (0, express_validator_1.body)("trainingDayName", "Training day is invalid")
+router.get('/recommendation', authMiddleware_1.default, programController.getRecommendationProgram);
+router.post('/:day', authMiddleware_1.default, [
+    (0, express_validator_1.param)('day', 'Invalid day').custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
+    (0, express_validator_1.body)('trainingDayName', 'Training day is invalid')
         .optional()
         .custom((value) => (0, customValidationHelpers_1.validateEnums)(value, trainingDayNames)),
-    (0, express_validator_1.body)("workoutName")
+    (0, express_validator_1.body)('workoutName')
         .optional()
-        .isAlpha("en-US", { ignore: " " })
-        .withMessage("Name can contain only letters")
+        .isAlpha('en-US', { ignore: ' ' })
+        .withMessage('Name can contain only letters')
         .isLength({ min: 3 })
-        .withMessage("Name must be at least 3 letters"),
+        .withMessage('Name must be at least 3 letters'),
 ], programController.createProgram);
-router.get("/", authMiddleware_1.default, programController.getAllPrograms);
-router.get("/:day", authMiddleware_1.default, (0, express_validator_1.param)("day", "Day is invalid").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)), programController.getProgram);
-router.put("/:day", authMiddleware_1.default, [
-    (0, express_validator_1.param)("day", "Invalid day").custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
-    (0, express_validator_1.body)("trainingDayName", "Training day is invalid")
+router.get('/', authMiddleware_1.default, programController.getAllPrograms);
+router.get('/:day', authMiddleware_1.default, (0, express_validator_1.param)('day', 'Day is invalid').custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)), programController.getProgram);
+router.put('/:day', authMiddleware_1.default, [
+    (0, express_validator_1.param)('day', 'Invalid day').custom((value) => (0, customValidationHelpers_1.validateEnums)(value, days)),
+    (0, express_validator_1.body)('trainingDayName', 'Training day is invalid')
         .optional()
         .custom((value) => (0, customValidationHelpers_1.validateEnums)(value, trainingDayNames)),
-    (0, express_validator_1.body)("restDay", "rest day needs to be a boolean").isBoolean(),
+    (0, express_validator_1.body)('restDay', 'rest day needs to be a boolean').isBoolean(),
 ], programController.changeProgram);
 exports.default = router;
