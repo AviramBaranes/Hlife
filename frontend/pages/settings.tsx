@@ -50,9 +50,9 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
           onClick={themeHandler}
           type='checkbox'
           id='switch'
-          className={classes.Checkbox}
+          className='Checkbox'
         />
-        <label htmlFor='switch' className={classes.SwitchLabel}></label>
+        <label htmlFor='switch' className='SwitchLabel'></label>
       </div>
 
       {isAuthenticated && (
@@ -72,16 +72,7 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
                 size='2x'
                 onClick={() => {
                   setShouldDisplayForm(true);
-<<<<<<< Updated upstream
-                  setArrowDirection("up");
-                  // setTimeout(() => {
-                  //   ButtonElementRef.current.scrollIntoView({
-                  //     behavior: "smooth",
-                  //   });
-                  // }, 450);
-=======
                   setArrowDirection('up');
->>>>>>> Stashed changes
                 }}
               />
             )}

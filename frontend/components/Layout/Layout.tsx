@@ -23,6 +23,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   );
 
   //#30a954
+  //#0d98ba
   //handle app theme
   const theme = [
     {
@@ -30,14 +31,14 @@ function Layout({ children }: { children: React.ReactNode[] }) {
       'text-color': 'white',
       'opposite-text': 'black',
       'secondary-color': 'rgb(1, 110, 6)',
-      'button-color':'rgb(73, 73, 73)'
+      'button-color': 'rgb(73, 73, 73)',
     },
     {
       'primary-color': 'rgb(0, 136, 0)',
       'text-color': 'black',
       'opposite-text': 'white',
       'secondary-color': 'rgb(3, 189, 13)',
-      'button-color':'rgb(134, 113, 113)'
+      'button-color': 'rgb(134, 113, 113)',
     },
   ];
 

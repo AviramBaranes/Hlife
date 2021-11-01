@@ -1,22 +1,21 @@
 @import '../breakpoints.scss';
 
-
-.ErrorDiv{
+.ErrorDiv {
   right: 20%;
   left: 20%;
-  margin-inline:auto ;
-  @include media('<tablet'){
+  margin-inline: auto;
+  @include media('<tablet') {
     transform: translateX(-10%);
-  margin-inline:auto ;
+    margin-inline: auto;
   }
-  }
+}
 
-.Main{
+.Main {
   text-align: center;
-  h3{
-    margin-block:1rem ;
+  h3 {
+    margin-block: 1rem;
     font-size: 2rem;
-    &::after{
+    &::after {
       content: '';
       background-color: var(--primary-color);
       display: block;
@@ -27,34 +26,33 @@
   }
 }
 
-@mixin sectionStyles($setBorder:true){
+@mixin sectionStyles($setBorder: true) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block:4rem ;
-  h4{
+  margin-block: 4rem;
+  h4 {
     font-size: 1.4rem;
   }
-  @if $setBorder{
+  @if $setBorder {
     padding-bottom: 4rem;
     border-bottom: 1px solid var(--text-color);
   }
 }
 
-.ModeSection{
-  @include sectionStyles()
+.ModeSection {
+  @include sectionStyles();
 }
-.Title{
-  @include sectionStyles($setBorder:false)
+.Title {
+  @include sectionStyles($setBorder: false);
 }
 
-.PasswordSection{
-    svg {
+.PasswordSection {
+  svg {
     cursor: pointer;
     animation: rotateArrow 500ms ease-in-out;
   }
 }
-
 
 @keyframes rotateArrow {
   from {
@@ -65,7 +63,6 @@
   }
 }
 
-
 .Form {
   animation: formDropDown 600ms ease-in-out;
 }
@@ -73,7 +70,6 @@
 .FormClosing {
   animation: formDropDownReverse 600ms ease-in-out;
 }
-
 
 @keyframes formDropDown {
   from {
@@ -96,60 +92,26 @@
   }
 }
 
-.Checkbox {
-  width: 0;
-  height: 0;
-  visibility: hidden;
-}
-.SwitchLabel {
-  display: block;
-  width: 3rem;
-  height: 1.4rem;
-  background-color: #477a85;
-  border-radius: 100px;
-  position: relative;
-  cursor: pointer;
-  transition: 0.5s;
-  box-shadow: 0 0 20px #477a8550;
-}
-.SwitchLabel::after {
-  content: "";
-  width: 1.4rem;
-  height: 1.4rem;
-  background-color: #e8f5f7;
-  position: absolute;
-  border-radius: 70px;
-  transition: 0.5s;
-}
-
-.Checkbox:checked + .SwitchLabel:after {
-  transform: translateX(-115%);
-}
-
-.Checkbox:checked + .SwitchLabel {
-  background-color: #243d42;
-}
-
-@include media('>=desktop'){
-  .Main{
-    margin-inline:auto;
+@include media('>=desktop') {
+  .Main {
+    margin-inline: auto;
     width: 80%;
-    h3{
+    h3 {
       font-size: 3rem;
       margin-block: 3rem;
-      &::after{
+      &::after {
         width: 12rem;
       }
     }
   }
-  .Form{
-    margin-inline:auto;
+  .Form {
+    margin-inline: auto;
     width: 60%;
     padding-top: 4rem;
   }
-  .FormClosing{
+  .FormClosing {
     padding-top: 4rem;
-    margin-inline:auto;
+    margin-inline: auto;
     width: 60%;
   }
 }

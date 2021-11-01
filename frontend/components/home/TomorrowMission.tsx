@@ -1,6 +1,8 @@
+import React, { useState } from 'react';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+
+import classes from '../../styles/pages/home.module.scss';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
 import Modal from '../UI/Modal/Modal';
 
@@ -29,45 +31,50 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
     today.getFullYear();
 
   return (
-    <div>
+    <div className={classes.TomorrowMission}>
       {showModal && exercises?.length && workoutName && (
         <Modal onClose={() => setShowModal(false)}>
-          <h1>
-            {workoutName} <time>{tomorrow}</time>
-          </h1>
-          <h3>Exercises:</h3>
-          <ul>
-            {exercises.map((exercise) => (
-              <li>
-                <div>
-                  <p>
-                    <strong>Name:</strong>
-                    {exercise.name}
-                  </p>
-                  <p>
-                    <strong>Reps:</strong>
-                    {exercise.reps}
-                  </p>
-                  <p>
-                    <strong>Sets:</strong>
-                    {exercise.sets}
-                  </p>
-                  {exercise.description && (
+          <div className={classes.TomorrowMissionModal}>
+            <div className={classes.ModalTitle}>
+              <h2>
+                <strong>{workoutName}</strong> ({trainingDayName})
+              </h2>
+              <time>{tomorrow}</time>
+            </div>
+            <h4>Exercises:</h4>
+            <ul>
+              {exercises.map((exercise) => (
+                <li>
+                  <div>
                     <p>
-                      <strong>Description:</strong>
-                      {exercise.description}
+                      <strong>Name:</strong>
+                      {exercise.name}
                     </p>
-                  )}
-                  {exercise.muscles && (
                     <p>
-                      <strong>Muscles:</strong>
-                      {exercise.muscles}
+                      <strong>Reps:</strong>
+                      {exercise.reps}
                     </p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+                    <p>
+                      <strong>Sets:</strong>
+                      {exercise.sets}
+                    </p>
+                    {exercise.description && (
+                      <p>
+                        <strong>Description:</strong>
+                        {exercise.description}
+                      </p>
+                    )}
+                    {exercise.muscles && (
+                      <p>
+                        <strong>Muscles:</strong>
+                        {exercise.muscles}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Modal>
       )}
       <h3>Tomorrow Mission:</h3>
@@ -94,7 +101,7 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
           <strong>Max Points: </strong>
           10
         </p>
-        <p>(You already did and declared your workout for today.)</p>
+        <p>(You already did and declared your workout for today)</p>
       </div>
       {exercises?.length && workoutName && (
         <button className='skip-button' onClick={() => setShowModal(true)}>

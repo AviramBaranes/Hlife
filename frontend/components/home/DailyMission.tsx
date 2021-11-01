@@ -92,49 +92,50 @@ const DailyMission: React.FC<DailyMissionProps> = ({
     <div className={classes.DailyMission}>
       {showModal && workoutName && exercises?.length && (
         <Modal onClose={() => setShowModal(false)}>
-          <div>
-            <h1>
-              {workoutName} ({trainingDayName})<time>{date}</time>
-            </h1>
-
+          <div className={classes.DailyMissionModal}>
+            <div className={classes.ModalTitle}>
+              <h2>
+                <strong>{workoutName}</strong> ({trainingDayName})
+              </h2>
+              <time>{date}</time>
+            </div>
             <h4>Exercises: </h4>
             <form onSubmit={submitFormHandler}>
               {exercises.map((exercise, i) => (
-                <div key={exercise.name + i}>
-                  <div>
-                    <input
-                      onChange={inputChangeHandler}
-                      type='checkbox'
-                      id={exercise.name}
-                    />
+                <div className={classes.Form}>
+                  <input
+                    onChange={inputChangeHandler}
+                    type='checkbox'
+                    id={exercise.name}
+                  />
+                  <div className={classes.Exercise} key={exercise.name + i}>
                     <label htmlFor={exercise.name}>
                       <strong>Name: </strong>
                       {exercise.name}
                     </label>
-                  </div>
-
-                  <div>
-                    {exercise.description && (
+                    <div>
+                      {exercise.description && (
+                        <p>
+                          <strong>Description: </strong>
+                          {exercise.description}
+                        </p>
+                      )}
                       <p>
-                        <strong>Description: </strong>
-                        {exercise.description}
+                        <strong>Reps: </strong>
+                        {exercise.reps}
                       </p>
-                    )}
-                    <p>
-                      <strong>Reps: </strong>
-                      {exercise.reps}
-                    </p>
-                    <p>
-                      <strong>Sets: </strong>
-                      {exercise.sets}
-                    </p>
-
-                    {exercise.muscles && (
                       <p>
-                        <strong>Muscles: </strong>
-                        {exercise.muscles}
+                        <strong>Sets: </strong>
+                        {exercise.sets}
                       </p>
-                    )}
+
+                      {exercise.muscles && (
+                        <p>
+                          <strong>Muscles: </strong>
+                          {exercise.muscles}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

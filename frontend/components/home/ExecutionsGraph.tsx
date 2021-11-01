@@ -36,15 +36,15 @@ const ExecutionsGraph: React.FC<{
   const [graphToDisplay, setGraphToDisplay] = useState<'pie' | 'bar'>('bar');
 
   const dimensions = {
-    height: 320,
-    width: (executionsData.length > 7 ? 10 : 40) * executionsData.length + 20,
-    marginLeft: 40,
+    height: 200,
+    width: (executionsData.length > 7 ? 10 : 40) * executionsData.length + 26.5,
+    marginLeft: 50,
     marginTop: 10,
     marginRight: 25,
     marginBottom: 40,
   };
   const pieDimensions = {
-    height: 320,
+    height: 200,
     width: 310,
     radius: 105,
   };
@@ -103,10 +103,18 @@ const ExecutionsGraph: React.FC<{
       selectedBarChart.style('visibility', 'hidden');
     }
     if (hasExecutions && selectedBarChart) {
-      selectedBarChart.style('height', 320);
+      selectedBarChart.style('height', 200);
       selectedBarChart.style('visibility', 'visible');
     }
-  }, [hasExecutions, selectedBarChart]);
+    if (!hasExecutions && selectedPieChart) {
+      selectedPieChart.style('height', 0);
+      selectedPieChart.style('visibility', 'hidden');
+    }
+    if (hasExecutions && selectedPieChart) {
+      selectedPieChart.style('height', 320);
+      selectedPieChart.style('visibility', 'visible');
+    }
+  }, [hasExecutions, selectedBarChart, selectedPieChart]);
 
   useEffect(() => {
     setAvg(
@@ -394,26 +402,33 @@ const ExecutionsGraph: React.FC<{
     }
   }
   return (
-    <div>
+    <div className={classes.ExecutionsGraph}>
       {hasExecutions && (
         <div>
           {!!executionsData.length && date[0] && (
-            <>
-              <h3>
-                Your weekly Executions:
-                <br /> (<time>{dateToString(date[0]!)}</time> to{' '}
-                <time>{dateToString(date[1]!)}</time>)
-              </h3>
-              {avg && <p>Average:{avg}</p>}
-            </>
+            <div className={classes.GraphTitle}>
+              <h3>Your weekly Executions:</h3>
+              <time>{dateToString(date[0]!)}</time> to{' '}
+              <time>{dateToString(date[1]!)}</time>
+              {avg && (
+                <p>
+                  Average:
+                  <strong> {avg}</strong>
+                </p>
+              )}
+            </div>
           )}
 
-          <label htmlFor='changeGraph'>{graphToDisplay}</label>
-          <input
-            type='checkbox'
-            id='changeGraph'
-            onChange={changeGraphHandler}
-          />
+          <div className={classes.Checkbox}>
+            <p>{graphToDisplay === 'bar' ? 'pie' : 'bar'}</p>
+            <input
+              className='Checkbox'
+              type='checkbox'
+              id='changeGraph'
+              onChange={changeGraphHandler}
+            />
+            <label className='SwitchLabel' htmlFor='changeGraph'></label>
+          </div>
         </div>
       )}
       <svg
@@ -430,24 +445,29 @@ const ExecutionsGraph: React.FC<{
       ></svg>
 
       {!hasExecutions && (
-        <p>
+        <p className={classes.NoExecutions}>
           No Executions found in this week, You should declare about workouts
           more often, so we can display your execution graph.
         </p>
       )}
-      <div className='input-container'>
-        <select onChange={selectWeekHandler} id='weekSelect'>
-          <option value='' style={{ display: 'none' }}></option>
-          <option value={0}>this week</option>
-          <option value={1}>1 week ago</option>
-          <option value={2}>2 weeks ago</option>
-          <option value={3}>3 weeks ago</option>
-          <option value={4}>4 weeks ago</option>
-          <option value={5}>whole month</option>
-        </select>
-        <label className={selectElActive ? 'Active' : ''} htmlFor='weekSelect'>
-          Select week
-        </label>
+      <div className={classes.Input}>
+        <div className='input-container'>
+          <select onChange={selectWeekHandler} id='weekSelect'>
+            <option value='' style={{ display: 'none' }}></option>
+            <option value={0}>this week</option>
+            <option value={1}>1 week ago</option>
+            <option value={2}>2 weeks ago</option>
+            <option value={3}>3 weeks ago</option>
+            <option value={4}>4 weeks ago</option>
+            <option value={5}>whole month</option>
+          </select>
+          <label
+            className={selectElActive ? 'Active' : ''}
+            htmlFor='weekSelect'
+          >
+            Select week
+          </label>
+        </div>
       </div>
     </div>
   );
