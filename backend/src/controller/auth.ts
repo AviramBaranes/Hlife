@@ -289,7 +289,6 @@ export const validateUser: RequestHandler = async (req, res, next) => {
 
     const { hasProgram, hasGoals, hasInitialStats, hasAllWorkouts, grade } =
       user;
-
     res.status(200).json({
       isAuthenticated: true,
       hasProgram,

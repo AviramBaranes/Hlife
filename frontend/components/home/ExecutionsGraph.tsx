@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../styles/pages/home.module.scss';
-import Modal from '../UI/Modal/Modal';
 import { dateToString } from '../../utils/dates/dateToString';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../utils/errors/handleRequestErrors';
@@ -21,15 +20,20 @@ type Execution = { rate: number; date: Date };
 
 const colors = ['#D9EFE0', '#B4E0C1', '#8ED0A2', '#68C083', '#30A954'];
 
+const defaultExecutions = [{ date: new Date(), rate: 0 }];
+
 const ExecutionsGraph: React.FC<{
   weeklyExecutions: Execution[];
 }> = ({ weeklyExecutions }) => {
   const dispatch = useDispatch();
-  const [executionsData, setExecutionsData] = useState(weeklyExecutions);
+  const updatedData = weeklyExecutions.length
+    ? weeklyExecutions
+    : defaultExecutions;
+
+  const [executionsData, setExecutionsData] = useState(updatedData);
   const [hasExecutions, setHasExecutions] = useState(!!weeklyExecutions.length);
   const [selectElActive, setSelectElActive] = useState(false);
   const [graphToDisplay, setGraphToDisplay] = useState<'pie' | 'bar'>('bar');
-  const [showModal, setShowModal] = useState(false);
 
   const dimensions = {
     height: 320,
@@ -94,6 +98,17 @@ const ExecutionsGraph: React.FC<{
   };
 
   useEffect(() => {
+    if (!hasExecutions && selectedBarChart) {
+      selectedBarChart.style('height', 0);
+      selectedBarChart.style('visibility', 'hidden');
+    }
+    if (hasExecutions && selectedBarChart) {
+      selectedBarChart.style('height', 320);
+      selectedBarChart.style('visibility', 'visible');
+    }
+  }, [hasExecutions, selectedBarChart]);
+
+  useEffect(() => {
     setAvg(
       +(
         executionsData.reduce((prev, curr) => (prev += curr.rate), 0) /
@@ -140,7 +155,6 @@ const ExecutionsGraph: React.FC<{
         selectedBarChart.select('.xAxis').remove();
         selectedBarChart.select('.yAxis').remove();
 
-        // Refactor translate x
         selectedBarChart
           .append('g')
           .attr('class', 'xAxis')
@@ -167,7 +181,6 @@ const ExecutionsGraph: React.FC<{
           .call(yAxis);
 
         //update graph (enter,remove and update)
-
         const rects = barGraph.selectAll('rect').data(executionsData);
 
         rects
@@ -196,11 +209,6 @@ const ExecutionsGraph: React.FC<{
           .ease(d3.easeElastic)
           .attr('y', (d) => y(d.rate))
           .attr('height', (d) => graphHeight - y(d.rate));
-
-        updatedRects.on('click', (e, d) => {
-          console.log(d);
-          setShowModal(true);
-        });
 
         const enterRects = rects
           .enter()
@@ -370,11 +378,11 @@ const ExecutionsGraph: React.FC<{
       );
 
       if (status === 204) {
+        setExecutionsData(defaultExecutions);
         setHasExecutions(false);
         return;
       }
       setHasExecutions(true);
-      console.log(data);
       setExecutionsData(
         data.map((item: { date: Date; executionRate: number }) => ({
           date: item.date,
@@ -385,44 +393,46 @@ const ExecutionsGraph: React.FC<{
       handleAxiosError(err, dispatch, 'Fetching Executions Failed');
     }
   }
-
   return (
     <div>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <h2></h2>
-          <p></p>
-        </Modal>
+      {hasExecutions && (
+        <div>
+          {!!executionsData.length && date[0] && (
+            <>
+              <h3>
+                Your weekly Executions:
+                <br /> (<time>{dateToString(date[0]!)}</time> to{' '}
+                <time>{dateToString(date[1]!)}</time>)
+              </h3>
+              {avg && <p>Average:{avg}</p>}
+            </>
+          )}
+
+          <label htmlFor='changeGraph'>{graphToDisplay}</label>
+          <input
+            type='checkbox'
+            id='changeGraph'
+            onChange={changeGraphHandler}
+          />
+        </div>
       )}
-      <h3>
-        Your weekly Executions:
-        <br /> (<time>{dateToString(date[0]!)}</time> to{' '}
-        <time>{dateToString(date[1]!)}</time>)
-      </h3>
-      {avg && <p>Average:{avg}</p>}
+      <svg
+        display={graphToDisplay === 'bar' ? 'block' : 'none'}
+        height={dimensions.height}
+        width={dimensions.width}
+        ref={barRef}
+      ></svg>
+      <svg
+        display={graphToDisplay === 'pie' ? 'block' : 'none'}
+        height={pieDimensions.height}
+        width={pieDimensions.width}
+        ref={pieRef}
+      ></svg>
 
-      <label htmlFor='changeGraph'>{graphToDisplay}</label>
-      <input type='checkbox' id='changeGraph' onChange={changeGraphHandler} />
-
-      {hasExecutions ? (
-        <>
-          <svg
-            display={graphToDisplay === 'bar' ? 'block' : 'none'}
-            height={dimensions.height}
-            width={dimensions.width}
-            ref={barRef}
-          ></svg>
-          <svg
-            display={graphToDisplay === 'pie' ? 'block' : 'none'}
-            height={pieDimensions.height}
-            width={pieDimensions.width}
-            ref={pieRef}
-          ></svg>
-        </>
-      ) : (
+      {!hasExecutions && (
         <p>
-          No Executions found in this dates, You should declare about workouts
-          more often.
+          No Executions found in this week, You should declare about workouts
+          more often, so we can display your execution graph.
         </p>
       )}
       <div className='input-container'>
@@ -433,7 +443,7 @@ const ExecutionsGraph: React.FC<{
           <option value={2}>2 weeks ago</option>
           <option value={3}>3 weeks ago</option>
           <option value={4}>4 weeks ago</option>
-          <option value={5}>last month</option>
+          <option value={5}>whole month</option>
         </select>
         <label className={selectElActive ? 'Active' : ''} htmlFor='weekSelect'>
           Select week

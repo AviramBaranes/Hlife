@@ -1,13 +1,5 @@
-<<<<<<< Updated upstream
-import { GetServerSideProps } from "next";
-import { useDispatch } from "react-redux";
-import { errorsActions } from "../redux/slices/errors/errorsSlice";
-import { redirectedError } from "../utils/errors/redirectedError";
-import protectRouteHandler from "../utils/protectedRoutes/protectedRoutes";
-=======
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
->>>>>>> Stashed changes
 
 import classes from '../styles/pages/home.module.scss';
 import DailyMission from '../components/home/DailyMission';
@@ -133,6 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
       return { props };
     } catch (err: any) {
+      console.log(err.message);
       return { redirect: { destination: '/error-occur', permanent: false } };
     }
   } else {

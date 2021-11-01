@@ -1,3 +1,5 @@
+fix bugs
+ux when its sunday
 1.styles
 
 2.tests

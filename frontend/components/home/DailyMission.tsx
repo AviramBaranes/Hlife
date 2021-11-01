@@ -1,6 +1,8 @@
 import router from 'next/router';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+
+import classes from '../../styles/pages/home.module.scss';
 import { loadingAction } from '../../redux/slices/loading/loadingSlice';
 import { messagesActions } from '../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../utils/axios/axiosInstance';
@@ -87,7 +89,7 @@ const DailyMission: React.FC<DailyMissionProps> = ({
   }
 
   return (
-    <div>
+    <div className={classes.DailyMission}>
       {showModal && workoutName && exercises?.length && (
         <Modal onClose={() => setShowModal(false)}>
           <div>
