@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCsrfToken } from '../../redux/slices/tokens';
 
 import Navigation from './MainNav/Navigation';
 import classes from '../../styles/components/Layout.module.scss';
@@ -10,14 +9,16 @@ import SideNav from './NavComponents/SideNav';
 import { settingsSliceActions } from '../../redux/slices/settings/settingsSlice';
 import useTheme from '../../utils/customHook/useTheme';
 import Loading from '../UI/Animations/Loading';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import { loadingAction } from '../../redux/slices/loading/loadingSlice';
 
 function Layout({ children }: { children: React.ReactNode[] }) {
   const dispatch = useDispatch();
   const [displaySideNav, setDisplaySideNav] = useState(false);
   const [themeIndex, setThemeIndex] = useState(0);
+  const [error, setError] = useState<Error | null>(null);
 
   const { loading } = useSelector((state: RootState) => state.loadingReducer);
-  const { error } = useSelector((state: RootState) => state.tokensReducer);
   const { themeClass } = useSelector(
     (state: RootState) => state.settingsReducer
   );
@@ -60,10 +61,21 @@ function Layout({ children }: { children: React.ReactNode[] }) {
 
   //handle csrf token
   useEffect(() => {
-    dispatch(getCsrfToken());
+    dispatch(loadingAction.setToTrue());
+    const getCsrf = async () => {
+      await axiosInstance.get('/');
+    };
+    getCsrf()
+      .then(() => {
+        dispatch(loadingAction.setToFalse());
+      })
+      .catch((err) => {
+        dispatch(loadingAction.setToFalse());
+        setError(err);
+      });
   }, []);
 
-  if (error.message) {
+  if (error) {
     dispatch(
       errorsActions.newError({
         errorTitle: 'Server Error',
@@ -73,7 +85,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   }
   return (
     <>
-      {error.message ? (
+      {error ? (
         children[0]
       ) : (
         <div className={`${classes.Layout} Dark`}>

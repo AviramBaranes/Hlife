@@ -4,7 +4,6 @@ import axiosInstance from '../axios/axiosInstance';
 
 const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
   try {
-    let destination: string;
     const cookies = parseCookies(ctx);
     const { data } = await axiosInstance.get('/auth/isUser', {
       headers: {

@@ -2,20 +2,11 @@ import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-<<<<<<< Updated upstream
-import classes from '../../../styles/pages/set-goals.module.scss'
-import FatPercentageField from "../../../components/Registration/generalFields/FatPercentageField";
-import MusclesMassField from "../../../components/Registration/generalFields/MusclesMassField";
-import RequiredFields from "../../../components/Registration/goalsFields/RequiredFields";
-import { RootState } from "../../../redux/store/reduxStore";
-import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
-=======
 import FatPercentageField from '../../../components/Registration/generalFields/FatPercentageField';
 import MusclesMassField from '../../../components/Registration/generalFields/MusclesMassField';
 import RequiredFields from '../../../components/Registration/goalsFields/RequiredFields';
 import { RootState } from '../../../redux/store/reduxStore';
 import protectRouteHandler from '../../../utils/protectedRoutes/protectedRoutes';
->>>>>>> Stashed changes
 import {
   createGoalsFieldsProps,
   getDisplayRequirements,

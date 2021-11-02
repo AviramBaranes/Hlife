@@ -239,7 +239,7 @@ const ChangePassword: React.FC = () => {
       handleAxiosError(err, dispatch, 'Change Password Failed');
     }
   };
-  
+
   return (
     <form onSubmit={formSubmitHandler}>
       {fields.map((field) => {

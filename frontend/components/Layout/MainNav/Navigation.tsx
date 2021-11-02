@@ -28,9 +28,8 @@ const Navigation: React.FC<{
         <h1 className={classes.Logo}>
           <Link href='/'>Hlife</Link>
         </h1>
-        {!isAuthenticated && <AuthenticateNav />}
-        {hasProgram && <AuthorizedNav />}
-        {isAuthenticated && !hasProgram && null}
+        {!isAuthenticated && !isAuthenticated && <AuthenticateNav />}
+        {hasProgram && isAuthenticated && <AuthorizedNav />}
         <div
           data-testid='burgerLink'
           className={classes.BarsIcon}

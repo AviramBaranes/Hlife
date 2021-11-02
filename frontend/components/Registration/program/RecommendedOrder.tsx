@@ -146,7 +146,7 @@ const RecommendedOrder: React.FC<{
       localStorage.clear();
       document.cookie =
         'choseWorkout=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      dispatch(validateAuthenticationAction())
+      dispatch(validateAuthenticationAction());
     }).catch((err) => {
       handleAxiosError(err, dispatch, 'Schedule program failed');
     });
@@ -157,8 +157,8 @@ const RecommendedOrder: React.FC<{
       <div className={classes.Recommendation}>
         <strong>Recommendation: </strong>
         <div className={classes.RecommendationList}>
-          {order.split('\n').map((day) => (
-            <div key={day}>
+          {order.split('\n').map((day, i) => (
+            <div key={day + i}>
               <p>{day}</p>
             </div>
           ))}

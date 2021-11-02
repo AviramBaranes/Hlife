@@ -253,7 +253,7 @@
 }
 @include media('>=desktop') {
   .ExecutionSection {
-    margin-top: 5rem;
+    margin-top: 2rem;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
@@ -288,7 +288,7 @@
   .TomorrowMission {
     width: 50%;
     margin-bottom: 6rem;
-    margin-left: 0.5rem;
+    margin-left: 10rem;
     h3 {
       font-size: 2rem;
       border-bottom: 2px solid var(--primary-color);

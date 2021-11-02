@@ -1,8 +1,8 @@
-import { AxiosRequestConfig } from "axios";
-import axiosInstance from "../../utils/axios/axiosInstance";
-import protectRouteHandler from "../../utils/protectedRoutes/protectedRoutes";
+import { AxiosRequestConfig } from 'axios';
+import axiosInstance from '../../utils/axios/axiosInstance';
+import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
 
-describe("protected routes tests", () => {
+describe('protected routes tests', () => {
   let mockedAxios: jest.SpyInstance<
     Promise<unknown>,
     [url: string, data?: any, config?: AxiosRequestConfig | undefined]
@@ -10,7 +10,7 @@ describe("protected routes tests", () => {
 
   beforeEach(() => {
     mockedAxios = jest
-      .spyOn(axiosInstance, "get")
+      .spyOn(axiosInstance, 'get')
       .mockImplementationOnce(async () => {
         throw new Error();
       })
@@ -44,6 +44,7 @@ describe("protected routes tests", () => {
           hasAllWorkouts: true,
           hasInitialStats: true,
           hasProgram: true,
+          grade: 100,
         },
       }));
   });
@@ -51,46 +52,55 @@ describe("protected routes tests", () => {
   afterAll(() => {
     jest.resetAllMocks();
   });
-  test("should send default path if fail", async () => {
-    const path = await protectRouteHandler("" as any);
+  test('should send default path if fail', async () => {
+    const { destination, grade } = await protectRouteHandler('' as any);
 
-    expect(mockedAxios.mock.calls[0][0]).toEqual("/auth/isUser");
+    expect(mockedAxios.mock.calls[0][0]).toEqual('/auth/isUser');
     expect(mockedAxios.mock.calls[0][1].headers.Cookie).toEqual(
-      "_csrf=_csrf; jon=jon; XSRF-TOKEN=token;"
+      '_csrf=_csrf; jon=jon; XSRF-TOKEN=token;'
     );
-    expect(path).toEqual("/auth/login");
+    expect(destination).toEqual('/auth/login');
+    expect(grade).toEqual(null);
   });
 
   test("should return '/auth/login' for not authenticated user", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/login");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/login');
+    expect(grade).toEqual(null);
   });
 
   test("should return '/auth/registration/set-goals' for user with no goals", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/set-goals");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/registration/set-goals');
+    expect(grade).toEqual(null);
   });
 
   test("should return '/auth/registration/set-initial-stats' user with no stats", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/set-initial-stats");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/registration/set-initial-stats');
+    expect(grade).toEqual(null);
   });
 
   test("should return '/auth/registration/choose-workout' user with no stats", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/choose-workout");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/registration/choose-workout');
+    expect(grade).toEqual(null);
   });
   test("should return '/auth/registration/create-workout' user with no stats", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/create-workout");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/registration/create-workout');
+    expect(grade).toEqual(null);
   });
   test("should return '/auth/registration/schedule-program' for user with no program", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/auth/registration/schedule-program");
+    const { destination, grade } = await protectRouteHandler('' as any);
+    expect(destination).toEqual('/auth/registration/schedule-program');
+    expect(grade).toEqual(null);
   });
 
   test("should return '/' for user with full program", async () => {
-    const path = await protectRouteHandler("" as any);
-    expect(path).toEqual("/");
+    const { destination, grade } = await protectRouteHandler('' as any);
+
+    expect(destination).toEqual('/');
+    expect(grade).toEqual(100);
   });
 });
