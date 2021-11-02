@@ -11,7 +11,7 @@ import axiosInstance from '../utils/axios/axiosInstance';
 import { dateToString } from '../utils/dates/dateToString';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
-interface homeProps {
+export interface HomeProps {
   weeklyExecutions: { rate: number; date: Date }[];
   executionDeclared: boolean;
   grade: number;
@@ -21,7 +21,7 @@ interface homeProps {
   time: number | null;
 }
 
-const Home: React.FC<homeProps> = ({
+const Home: React.FC<HomeProps> = ({
   grade,
   workoutName,
   time,
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       const headers = {
         Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,
       };
-      const props: homeProps = {
+      const props: HomeProps = {
         grade,
         trainingDayName: 'X',
         executionDeclared: false,

@@ -82,6 +82,7 @@ const DailyMission: React.FC<DailyMissionProps> = ({
       );
       router.reload();
     } catch (err) {
+      console.log(err);
       handleAxiosError(err, dispatch, 'Failed to submit');
     } finally {
       setShowModal(false);
@@ -102,7 +103,7 @@ const DailyMission: React.FC<DailyMissionProps> = ({
             <h4>Exercises: </h4>
             <form onSubmit={submitFormHandler}>
               {exercises.map((exercise, i) => (
-                <div className={classes.Form}>
+                <div key={exercise.name + i} className={classes.Form}>
                   <input
                     onChange={inputChangeHandler}
                     type='checkbox'
@@ -132,7 +133,7 @@ const DailyMission: React.FC<DailyMissionProps> = ({
                       {exercise.muscles && (
                         <p>
                           <strong>Muscles: </strong>
-                          {exercise.muscles}
+                          {exercise.muscles.join(', ')}
                         </p>
                       )}
                     </div>

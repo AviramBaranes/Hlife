@@ -43,8 +43,8 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
             </div>
             <h4>Exercises:</h4>
             <ul>
-              {exercises.map((exercise) => (
-                <li>
+              {exercises.map((exercise, i) => (
+                <li key={exercise.name + i}>
                   <div>
                     <p>
                       <strong>Name:</strong>
@@ -67,7 +67,7 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
                     {exercise.muscles && (
                       <p>
                         <strong>Muscles:</strong>
-                        {exercise.muscles}
+                        {exercise.muscles.join(', ')}
                       </p>
                     )}
                   </div>

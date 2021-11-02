@@ -432,12 +432,14 @@ const ExecutionsGraph: React.FC<{
         </div>
       )}
       <svg
+        data-testid='bar-chart'
         display={graphToDisplay === 'bar' ? 'block' : 'none'}
         height={dimensions.height}
         width={dimensions.width}
         ref={barRef}
       ></svg>
       <svg
+        data-testid='pie-graph'
         display={graphToDisplay === 'pie' ? 'block' : 'none'}
         height={pieDimensions.height}
         width={pieDimensions.width}
