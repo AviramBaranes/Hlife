@@ -11,18 +11,11 @@ import axiosInstance from '../../../../utils/axios/axiosInstance';
 import * as protectedRoute from '../../../../utils/protectedRoutes/protectedRoutes';
 
 jest.mock('nookies', () => ({
-  parseCookies: jest
-    .fn()
-    .mockImplementationOnce(() => ({
-      _csrf: '_csrf',
-      jon: 'jon',
-      XSRF_TOKEN: 'token',
-    }))
-    .mockImplementationOnce(() => ({
-      _csrf: '_csrf',
-      jon: 'jon',
-      XSRF_TOKEN: 'token',
-    })),
+  parseCookies: jest.fn().mockImplementation(() => ({
+    _csrf: '_csrf',
+    jon: 'jon',
+    XSRF_TOKEN: 'token',
+  })),
 }));
 
 const dummyWorkouts = [

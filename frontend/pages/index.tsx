@@ -125,7 +125,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
       return { props };
     } catch (err: any) {
-      console.log(err.message);
       return { redirect: { destination: '/error-occur', permanent: false } };
     }
   } else {
