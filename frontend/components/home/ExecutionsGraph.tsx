@@ -448,8 +448,7 @@ const ExecutionsGraph: React.FC<{
 
       {!hasExecutions && (
         <p className={classes.NoExecutions}>
-          No Executions found in this week, You should declare about workouts
-          more often, so we can display your execution graph.
+          No execution have been declared during this week... yet
         </p>
       )}
       <div className={classes.Input}>

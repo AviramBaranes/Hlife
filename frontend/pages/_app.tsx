@@ -12,9 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Layout>
-         <ErrorContainer />
+        <ErrorContainer />
         <MessageContainer />
-        <Component {...pageProps} /> 
+        <Component {...pageProps} />
       </Layout>
     </Provider>
   );

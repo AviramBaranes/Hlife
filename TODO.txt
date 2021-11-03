@@ -1,13 +1,11 @@
-ux when its sunday
-add loader to Image in uploadPhoto
-1.styles
+fix test warning
+1.program
+    A: page
+    B: styles
+    C: tests
 
-2.tests
+2.stats
 
-3.program
+3.about
 
-4.stats
-
-5.about
-
-6.deploy
+4.deploy

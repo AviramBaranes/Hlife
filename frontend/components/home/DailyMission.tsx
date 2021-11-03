@@ -55,6 +55,7 @@ const DailyMission: React.FC<DailyMissionProps> = ({
         );
         router.reload();
       } catch (err) {
+        console.log(err);
         handleAxiosError(err, dispatch, 'Failed to submit');
       }
     } else {

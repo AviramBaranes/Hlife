@@ -10,7 +10,7 @@ import { dateToString } from '../../../utils/dates/dateToString';
 
 describe('ExecutionGraphs tests', () => {
   const noExecutionsText =
-    'No Executions found in this week, You should declare about workouts more often, so we can display your execution graph.';
+    'No execution have been declared during this week... yet';
   const weeklyExecutions = [
     { rate: 100, date: new Date('11-11-2001') },
     { rate: 70, date: new Date('12-11-2001') },
@@ -33,7 +33,7 @@ describe('ExecutionGraphs tests', () => {
           { executionRate: 100, date: new Date('13-11-2001') },
           { executionRate: 100, date: new Date('14-11-2001') },
           { executionRate: 25, date: new Date('15-11-2001') },
-          { executionRate: 25, date: new Date('15-11-2001') },
+          { executionRate: 25, date: new Date('16-11-2001') },
         ],
       }))
       .mockImplementationOnce(async () => ({
@@ -190,10 +190,9 @@ describe('ExecutionGraphs tests', () => {
       expect(barChart.children[0].children.length).toBe(3);
       expect(barChart.children[0].children[0]).toHaveAttribute('height', '150');
       expect(barChart.children[0].children[1]).toHaveAttribute('height', '150');
-      expect(barChart.children[0].children[2]).toHaveAttribute(
-        'height',
-        '37.5'
-      );
+      expect(
+        +barChart.children[0].children[2].getAttribute('height')!
+      ).toBeCloseTo(37.5);
     });
 
     userEvent.click(screen.getByRole('checkbox'));
@@ -236,14 +235,12 @@ describe('ExecutionGraphs tests', () => {
       expect(barChart.children[0].children.length).toBe(4);
       expect(barChart.children[0].children[0]).toHaveAttribute('height', '150');
       expect(barChart.children[0].children[1]).toHaveAttribute('height', '150');
-      expect(barChart.children[0].children[2]).toHaveAttribute(
-        'height',
-        '37.5'
-      );
-      expect(barChart.children[0].children[3]).toHaveAttribute(
-        'height',
-        '37.5'
-      );
+      expect(
+        +barChart.children[0].children[2].getAttribute('height')!
+      ).toBeCloseTo(37.5);
+      expect(
+        +barChart.children[0].children[3].getAttribute('height')!
+      ).toBeCloseTo(37.5);
     });
 
     userEvent.click(screen.getByRole('checkbox'));

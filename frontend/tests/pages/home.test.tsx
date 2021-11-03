@@ -168,15 +168,6 @@ describe('Home page tests', () => {
     weeklyExecutions: [],
   };
 
-  let spiedAxios: jest.SpyInstance;
-  beforeEach(() => {
-    spiedAxios = jest
-      .spyOn(axiosInstance, 'post')
-      .mockImplementation(async () => ({ data: '' }));
-  });
-
-  afterEach(() => jest.restoreAllMocks());
-
   test('should render userScore', async () => {
     render(
       <Provider store={store}>
@@ -191,91 +182,6 @@ describe('Home page tests', () => {
     expect(initialNumberOnScreen).toBeInTheDocument();
     expect(betweenNumber).toBeInTheDocument();
     expect(finalNumber).toBeInTheDocument();
-  });
-  test('should render DailyMission when not aerobic or rest', async () => {
-    render(
-      <Provider store={store}>
-        <Home {...props} />
-      </Provider>
-    );
-
-    // should not render tomorrow mission
-    expect(screen.queryByText('Tomorrow Mission:')).not.toBeInTheDocument();
-    //renders according to props:
-    expect(screen.getByText('Daily Mission:')).toBeInTheDocument();
-    expect(screen.getByText('Chest (A)')).toBeInTheDocument();
-    expect(screen.getByText('120 (minutes)')).toBeInTheDocument();
-
-    //open modal:
-    userEvent.click(screen.getByText('Complete'));
-    const inputs = screen.getAllByRole('checkbox');
-    expect(inputs.length).toEqual(2);
-    expect(screen.getByText('pushups').tagName).toBe('LABEL');
-    expect(screen.getByText('pull-ups').tagName).toBe('LABEL');
-    expect(screen.getByText('a good exercise')).toBeInTheDocument();
-    expect(screen.getByText('back, chest')).toBeInTheDocument();
-    expect(screen.getByText('12')).toBeInTheDocument();
-    expect(screen.getByText('20')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
-    expect(screen.getByText('7')).toBeInTheDocument();
-
-    userEvent.click(inputs[1]);
-    act(() => {
-      userEvent.click(screen.getByText('Submit'));
-    });
-
-    expect(spiedAxios.mock.calls[0][0]).toBe('/program-exec/');
-    expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
-      exercises: { pushups: false, 'pull-ups': true },
-    });
-
-    await waitFor(() => {
-      expect(screen.queryByText('a good exercise')).not.toBeInTheDocument();
-    });
-  });
-
-  test('should render DailyMission when aerobic', async () => {
-    const newProps = { ...props };
-    newProps.trainingDayName = 'aerobic';
-    render(
-      <Provider store={store}>
-        <Home {...newProps} />
-      </Provider>
-    );
-
-    //renders according to props:
-    expect(screen.getByText('Daily Mission:')).toBeInTheDocument();
-    expect(screen.getByText('Chest (aerobic)')).toBeInTheDocument();
-    expect(screen.getByText('120 (minutes)')).toBeInTheDocument();
-
-    userEvent.click(screen.getByText('Complete'));
-
-    expect(spiedAxios.mock.calls[0][0]).toBe('/program-exec/');
-    expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
-      isAerobic: true,
-    });
-  });
-
-  test('should render DailyMission when rest', async () => {
-    const newProps = { ...props };
-    newProps.trainingDayName = 'X';
-    delete newProps.workoutName;
-    render(
-      <Provider store={store}>
-        <Home {...newProps} />
-      </Provider>
-    );
-
-    //renders according to props:
-    expect(screen.getByText('Daily Mission:')).toBeInTheDocument();
-    expect(screen.getByText('Rest Day (X)')).toBeInTheDocument();
-
-    userEvent.click(screen.getByText('Complete'));
-
-    expect(spiedAxios.mock.calls[0][0]).toBe('/program-exec/');
-    expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
-      isAerobic: false,
-    });
   });
 
   test('should render TomorrowMission and showModal', () => {
