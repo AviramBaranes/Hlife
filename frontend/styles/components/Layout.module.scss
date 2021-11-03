@@ -1,6 +1,7 @@
+@import '../breakpoints.scss';
 .Layout {
   main {
-    width: 90%;
+    width: 95%;
     margin: auto;
   }
 }
@@ -27,12 +28,10 @@
   }
 }
 
-// @media (max-width: 444px) {
-//   .Layout {
-//     main {
-//       height: 80vh;
-//       margin: auto;
-//       width: 100%;
-//     }
-//   }
-// }
+@include media('>bigPhone') {
+  .Layout {
+    main {
+      width: 90%;
+    }
+  }
+}

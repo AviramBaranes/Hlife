@@ -1,5 +1,5 @@
 //inputs
-@import "../breakpoints.scss";
+@import '../breakpoints.scss';
 
 //Regular Input
 .input-container {
@@ -8,7 +8,6 @@
   flex-direction: column;
   max-width: 55%;
   margin: 1rem auto;
-  
 
   .inValid {
     background-color: salmon;
@@ -18,17 +17,18 @@
   .Active {
     transform: translate(0, 5px) scale(0.8);
     color: var(--secondary-color);
-   font-weight: bolder;
+    font-weight: bolder;
   }
 
-  .long-word{
+  .long-word {
     font-size: 0.7rem;
   }
 
   input,
-  select,textarea {
+  select,
+  textarea {
     max-width: 100%;
-    color: var(--opposite-text);;
+    color: var(--opposite-text);
     padding: 1.2rem 1rem 0.2rem 0.9rem;
     outline: 0;
     border: 1px solid #ddd;
@@ -44,11 +44,11 @@
     }
   }
 
-  input[type=time]{
+  input[type='time'] {
     width: 100%;
-}
+  }
 
-  textarea{
+  textarea {
     padding-bottom: 0rem;
   }
 
@@ -69,40 +69,39 @@
     font-weight: bolder;
   }
 
-  @include media(">=desktop") {
+  @include media('>=desktop') {
     max-width: 100%;
   }
 }
 
 //Range Input
-.range-input{
+.range-input {
   display: flex;
   justify-content: center;
   align-items: center;
-  p{
+  p {
     margin: 0.5rem;
     transform: translateY(1rem);
-    &::before{
-      content: "";
+    &::before {
+      content: '';
       width: 2px;
       height: 8px;
       display: block;
       background-color: var(--text-color);
       top: -2px;
-      margin-inline:auto ;
+      margin-inline: auto;
     }
   }
-
 
   input {
     -webkit-appearance: none;
     margin: 18px 0;
     width: 100%;
 
-    &:focus{
+    &:focus {
       outline: none;
     }
-    
+
     //chrome
     &::-webkit-slider-runnable-track {
       width: 100%;
@@ -113,24 +112,24 @@
       border-radius: 1.3px;
       border: 0.2px solid #010101;
     }
-  
-  &::-webkit-slider-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
-    border-radius: 3px 3px 10px 10px;
-    background: #ffffff;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -0.7rem; 
-  }
+
+    &::-webkit-slider-thumb {
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      border: 1px solid #000000;
+      height: 36px;
+      width: 16px;
+      border-radius: 3px 3px 10px 10px;
+      background: #ffffff;
+      cursor: pointer;
+      -webkit-appearance: none;
+      margin-top: -0.7rem;
+    }
 
     &:focus::-webkit-slider-runnable-track {
       background: #30a954;
     }
 
-  //fire fox
+    //fire fox
     &::-moz-range-track {
       width: 100%;
       height: 8.4px;
@@ -150,81 +149,111 @@
       background: #ffffff;
       cursor: pointer;
     }
-  //internet explorer
+    //internet explorer
 
-  &::-ms-track {
-    width: 100%;
-    height: 8.4px;
-    cursor: pointer;
-    background: transparent;
-    border-color: transparent;
-    border-width: 16px 0;
-    color: transparent;
+    &::-ms-track {
+      width: 100%;
+      height: 8.4px;
+      cursor: pointer;
+      background: transparent;
+      border-color: transparent;
+      border-width: 16px 0;
+      color: transparent;
+    }
+
+    &::-ms-fill-lower {
+      background: #30a954;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+
+    &::-ms-fill-upper {
+      background: #30a954;
+      border: 0.2px solid #010101;
+      border-radius: 2.6px;
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    }
+
+    &::-ms-thumb {
+      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+      border: 1px solid #000000;
+      height: 36px;
+      width: 16px;
+      border-radius: 3px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    &:focus::-ms-fill-lower {
+      background: #30a954;
+    }
+
+    &:focus::-ms-fill-upper {
+      background: #30a954;
+    }
   }
 
-  &::-ms-fill-lower {
-    background: #30a954;
-    border: 0.2px solid #010101;
-    border-radius: 2.6px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  @include media('>phone', '<=bigPhone') {
+    width: 90%;
+    margin: auto;
+  }
+  @include media('<=tablet', '>bigPhone') {
+    width: 70%;
+    margin: auto;
+    p {
+      font-size: larger;
+    }
   }
 
-  &::-ms-fill-upper {
-    background: #30a954;
-    border: 0.2px solid #010101;
-    border-radius: 2.6px;
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  @include media('>tablet', '<desktop') {
+    width: 60%;
+    margin: auto;
+    p {
+      font-size: larger;
+    }
   }
 
-  &::-ms-thumb {
-    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-    border: 1px solid #000000;
-    height: 36px;
-    width: 16px;
-    border-radius: 3px;
-    background: #ffffff;
-    cursor: pointer;
-  }
-
-  &:focus::-ms-fill-lower {
-    background: #30a954;
-  }
-
-  &:focus::-ms-fill-upper {
-    background: #30a954;
+  @include media('>=desktop') {
+    width: 50%;
+    margin: auto;
+    p {
+      font-size: larger;
+    }
   }
 }
 
-@include media('>phone','<=bigPhone'){
-  width:90%;
-  margin: auto;
+//checkbox Input
+.Checkbox {
+  width: 0;
+  height: 0;
+  visibility: hidden;
 }
-@include media('<=tablet','>bigPhone'){
-  width:70%;
-  margin: auto;
-  p{
-    font-size: larger;
-  }
+.SwitchLabel {
+  display: block;
+  width: 3rem;
+  height: 1.4rem;
+  background-color: #477a85;
+  border-radius: 100px;
+  position: relative;
+  cursor: pointer;
+  transition: 0.5s;
+  box-shadow: 0 0 20px #477a8550;
+}
+.SwitchLabel::after {
+  content: '';
+  width: 1.4rem;
+  height: 1.4rem;
+  background-color: #e8f5f7;
+  position: absolute;
+  border-radius: 70px;
+  transition: 0.5s;
 }
 
-@include media('>tablet','<desktop'){
-  width:60%;
-  margin: auto;
-  p{
-    font-size: larger;
-  }
+.Checkbox:checked + .SwitchLabel:after {
+  transform: translateX(-115%);
 }
 
-@include media('>=desktop'){
-  width:50%;
-  margin: auto;
-  p{
-    font-size: larger;
-  }
+.Checkbox:checked + .SwitchLabel {
+  background-color: #243d42;
 }
-}
-  
-  
-
-  
-  

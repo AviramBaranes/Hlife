@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { GetServerSideProps } from "next";
+import React, { useState } from 'react';
+import { GetServerSideProps } from 'next';
 
-import ChooseWorkout from "../../../components/Registration/workout/ChooseWorkout";
-import protectRouteHandler from "../../../utils/protectedRoutes/protectedRoutes";
-import { calculateRecommendationWorkout } from "../../../utils/registration/workout/chooseWorkoutHelper";
-import { useDispatch } from "react-redux";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
-import CustomWorkout from "../../../components/Registration/workout/CustomWorkout";
-import { parseCookies } from "nookies";
+import ChooseWorkout from '../../../components/Registration/workout/ChooseWorkout';
+import protectRouteHandler from '../../../utils/protectedRoutes/protectedRoutes';
+import { calculateRecommendationWorkout } from '../../../utils/registration/workout/chooseWorkoutHelper';
+import { useDispatch } from 'react-redux';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import CustomWorkout from '../../../components/Registration/workout/CustomWorkout';
+import { parseCookies } from 'nookies';
 
 interface ChooseWorkoutProps {
   programStyle: string;
@@ -26,8 +26,8 @@ const ChooseWorkoutPage: React.FC<ChooseWorkoutProps> = (props) => {
   if (props.error) {
     dispatch(
       errorsActions.newError({
-        errorTitle: "Something went wrong",
-        errorMessage: "Try to refresh",
+        errorTitle: 'Something went wrong',
+        errorMessage: 'Try to refresh',
       })
     );
   }
@@ -42,8 +42,8 @@ const ChooseWorkoutPage: React.FC<ChooseWorkoutProps> = (props) => {
 export default ChooseWorkoutPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const destination = await protectRouteHandler(ctx);
-  if (destination === "/auth/registration/choose-workout") {
+  const { destination } = await protectRouteHandler(ctx);
+  if (destination === '/auth/registration/choose-workout') {
     const cookies = parseCookies(ctx);
     const recommendation = await calculateRecommendationWorkout(cookies);
 

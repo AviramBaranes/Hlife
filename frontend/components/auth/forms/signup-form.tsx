@@ -189,7 +189,6 @@ function signupForm() {
       handleAxiosError(err, dispatch, 'Sign Up Failed');
     }
   }
-  // console.log(fields)
   return (
     <form
       className={classes.Form}

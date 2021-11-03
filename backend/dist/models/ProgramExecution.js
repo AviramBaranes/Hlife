@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const ProgramExecutionSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     executions: [
         {
             programId: {
                 type: Schema.Types.ObjectId,
-                ref: "Program.program",
+                ref: 'Program.program',
                 required: true,
             },
             date: { type: Date, required: true },
@@ -20,5 +20,5 @@ const ProgramExecutionSchema = new Schema({
         },
     ],
 });
-const ProgramExecution = mongoose_1.default.model("ProgramExecution", ProgramExecutionSchema);
+const ProgramExecution = mongoose_1.default.model('ProgramExecution', ProgramExecutionSchema);
 exports.default = ProgramExecution;

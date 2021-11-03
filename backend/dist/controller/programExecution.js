@@ -18,13 +18,13 @@ const getExercisesByDate = async (req, res, next) => {
         const { userId } = req;
         const date = req.params.date || new Date();
         (0, validationErrors_1.validationErrorsHandler)(req);
-        const day = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(date)); //get the day as a name
+        const day = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(date)); //get the day as a name
         const user = (await User_1.default.findById(userId));
         //TODO add program logic to program endpoints
         if (!user.hasProgram) {
             res
                 .status(403)
-                .send("You need to create a full program before you declare about execution");
+                .send('You need to create a full program before you declare about execution');
             return;
         }
         const program = (await Program_1.default.findOne({ user: userId }));
@@ -32,12 +32,12 @@ const getExercisesByDate = async (req, res, next) => {
         if (programOfDay.restDay) {
             res
                 .status(200)
-                .send("This is a rest day, You have no exercises to complete!");
+                .send('This is a rest day, You have no exercises to complete!');
             return;
         }
         const workout = (await Workout_1.default.findById(programOfDay.workout));
-        const exercises = workout.exercises.map((exercise) => exercise.name);
-        res.status(200).json({ exercises });
+        const { name, trainingDayName, time, exercises } = workout;
+        res.status(200).json({ exercises, name, trainingDayName, time });
         return;
     }
     catch (err) {
@@ -48,24 +48,28 @@ exports.getExercisesByDate = getExercisesByDate;
 const declareAnExecution = async (req, res, next) => {
     try {
         const { userId } = req;
-        const { exercises } = req.body;
+        const { exercises, isAerobic } = req.body;
         const date = req.params.date || new Date();
         (0, validationErrors_1.validationErrorsHandler)(req);
-        const day = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(new Date(date)); //get the day as a name
+        const day = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(new Date(date)); //get the day as a name
         const user = (await User_1.default.findById(userId));
         if (!user.hasProgram) {
             res
                 .status(403)
-                .send("You need to create a full program before you declare about execution");
+                .send('You need to create a full program before you declare about execution');
             return;
         }
         const program = (await Program_1.default.findOne({ user: userId }));
         const programOfDay = program.program.find((program) => program.day === day);
         const programExecution = await ProgramExecution_1.default.findOne({ user: userId });
-        if (programOfDay.restDay) {
+        let modifiedDate = date;
+        if (!req.params.date) {
+            modifiedDate = new Date(new Date(date).setHours(0, 0, 0, 0));
+        }
+        if (programOfDay.restDay || isAerobic) {
             const currentExecution = {
                 programId: programOfDay._id,
-                date,
+                date: modifiedDate,
                 executionRate: 100,
                 grade: 10,
             };
@@ -84,7 +88,7 @@ const declareAnExecution = async (req, res, next) => {
             const grade = Math.ceil(executionRate / 10);
             const execution = {
                 programId: programOfDay._id,
-                date,
+                date: modifiedDate,
                 executionRate,
                 grade,
             };
@@ -93,7 +97,7 @@ const declareAnExecution = async (req, res, next) => {
         }
         await programExecution.save();
         await user.save();
-        res.status(201).send("Wonderful! Your execution has been declared");
+        res.status(201).send('Wonderful! Your execution has been declared');
         return;
     }
     catch (err) {
@@ -114,9 +118,9 @@ const getSingleExecution = async (req, res, next) => {
             return;
         }
         const date = new Date(stringDate);
-        const requestedExecution = programExecution.executions.find((execution) => execution.date.toISOString() === date.toISOString());
+        const requestedExecution = programExecution.executions.find((execution) => execution.date.toLocaleDateString() === date.toLocaleDateString());
         if (!requestedExecution) {
-            res.status(403).send("No execution was found at this date");
+            res.status(403).send('No execution was found at this date');
             return;
         }
         res.status(200).json(requestedExecution);
@@ -130,7 +134,7 @@ exports.getSingleExecution = getSingleExecution;
 const getExecutionsByRange = async (req, res, next) => {
     try {
         const { userId } = req;
-        const { date, range } = req.body;
+        const { date, range } = req.params;
         (0, validationErrors_1.validationErrorsHandler)(req);
         const user = (await User_1.default.findById(userId));
         if (!user.hasProgram) {
@@ -140,23 +144,23 @@ const getExecutionsByRange = async (req, res, next) => {
         const dateObj = new Date(date);
         let executions;
         switch (range) {
-            case "week":
+            case 'week':
                 executions = await (0, progExecHelpers_1.getExecutionsOfWeek)(dateObj, userId);
                 break;
-            case "month":
+            case 'month':
                 executions = await (0, progExecHelpers_1.getExecutionsOfMonth)(dateObj, userId);
                 break;
-            case "year":
+            case 'year':
                 executions = await (0, progExecHelpers_1.getExecutionsOfYear)(dateObj, userId);
                 break;
-            case "all":
+            case 'all':
                 executions = await (0, progExecHelpers_1.getAllExecutions)(userId);
                 break;
             default:
                 executions = [];
         }
         if (executions.length === 0) {
-            res.status(403).send("No Executions were found in this dates");
+            res.status(204).send('No Executions were found in this dates');
             return;
         }
         res.status(200).json(executions);
@@ -167,3 +171,65 @@ const getExecutionsByRange = async (req, res, next) => {
     }
 };
 exports.getExecutionsByRange = getExecutionsByRange;
+// export const createDummyData: RequestHandler = async (req, res, next) => {
+//   try {
+//     const { userId } = req;
+//     const dates = [
+//       '10-01-2021',
+//       '10-02-2021',
+//       '10-03-2021',
+//       '10-04-2021',
+//       '10-05-2021',
+//       '10-06-2021',
+//       '10-07-2021',
+//       '10-08-2021',
+//       '10-09-2021',
+//       '10-10-2021',
+//       '10-11-2021',
+//       '10-12-2021',
+//       '10-13-2021',
+//       '10-14-2021',
+//       '10-15-2021',
+//       '10-16-2021',
+//       '10-17-2021',
+//       '10-18-2021',
+//       '10-19-2021',
+//       '10-20-2021',
+//       '10-21-2021',
+//       '10-22-2021',
+//       '10-23-2021',
+//       '10-24-2021',
+//       '10-25-2021',
+//       '10-26-2021',
+//       '10-27-2021',
+//       '10-28-2021',
+//       '10-29-2021',
+//       '10-30-2021',
+//     ];
+//     let counter = 0;
+//     // validationErrorsHandler(req);
+//     //get the day as a name
+//     // const user = (await User.findById(userId)) as UserType;
+//     // const program = (await Program.findOne({ user: userId })) as ProgramType;
+//     // const programOfDay = program.program.find((program) => program.day === day);
+//     const programExecution = await ProgramExecution.findOne({ user: userId });
+//     while (counter < 29) {
+//       const date = new Date(dates[counter]);
+//       console.log(date);
+//       let rate = Math.random() * 120;
+//       const executionRate = rate > 100 ? 100 : rate;
+//       const execution = {
+//         programId: '6176790215381809aca95aaf',
+//         date,
+//         executionRate,
+//       };
+//       programExecution.executions.push(execution);
+//       counter++;
+//     }
+//     await programExecution.save();
+//     res.status(201).send('Wonderful! Your execution has been declared');
+//     return;
+//   } catch (err: any) {
+//     catchErrorHandler(err, next);
+//   }
+// };

@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import tokensReducer from '../slices/tokens';
 import usersReducer from '../slices/auth/authSlice';
 import errorsReducer from '../slices/errors/errorsSlice';
 import messagesReducer from '../slices/messages/messagesSlice';
@@ -11,7 +10,6 @@ import loadingReducer from '../slices/loading/loadingSlice';
 
 const store = configureStore({
   reducer: {
-    tokensReducer,
     usersReducer,
     errorsReducer,
     messagesReducer,

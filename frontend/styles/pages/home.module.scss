@@ -1,0 +1,308 @@
+@import '../breakpoints.scss';
+
+.UserScore {
+  width: 50%;
+  margin: 2rem auto;
+  text-align: center;
+  p {
+    font-size: 2.5rem;
+  }
+  svg {
+    width: 70%;
+  }
+}
+
+.AnimationStart {
+  width: 70%;
+  margin: auto;
+  border-radius: 1rem;
+  transform: scale(1.5);
+  box-shadow: 1rem 0rem 1rem var(--primary-color),
+    -1rem 0rem 1rem var(--primary-color);
+  transition: transform, box-shadow 400ms ease-in-out;
+}
+.AnimationEnd {
+  transform: scale(1);
+  transition: transform 400ms ease-in-out;
+}
+
+.ExecutionSection {
+  display: flex;
+  flex-direction: column;
+}
+// DailyMission & TomorrowMission
+.DailyMission,
+.TomorrowMission {
+  margin-bottom: 4rem;
+  margin-left: 0.5rem;
+  h3 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    width: 10.5rem;
+    margin-bottom: 1rem;
+  }
+  p {
+    margin-block: 0.45rem;
+    strong {
+      font-size: 1.2rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  button {
+    padding: 0.5rem 1.7rem;
+    margin-left: 0;
+  }
+}
+
+.DailyMissionModal,
+.TomorrowMissionModal {
+  h2 {
+    margin-bottom: 0.3rem;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    strong {
+      font-size: 2rem;
+    }
+  }
+
+  h4 {
+    font-size: 1.27rem;
+    margin-block: 0.8rem;
+  }
+}
+
+.Form {
+  display: flex;
+  align-items: flex-start;
+  input {
+    margin-right: 1rem;
+    margin-top: 0.2rem;
+  }
+}
+
+.Exercise {
+  margin-bottom: 1rem;
+}
+
+.ModalTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  time {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+//Tomorrow mission
+.TomorrowMission {
+  margin-bottom: 3rem;
+  h3 {
+    width: 15rem;
+  }
+  button {
+    padding-inline: 2.5rem;
+  }
+}
+.TomorrowMissionModal {
+  li {
+    margin-bottom: 1.4rem;
+  }
+  p {
+    margin-bottom: 0.3rem;
+  }
+}
+
+//graph
+.GraphTitle {
+  h3 {
+    font-size: 1.5rem;
+    font-weight: lighter;
+    margin-bottom: 0.4rem;
+  }
+  time {
+    font-size: 0.75rem;
+  }
+  p {
+    margin-top: 0.75rem;
+    margin-bottom: 0.5rem;
+    padding-top: 1rem;
+  }
+}
+
+.Checkbox {
+  display: flex;
+  align-items: center;
+  margin-block: 1rem;
+  p {
+    margin-right: 20%;
+    font-size: 1.4rem;
+  }
+  input:checked + label::after {
+    transform: translateX(115%) !important;
+  }
+}
+
+.NoExecutions {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  margin-top: 1rem;
+}
+
+.Input {
+  margin-top: 2rem;
+}
+
+@include media('>bigPhone', '<=tablet') {
+  .DailyMission,
+  .TomorrowMission {
+    margin-left: 12%;
+  }
+  .UserScore {
+    width: 60%;
+    margin: 2.5rem auto;
+    h3 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 3rem;
+    }
+  }
+  .AnimationStart {
+    width: 60%;
+  }
+
+  .Input {
+    width: 60%;
+    margin: auto;
+    margin-left: 25%;
+  }
+
+  .ExecutionsGraph {
+    text-align: center;
+    width: 90%;
+    margin: auto;
+    margin-top: 3rem;
+    .GraphTitle,
+    .Checkbox {
+      text-align: left;
+      width: 70%;
+      margin-inline: auto;
+    }
+    svg {
+      margin: auto;
+    }
+  }
+}
+@include media('>tablet', '<desktop') {
+  .ExecutionSection {
+    margin-block: 4rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .DailyMission,
+  .TomorrowMission {
+    width: 50%;
+    margin-bottom: 6rem;
+    margin-left: 0.5rem;
+    h3 {
+      font-size: 2rem;
+      border-bottom: 2px solid var(--primary-color);
+      width: 14rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-block: 1rem;
+    }
+  }
+
+  .TomorrowMission {
+    h3 {
+      width: 19rem;
+    }
+  }
+
+  .Input {
+    width: 100%;
+  }
+
+  .ExecutionsGraph {
+    width: 40%;
+  }
+
+  .GraphTitle {
+    h3 {
+      font-size: 1.1rem;
+    }
+  }
+  .UserScore {
+    margin: 2.5rem auto;
+    h3 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 4rem;
+    }
+  }
+  .AnimationStart {
+    width: 50%;
+  }
+}
+@include media('>=desktop') {
+  .ExecutionSection {
+    margin-top: 2rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .ExecutionsGraph {
+    width: 30%;
+  }
+
+  .NoExecutions {
+    margin-right: 6rem;
+  }
+
+  .Input {
+    width: 60%;
+    margin-left: 2rem;
+  }
+
+  .UserScore {
+    margin: 2rem auto;
+    h3 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 5rem;
+    }
+  }
+  .AnimationStart {
+    width: 30%;
+  }
+  .DailyMission,
+  .TomorrowMission {
+    width: 50%;
+    margin-bottom: 6rem;
+    margin-left: 10rem;
+    h3 {
+      font-size: 2rem;
+      border-bottom: 2px solid var(--primary-color);
+      width: 14rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-block: 1rem;
+    }
+  }
+
+  .TomorrowMission {
+    h3 {
+      width: 19rem;
+    }
+  }
+}

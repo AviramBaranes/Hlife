@@ -1,50 +1,50 @@
-import express from "express";
-import { body, param } from "express-validator";
+import express from 'express';
+import { body, param } from 'express-validator';
 
-import * as authController from "../controller/auth";
-import authMiddleware from "../middleware/authMiddleware";
+import * as authController from '../controller/auth';
+import authMiddleware from '../middleware/authMiddleware';
 
 const router = express.Router();
 
 //signup
 router.post(
-  "/signup",
+  '/signup',
   [
-    body("name")
+    body('name')
       .isAlpha()
-      .withMessage("name only allow letters")
+      .withMessage('name only allow letters')
       .isLength({ min: 3 })
-      .withMessage("name must be at least 3 characters"),
+      .withMessage('name must be at least 3 characters'),
 
-    body("email", "please enter a correct email").isEmail().normalizeEmail(),
+    body('email', 'please enter a correct email').isEmail().normalizeEmail(),
 
-    body("password")
+    body('password')
       .isLength({ min: 6 })
-      .withMessage("password need to be at least 6 characters")
+      .withMessage('password need to be at least 6 characters')
       .isAlphanumeric()
-      .withMessage("password only allow letters and numbers"), //isStrongPassword
+      .withMessage('password only allow letters and numbers'), //isStrongPassword
 
-    body("passwordConfirmation")
+    body('passwordConfirmation')
       .isLength({ min: 6 })
-      .withMessage("password need to be at least 6 characters")
+      .withMessage('password need to be at least 6 characters')
       .isAlphanumeric()
-      .withMessage("password only allow letters and numbers"),
+      .withMessage('password only allow letters and numbers'),
 
-    body("gender", "gender is invalid").custom((value: string) => {
-      if (value === "male" || value === "female") {
+    body('gender', 'gender is invalid').custom((value: string) => {
+      if (value === 'male' || value === 'female') {
         return true;
       }
       return false;
     }),
 
     body(
-      "dateOfBirth",
+      'dateOfBirth',
       'The field must be a date between "01/01/1920" and "01/01/2005"'
     )
       .isDate()
       .custom((value: string) => {
-        const limit = new Date("01/01/1920");
-        const max = new Date("01/01/2005");
+        const limit = new Date('01/01/1920');
+        const max = new Date('01/01/2005');
         const date = new Date(value);
 
         if (
@@ -62,61 +62,61 @@ router.post(
 
 //login
 router.post(
-  "/login",
+  '/login',
   [
-    body("email", "please enter a correct email").isEmail().normalizeEmail(),
+    body('email', 'please enter a correct email').isEmail().normalizeEmail(),
 
     body(
-      "password",
-      "Invalid password, At least 6 characters for a password"
+      'password',
+      'Invalid password, At least 6 characters for a password'
     ).isLength({ min: 6 }),
   ],
   authController.login
 );
 
 //logout
-router.post("/logout", authMiddleware, authController.logout);
+router.post('/logout', authMiddleware, authController.logout);
 
 //reset via settings
 router.post(
-  "/settings/password-reset",
+  '/settings/password-reset',
   authMiddleware,
-  body(["currentPassword", "newPassword", "newPasswordConfirmation"])
+  body(['currentPassword', 'newPassword', 'newPasswordConfirmation'])
     .isLength({ min: 6 })
-    .withMessage("password need to be at least 6 characters")
+    .withMessage('password need to be at least 6 characters')
     .isAlphanumeric()
-    .withMessage("password only allow letters and numbers"),
+    .withMessage('password only allow letters and numbers'),
   authController.resetPassword
 );
 
 //send email reset token
 router.post(
-  "/password/send-token",
-  body("email").isEmail().withMessage("Invalid Email").normalizeEmail(),
+  '/password/send-token',
+  body('email').isEmail().withMessage('Invalid Email').normalizeEmail(),
   authController.sendResetEmail
 );
 
 //reset via email
 router.put(
-  "/reset/password-reset",
-  body(["password", "passwordConfirmation"])
+  '/reset/password-reset',
+  body(['password', 'passwordConfirmation'])
     .isLength({ min: 6 })
-    .withMessage("password need to be at least 6 characters")
+    .withMessage('password need to be at least 6 characters')
     .isAlphanumeric()
-    .withMessage("password only allow letters and numbers"),
+    .withMessage('password only allow letters and numbers'),
   authController.resetPasswordViaToken
 );
 
 //validate token
 router.get(
-  "/reset/validate-token/:token",
-  param("token")
+  '/reset/validate-token/:token',
+  param('token')
     .isLength({ min: 64, max: 64 })
-    .withMessage("Invalid Token, too short"),
+    .withMessage('Invalid Token, too short'),
   authController.validateResetToken
 );
 
 //validate auth
-router.get("/isUser", authMiddleware, authController.validateUser);
+router.get('/isUser', authMiddleware, authController.validateUser);
 
 export default router;

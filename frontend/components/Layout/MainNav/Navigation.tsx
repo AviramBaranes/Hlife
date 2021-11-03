@@ -1,14 +1,14 @@
-import React, { SetStateAction, useEffect, useState } from "react";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import React, { SetStateAction, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import classes from "../../../styles/components/Navigation.module.scss";
-import { RootState } from "../../../redux/store/reduxStore";
-import AuthorizedNav from "../NavComponents/AuthorizeNav";
-import AuthenticateNav from "../NavComponents/AuthenticateNav";
-import { validateAuthenticationAction } from "../../../redux/slices/auth/authSlice";
+import classes from '../../../styles/components/Navigation.module.scss';
+import { RootState } from '../../../redux/store/reduxStore';
+import AuthorizedNav from '../NavComponents/AuthorizeNav';
+import AuthenticateNav from '../NavComponents/AuthenticateNav';
+import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
 const Navigation: React.FC<{
   setDisplaySideNav: React.Dispatch<SetStateAction<boolean>>;
@@ -26,11 +26,10 @@ const Navigation: React.FC<{
     <>
       <nav className={classes.Navbar}>
         <h1 className={classes.Logo}>
-          <Link href="/">Hlife</Link>
+          <Link href='/'>Hlife</Link>
         </h1>
-        {!isAuthenticated && <AuthenticateNav />}
-        {hasProgram && <AuthorizedNav />}
-        {isAuthenticated && !hasProgram && null}
+        {!isAuthenticated && !isAuthenticated && <AuthenticateNav />}
+        {hasProgram && isAuthenticated && <AuthorizedNav />}
         <div
           data-testid='burgerLink'
           className={classes.BarsIcon}
