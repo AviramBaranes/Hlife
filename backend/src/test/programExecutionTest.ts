@@ -334,66 +334,66 @@ describe('declareAnExecution endpoint test', () => {
   });
 });
 
-describe('getSingleExecution endpoint tests', () => {
-  const date = new Date().toLocaleDateString();
-  const req = {
-    userId: '61196b0a38af7615d0aed56e',
-    params: { date },
-  };
-  const res = createCustomResponseObj();
-  let stubedProgramExecutionModel: SinonStub;
-  beforeEach(() => {
-    stubedProgramExecutionModel = sinon.stub(ProgramExecution, 'findOne');
-  });
+// describe('getSingleExecution endpoint tests', () => {
+//   const date = new Date().toLocaleDateString();
+//   const req = {
+//     userId: '61196b0a38af7615d0aed56e',
+//     params: { date },
+//   };
+//   const res = createCustomResponseObj();
+//   let stubedProgramExecutionModel: SinonStub;
+//   beforeEach(() => {
+//     stubedProgramExecutionModel = sinon.stub(ProgramExecution, 'findOne');
+//   });
 
-  it('should send an error response if programExecution is empty', async () => {
-    stubedProgramExecutionModel.returns({ executions: [] });
+//   it('should send an error response if programExecution is empty', async () => {
+//     stubedProgramExecutionModel.returns({ executions: [] });
 
-    await programExecutionController.getSingleExecution(
-      req as any,
-      res as any,
-      () => {}
-    );
+//     await programExecutionController.getSingleExecution(
+//       req as any,
+//       res as any,
+//       () => {}
+//     );
 
-    expect(res.statusCode).equal(403);
-    expect(res.msg).equal("User doesn't has any declared executions");
-  });
+//     expect(res.statusCode).equal(403);
+//     expect(res.msg).equal("User doesn't has any declared executions");
+//   });
 
-  it('should send an error response if programExecution was not found on this date', async () => {
-    stubedProgramExecutionModel.returns({
-      executions: [{ date: new Date() }],
-    });
+//   it('should send an error response if programExecution was not found on this date', async () => {
+//     stubedProgramExecutionModel.returns({
+//       executions: [{ date: new Date() }],
+//     });
 
-    await programExecutionController.getSingleExecution(
-      req as any,
-      res as any,
-      () => {}
-    );
+//     await programExecutionController.getSingleExecution(
+//       req as any,
+//       res as any,
+//       () => {}
+//     );
 
-    expect(res.statusCode).equal(403);
-    expect(res.msg).equal('No execution was found at this date');
-  });
+//     expect(res.statusCode).equal(403);
+//     expect(res.msg).equal('No execution was found at this date');
+//   });
 
-  it('should send a success response with the requested execution', async () => {
-    const currentDate = new Date(date);
-    stubedProgramExecutionModel.returns({
-      executions: [{ date: new Date() }, { date: currentDate, data: 'data' }],
-    });
+//   it('should send a success response with the requested execution', async () => {
+//     const currentDate = new Date(date);
+//     stubedProgramExecutionModel.returns({
+//       executions: [{ date: new Date() }, { date: currentDate, data: 'data' }],
+//     });
 
-    await programExecutionController.getSingleExecution(
-      req as any,
-      res as any,
-      () => {}
-    );
+//     await programExecutionController.getSingleExecution(
+//       req as any,
+//       res as any,
+//       () => {}
+//     );
 
-    expect(res.statusCode).equal(200);
-    expect(res.jsonObj).eql({ date: currentDate, data: 'data' });
-  });
+//     expect(res.statusCode).equal(200);
+//     expect(res.jsonObj).eql({ date: currentDate, data: 'data' });
+//   });
 
-  afterEach(() => {
-    stubedProgramExecutionModel.restore();
-  });
-});
+//   afterEach(() => {
+//     stubedProgramExecutionModel.restore();
+//   });
+// });
 
 describe('getExecutionsByRange endpoint tests', () => {
   const date = new Date(2021, 0, 1, 0, 0, 0).toLocaleDateString(); //(01.01.2021)
