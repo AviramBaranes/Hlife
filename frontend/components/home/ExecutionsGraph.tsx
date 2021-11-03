@@ -439,7 +439,7 @@ const ExecutionsGraph: React.FC<{
         ref={barRef}
       ></svg>
       <svg
-        data-testid='pie-graph'
+        data-testid='pie-chart'
         display={graphToDisplay === 'pie' ? 'block' : 'none'}
         height={pieDimensions.height}
         width={pieDimensions.width}

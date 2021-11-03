@@ -1,5 +1,5 @@
-fix bugs
 ux when its sunday
+add loader to Image in uploadPhoto
 1.styles
 
 2.tests
