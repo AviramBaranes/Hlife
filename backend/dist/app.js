@@ -66,7 +66,7 @@ app.use((error, req, res, next) => {
         message = 'Server Error';
     if (!data)
         data = null;
-    res.status(statusCode).json({ message, data });
+    res.status(statusCode).send({ message, data });
 });
 const server = app.listen(8080);
 exports.default = server; //for tests
