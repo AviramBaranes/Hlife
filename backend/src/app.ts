@@ -82,7 +82,7 @@ app.use(
     if (!message) message = 'Server Error';
     if (!data) data = null;
 
-    res.status(statusCode).send(message);
+    res.status(statusCode).send({ message, data });
   }
 );
 

@@ -1,13 +1,13 @@
-import mongoose, { Document, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
 const WorkoutSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 
   trainingDayName: {
     type: String,
-    enum: ["A", "B", "C", "D", "FB", "aerobic"],
+    enum: ['A', 'B', 'C', 'D', 'FB', 'aerobic'],
     required: true,
   },
 
@@ -28,7 +28,7 @@ const WorkoutSchema = new Schema({
   time: { type: Number, min: 10, max: 300 },
 });
 
-const Workout = mongoose.model("workout", WorkoutSchema);
+const Workout = mongoose.model('Workout', WorkoutSchema);
 export default Workout;
 
 interface Exercises {
@@ -41,7 +41,7 @@ interface Exercises {
 
 export interface WorkoutType extends Document {
   user: ObjectId;
-  trainingDayName: "A" | "B" | "C" | "D" | "FB" | "aerobic";
+  trainingDayName: 'A' | 'B' | 'C' | 'D' | 'FB' | 'aerobic';
   name: string;
   description: string | undefined;
   exercises: Exercises[];

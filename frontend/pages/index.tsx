@@ -60,6 +60,7 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { destination, grade } = await protectRouteHandler(ctx);
+  console.log(destination);
   if (destination === '/') {
     try {
       const cookies = parseCookies(ctx);

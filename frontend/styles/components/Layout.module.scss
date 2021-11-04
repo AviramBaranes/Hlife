@@ -7,13 +7,14 @@
 }
 
 .DarkMode {
-  background-image: url('../../assets/Hlife-background\ .png');
+  // background-image: url('../../assets/Hlife-background\ .png');
+  background-color: rgb(19, 17, 17);
   color: var(--text-color);
 }
 
 .LightMode {
   // background-image: url('../../assets/lighted-theme-background.svg');
-  background-color: rgba(255, 249, 236, 0.719);
+  background-color: rgb(255, 252, 245);
   color: var(--text-color);
 }
 

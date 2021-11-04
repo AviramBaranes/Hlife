@@ -29,7 +29,7 @@ const CreateSingleWorkout: React.FC<{
 
   async function submitWorkoutHandler(e: React.FormEvent) {
     e.preventDefault();
-    window.scroll(0,0)
+    window.scroll(0, 0);
     const [hours, minutes] = totalTime.split(':');
     const time = +hours * 60 + +minutes;
 
@@ -68,7 +68,7 @@ const CreateSingleWorkout: React.FC<{
         dispatch(loadingAction.setToFalse());
         router.push('/auth/registration/schedule-program');
       }
-      dispatch(loadingAction.setToFalse())
+      dispatch(loadingAction.setToFalse());
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Failed to create workout');
     }

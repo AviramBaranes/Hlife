@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classes from '../../styles/pages/home.module.scss';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
 import Modal from '../UI/Modal/Modal';
+import DetailedExercise from './DetailedExercise';
 
 interface TomorrowMissionProps {
   trainingDayName: string;
@@ -34,47 +35,12 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
     <div className={classes.TomorrowMission}>
       {showModal && exercises?.length && workoutName && (
         <Modal onClose={() => setShowModal(false)}>
-          <div className={classes.TomorrowMissionModal}>
-            <div className={classes.ModalTitle}>
-              <h2>
-                <strong>{workoutName}</strong> ({trainingDayName})
-              </h2>
-              <time>{tomorrow}</time>
-            </div>
-            <h4>Exercises:</h4>
-            <ul>
-              {exercises.map((exercise, i) => (
-                <li key={exercise.name + i}>
-                  <div>
-                    <p>
-                      <strong>Name:</strong>
-                      {exercise.name}
-                    </p>
-                    <p>
-                      <strong>Reps:</strong>
-                      {exercise.reps}
-                    </p>
-                    <p>
-                      <strong>Sets:</strong>
-                      {exercise.sets}
-                    </p>
-                    {exercise.description && (
-                      <p>
-                        <strong>Description:</strong>
-                        {exercise.description}
-                      </p>
-                    )}
-                    {exercise.muscles && (
-                      <p>
-                        <strong>Muscles:</strong>
-                        {exercise.muscles.join(', ')}
-                      </p>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <DetailedExercise
+            exercises={exercises}
+            time={tomorrow}
+            trainingDayName={trainingDayName}
+            workoutName={workoutName}
+          />
         </Modal>
       )}
       <h3>Tomorrow Mission:</h3>

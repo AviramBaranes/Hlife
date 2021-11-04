@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config({ path: "./config.env" });
+dotenv_1.default.config({ path: './config.env' });
 const chai_1 = require("chai");
 const sinon_1 = __importDefault(require("sinon"));
 const programController = __importStar(require("../controller/program"));
@@ -33,171 +33,171 @@ const Program_1 = __importDefault(require("../models/Program"));
 const User_1 = __importDefault(require("../models/User"));
 const Goals_1 = __importDefault(require("../models/Goals"));
 const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
-describe("get program recommendation endpoint test ", () => {
-    const req = { userId: "123" };
+describe('get program recommendation endpoint test ', () => {
+    const req = { userId: '123' };
     const res = (0, responseDefaultObj_1.default)();
     let stubedUserModel, stubedGoalsModel, stubedStatsModel;
     beforeEach(() => {
-        stubedGoalsModel = sinon_1.default.stub(Goals_1.default, "findOne");
-        stubedUserModel = sinon_1.default.stub(User_1.default, "findById");
-        stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, "findOne");
+        stubedGoalsModel = sinon_1.default.stub(Goals_1.default, 'findOne');
+        stubedUserModel = sinon_1.default.stub(User_1.default, 'findById');
+        stubedStatsModel = sinon_1.default.stub(PhysicalStats_1.default, 'findOne');
     });
     afterEach(() => {
         stubedGoalsModel.restore();
         stubedUserModel.restore();
         stubedStatsModel.restore();
     });
-    it("should send an error response if no basic goal was defined", async () => {
+    it('should send an error response if no basic goal was defined', async () => {
         stubedGoalsModel.returns({ basicGoal: false });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("User need to create goals in order to get a recommendation program");
+        (0, chai_1.expect)(res.msg).equal('User need to create goals in order to get a recommendation program');
     });
-    it("should send the correct recommendation (female gain muscle pro)", async () => {
-        stubedUserModel.returns({ gender: "female" });
-        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
-        stubedStatsModel.returns({ rank: "Pro" });
+    it('should send the correct recommendation (female gain muscle pro)', async () => {
+        stubedUserModel.returns({ gender: 'female' });
+        stubedGoalsModel.returns({ basicGoal: 'increase muscles mass' });
+        stubedStatsModel.returns({ rank: 'Pro' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "AB", timesPerWeek: 4 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'AB', timesPerWeek: 4 });
     });
-    it("should send the correct recommendation (female gain muscle)", async () => {
-        stubedUserModel.returns({ gender: "female" });
-        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
-        stubedStatsModel.returns({ rank: "Intermediate" });
+    it('should send the correct recommendation (female gain muscle)', async () => {
+        stubedUserModel.returns({ gender: 'female' });
+        stubedGoalsModel.returns({ basicGoal: 'increase muscles mass' });
+        stubedStatsModel.returns({ rank: 'Intermediate' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "FB", timesPerWeek: 2 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'FB', timesPerWeek: 2 });
     });
-    it("should send the correct recommendation (female lose fat pro)", async () => {
-        stubedUserModel.returns({ gender: "female" });
-        stubedGoalsModel.returns({ basicGoal: "lose fat" });
-        stubedStatsModel.returns({ rank: "Pro" });
+    it('should send the correct recommendation (female lose fat pro)', async () => {
+        stubedUserModel.returns({ gender: 'female' });
+        stubedGoalsModel.returns({ basicGoal: 'lose fat' });
+        stubedStatsModel.returns({ rank: 'Pro' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
-        (0, chai_1.expect)(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'aerobic', timesPerWeek: 4 });
+        (0, chai_1.expect)(res.jsonObj[1]).eql({ workoutName: 'FB', timesPerWeek: 1 });
     });
-    it("should send the correct recommendation (female lose fat)", async () => {
-        stubedUserModel.returns({ gender: "female" });
-        stubedGoalsModel.returns({ basicGoal: "lose fat" });
-        stubedStatsModel.returns({ rank: "Advanced" });
+    it('should send the correct recommendation (female lose fat)', async () => {
+        stubedUserModel.returns({ gender: 'female' });
+        stubedGoalsModel.returns({ basicGoal: 'lose fat' });
+        stubedStatsModel.returns({ rank: 'Advanced' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'aerobic', timesPerWeek: 4 });
     });
-    it("should send the correct recommendation (male lose fat pro)", async () => {
-        stubedUserModel.returns({ gender: "male" });
-        stubedGoalsModel.returns({ basicGoal: "lose fat" });
-        stubedStatsModel.returns({ rank: "Pro" });
+    it('should send the correct recommendation (male lose fat pro)', async () => {
+        stubedUserModel.returns({ gender: 'male' });
+        stubedGoalsModel.returns({ basicGoal: 'lose fat' });
+        stubedStatsModel.returns({ rank: 'Pro' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 4 });
-        (0, chai_1.expect)(res.jsonObj[1]).eql({ workoutName: "FB", timesPerWeek: 1 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'aerobic', timesPerWeek: 4 });
+        (0, chai_1.expect)(res.jsonObj[1]).eql({ workoutName: 'FB', timesPerWeek: 1 });
     });
-    it("should send the correct recommendation (male lose fat)", async () => {
-        stubedUserModel.returns({ gender: "male" });
-        stubedGoalsModel.returns({ basicGoal: "lose fat" });
-        stubedStatsModel.returns({ rank: "Beginner" });
+    it('should send the correct recommendation (male lose fat)', async () => {
+        stubedUserModel.returns({ gender: 'male' });
+        stubedGoalsModel.returns({ basicGoal: 'lose fat' });
+        stubedStatsModel.returns({ rank: 'Beginner' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "aerobic", timesPerWeek: 2 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'aerobic', timesPerWeek: 2 });
     });
-    it("should send the correct recommendation (male gain muscle)", async () => {
-        stubedUserModel.returns({ gender: "male" });
-        stubedGoalsModel.returns({ basicGoal: "increase muscles mass" });
-        stubedStatsModel.returns({ rank: "Pro" });
+    it('should send the correct recommendation (male gain muscle)', async () => {
+        stubedUserModel.returns({ gender: 'male' });
+        stubedGoalsModel.returns({ basicGoal: 'increase muscles mass' });
+        stubedStatsModel.returns({ rank: 'Pro' });
         await programController.getRecommendationProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: "ABCD", timesPerWeek: 4 });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ workoutName: 'ABCD', timesPerWeek: 4 });
     });
 });
-describe("create program endpoint test", () => {
+describe('create program endpoint test', () => {
     const res = (0, responseDefaultObj_1.default)();
     const req = {
-        userId: "61196b0a38af7615d0aed56e",
-        body: { trainingDayName: "A" },
-        params: { day: "Sunday" },
+        userId: '61196b0a38af7615d0aed56e',
+        body: { trainingDayName: 'A' },
+        params: { day: 'Sunday' },
     };
     let stubedWorkoutModel;
     let stubedProgramModel;
     beforeEach(() => {
-        stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findOne");
-        stubedProgramModel = sinon_1.default.stub(Program_1.default, "findOne");
+        stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, 'findOne');
+        stubedProgramModel = sinon_1.default.stub(Program_1.default, 'findOne');
     });
-    it("Should send error response if workout was not found", async () => {
+    it('Should send error response if workout was not found', async () => {
         stubedWorkoutModel.returns(false);
         await programController.createProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
         (0, chai_1.expect)(res.msg).equal("Couldn't find a workout with this name, make sure you create one first");
     });
-    it("should create new program model with a list of all days + a rest day", async () => {
+    it('should create new program model with a list of all days + a rest day', async () => {
         stubedProgramModel.returns({ program: [], save: sinon_1.default.spy() });
         stubedWorkoutModel.returns(false);
         delete req.body.trainingDayName;
         await programController.createProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
         (0, chai_1.expect)(program.save.called).equal(true);
-        (0, chai_1.expect)(program.program[0].day).equal("Sunday");
+        (0, chai_1.expect)(program.program[0].day).equal('Sunday');
         (0, chai_1.expect)(program.program[0].restDay).equal(true);
-        (0, chai_1.expect)(program.program[1].day).equal("Monday");
+        (0, chai_1.expect)(program.program[1].day).equal('Monday');
         (0, chai_1.expect)(program.program).length(7);
     });
-    it("should create new program model with a list of all days + a workout day", async () => {
+    it('should create new program model with a list of all days + a workout day', async () => {
         stubedProgramModel.returns({ program: [], save: sinon_1.default.spy() });
-        stubedWorkoutModel.returns({ _id: "51196b0a38af7615d0aed56e" });
-        req.body.trainingDayName = "A";
+        stubedWorkoutModel.returns({ _id: '51196b0a38af7615d0aed56e' });
+        req.body.trainingDayName = 'A';
         await programController.createProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
         (0, chai_1.expect)(program.save.called).equal(true);
-        (0, chai_1.expect)(program.program[0].day).equal("Sunday");
-        (0, chai_1.expect)(program.program[0].workout.toString()).equal("51196b0a38af7615d0aed56e");
-        (0, chai_1.expect)(program.program[1].day).equal("Monday");
+        (0, chai_1.expect)(program.program[0].day).equal('Sunday');
+        (0, chai_1.expect)(program.program[0].workout.toString()).equal('51196b0a38af7615d0aed56e');
+        (0, chai_1.expect)(program.program[1].day).equal('Monday');
         (0, chai_1.expect)(program.program).length(7);
     });
-    it("should send a success response", () => {
+    it('should send a success response', () => {
         (0, chai_1.expect)(res.statusCode).equal(201);
-        (0, chai_1.expect)(res.msg).equal("Program added successfully");
+        (0, chai_1.expect)(res.msg).equal('Program added successfully');
     });
-    it("should send an error response if day already has a program (restDay)", async () => {
+    it('should send an error response if day already has a program (restDay)', async () => {
         stubedProgramModel.returns({
-            program: [{ day: "Sunday", restDay: true }, { day: "Monday" }],
+            program: [{ day: 'Sunday', restDay: true }, { day: 'Monday' }],
         });
         stubedWorkoutModel.returns(false);
         delete req.body.trainingDayName;
         await programController.createProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("This day already has a program");
+        (0, chai_1.expect)(res.msg).equal('This day already has a program');
     });
-    it("should send an error response if day already has a program (workout)", async () => {
+    it('should send an error response if day already has a program (workout)', async () => {
         stubedProgramModel.returns({
-            program: [{ day: "Sunday", workout: "id" }, { day: "Monday" }],
+            program: [{ day: 'Sunday', workout: 'id' }, { day: 'Monday' }],
         });
         stubedWorkoutModel.returns(false);
         delete req.body.trainingDayName;
         await programController.createProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("This day already has a program");
+        (0, chai_1.expect)(res.msg).equal('This day already has a program');
     });
-    it("should create new program day with a workout", async () => {
-        req.body.trainingDayName = "A";
+    it('should create new program day with a workout', async () => {
+        req.body.trainingDayName = 'A';
         stubedProgramModel.returns({
             save: sinon_1.default.spy(),
-            program: [{ day: "Sunday" }, { day: "Monday" }],
+            program: [{ day: 'Sunday' }, { day: 'Monday' }],
         });
-        stubedWorkoutModel.returns({ _id: "51196b0a38af7615d0aed56e" });
+        stubedWorkoutModel.returns({ _id: '51196b0a38af7615d0aed56e' });
         await programController.createProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
         (0, chai_1.expect)(program.save.called).equal(true);
-        (0, chai_1.expect)(program.program[0].workout.toString()).equal("51196b0a38af7615d0aed56e");
+        (0, chai_1.expect)(program.program[0].workout.toString()).equal('51196b0a38af7615d0aed56e');
         (0, chai_1.expect)(program.program[0].restDay).equal(false);
     });
-    it("should create new program day with a restDay", async () => {
-        req.params.day = "Monday";
+    it('should create new program day with a restDay', async () => {
+        req.params.day = 'Monday';
         delete req.body.trainingDayName;
         stubedProgramModel.returns({
             save: sinon_1.default.spy(),
-            program: [{ day: "Sunday" }, { day: "Monday" }],
+            program: [{ day: 'Sunday' }, { day: 'Monday' }],
         });
         await programController.createProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
@@ -205,25 +205,25 @@ describe("create program endpoint test", () => {
         (0, chai_1.expect)(program.program[1].workout).equal(undefined);
         (0, chai_1.expect)(program.program[1].restDay).equal(true);
     });
-    it("should send a success response", () => {
+    it('should send a success response', () => {
         (0, chai_1.expect)(res.statusCode).equal(201);
-        (0, chai_1.expect)(res.msg).equal("Program added successfully");
+        (0, chai_1.expect)(res.msg).equal('Program added successfully');
     });
-    it("should update user if program is full", async () => {
-        req.params.day = "Sunday";
+    it('should update user if program is full', async () => {
+        req.params.day = 'Sunday';
         stubedProgramModel.returns({
             save: sinon_1.default.spy(),
             program: [
-                { day: "Sunday" },
-                { day: "2", restDay: true },
-                { day: "3", restDay: true },
-                { day: "4", restDay: true },
-                { day: "5", restDay: true },
-                { day: "6", restDay: true },
-                { day: "7", restDay: true },
+                { day: 'Sunday' },
+                { day: '2', restDay: true },
+                { day: '3', restDay: true },
+                { day: '4', restDay: true },
+                { day: '5', restDay: true },
+                { day: '6', restDay: true },
+                { day: '7', restDay: true },
             ],
         });
-        const stubedUser = sinon_1.default.stub(User_1.default, "findById");
+        const stubedUser = sinon_1.default.stub(User_1.default, 'findById');
         stubedUser.returns({ hasProgram: false, save: sinon_1.default.spy() });
         await programController.createProgram(req, res, () => { });
         const user = User_1.default.findById({});
@@ -236,75 +236,87 @@ describe("create program endpoint test", () => {
         stubedProgramModel.restore();
     });
 });
-describe("get all programs endpoint test", () => {
-    const req = { userId: "123" };
+describe('get all programs endpoint test', () => {
+    const req = { userId: '123' };
     const res = (0, responseDefaultObj_1.default)();
     let stubedProgramModel;
     beforeEach(() => {
-        stubedProgramModel = sinon_1.default.stub(Program_1.default, "findOne");
+        stubedProgramModel = sinon_1.default.stub(Program_1.default, 'findOne');
     });
-    it("should send an error response if no program was found", async () => {
-        stubedProgramModel.returns(false);
-        await programController.getAllPrograms(req, res, () => { });
-        (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("Something wrong... this user has no program");
-    });
-    it("should send an error response if program is not full", async () => {
-        stubedProgramModel.returns({ program: [{ day: "a" }, { day: "b" }] });
-        await programController.getAllPrograms(req, res, () => { });
-        (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("You need to create a program for each day in order to request them");
-    });
-    it("should send a success response with the full program", async () => {
+    it('should send an error response if no program was found', async () => {
         stubedProgramModel.returns({
-            program: [
-                { day: "a", restDay: true },
-                { restDay: false, workout: "id", day: "b" },
-            ],
+            populate() {
+                return false;
+            },
+        });
+        await programController.getAllPrograms(req, res, () => { });
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal('Something wrong... this user has no program');
+    });
+    it('should send an error response if program is not full', async () => {
+        stubedProgramModel.returns({
+            populate() {
+                return { program: [{ day: 'a' }, { day: 'b' }] };
+            },
+        });
+        await programController.getAllPrograms(req, res, () => { });
+        (0, chai_1.expect)(res.statusCode).equal(403);
+        (0, chai_1.expect)(res.msg).equal('You need to create a program for each day in order to request them');
+    });
+    it('should send a success response with the full program', async () => {
+        stubedProgramModel.returns({
+            populate() {
+                return {
+                    program: [
+                        { day: 'a', restDay: true },
+                        { restDay: false, workout: 'id', day: 'b' },
+                    ],
+                };
+            },
         });
         await programController.getAllPrograms(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(200);
-        (0, chai_1.expect)(res.jsonObj[0]).eql({ day: "a", restDay: true });
-        (0, chai_1.expect)(res.jsonObj[1]).eql({ restDay: false, workout: "id", day: "b" });
+        (0, chai_1.expect)(res.jsonObj[0]).eql({ day: 'a', restDay: true });
+        (0, chai_1.expect)(res.jsonObj[1]).eql({ restDay: false, workout: 'id', day: 'b' });
     });
     afterEach(() => {
         stubedProgramModel.restore();
     });
 });
-describe("get program endpoint test", () => {
+describe('get program endpoint test', () => {
     const res = (0, responseDefaultObj_1.default)();
     const req = {
-        userId: "61196b0a38af7615d0aed56e",
-        params: { day: "Sunday" },
+        userId: '61196b0a38af7615d0aed56e',
+        params: { day: 'Sunday' },
     };
     let stubedProgramModel;
     beforeEach(() => {
-        stubedProgramModel = sinon_1.default.stub(Program_1.default, "findOne");
+        stubedProgramModel = sinon_1.default.stub(Program_1.default, 'findOne');
     });
-    it("Should send an error response if workout was not found", async () => {
+    it('Should send an error response if workout was not found', async () => {
         stubedProgramModel.returns({ program: [] });
         await programController.getProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("No program was found for the user");
+        (0, chai_1.expect)(res.msg).equal('No program was found for the user');
     });
-    it("should send an error response if there is no program as made yet", async () => {
-        stubedProgramModel.returns({ program: [{ day: "Sunday" }] });
+    it('should send an error response if there is no program as made yet', async () => {
+        stubedProgramModel.returns({ program: [{ day: 'Sunday' }] });
         await programController.getProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("No program was set at this day yet, make sure you create one");
+        (0, chai_1.expect)(res.msg).equal('No program was set at this day yet, make sure you create one');
     });
-    it("should send a success response with the requested program", async () => {
+    it('should send a success response with the requested program', async () => {
         stubedProgramModel.returns({
             program: [
-                { day: "no" },
-                { day: "Sunday", restDay: false, workout: "_id" },
+                { day: 'no' },
+                { day: 'Sunday', restDay: false, workout: '_id' },
             ],
         });
         await programController.getProgram(req, res, () => { });
         const expectedResponseData = {
-            day: "Sunday",
+            day: 'Sunday',
             restDay: false,
-            workout: "_id",
+            workout: '_id',
         };
         (0, chai_1.expect)(res.statusCode).equal(200);
         (0, chai_1.expect)(res.jsonObj).eql(expectedResponseData);
@@ -313,64 +325,64 @@ describe("get program endpoint test", () => {
         stubedProgramModel.restore();
     });
 });
-describe("change program endpoint test", () => {
+describe('change program endpoint test', () => {
     const res = (0, responseDefaultObj_1.default)();
     const req = {
-        userId: "61196b0a38af7615d0aed56e",
-        body: { trainingDayName: "A", restDay: true },
-        params: { day: "Sunday" },
+        userId: '61196b0a38af7615d0aed56e',
+        body: { trainingDayName: 'A', restDay: true },
+        params: { day: 'Sunday' },
     };
     let stubedProgramModel;
     let stubedWorkoutModel;
     beforeEach(() => {
-        stubedProgramModel = sinon_1.default.stub(Program_1.default, "findOne");
-        stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, "findOne");
+        stubedProgramModel = sinon_1.default.stub(Program_1.default, 'findOne');
+        stubedWorkoutModel = sinon_1.default.stub(Workout_1.default, 'findOne');
     });
-    it("Should send an error response if the request contains a rest day and a workout", async () => {
+    it('Should send an error response if the request contains a rest day and a workout', async () => {
         stubedProgramModel.returns(false);
         await programController.changeProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
         (0, chai_1.expect)(res.msg).equal("You can't set a workout day as a rest day");
     });
-    it("Should send an error response if program was not found", async () => {
+    it('Should send an error response if program was not found', async () => {
         req.body.restDay = false;
         stubedProgramModel.returns(false);
         await programController.changeProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("No program was found for the user");
+        (0, chai_1.expect)(res.msg).equal('No program was found for the user');
     });
-    it("should send an error response if there is no program as made yet", async () => {
-        stubedProgramModel.returns({ program: [{ day: "Sunday" }] });
+    it('should send an error response if there is no program as made yet', async () => {
+        stubedProgramModel.returns({ program: [{ day: 'Sunday' }] });
         await programController.changeProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
-        (0, chai_1.expect)(res.msg).equal("No program was set at this day yet, make sure you create one");
+        (0, chai_1.expect)(res.msg).equal('No program was set at this day yet, make sure you create one');
     });
-    it("Should send error response if workout was not found", async () => {
+    it('Should send error response if workout was not found', async () => {
         stubedWorkoutModel.returns(false);
-        stubedProgramModel.returns({ program: [{ day: "Sunday", restDay: true }] });
+        stubedProgramModel.returns({ program: [{ day: 'Sunday', restDay: true }] });
         await programController.changeProgram(req, res, () => { });
         (0, chai_1.expect)(res.statusCode).equal(403);
         (0, chai_1.expect)(res.msg).equal("Couldn't find a workout with this name, make sure you create one first");
     });
-    it("Should set a new workout", async () => {
-        stubedWorkoutModel.returns({ _id: "61196b0a38af7615d0aed56e" });
+    it('Should set a new workout', async () => {
+        stubedWorkoutModel.returns({ _id: '61196b0a38af7615d0aed56e' });
         stubedProgramModel.returns({
             save: sinon_1.default.spy(),
-            program: [{ day: "Sunday", restDay: true }],
+            program: [{ day: 'Sunday', restDay: true }],
         });
         await programController.changeProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
         const testingProgram = program.program[0];
-        (0, chai_1.expect)(testingProgram.workout.toString()).equal("61196b0a38af7615d0aed56e");
+        (0, chai_1.expect)(testingProgram.workout.toString()).equal('61196b0a38af7615d0aed56e');
         (0, chai_1.expect)(testingProgram.restDay).equal(false);
         (0, chai_1.expect)(program.save.called).equal(true);
     });
-    it("should delete the workout if rest day is true", async () => {
+    it('should delete the workout if rest day is true', async () => {
         req.body.restDay = true;
         delete req.body.trainingDayName;
         stubedProgramModel.returns({
             save: sinon_1.default.spy(),
-            program: [{ day: "Sunday", workout: "exist" }],
+            program: [{ day: 'Sunday', workout: 'exist' }],
         });
         await programController.changeProgram(req, res, () => { });
         const program = await Program_1.default.findOne();
@@ -379,9 +391,9 @@ describe("change program endpoint test", () => {
         (0, chai_1.expect)(testingProgram.restDay).equal(true);
         (0, chai_1.expect)(program.save.called).equal(true);
     });
-    it("should set a success response", () => {
+    it('should set a success response', () => {
         (0, chai_1.expect)(res.statusCode).equal(201);
-        (0, chai_1.expect)(res.msg).equal("Program updated successfully");
+        (0, chai_1.expect)(res.msg).equal('Program updated successfully');
     });
     afterEach(() => {
         stubedProgramModel.restore();
