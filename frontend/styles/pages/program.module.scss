@@ -19,7 +19,7 @@
   td {
     margin: unset;
     cursor: default;
-    max-width: 3rem;
+    max-width: 2.5rem;
     min-width: 2.2rem;
     overflow-wrap: break-word;
     height: 2.3rem;
@@ -147,10 +147,17 @@
 }
 
 .Checkbox {
+  width: 35%;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 1rem;
+  p {
+    margin: unset;
+    text-align: left;
+    font-size: 1rem;
+  }
 }
 
 .Graphs {

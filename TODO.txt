@@ -1,4 +1,3 @@
-# fix execution graph x scale
 1.program
     A: tests
 

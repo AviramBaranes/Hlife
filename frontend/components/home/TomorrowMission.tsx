@@ -69,7 +69,7 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
         </p>
         <p>(You already did and declared your workout for today)</p>
       </div>
-      {exercises?.length && workoutName && (
+      {!!exercises?.length && workoutName && (
         <button className='skip-button' onClick={() => setShowModal(true)}>
           More
           <span>

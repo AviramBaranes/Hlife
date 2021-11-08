@@ -313,6 +313,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
       </p>
       {programStyle === 'FB & aerobic' && (
         <div className={classes.Checkbox}>
+          <p>{currentCircle === 'full body' ? 'aerobic' : 'full body'}</p>
           <input
             id='changeGraph'
             className='Checkbox'

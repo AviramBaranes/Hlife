@@ -25,6 +25,6 @@ export interface ProgramObj {
     | 'Thursday'
     | 'Friday'
     | 'Saturday';
-  restDay: boolean | undefined;
-  workout: WorkoutType | undefined;
+  restDay?: boolean;
+  workout?: WorkoutType;
 }

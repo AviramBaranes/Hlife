@@ -31,7 +31,7 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
       );
     setShowModal(true);
   }
-  console.log(description);
+
   return (
     <div className={classes.ProgramTable}>
       {showModal && (
@@ -73,7 +73,7 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
                   cursor: program.workout?.name ? 'pointer' : 'default',
                 }}
               >
-                {program.workout?.name || 'Rest'}{' '}
+                {program.workout?.name || 'Rest'}
               </td>
             ))}
           </tr>

@@ -19,7 +19,7 @@ const DetailedExercise: React.FC<DetailedExerciseProps> = ({
   description,
 }) => {
   return (
-    <div className={classes.TomorrowMissionModal}>
+    <div data-testid='workout-modal' className={classes.TomorrowMissionModal}>
       <div className={classes.ModalTitle}>
         <h2>
           <strong>{workoutName}</strong> ({trainingDayName})
@@ -35,27 +35,22 @@ const DetailedExercise: React.FC<DetailedExerciseProps> = ({
               <li key={exercise.name + i}>
                 <div>
                   <p>
-                    <strong>Name:</strong>
-                    {exercise.name}
+                    <strong>Name:</strong> {exercise.name}
                   </p>
                   <p>
-                    <strong>Reps:</strong>
-                    {exercise.reps}
+                    <strong>Reps:</strong> {exercise.reps}
                   </p>
                   <p>
-                    <strong>Sets:</strong>
-                    {exercise.sets}
+                    <strong>Sets:</strong> {exercise.sets}
                   </p>
                   {exercise.description && (
                     <p>
-                      <strong>Description:</strong>
-                      {exercise.description}
+                      <strong>Description:</strong> {exercise.description}
                     </p>
                   )}
                   {exercise.muscles && (
                     <p>
-                      <strong>Muscles:</strong>
-                      {exercise.muscles.join(', ')}
+                      <strong>Muscles:</strong> {exercise.muscles.join(', ')}
                     </p>
                   )}
                 </div>

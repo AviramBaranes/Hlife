@@ -163,15 +163,19 @@ const ExecutionsGraph: React.FC<{
         selectedBarChart.select('.xAxis').remove();
         selectedBarChart.select('.yAxis').remove();
 
+        let transformX =
+          dimensions.marginLeft +
+          (dimensions.width - 100) / executionsData.length / 2;
+
+        if (executionsData.length === 1) transformX += 27;
+        else if (executionsData.length === 2) transformX += 10;
+
         selectedBarChart
           .append('g')
           .attr('class', 'xAxis')
           .attr(
             'transform',
-            `translate(${
-              dimensions.marginLeft +
-              (dimensions.width - 100) / executionsData.length / 2
-            },${graphHeight + dimensions.marginTop + 3})`
+            `translate(${transformX},${graphHeight + dimensions.marginTop + 3})`
           )
           .call(xAxis)
           .selectAll('text')
