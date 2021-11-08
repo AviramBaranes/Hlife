@@ -6,7 +6,7 @@ interface Exercises {
   reps: number;
 }
 
-interface WorkoutType {
+export interface WorkoutType {
   user: string;
   trainingDayName: 'A' | 'B' | 'C' | 'D' | 'FB' | 'aerobic';
   name: string;

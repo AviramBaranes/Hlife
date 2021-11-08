@@ -27,7 +27,7 @@ const DetailedExercise: React.FC<DetailedExerciseProps> = ({
         <time>{time}</time>
       </div>
       {description && <p>{description}</p>}
-      {exercises && exercises.length && (
+      {exercises && !!exercises.length && (
         <>
           <h4>Exercises:</h4>
           <ul>

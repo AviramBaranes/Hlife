@@ -23,15 +23,15 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
 
     setWorkoutName(name);
     setTrainingDayName(trainingDayName);
+    setDescription(description || '');
     exercises && setExercises(exercises);
-    description && setDescription(description);
     time &&
       setTime(
         `${Math.floor(time / 60)}:${String(time % 60).padStart(2, '0')} (h)`
       );
     setShowModal(true);
   }
-
+  console.log(description);
   return (
     <div className={classes.ProgramTable}>
       {showModal && (
@@ -48,46 +48,50 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
       <h3>Your Program</h3>
       <p>You can press on the workout name for more details</p>
       <table>
-        <tr>
-          <th>Day</th>
-          {/* <td>Sun</td>
-          <td>Mon</td>
-          <td>Tue</td>
-          <td>Wed</td>
-          <td>Thu</td>
-          <td>Fri</td>
-          <td>Sat</td> */}
-          {fullProgram.map((program) => (
-            <td
-              onClick={() => detailedWorkoutHandler(program)}
-              style={{ cursor: program.workout?.name ? 'pointer' : 'default' }}
-            >
-              {program.day.substring(0, 3)}
-            </td>
-          ))}
-        </tr>
-        <tr>
-          <th>Name</th>
-          {fullProgram.map((program) => (
-            <td
-              onClick={() => detailedWorkoutHandler(program)}
-              style={{ cursor: program.workout?.name ? 'pointer' : 'default' }}
-            >
-              {program.workout?.name || 'Rest'}{' '}
-            </td>
-          ))}
-        </tr>
-        <tr>
-          <th>Time</th>
-          {fullProgram.map((program) => (
-            <td
-              onClick={() => detailedWorkoutHandler(program)}
-              style={{ cursor: program.workout?.name ? 'pointer' : 'default' }}
-            >
-              {program.workout?.time ? `${program.workout?.time} (m)` : '-'}
-            </td>
-          ))}
-        </tr>
+        <tbody>
+          <tr>
+            <th>Day</th>
+            {fullProgram.map((program) => (
+              <td
+                key={program.day}
+                onClick={() => detailedWorkoutHandler(program)}
+                style={{
+                  cursor: program.workout?.name ? 'pointer' : 'default',
+                }}
+              >
+                {program.day.substring(0, 3)}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th>Name</th>
+            {fullProgram.map((program) => (
+              <td
+                key={program.day}
+                onClick={() => detailedWorkoutHandler(program)}
+                style={{
+                  cursor: program.workout?.name ? 'pointer' : 'default',
+                }}
+              >
+                {program.workout?.name || 'Rest'}{' '}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th>Time</th>
+            {fullProgram.map((program) => (
+              <td
+                key={program.day}
+                onClick={() => detailedWorkoutHandler(program)}
+                style={{
+                  cursor: program.workout?.name ? 'pointer' : 'default',
+                }}
+              >
+                {program.workout?.time ? `${program.workout?.time} (m)` : '-'}
+              </td>
+            ))}
+          </tr>
+        </tbody>
       </table>
     </div>
   );

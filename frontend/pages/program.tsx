@@ -1,19 +1,22 @@
 import { GetServerSideProps } from 'next';
 import { parseCookies } from 'nookies';
 import React from 'react';
+import ProgramGraph from '../components/program/ProgramGraph';
 import ProgramTable from '../components/program/ProgramTable';
-import { ProgramObj } from '../types/Program';
+import { ProgramObj, WorkoutType } from '../types/Program';
 import axiosInstance from '../utils/axios/axiosInstance';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
 interface ProgramProps {
   fullProgram: ProgramObj[];
+  allWorkouts: WorkoutType[];
 }
 
-const Program: React.FC<ProgramProps> = ({ fullProgram }) => {
+const Program: React.FC<ProgramProps> = ({ fullProgram, allWorkouts }) => {
   return (
     <div>
       <ProgramTable fullProgram={fullProgram} />
+      <ProgramGraph allWorkouts={allWorkouts} />
     </div>
   );
 };
@@ -32,8 +35,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
       const fullProgram = (await axiosInstance.get('/program/', { headers }))
         .data;
+      const allWorkouts = (await axiosInstance.get('/workout/all', { headers }))
+        .data;
 
-      return { props: { fullProgram } };
+      return { props: { fullProgram, allWorkouts } };
     } catch (err: any) {
       return { redirect: { destination: '/error-occur', permanent: false } };
     }
