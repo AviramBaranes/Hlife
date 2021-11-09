@@ -189,10 +189,9 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           .text((d: any) => d.data.title);
       }
     }
-  }, [regularSelector, regularGraph, currentCircle]);
+  }, [regularSelector, regularGraph, currentCircle, programStyle]);
 
   useEffect(() => {
-    console.log(1);
     if (
       !(
         (programStyle === 'FB & aerobic' && currentCircle === 'aerobic') ||
@@ -200,7 +199,6 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
       )
     )
       return;
-    console.log(2);
     if (!aerobicSelector) {
       setAerobicSelector(d3.select(aerobicCirclePack.current));
     } else {
@@ -217,8 +215,6 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
         const pack = d3.pack().size([315, 315]).padding(5);
 
         const circlePackData = pack(rootNode).descendants();
-
-        console.log(circlePackData);
 
         const nodes = aerobicGraph
           .selectAll('g')
@@ -252,13 +248,13 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           .text((d: any) => d.data.title);
       }
     }
-  }, [aerobicSelector, aerobicGraph, currentCircle]);
+  }, [aerobicSelector, aerobicGraph, currentCircle, programStyle]);
 
   return (
     <div className={classes.GraphSec}>
       {showRegularModal && currentExercise && (
         <Modal yPosition='40vh' onClose={() => setShowRegularModal(false)}>
-          <div className={classes.ExerciseModal}>
+          <div data-testid='regular-modal' className={classes.ExerciseModal}>
             <p>
               <strong>Exercise: </strong>
               {currentExercise.name}
@@ -288,7 +284,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
       )}
       {showAerobicModal && currentAerobicWorkout && (
         <Modal yPosition='40vh' onClose={() => setShowAerobicModal(false)}>
-          <div className={classes.ExerciseModal}>
+          <div data-testid='aerobic-modal' className={classes.ExerciseModal}>
             <p>
               <strong>Workout: </strong>
               {currentAerobicWorkout.name}
@@ -329,6 +325,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
       )}
       <div className={classes.Graphs}>
         <svg
+          data-testid='aerobic-graph'
           display={
             (programStyle === 'FB & aerobic' && currentCircle === 'aerobic') ||
             programStyle === 'aerobic'
@@ -340,6 +337,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           width={320}
         ></svg>
         <svg
+          data-testid='regular-graph'
           display={
             (programStyle === 'FB & aerobic' && currentCircle === 'aerobic') ||
             programStyle === 'aerobic'

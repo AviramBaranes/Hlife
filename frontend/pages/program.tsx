@@ -5,17 +5,26 @@ import ProgramGraph from '../components/program/ProgramGraph';
 import ProgramTable from '../components/program/ProgramTable';
 import { ProgramObj, WorkoutType } from '../types/Program';
 import axiosInstance from '../utils/axios/axiosInstance';
+import { dateToString } from '../utils/dates/dateToString';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
 interface ProgramProps {
   fullProgram: ProgramObj[];
   allWorkouts: WorkoutType[];
+  weeklyExecutions: (boolean | null)[];
 }
 
-const Program: React.FC<ProgramProps> = ({ fullProgram, allWorkouts }) => {
+const Program: React.FC<ProgramProps> = ({
+  fullProgram,
+  allWorkouts,
+  weeklyExecutions,
+}) => {
   return (
     <div>
-      <ProgramTable fullProgram={fullProgram} />
+      <ProgramTable
+        fullProgram={fullProgram}
+        weeklyExecutions={weeklyExecutions}
+      />
       <ProgramGraph allWorkouts={allWorkouts} />
     </div>
   );
@@ -37,8 +46,19 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         .data;
       const allWorkouts = (await axiosInstance.get('/workout/all', { headers }))
         .data;
+      const { data, status } = await axiosInstance.get(
+        `/program-exec/by-range/week/${dateToString(new Date())}`,
+        { headers }
+      );
 
-      return { props: { fullProgram, allWorkouts } };
+      let weeklyExecutions = Array(7).fill(null);
+      if (status === 200)
+        data.forEach(
+          (item: { executionRate: number; date: Date }) =>
+            (weeklyExecutions[new Date(item.date).getDay()] =
+              item.executionRate === 100)
+        );
+      return { props: { fullProgram, allWorkouts, weeklyExecutions } };
     } catch (err: any) {
       return { redirect: { destination: '/error-occur', permanent: false } };
     }

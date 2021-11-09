@@ -1,3 +1,5 @@
+import { faCheck, faXRay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 
 import classes from '../../styles/pages/program.module.scss';
@@ -6,8 +8,14 @@ import DetailedExercise from '../home/DetailedExercise';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
 import Modal from '../UI/Modal/Modal';
 
-const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
+interface ProgramTableProps {
+  fullProgram: ProgramObj[];
+  weeklyExecutions: (boolean | null)[];
+}
+
+const ProgramTable: React.FC<ProgramTableProps> = ({
   fullProgram,
+  weeklyExecutions,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [time, setTime] = useState('');
@@ -51,7 +59,7 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
         <tbody>
           <tr>
             <th>Day</th>
-            {fullProgram.map((program) => (
+            {fullProgram.map((program, i) => (
               <td
                 key={program.day}
                 onClick={() => detailedWorkoutHandler(program)}
@@ -88,6 +96,24 @@ const ProgramTable: React.FC<{ fullProgram: ProgramObj[] }> = ({
                 }}
               >
                 {program.workout?.time ? `${program.workout?.time} (m)` : '-'}
+              </td>
+            ))}
+          </tr>
+          <tr>
+            <th>Executions</th>
+            {fullProgram.map((program, i) => (
+              <td
+                key={program.day}
+                onClick={() => detailedWorkoutHandler(program)}
+                style={{
+                  cursor: program.workout?.name ? 'pointer' : 'default',
+                }}
+              >
+                {weeklyExecutions[i] === true && (
+                  <FontAwesomeIcon icon={faCheck} />
+                )}
+                {weeklyExecutions[i] === null && '-'}
+                {weeklyExecutions[i] === false && 'X'}
               </td>
             ))}
           </tr>

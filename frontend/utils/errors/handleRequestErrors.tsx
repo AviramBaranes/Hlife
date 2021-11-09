@@ -13,7 +13,6 @@ export const handleAxiosError = (
   dispatch(loadingAction.setToFalse());
   const { status } = err.response;
   let errorMessage = '';
-  console.log(err.response);
   if (status === 422) {
     errorMessage = err.response.data.data[0].msg;
   } else if (status === 403) {
