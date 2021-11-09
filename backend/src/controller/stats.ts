@@ -1,14 +1,14 @@
-import { RequestHandler } from "express";
+import { RequestHandler } from 'express';
 
-import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
-import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
-import PhysicalStats, { PhysicalStatsType } from "../models/PhysicalStats";
-import Goals, { GoalsType } from "../models/Goals";
-import User, { UserType } from "../models/User";
+import { validationErrorsHandler } from '../utils/helpers/Errors/validationErrors';
+import { catchErrorHandler } from '../utils/helpers/Errors/catchErrorsHandler';
+import PhysicalStats, { PhysicalStatsType } from '../models/PhysicalStats';
+import Goals, { GoalsType } from '../models/Goals';
+import User, { UserType } from '../models/User';
 import {
   calculateGrade,
   GoalsAchieved,
-} from "../utils/helpers/stats/statsHelpers";
+} from '../utils/helpers/stats/statsHelpers';
 
 export const addStats: RequestHandler = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
 
     if (req.file) {
       const { path } = req.file as Express.Multer.File;
-      bodyImageUrl = path.replace("\\", "/");
+      bodyImageUrl = path.replace('\\', '/');
     }
 
     const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
@@ -46,13 +46,8 @@ export const addStats: RequestHandler = async (req, res, next) => {
       const lastWeightRecord = lastStatsRecord.weight;
 
       const currentTime = new Date().getTime();
-      if (
-        lastStatsRecord.date.getTime() + 7 * 24 * 60 * 60 * 1000 >
-        currentTime
-      ) {
-        res
-          .status(403)
-          .send("You can only declare stats change once in 7 days");
+      if (lastStatsRecord.date.getTime() + 24 * 60 * 60 * 1000 > currentTime) {
+        res.status(403).send('You can only declare stats change once a day');
         return;
       }
 
@@ -106,12 +101,12 @@ export const getAllStatsDates: RequestHandler = async (req, res, next) => {
     })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(403).send("No stats were found for this user");
+      res.status(403).send('No stats were found for this user');
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(403).send("No stats were created yet");
+      res.status(403).send('No stats were created yet');
       return;
     }
 
@@ -137,7 +132,7 @@ export const getStatsByDate: RequestHandler = async (req, res, next) => {
     })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(403).send("No stats were found for this user");
+      res.status(403).send('No stats were found for this user');
       return;
     }
 
@@ -146,7 +141,7 @@ export const getStatsByDate: RequestHandler = async (req, res, next) => {
     );
 
     if (!requestedStats) {
-      res.status(403).send("Invalid date, no stats were entered at this date");
+      res.status(403).send('Invalid date, no stats were entered at this date');
       return;
     }
 
@@ -162,19 +157,19 @@ export const getAllStats: RequestHandler = async (req, res, next) => {
 
     const userStats = (await PhysicalStats.findOne({
       user: userId,
-    })) as PhysicalStatsType;
+    }).populate('user')) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(403).send("No stats were found for this user");
+      res.status(403).send('No stats were found for this user');
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(403).send("No stats were created yet");
+      res.status(403).send('No stats were created yet');
       return;
     }
 
-    res.status(200).json({ stats: [...userStats.stats] });
+    res.status(200).json(userStats);
   } catch (err: any) {
     catchErrorHandler(err, next);
   }
@@ -189,12 +184,12 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
     })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(403).send("No stats were found for this user");
+      res.status(403).send('No stats were found for this user');
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(403).send("No stats were created yet");
+      res.status(403).send('No stats were created yet');
       return;
     }
 
@@ -218,7 +213,7 @@ export const deleteLastStats: RequestHandler = async (req, res, next) => {
     userStats.stats.pop();
     await userStats.save();
 
-    res.status(200).send("The last stats were deleted");
+    res.status(200).send('The last stats were deleted');
   } catch (err: any) {
     catchErrorHandler(err, next);
   }
@@ -237,12 +232,12 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
     })) as PhysicalStatsType;
 
     if (!userStats) {
-      res.status(403).send("No stats were found for this user");
+      res.status(403).send('No stats were found for this user');
       return;
     }
 
     if (userStats.stats.length === 0) {
-      res.status(403).send("No stats were created yet");
+      res.status(403).send('No stats were created yet');
       return;
     }
 
@@ -267,7 +262,7 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
       !weight && !height && !fatPercentage && !musclesMass && !bodyImageUrl;
 
     if (noData) {
-      res.status(403).send("No data was provided");
+      res.status(403).send('No data was provided');
       return;
     }
 
@@ -279,7 +274,7 @@ export const changeLastStats: RequestHandler = async (req, res, next) => {
 
     await userStats.save();
 
-    res.status(200).send("The last stats were updated");
+    res.status(200).send('The last stats were updated');
   } catch (err: any) {
     catchErrorHandler(err, next);
   }
@@ -308,7 +303,7 @@ export const setRanking: RequestHandler = async (req, res, next) => {
     physicalStats.rank = selfRank;
     await physicalStats.save();
 
-    res.status(201).send("Ranking the user successfully");
+    res.status(201).send('Ranking the user successfully');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);

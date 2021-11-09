@@ -18,7 +18,7 @@ const addStats = async (req, res, next) => {
         let bodyImageUrl;
         if (req.file) {
             const { path } = req.file;
-            bodyImageUrl = path.replace("\\", "/");
+            bodyImageUrl = path.replace('\\', '/');
         }
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
         if (!userGoals) {
@@ -37,11 +37,8 @@ const addStats = async (req, res, next) => {
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
             const currentTime = new Date().getTime();
-            if (lastStatsRecord.date.getTime() + 7 * 24 * 60 * 60 * 1000 >
-                currentTime) {
-                res
-                    .status(403)
-                    .send("You can only declare stats change once in 7 days");
+            if (lastStatsRecord.date.getTime() + 24 * 60 * 60 * 1000 > currentTime) {
+                res.status(403).send('You can only declare stats change once a day');
                 return;
             }
             const { failureMessages, goalsAchieved, calculatedGrade } = (0, statsHelpers_1.calculateGrade)(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoal, userGoals.detailGoals, weight, messages);
@@ -79,11 +76,11 @@ const getAllStatsDates = async (req, res, next) => {
             user: userId,
         }));
         if (!userStats) {
-            res.status(403).send("No stats were found for this user");
+            res.status(403).send('No stats were found for this user');
             return;
         }
         if (userStats.stats.length === 0) {
-            res.status(403).send("No stats were created yet");
+            res.status(403).send('No stats were created yet');
             return;
         }
         const statsDates = userStats.stats.map((stats) => stats.date);
@@ -103,12 +100,12 @@ const getStatsByDate = async (req, res, next) => {
             user: userId,
         }));
         if (!userStats) {
-            res.status(403).send("No stats were found for this user");
+            res.status(403).send('No stats were found for this user');
             return;
         }
         const requestedStats = userStats.stats.find((stats) => stats.date.toString() === date);
         if (!requestedStats) {
-            res.status(403).send("Invalid date, no stats were entered at this date");
+            res.status(403).send('Invalid date, no stats were entered at this date');
             return;
         }
         res.status(200).json({ ...requestedStats });
@@ -123,16 +120,16 @@ const getAllStats = async (req, res, next) => {
         const { userId } = req;
         const userStats = (await PhysicalStats_1.default.findOne({
             user: userId,
-        }));
+        }).populate('user'));
         if (!userStats) {
-            res.status(403).send("No stats were found for this user");
+            res.status(403).send('No stats were found for this user');
             return;
         }
         if (userStats.stats.length === 0) {
-            res.status(403).send("No stats were created yet");
+            res.status(403).send('No stats were created yet');
             return;
         }
-        res.status(200).json({ stats: [...userStats.stats] });
+        res.status(200).json(userStats);
     }
     catch (err) {
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
@@ -146,11 +143,11 @@ const deleteLastStats = async (req, res, next) => {
             user: userId,
         }));
         if (!userStats) {
-            res.status(403).send("No stats were found for this user");
+            res.status(403).send('No stats were found for this user');
             return;
         }
         if (userStats.stats.length === 0) {
-            res.status(403).send("No stats were created yet");
+            res.status(403).send('No stats were created yet');
             return;
         }
         const lastStatsIndex = userStats.stats.length - 1;
@@ -167,7 +164,7 @@ const deleteLastStats = async (req, res, next) => {
         }
         userStats.stats.pop();
         await userStats.save();
-        res.status(200).send("The last stats were deleted");
+        res.status(200).send('The last stats were deleted');
     }
     catch (err) {
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
@@ -183,11 +180,11 @@ const changeLastStats = async (req, res, next) => {
             user: userId,
         }));
         if (!userStats) {
-            res.status(403).send("No stats were found for this user");
+            res.status(403).send('No stats were found for this user');
             return;
         }
         if (userStats.stats.length === 0) {
-            res.status(403).send("No stats were created yet");
+            res.status(403).send('No stats were created yet');
             return;
         }
         const lastStatsIndex = userStats.stats.length - 1;
@@ -204,7 +201,7 @@ const changeLastStats = async (req, res, next) => {
         }
         const noData = !weight && !height && !fatPercentage && !musclesMass && !bodyImageUrl;
         if (noData) {
-            res.status(403).send("No data was provided");
+            res.status(403).send('No data was provided');
             return;
         }
         if (weight)
@@ -218,7 +215,7 @@ const changeLastStats = async (req, res, next) => {
         if (bodyImageUrl)
             lastStats.bodyImageUrl = bodyImageUrl;
         await userStats.save();
-        res.status(200).send("The last stats were updated");
+        res.status(200).send('The last stats were updated');
     }
     catch (err) {
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
@@ -241,7 +238,7 @@ const setRanking = async (req, res, next) => {
         }
         physicalStats.rank = selfRank;
         await physicalStats.save();
-        res.status(201).send("Ranking the user successfully");
+        res.status(201).send('Ranking the user successfully');
         return;
     }
     catch (err) {

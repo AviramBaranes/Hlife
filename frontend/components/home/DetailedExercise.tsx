@@ -48,7 +48,7 @@ const DetailedExercise: React.FC<DetailedExerciseProps> = ({
                       <strong>Description:</strong> {exercise.description}
                     </p>
                   )}
-                  {exercise.muscles && (
+                  {!!exercise.muscles?.length && (
                     <p>
                       <strong>Muscles:</strong> {exercise.muscles.join(', ')}
                     </p>

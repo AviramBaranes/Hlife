@@ -1,4 +1,9 @@
-import { faCheck, faXRay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCheck,
+  faStar,
+  faStarHalfAlt,
+  faXRay,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 
@@ -110,10 +115,12 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                 }}
               >
                 {weeklyExecutions[i] === true && (
-                  <FontAwesomeIcon icon={faCheck} />
+                  <FontAwesomeIcon icon={faStar} />
                 )}
                 {weeklyExecutions[i] === null && '-'}
-                {weeklyExecutions[i] === false && 'X'}
+                {weeklyExecutions[i] === false && (
+                  <FontAwesomeIcon icon={faStarHalfAlt} />
+                )}
               </td>
             ))}
           </tr>

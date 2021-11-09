@@ -273,7 +273,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
                 {currentExercise.description}
               </p>
             )}
-            {currentExercise.muscles && (
+            {!!currentExercise.muscles?.length && (
               <p>
                 <strong>Muscles: </strong>
                 {currentExercise.muscles.join(', ')}

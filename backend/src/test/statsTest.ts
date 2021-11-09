@@ -1,39 +1,39 @@
-import dotenv from "dotenv";
-dotenv.config({ path: "./config.env" });
+import dotenv from 'dotenv';
+dotenv.config({ path: './config.env' });
 
-import { expect } from "chai";
-import sinon, { SinonStub } from "sinon";
+import { expect } from 'chai';
+import sinon, { SinonStub } from 'sinon';
 
-import * as statsController from "../controller/stats";
+import * as statsController from '../controller/stats';
 import createCustomResponseObj, {
   ResponseCustomObject,
-} from "../utils/helpers/forTests/responseDefaultObj";
-import PhysicalStats from "../models/PhysicalStats";
-import Goals from "../models/Goals";
-import User from "../models/User";
-import Sinon from "sinon";
+} from '../utils/helpers/forTests/responseDefaultObj';
+import PhysicalStats from '../models/PhysicalStats';
+import Goals from '../models/Goals';
+import User from '../models/User';
+import Sinon from 'sinon';
 
-describe("addStats endpoint general tests", () => {
+describe('addStats endpoint general tests', () => {
   const res = createCustomResponseObj();
   const req = {
-    userId: "123",
+    userId: '123',
     body: {
       weight: 100,
       fatPercentage: 20,
       musclesMass: 30,
       height: 180,
-      bodyImageUrl: "image",
+      bodyImageUrl: 'image',
     },
   };
   let stubedGoalsModel: SinonStub;
   let stubedUserModel: SinonStub;
   let stubedStatsModel: SinonStub;
   beforeEach(() => {
-    stubedGoalsModel = sinon.stub(Goals, "findOne");
-    stubedUserModel = sinon.stub(User, "findById");
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedGoalsModel = sinon.stub(Goals, 'findOne');
+    stubedUserModel = sinon.stub(User, 'findById');
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
-  it("should handle user goal not found", async () => {
+  it('should handle user goal not found', async () => {
     stubedGoalsModel.returns(false);
 
     await statsController.addStats(req as any, res as any, () => {});
@@ -42,17 +42,17 @@ describe("addStats endpoint general tests", () => {
     expect(res.msg).equal("User's goals not found");
   });
 
-  it("should not add stats more then once in 7 days", async () => {
+  it('should not add stats more then once in 7 days', async () => {
     stubedGoalsModel.returns(true);
     stubedStatsModel.returns({ stats: [{ date: new Date() }] });
 
     await statsController.addStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("You can only declare stats change once in 7 days");
+    expect(res.msg).equal('You can only declare stats change once a day');
   });
 
-  it("should create stats model", async () => {
+  it('should create stats model', async () => {
     stubedStatsModel.returns({ stats: [], save: sinon.spy() });
     stubedGoalsModel.returns(true);
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
@@ -76,7 +76,7 @@ describe("addStats endpoint general tests", () => {
     expect(stats.save.called).equal(true);
   });
 
-  it("should return the right response", () => {
+  it('should return the right response', () => {
     const data = res.jsonObj;
     expect(res.statusCode).equal(201);
     expect(data.messages).eql([]);
@@ -91,16 +91,16 @@ describe("addStats endpoint general tests", () => {
   });
 });
 
-describe("addStats endpoint deeply tests", () => {
+describe('addStats endpoint deeply tests', () => {
   const res = createCustomResponseObj();
   const req = {
-    userId: "123",
+    userId: '123',
     body: {
       weight: 100,
       fatPercentage: 20,
       musclesMass: 30,
       height: 180,
-      bodyImageUrl: "image",
+      bodyImageUrl: 'image',
     } as any,
   };
   let stubedGoalsModel: SinonStub;
@@ -108,23 +108,23 @@ describe("addStats endpoint deeply tests", () => {
   let stubedStatsModel: SinonStub;
   let stubedDate: SinonStub;
   before(() => {
-    stubedDate = sinon.stub(Date.prototype, "getTime");
+    stubedDate = sinon.stub(Date.prototype, 'getTime');
     stubedDate.returns(Infinity);
   });
   after(() => {
     stubedDate.restore();
   });
   beforeEach(() => {
-    stubedGoalsModel = sinon.stub(Goals, "findOne");
-    stubedUserModel = sinon.stub(User, "findById");
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedGoalsModel = sinon.stub(Goals, 'findOne');
+    stubedUserModel = sinon.stub(User, 'findById');
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
     stubedGoalsModel.returns({
-      basicGoal: "lose fat",
+      basicGoal: 'lose fat',
       detailGoals: { weight: 30, fatPercentage: 5, musclesMass: 100 },
     });
   });
 
-  it("should add the grade and send messages", async () => {
+  it('should add the grade and send messages', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -133,7 +133,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 110,
       fatPercentage: 25,
       musclesMass: 25,
@@ -155,11 +155,11 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.messages[1]).equal(
       "Unfortunately you didn't gain more muscles mass this time"
     );
-    expect(res.jsonObj.messages[2]).equal("You failed to lose weight");
+    expect(res.jsonObj.messages[2]).equal('You failed to lose weight');
     expect(res.jsonObj.accomplishments).eql({});
   });
 
-  it("should add the grade and send messages (weight improved)", async () => {
+  it('should add the grade and send messages (weight improved)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -168,7 +168,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 100,
       fatPercentage: 25,
       musclesMass: 25,
@@ -194,7 +194,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.accomplishments).eql({});
   });
 
-  it("should add the grade and send messages (musclesMass improved)", async () => {
+  it('should add the grade and send messages (musclesMass improved)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -203,7 +203,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 90,
       fatPercentage: 25,
       musclesMass: 30,
@@ -225,7 +225,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.accomplishments).eql({});
   });
 
-  it("should add the grade and send messages (all improved)", async () => {
+  it('should add the grade and send messages (all improved)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -234,7 +234,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 88,
       fatPercentage: 20,
       musclesMass: 31,
@@ -253,7 +253,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.accomplishments).eql({});
   });
 
-  it("should add the grade and send messages (weight reached goal)", async () => {
+  it('should add the grade and send messages (weight reached goal)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -262,7 +262,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 30,
       fatPercentage: 19,
       musclesMass: 32,
@@ -283,7 +283,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
   });
 
-  it("should add the grade and send messages (fatPercentage reached goal)", async () => {
+  it('should add the grade and send messages (fatPercentage reached goal)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -292,7 +292,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 29,
       fatPercentage: 5,
       musclesMass: 33,
@@ -313,7 +313,7 @@ describe("addStats endpoint deeply tests", () => {
     expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
   });
 
-  it("should add the grade and send messages (fatPercentage reached goal)", async () => {
+  it('should add the grade and send messages (fatPercentage reached goal)', async () => {
     const statsArray = <object>[];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
@@ -322,7 +322,7 @@ describe("addStats endpoint deeply tests", () => {
 
     req.body = {
       height: 1,
-      bodyImageUrl: "",
+      bodyImageUrl: '',
       weight: 28,
       fatPercentage: 4,
       musclesMass: 100,
@@ -350,9 +350,9 @@ describe("addStats endpoint deeply tests", () => {
   });
 });
 
-describe("getAllStatsDates endpoint tests", () => {
+describe('getAllStatsDates endpoint tests', () => {
   const req = {
-    userId: "123",
+    userId: '123',
   };
 
   let res: ResponseCustomObject;
@@ -360,34 +360,34 @@ describe("getAllStatsDates endpoint tests", () => {
 
   beforeEach(() => {
     res = createCustomResponseObj();
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send error response if no userStats found", async () => {
+  it('should send error response if no userStats found', async () => {
     stubedStatsModel.returns(false);
 
     await statsController.getAllStatsDates(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were found for this user");
+    expect(res.msg).equal('No stats were found for this user');
   });
 
-  it("should send error response if no stats were yet to be created", async () => {
+  it('should send error response if no stats were yet to be created', async () => {
     stubedStatsModel.returns({
       stats: [],
     });
 
-    await statsController.getAllStats(req as any, res as any, () => {});
+    await statsController.getAllStatsDates(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were created yet");
+    expect(res.msg).equal('No stats were created yet');
   });
 
-  it("should send success response with all the stats", async () => {
+  it('should send success response with all the stats', async () => {
     const stats = [
-      { data: "data1", moreData: "moreData1", date: 1 },
-      { data: "data2", moreData: "moreData2", date: 2 },
-      { data: "data3", moreData: "moreData3", date: 3 },
+      { data: 'data1', moreData: 'moreData1', date: 1 },
+      { data: 'data2', moreData: 'moreData2', date: 2 },
+      { data: 'data3', moreData: 'moreData3', date: 3 },
     ];
     stubedStatsModel.returns({
       stats,
@@ -406,9 +406,9 @@ describe("getAllStatsDates endpoint tests", () => {
   });
 });
 
-describe("getStatsByDate endpoint tests", () => {
+describe('getStatsByDate endpoint tests', () => {
   const req = {
-    userId: "123",
+    userId: '123',
     params: <{ date?: string }>{},
   };
 
@@ -418,45 +418,45 @@ describe("getStatsByDate endpoint tests", () => {
 
   beforeEach(() => {
     res = createCustomResponseObj();
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send error response if no userStats found", async () => {
+  it('should send error response if no userStats found', async () => {
     stubedStatsModel.returns(false);
 
     await statsController.getStatsByDate(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were found for this user");
+    expect(res.msg).equal('No stats were found for this user');
   });
 
-  it("should send error response if no stats found by date", async () => {
+  it('should send error response if no stats found by date', async () => {
     stubedStatsModel.returns({
-      stats: [{ date: "" }, { date: "11/11/1999" }, { date: "" }],
+      stats: [{ date: '' }, { date: '11/11/1999' }, { date: '' }],
     });
 
-    req.params.date = "11/11/2001";
+    req.params.date = '11/11/2001';
 
     await statsController.getStatsByDate(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("Invalid date, no stats were entered at this date");
+    expect(res.msg).equal('Invalid date, no stats were entered at this date');
   });
 
-  it("should send success response with the requested stats", async () => {
+  it('should send success response with the requested stats', async () => {
     stubedStatsModel.returns({
       stats: [
-        { date: "" },
-        { moreData: "data", date: "11/11/2001" },
-        { date: "" },
+        { date: '' },
+        { moreData: 'data', date: '11/11/2001' },
+        { date: '' },
       ],
     });
 
     await statsController.getStatsByDate(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(200);
-    expect(res.jsonObj.moreData).equal("data");
-    expect(res.jsonObj.date).equal("11/11/2001");
+    expect(res.jsonObj.moreData).equal('data');
+    expect(res.jsonObj.date).equal('11/11/2001');
   });
 
   afterEach(() => {
@@ -464,9 +464,9 @@ describe("getStatsByDate endpoint tests", () => {
   });
 });
 
-describe("getAllStats endpoint tests", () => {
+describe('getAllStats endpoint tests', () => {
   const req = {
-    userId: "123",
+    userId: '123',
   };
 
   let res: ResponseCustomObject;
@@ -474,37 +474,45 @@ describe("getAllStats endpoint tests", () => {
 
   beforeEach(() => {
     res = createCustomResponseObj();
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send error response if no userStats found", async () => {
-    stubedStatsModel.returns(false);
+  it('should send error response if no userStats found', async () => {
+    stubedStatsModel.returns({ populate: () => false });
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were found for this user");
+    expect(res.msg).equal('No stats were found for this user');
   });
 
-  it("should send error response if no stats were yet to be created", async () => {
+  it('should send error response if no stats were yet to be created', async () => {
     stubedStatsModel.returns({
-      stats: [],
+      populate() {
+        return {
+          stats: [],
+        };
+      },
     });
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were created yet");
+    expect(res.msg).equal('No stats were created yet');
   });
 
-  it("should send success response with all the stats", async () => {
+  it('should send success response with all the stats', async () => {
     const stats = [
-      { data: "data1", moreData: "moreData1" },
-      { data: "data2", moreData: "moreData2" },
-      { data: "data3", moreData: "moreData3" },
+      { data: 'data1', moreData: 'moreData1' },
+      { data: 'data2', moreData: 'moreData2' },
+      { data: 'data3', moreData: 'moreData3' },
     ];
     stubedStatsModel.returns({
-      stats,
+      populate() {
+        return {
+          stats,
+        };
+      },
     });
 
     await statsController.getAllStats(req as any, res as any, () => {});
@@ -518,9 +526,9 @@ describe("getAllStats endpoint tests", () => {
   });
 });
 
-describe("deleteLastStats endpoint tests", () => {
+describe('deleteLastStats endpoint tests', () => {
   const req = {
-    userId: "123",
+    userId: '123',
   };
 
   let res: ResponseCustomObject;
@@ -528,19 +536,19 @@ describe("deleteLastStats endpoint tests", () => {
 
   beforeEach(() => {
     res = createCustomResponseObj();
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send error response if no userStats found", async () => {
+  it('should send error response if no userStats found', async () => {
     stubedStatsModel.returns(false);
 
     await statsController.deleteLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were found for this user");
+    expect(res.msg).equal('No stats were found for this user');
   });
 
-  it("should send error response if no stats were yet to be created", async () => {
+  it('should send error response if no stats were yet to be created', async () => {
     stubedStatsModel.returns({
       stats: [],
     });
@@ -548,10 +556,10 @@ describe("deleteLastStats endpoint tests", () => {
     await statsController.deleteLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were created yet");
+    expect(res.msg).equal('No stats were created yet');
   });
 
-  it("should send error response if stats were created over 24 hours ago", async () => {
+  it('should send error response if stats were created over 24 hours ago', async () => {
     stubedStatsModel.returns({
       stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
     });
@@ -564,10 +572,10 @@ describe("deleteLastStats endpoint tests", () => {
     );
   });
 
-  it("should send success response and delete the last stats", async () => {
+  it('should send success response and delete the last stats', async () => {
     stubedStatsModel.returns({
       save: sinon.spy(),
-      stats: [{ data: "first data" }, { data: "last data", date: new Date() }],
+      stats: [{ data: 'first data' }, { data: 'last data', date: new Date() }],
     });
 
     await statsController.deleteLastStats(req as any, res as any, () => {});
@@ -576,10 +584,10 @@ describe("deleteLastStats endpoint tests", () => {
     const lastStatsIndex = userStats.stats.length - 1;
     const lastStats = userStats.stats[lastStatsIndex];
 
-    expect(lastStats.data).equal("first data");
+    expect(lastStats.data).equal('first data');
     expect(userStats.save.called).equal(true);
     expect(res.statusCode).equal(200);
-    expect(res.msg).equal("The last stats were deleted");
+    expect(res.msg).equal('The last stats were deleted');
   });
 
   afterEach(() => {
@@ -587,9 +595,9 @@ describe("deleteLastStats endpoint tests", () => {
   });
 });
 
-describe("changeLastStats endpoint tests", () => {
+describe('changeLastStats endpoint tests', () => {
   const req = {
-    userId: "123",
+    userId: '123',
     body: <any>{},
   };
 
@@ -598,19 +606,19 @@ describe("changeLastStats endpoint tests", () => {
 
   beforeEach(() => {
     res = createCustomResponseObj();
-    stubedStatsModel = sinon.stub(PhysicalStats, "findOne");
+    stubedStatsModel = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send error response if no userStats found", async () => {
+  it('should send error response if no userStats found', async () => {
     stubedStatsModel.returns(false);
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were found for this user");
+    expect(res.msg).equal('No stats were found for this user');
   });
 
-  it("should send error response if no stats were yet to be created", async () => {
+  it('should send error response if no stats were yet to be created', async () => {
     stubedStatsModel.returns({
       stats: [],
     });
@@ -618,10 +626,10 @@ describe("changeLastStats endpoint tests", () => {
     await statsController.changeLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No stats were created yet");
+    expect(res.msg).equal('No stats were created yet');
   });
 
-  it("should send error response if stats were created over 24 hours ago", async () => {
+  it('should send error response if stats were created over 24 hours ago', async () => {
     stubedStatsModel.returns({
       stats: [{ date: new Date().getTime() - 100 * 60 * 60 * 25 }],
     });
@@ -634,7 +642,7 @@ describe("changeLastStats endpoint tests", () => {
     );
   });
 
-  it("should send error response if no data was sent", async () => {
+  it('should send error response if no data was sent', async () => {
     stubedStatsModel.returns({
       stats: [{ date: new Date() }],
     });
@@ -642,19 +650,19 @@ describe("changeLastStats endpoint tests", () => {
     await statsController.changeLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal("No data was provided");
+    expect(res.msg).equal('No data was provided');
   });
 
-  it("should change the last stats and send success response", async () => {
+  it('should change the last stats and send success response', async () => {
     stubedStatsModel.returns({
       save: sinon.spy(),
-      stats: [{ data: "data" }, { date: new Date() }],
+      stats: [{ data: 'data' }, { date: new Date() }],
     });
     req.body.weight = 1;
     req.body.height = 2;
     req.body.fatPercentage = 3;
     req.body.musclesMass = 4;
-    req.body.bodyImageUrl = "image";
+    req.body.bodyImageUrl = 'image';
     await statsController.changeLastStats(req as any, res as any, () => {});
 
     const userStats = PhysicalStats.findOne();
@@ -665,21 +673,21 @@ describe("changeLastStats endpoint tests", () => {
     expect(lastStats.height).equal(2);
     expect(lastStats.fatPercentage).equal(3);
     expect(lastStats.musclesMass).equal(4);
-    expect(lastStats.bodyImageUrl).equal("image");
+    expect(lastStats.bodyImageUrl).equal('image');
     expect(userStats.save.called).equal(true);
   });
 
-  it("should send success response and change the last stats", async () => {
+  it('should send success response and change the last stats', async () => {
     stubedStatsModel.returns({
       save: sinon.spy(),
-      stats: [{ data: "data" }, { date: new Date() }],
+      stats: [{ data: 'data' }, { date: new Date() }],
     });
     req.body.weight = 1;
 
     await statsController.changeLastStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(200);
-    expect(res.msg).equal("The last stats were updated");
+    expect(res.msg).equal('The last stats were updated');
   });
 
   afterEach(() => {
@@ -687,16 +695,16 @@ describe("changeLastStats endpoint tests", () => {
   });
 });
 
-describe("set ranks tests", () => {
-  const req = { userId: "123", body: { selfRank: "new rank" } as any };
+describe('set ranks tests', () => {
+  const req = { userId: '123', body: { selfRank: 'new rank' } as any };
   const res = createCustomResponseObj();
   let stubedStats: SinonStub;
 
   before(() => {
-    stubedStats = sinon.stub(PhysicalStats, "findOne");
+    stubedStats = sinon.stub(PhysicalStats, 'findOne');
   });
 
-  it("should send an error response if physical stats was not found", async () => {
+  it('should send an error response if physical stats was not found', async () => {
     stubedStats.returns(false);
 
     await statsController.setRanking(req as any, res as any, () => {});
@@ -707,20 +715,20 @@ describe("set ranks tests", () => {
     );
   });
 
-  it("should save the new rank", async () => {
+  it('should save the new rank', async () => {
     stubedStats.returns({ save: sinon.spy() });
 
     await statsController.setRanking(req as any, res as any, () => {});
 
     const stats = await PhysicalStats.findOne();
 
-    expect(stats.rank).equal("new rank");
+    expect(stats.rank).equal('new rank');
     expect(stats.save.called).equal(true);
   });
 
-  it("should send a success response", () => {
+  it('should send a success response', () => {
     expect(res.statusCode).equal(201);
-    expect(res.msg).equal("Ranking the user successfully");
+    expect(res.msg).equal('Ranking the user successfully');
   });
 
   after(() => {
