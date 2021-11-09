@@ -1,9 +1,9 @@
-import { RequestHandler } from "express";
+import { RequestHandler } from 'express';
 
-import Workout, { WorkoutType } from "../models/Workout";
-import User, { UserType } from "../models/User";
-import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
-import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
+import Workout, { WorkoutType } from '../models/Workout';
+import User, { UserType } from '../models/User';
+import { catchErrorHandler } from '../utils/helpers/Errors/catchErrorsHandler';
+import { validationErrorsHandler } from '../utils/helpers/Errors/validationErrors';
 
 interface UserWithWorkout extends UserType {
   workouts: WorkoutType[];
@@ -16,10 +16,12 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
 
     validationErrorsHandler(req);
 
-    const user = (await User.findById(userId).populate('Workout')) as UserWithWorkout;
+    const user = (await User.findById(userId).populate(
+      'workouts'
+    )) as UserWithWorkout;
 
     let isNamesValid = true;
- 
+
     if (!user.workouts) {
       user.workouts = [];
     }
@@ -30,14 +32,14 @@ export const createWorkout: RequestHandler = async (req, res, next) => {
         workout.trainingDayName === trainingDayName;
 
       if (isNameIdentical || isTrainingDayNameIdentical) {
-        if (workout.trainingDayName !== "aerobic") {
+        if (workout.trainingDayName !== 'aerobic') {
           isNamesValid = false;
         }
       }
     });
 
     if (!isNamesValid) {
-      res.status(403).send("Each workout need to have a unique name");
+      res.status(403).send('Each workout need to have a unique name');
       return;
     }
 
@@ -72,7 +74,7 @@ export const changeHasAllWorkout: RequestHandler = async (req, res, next) => {
     user.hasAllWorkouts = true;
     await user.save();
 
-    res.status(201).send("User has now created all workout!");
+    res.status(201).send('User has now created all workout!');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);
@@ -110,12 +112,12 @@ export const getWorkoutByName: RequestHandler = async (req, res, next) => {
 export const getAllWorkouts: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
-    const workouts = await Workout.find({user:userId})
+    const workouts = await Workout.find({ user: userId });
 
     if (!workouts) {
       res
         .status(403)
-        .send("You need to create all workouts and then request for them.");
+        .send('You need to create all workouts and then request for them.');
       return;
     }
     res.status(200).json(workouts);
@@ -132,7 +134,7 @@ export const getById: RequestHandler = async (req, res, next) => {
     const workout = (await Workout.findById(workoutId)) as WorkoutType;
 
     if (!workout) {
-      res.status(403).send("No workout with this id");
+      res.status(403).send('No workout with this id');
       return;
     }
 
@@ -167,7 +169,7 @@ export const changeWorkout: RequestHandler = async (req, res, next) => {
     if (!name && !description && !exercises) {
       res
         .status(403)
-        .send("You need to provide data in order to change the workout");
+        .send('You need to provide data in order to change the workout');
       return;
     }
 
@@ -178,7 +180,7 @@ export const changeWorkout: RequestHandler = async (req, res, next) => {
 
     await workout.save();
 
-    res.status(201).send("Workout changed successfully");
+    res.status(201).send('Workout changed successfully');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);
@@ -206,7 +208,7 @@ export const deleteWorkout: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    res.status(200).send("Workout deleted successfully");
+    res.status(200).send('Workout deleted successfully');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);

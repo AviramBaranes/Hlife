@@ -9,10 +9,9 @@ const ProgramExecutionSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     executions: [
         {
-            programId: {
+            workoutId: {
                 type: Schema.Types.ObjectId,
-                ref: 'Program.program',
-                required: true,
+                ref: 'Workout',
             },
             date: { type: Date, required: true },
             executionRate: { type: Number, required: true, min: 0, max: 100 },

@@ -9,7 +9,8 @@ export const getExecutionsOfWeek = async (
 
   const programExecutions = await ProgramExecution.findOne({
     user: userId,
-  });
+  }).populate('executions.workoutId');
+
   const noExecutions = programExecutions.executions.length === 0;
 
   if (noExecutions) return [];
@@ -32,7 +33,7 @@ export const getExecutionsOfMonth = async (
 
   const programExecutions = await ProgramExecution.findOne({
     user: userId,
-  });
+  }).populate('executions.workoutId');
 
   const noExecutions = programExecutions.executions.length === 0;
 

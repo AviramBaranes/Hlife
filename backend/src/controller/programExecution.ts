@@ -7,7 +7,10 @@ import { validationErrorsHandler } from '../utils/helpers/Errors/validationError
 //models
 import User, { UserType } from '../models/User';
 import Workout, { WorkoutType } from '../models/Workout';
-import ProgramExecution, { ProgramExecType } from '../models/ProgramExecution';
+import ProgramExecution, {
+  Execution,
+  ProgramExecType,
+} from '../models/ProgramExecution';
 import Program, { ProgramType } from '../models/Program';
 import {
   getAllExecutions,
@@ -90,17 +93,18 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
     const programOfDay = program.program.find((program) => program.day === day);
 
     const programExecution = await ProgramExecution.findOne({ user: userId });
+
     let modifiedDate: Date | string = date;
     if (!req.params.date) {
       modifiedDate = new Date(new Date(date).setHours(0, 0, 0, 0));
     }
     if (programOfDay!.restDay || isAerobic) {
       const currentExecution = {
-        programId: programOfDay!._id,
         date: modifiedDate,
         executionRate: 100,
         grade: 10,
-      };
+      } as Execution;
+
       programExecution.executions.push(currentExecution);
       user.grade += currentExecution.grade;
     } else {
@@ -118,11 +122,12 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
       const grade = Math.ceil(executionRate / 10);
 
       const execution = {
-        programId: programOfDay!._id,
         date: modifiedDate,
         executionRate,
         grade,
-      };
+      } as Execution;
+
+      if (programOfDay?.workout) execution.workoutId = programOfDay.workout;
 
       programExecution.executions.push(execution);
       user.grade += grade;
@@ -133,6 +138,8 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
     res.status(201).send('Wonderful! Your execution has been declared');
     return;
   } catch (err: any) {
+    console.log(err);
+
     catchErrorHandler(err, next);
   }
 };

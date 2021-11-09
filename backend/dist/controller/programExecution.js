@@ -68,7 +68,6 @@ const declareAnExecution = async (req, res, next) => {
         }
         if (programOfDay.restDay || isAerobic) {
             const currentExecution = {
-                programId: programOfDay._id,
                 date: modifiedDate,
                 executionRate: 100,
                 grade: 10,
@@ -87,11 +86,12 @@ const declareAnExecution = async (req, res, next) => {
             const executionRate = Math.ceil(valueOfEachExercise * numberOfExercisesDone);
             const grade = Math.ceil(executionRate / 10);
             const execution = {
-                programId: programOfDay._id,
                 date: modifiedDate,
                 executionRate,
                 grade,
             };
+            if (programOfDay === null || programOfDay === void 0 ? void 0 : programOfDay.workout)
+                execution.workoutId = programOfDay.workout;
             programExecution.executions.push(execution);
             user.grade += grade;
         }
@@ -101,6 +101,7 @@ const declareAnExecution = async (req, res, next) => {
         return;
     }
     catch (err) {
+        console.log(err);
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };

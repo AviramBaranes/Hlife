@@ -13,13 +13,13 @@ const PhysicalStats_1 = __importDefault(require("../models/PhysicalStats"));
 const Goals_1 = __importDefault(require("../models/Goals"));
 const programHelpers_1 = require("../utils/program/programHelpers");
 const initialProgramList = [
-    { day: "Sunday" },
-    { day: "Monday" },
-    { day: "Tuesday" },
-    { day: "Wednesday" },
-    { day: "Thursday" },
-    { day: "Friday" },
-    { day: "Saturday" },
+    { day: 'Sunday' },
+    { day: 'Monday' },
+    { day: 'Tuesday' },
+    { day: 'Wednesday' },
+    { day: 'Thursday' },
+    { day: 'Friday' },
+    { day: 'Saturday' },
 ];
 const getRecommendationProgram = async (req, res, next) => {
     try {
@@ -28,7 +28,7 @@ const getRecommendationProgram = async (req, res, next) => {
         if (!goals.basicGoal) {
             res
                 .status(403)
-                .send("User need to create goals in order to get a recommendation program");
+                .send('User need to create goals in order to get a recommendation program');
             return;
         }
         const user = (await User_1.default.findById(userId));
@@ -37,10 +37,10 @@ const getRecommendationProgram = async (req, res, next) => {
         }));
         let recommendation;
         switch (user.gender) {
-            case "female":
+            case 'female':
                 recommendation = (0, programHelpers_1.calculateFemaleRecommendationProgram)(goals.basicGoal, physicalStats.rank);
                 break;
-            case "male":
+            case 'male':
                 recommendation = (0, programHelpers_1.calculateMaleRecommendationProgram)(goals.basicGoal, physicalStats.rank);
                 break;
         }
@@ -91,7 +91,7 @@ const createProgram = async (req, res, next) => {
             const isDayAlreadySet = program.program[programDayIndex].restDay ||
                 program.program[programDayIndex].workout;
             if (isDayAlreadySet) {
-                res.status(403).send("This day already has a program");
+                res.status(403).send('This day already has a program');
                 return;
             }
             if (workout) {
@@ -118,7 +118,7 @@ const createProgram = async (req, res, next) => {
                 await user.save();
             }
         }
-        res.status(201).send("Program added successfully");
+        res.status(201).send('Program added successfully');
         return;
     }
     catch (err) {
@@ -129,16 +129,16 @@ exports.createProgram = createProgram;
 const getAllPrograms = async (req, res, next) => {
     try {
         const { userId } = req;
-        const program = (await Program_1.default.findOne({ user: userId }));
+        const program = (await Program_1.default.findOne({ user: userId }).populate('program.workout'));
         if (!program) {
-            res.status(403).send("Something wrong... this user has no program");
+            res.status(403).send('Something wrong... this user has no program');
             return;
         }
         const programFull = program.program.every((program) => program.restDay || program.workout);
         if (!programFull) {
             res
                 .status(403)
-                .send("You need to create a program for each day in order to request them");
+                .send('You need to create a program for each day in order to request them');
             return;
         }
         res.status(200).json(program.program);
@@ -156,7 +156,7 @@ const getProgram = async (req, res, next) => {
         (0, validationErrors_1.validationErrorsHandler)(req);
         const program = (await Program_1.default.findOne({ user: userId }));
         if (program.program.length === 0) {
-            res.status(403).send("No program was found for the user");
+            res.status(403).send('No program was found for the user');
             return;
         }
         const requestedProgram = program.program.find((program) => program.day === day);
@@ -164,7 +164,7 @@ const getProgram = async (req, res, next) => {
         if (!isProgramAlreadySet) {
             res
                 .status(403)
-                .send("No program was set at this day yet, make sure you create one");
+                .send('No program was set at this day yet, make sure you create one');
             return;
         }
         res.status(200).json(requestedProgram);
@@ -187,7 +187,7 @@ const changeProgram = async (req, res, next) => {
         }
         const program = (await Program_1.default.findOne({ user: userId }));
         if (!program) {
-            res.status(403).send("No program was found for the user");
+            res.status(403).send('No program was found for the user');
             return;
         }
         const requestedProgram = {
@@ -197,7 +197,7 @@ const changeProgram = async (req, res, next) => {
         if (!isProgramAlreadySet) {
             res
                 .status(403)
-                .send("No program was set at this day yet, make sure you create one");
+                .send('No program was set at this day yet, make sure you create one');
             return;
         }
         let workout;
@@ -221,7 +221,7 @@ const changeProgram = async (req, res, next) => {
         const requestedProgramIndex = program.program.findIndex((program) => program.day === day);
         program.program[requestedProgramIndex] = { ...requestedProgram };
         await program.save();
-        res.status(201).send("Program updated successfully");
+        res.status(201).send('Program updated successfully');
         return;
     }
     catch (err) {

@@ -10,9 +10,12 @@ import { Exercise } from '../components/Registration/workout/Forms/Exercise';
 import axiosInstance from '../utils/axios/axiosInstance';
 import { dateToString } from '../utils/dates/dateToString';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
+import { WorkoutType } from '../types/Program';
+
+type Execution = { rate: number; date: Date; workout?: WorkoutType };
 
 export interface HomeProps {
-  weeklyExecutions: { rate: number; date: Date }[];
+  weeklyExecutions: Execution[];
   executionDeclared: boolean;
   grade: number;
   trainingDayName: string;
@@ -60,6 +63,7 @@ export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { destination, grade } = await protectRouteHandler(ctx);
+
   if (destination === '/') {
     try {
       const cookies = parseCookies(ctx);
@@ -112,19 +116,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         if (status === 204) {
           props.weeklyExecutions = [];
         } else if (status === 200) {
-          const weeklyExecutions = data.map(
-            (item: { date: Date; executionRate: number }) => ({
-              date: item.date,
-              rate: item.executionRate,
-            })
+          let weeklyExecutions = data.map(
+            (item: {
+              date: Date;
+              executionRate: number;
+              workoutId?: WorkoutType;
+            }) => {
+              let execution: Execution = {
+                date: item.date,
+                rate: item.executionRate,
+              };
+              if (item.workoutId) execution.workout = item.workoutId;
+              return execution;
+            }
           );
-
           props.weeklyExecutions = weeklyExecutions;
         }
       }
 
       return { props };
     } catch (err: any) {
+      console.log(err);
       return { redirect: { destination: '/error-occur', permanent: false } };
     }
   } else {

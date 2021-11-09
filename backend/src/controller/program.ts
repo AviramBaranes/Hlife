@@ -1,26 +1,26 @@
-import { RequestHandler } from "express";
-import { Schema } from "mongoose";
+import { RequestHandler } from 'express';
+import { Schema } from 'mongoose';
 
-import Workout, { WorkoutType } from "../models/Workout";
-import Program, { ProgramObj, ProgramType } from "../models/Program";
-import { catchErrorHandler } from "../utils/helpers/Errors/catchErrorsHandler";
-import { validationErrorsHandler } from "../utils/helpers/Errors/validationErrors";
-import User, { UserType } from "../models/User";
-import PhysicalStats, { PhysicalStatsType } from "../models/PhysicalStats";
-import Goals, { GoalsType } from "../models/Goals";
+import Workout, { WorkoutType } from '../models/Workout';
+import Program, { ProgramObj, ProgramType } from '../models/Program';
+import { catchErrorHandler } from '../utils/helpers/Errors/catchErrorsHandler';
+import { validationErrorsHandler } from '../utils/helpers/Errors/validationErrors';
+import User, { UserType } from '../models/User';
+import PhysicalStats, { PhysicalStatsType } from '../models/PhysicalStats';
+import Goals, { GoalsType } from '../models/Goals';
 import {
   calculateFemaleRecommendationProgram,
   calculateMaleRecommendationProgram,
-} from "../utils/program/programHelpers";
+} from '../utils/program/programHelpers';
 
 const initialProgramList = [
-  { day: "Sunday" },
-  { day: "Monday" },
-  { day: "Tuesday" },
-  { day: "Wednesday" },
-  { day: "Thursday" },
-  { day: "Friday" },
-  { day: "Saturday" },
+  { day: 'Sunday' },
+  { day: 'Monday' },
+  { day: 'Tuesday' },
+  { day: 'Wednesday' },
+  { day: 'Thursday' },
+  { day: 'Friday' },
+  { day: 'Saturday' },
 ] as any;
 
 export const getRecommendationProgram: RequestHandler = async (
@@ -37,7 +37,7 @@ export const getRecommendationProgram: RequestHandler = async (
       res
         .status(403)
         .send(
-          "User need to create goals in order to get a recommendation program"
+          'User need to create goals in order to get a recommendation program'
         );
       return;
     }
@@ -49,13 +49,13 @@ export const getRecommendationProgram: RequestHandler = async (
 
     let recommendation: { workoutName: string; timesPerWeek: number }[];
     switch (user.gender) {
-      case "female":
+      case 'female':
         recommendation = calculateFemaleRecommendationProgram(
           goals.basicGoal,
           physicalStats.rank
         );
         break;
-      case "male":
+      case 'male':
         recommendation = calculateMaleRecommendationProgram(
           goals.basicGoal,
           physicalStats.rank
@@ -125,7 +125,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
         program.program[programDayIndex].workout;
 
       if (isDayAlreadySet) {
-        res.status(403).send("This day already has a program");
+        res.status(403).send('This day already has a program');
         return;
       }
 
@@ -155,7 +155,7 @@ export const createProgram: RequestHandler = async (req, res, next) => {
       }
     }
 
-    res.status(201).send("Program added successfully");
+    res.status(201).send('Program added successfully');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);
@@ -166,10 +166,12 @@ export const getAllPrograms: RequestHandler = async (req, res, next) => {
   try {
     const { userId } = req;
 
-    const program = (await Program.findOne({ user: userId })) as ProgramType;
+    const program = (await Program.findOne({ user: userId }).populate(
+      'program.workout'
+    )) as ProgramType;
 
     if (!program) {
-      res.status(403).send("Something wrong... this user has no program");
+      res.status(403).send('Something wrong... this user has no program');
       return;
     }
 
@@ -181,7 +183,7 @@ export const getAllPrograms: RequestHandler = async (req, res, next) => {
       res
         .status(403)
         .send(
-          "You need to create a program for each day in order to request them"
+          'You need to create a program for each day in order to request them'
         );
       return;
     }
@@ -203,7 +205,7 @@ export const getProgram: RequestHandler = async (req, res, next) => {
     const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     if (program.program.length === 0) {
-      res.status(403).send("No program was found for the user");
+      res.status(403).send('No program was found for the user');
       return;
     }
 
@@ -217,7 +219,7 @@ export const getProgram: RequestHandler = async (req, res, next) => {
     if (!isProgramAlreadySet) {
       res
         .status(403)
-        .send("No program was set at this day yet, make sure you create one");
+        .send('No program was set at this day yet, make sure you create one');
       return;
     }
 
@@ -244,7 +246,7 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
     const program = (await Program.findOne({ user: userId })) as ProgramType;
 
     if (!program) {
-      res.status(403).send("No program was found for the user");
+      res.status(403).send('No program was found for the user');
       return;
     }
 
@@ -258,7 +260,7 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
     if (!isProgramAlreadySet) {
       res
         .status(403)
-        .send("No program was set at this day yet, make sure you create one");
+        .send('No program was set at this day yet, make sure you create one');
       return;
     }
 
@@ -290,7 +292,7 @@ export const changeProgram: RequestHandler = async (req, res, next) => {
     program.program[requestedProgramIndex] = { ...requestedProgram };
     await program.save();
 
-    res.status(201).send("Program updated successfully");
+    res.status(201).send('Program updated successfully');
     return;
   } catch (err: any) {
     catchErrorHandler(err, next);

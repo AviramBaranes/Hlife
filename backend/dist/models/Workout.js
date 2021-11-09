@@ -6,10 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const WorkoutSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     trainingDayName: {
         type: String,
-        enum: ["A", "B", "C", "D", "FB", "aerobic"],
+        enum: ['A', 'B', 'C', 'D', 'FB', 'aerobic'],
         required: true,
     },
     name: { type: String, required: true },
@@ -25,5 +25,5 @@ const WorkoutSchema = new Schema({
     ],
     time: { type: Number, min: 10, max: 300 },
 });
-const Workout = mongoose_1.default.model("workout", WorkoutSchema);
+const Workout = mongoose_1.default.model('Workout', WorkoutSchema);
 exports.default = Workout;

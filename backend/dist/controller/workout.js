@@ -13,7 +13,7 @@ const createWorkout = async (req, res, next) => {
         const { userId } = req;
         const { trainingDayName, name, description, exercises, time } = req.body;
         (0, validationErrors_1.validationErrorsHandler)(req);
-        const user = (await User_1.default.findById(userId).populate('Workout'));
+        const user = (await User_1.default.findById(userId).populate('workouts'));
         let isNamesValid = true;
         if (!user.workouts) {
             user.workouts = [];
@@ -22,13 +22,13 @@ const createWorkout = async (req, res, next) => {
             const isNameIdentical = workout.name === name;
             const isTrainingDayNameIdentical = workout.trainingDayName === trainingDayName;
             if (isNameIdentical || isTrainingDayNameIdentical) {
-                if (workout.trainingDayName !== "aerobic") {
+                if (workout.trainingDayName !== 'aerobic') {
                     isNamesValid = false;
                 }
             }
         });
         if (!isNamesValid) {
-            res.status(403).send("Each workout need to have a unique name");
+            res.status(403).send('Each workout need to have a unique name');
             return;
         }
         const workout = new Workout_1.default({
@@ -59,7 +59,7 @@ const changeHasAllWorkout = async (req, res, next) => {
         const user = (await User_1.default.findById(userId));
         user.hasAllWorkouts = true;
         await user.save();
-        res.status(201).send("User has now created all workout!");
+        res.status(201).send('User has now created all workout!');
         return;
     }
     catch (err) {
@@ -97,7 +97,7 @@ const getAllWorkouts = async (req, res, next) => {
         if (!workouts) {
             res
                 .status(403)
-                .send("You need to create all workouts and then request for them.");
+                .send('You need to create all workouts and then request for them.');
             return;
         }
         res.status(200).json(workouts);
@@ -113,7 +113,7 @@ const getById = async (req, res, next) => {
         const { workoutId } = req.params;
         const workout = (await Workout_1.default.findById(workoutId));
         if (!workout) {
-            res.status(403).send("No workout with this id");
+            res.status(403).send('No workout with this id');
             return;
         }
         res.status(200).json(workout);
@@ -142,7 +142,7 @@ const changeWorkout = async (req, res, next) => {
         if (!name && !description && !exercises) {
             res
                 .status(403)
-                .send("You need to provide data in order to change the workout");
+                .send('You need to provide data in order to change the workout');
             return;
         }
         if (name)
@@ -154,7 +154,7 @@ const changeWorkout = async (req, res, next) => {
         if (time)
             workout.time = time;
         await workout.save();
-        res.status(201).send("Workout changed successfully");
+        res.status(201).send('Workout changed successfully');
         return;
     }
     catch (err) {
@@ -177,7 +177,7 @@ const deleteWorkout = async (req, res, next) => {
                 .send("couldn't find workout, make sure you create a workout with this name first.");
             return;
         }
-        res.status(200).send("Workout deleted successfully");
+        res.status(200).send('Workout deleted successfully');
         return;
     }
     catch (err) {
