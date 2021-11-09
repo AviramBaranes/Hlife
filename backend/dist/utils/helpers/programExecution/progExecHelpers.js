@@ -10,7 +10,7 @@ const getExecutionsOfWeek = async (date, userId) => {
     const dates = getWeekDates(date);
     const programExecutions = await ProgramExecution_1.default.findOne({
         user: userId,
-    });
+    }).populate('executions.workoutId');
     const noExecutions = programExecutions.executions.length === 0;
     if (noExecutions)
         return [];
@@ -27,7 +27,7 @@ const getExecutionsOfMonth = async (date, userId) => {
     const dates = getMonthDates(date);
     const programExecutions = await ProgramExecution_1.default.findOne({
         user: userId,
-    });
+    }).populate('executions.workoutId');
     const noExecutions = programExecutions.executions.length === 0;
     if (noExecutions)
         return [];

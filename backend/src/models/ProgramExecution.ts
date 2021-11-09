@@ -7,10 +7,9 @@ const ProgramExecutionSchema = new Schema({
 
   executions: [
     {
-      programId: {
+      workoutId: {
         type: Schema.Types.ObjectId,
-        ref: 'Program.program',
-        required: true,
+        ref: 'Workout',
       },
 
       date: { type: Date, required: true },
@@ -28,8 +27,8 @@ const ProgramExecution = mongoose.model(
 );
 export default ProgramExecution;
 
-interface Execution {
-  programId: ObjectId;
+export interface Execution {
+  workoutId?: ObjectId;
   date: Date;
   executionRate: number;
   grade: number;

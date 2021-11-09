@@ -1,8 +1,8 @@
-1.program
-    A: tests
+1.stats
+    A:page
+    B:styles
+    C:tests
 
-2.stats
+2.about
 
-3.about
-
-4.deploy
+3.deploy

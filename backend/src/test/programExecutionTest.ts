@@ -200,9 +200,6 @@ describe('declareAnExecution endpoint test', () => {
     const programExecution = await ProgramExecution.findOne();
     const user = await User.findById({});
 
-    expect(programExecution.executions[0].programId).equal(
-      '61196b0a38af7615d0aed56f'
-    );
     expect(
       new Date(programExecution.executions[0].date).setHours(0, 0, 0, 0)
     ).equal(new Date(day).setHours(0, 0, 0, 0));
@@ -238,9 +235,6 @@ describe('declareAnExecution endpoint test', () => {
     const programExecution = await ProgramExecution.findOne();
     const user = await User.findById({});
 
-    expect(programExecution.executions[0].programId).equal(
-      '61196b0a38af7615d0aed56f'
-    );
     expect(programExecution.executions[0].date).equal(req.params.date);
     expect(programExecution.executions[0].executionRate).equal(100);
     expect(programExecution.executions[0].grade).equal(10);
@@ -273,9 +267,6 @@ describe('declareAnExecution endpoint test', () => {
     const programExecution = await ProgramExecution.findOne();
     const user = await User.findById({});
 
-    expect(programExecution.executions[0].programId).equal(
-      '61196b0a38af7615d0aed56f'
-    );
     expect(programExecution.executions[0].date).equal(req.params.date);
     expect(programExecution.executions[0].executionRate).equal(100);
     expect(programExecution.executions[0].grade).equal(10);
@@ -313,9 +304,6 @@ describe('declareAnExecution endpoint test', () => {
     const programExecution = await ProgramExecution.findOne();
     const user = await User.findById({});
 
-    expect(programExecution.executions[0].programId).equal(
-      '61196b0a38af7615d0aed56f'
-    );
     expect(programExecution.executions[0].date).equal(req.params.date);
     expect(programExecution.executions[0].executionRate).equal(75);
     expect(programExecution.executions[0].grade).equal(8);
@@ -428,7 +416,11 @@ describe('getExecutionsByRange endpoint tests', () => {
     dateNotInWeek.setDate(8);
     stubedUserModel.returns({ hasProgram: true });
     stubedProgramExecutionModel.returns({
-      executions: [{ date: dateNotInWeek, data: 'data' }],
+      populate() {
+        return {
+          executions: [{ date: dateNotInWeek, data: 'data' }],
+        };
+      },
     });
 
     await programExecutionController.getExecutionsByRange(
@@ -448,11 +440,15 @@ describe('getExecutionsByRange endpoint tests', () => {
     const anotherDateInWeek = new Date(2020, 11, 30);
     stubedUserModel.returns({ hasProgram: true });
     stubedProgramExecutionModel.returns({
-      executions: [
-        { date: dateNotInWeek, data: 'data' },
-        { date: dateInWeek, data: 'data2' },
-        { date: anotherDateInWeek, data: 'data3' },
-      ],
+      populate() {
+        return {
+          executions: [
+            { date: dateNotInWeek, data: 'data' },
+            { date: dateInWeek, data: 'data2' },
+            { date: anotherDateInWeek, data: 'data3' },
+          ],
+        };
+      },
     });
 
     await programExecutionController.getExecutionsByRange(
@@ -473,7 +469,11 @@ describe('getExecutionsByRange endpoint tests', () => {
     dateNotInWeek.setMonth(2);
     stubedUserModel.returns({ hasProgram: true });
     stubedProgramExecutionModel.returns({
-      executions: [{ date: dateNotInWeek, data: 'data' }],
+      populate() {
+        return {
+          executions: [{ date: dateNotInWeek, data: 'data' }],
+        };
+      },
     });
 
     await programExecutionController.getExecutionsByRange(
@@ -493,11 +493,15 @@ describe('getExecutionsByRange endpoint tests', () => {
     const AnotherDateInMonth = new Date(2021, 0, 25, 0, 0, 0);
     stubedUserModel.returns({ hasProgram: true });
     stubedProgramExecutionModel.returns({
-      executions: [
-        { date: dateNotInMonth, data: 'data' },
-        { date: dateInMonth, data: 'data2' },
-        { date: AnotherDateInMonth, data: 'data3' },
-      ],
+      populate() {
+        return {
+          executions: [
+            { date: dateNotInMonth, data: 'data' },
+            { date: dateInMonth, data: 'data2' },
+            { date: AnotherDateInMonth, data: 'data3' },
+          ],
+        };
+      },
     });
 
     await programExecutionController.getExecutionsByRange(

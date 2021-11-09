@@ -6,6 +6,9 @@ import classes from '../../styles/pages/home.module.scss';
 import { dateToString } from '../../utils/dates/dateToString';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../utils/errors/handleRequestErrors';
+import { WorkoutType } from '../../types/Program';
+import Modal from '../UI/Modal/Modal';
+import DetailedExercise from './DetailedExercise';
 
 type D3Select = null | d3.Selection<
   SVGSVGElement | null,
@@ -16,7 +19,7 @@ type D3Select = null | d3.Selection<
 
 type d3Graph = null | d3.Selection<SVGGElement, unknown, null, undefined>;
 
-type Execution = { rate: number; date: Date };
+type Execution = { rate: number; date: Date; workout?: WorkoutType };
 
 const colors = ['#D9EFE0', '#B4E0C1', '#8ED0A2', '#68C083', '#30A954'];
 
@@ -34,6 +37,10 @@ const ExecutionsGraph: React.FC<{
   const [hasExecutions, setHasExecutions] = useState(!!weeklyExecutions.length);
   const [selectElActive, setSelectElActive] = useState(false);
   const [graphToDisplay, setGraphToDisplay] = useState<'pie' | 'bar'>('bar');
+  const [showModal, setShowModal] = useState(false);
+  const [currentWorkout, setCurrentWorkout] = useState<WorkoutType | null>(
+    null
+  );
 
   const dimensions = {
     height: 200,
@@ -208,6 +215,7 @@ const ExecutionsGraph: React.FC<{
           .attr('y', graphHeight)
           .attr('x', (d) => x(new Date(d.date)))
           .attr('width', dimensions.width / 2 / executionsData.length)
+          .style('cursor', (d: any) => (d.workout ? 'pointer' : 'default'))
           .attr(
             'fill',
             (d) =>
@@ -222,10 +230,16 @@ const ExecutionsGraph: React.FC<{
           .attr('y', (d) => y(d.rate))
           .attr('height', (d) => graphHeight - y(d.rate));
 
+        updatedRects.on('click', (e, d: any) => {
+          setShowModal(true);
+          setCurrentWorkout(d.workout as WorkoutType);
+        });
+
         const enterRects = rects
           .enter()
           .append('rect')
           .attr('width', dimensions.width / 2 / executionsData.length)
+          .style('cursor', (d: any) => (d.workout ? 'pointer' : 'default'))
           .attr(
             'fill',
             (d) =>
@@ -242,6 +256,11 @@ const ExecutionsGraph: React.FC<{
           .ease(d3.easeElastic)
           .attr('y', (d) => y(d.rate))
           .attr('height', (d) => graphHeight - y(d.rate));
+
+        enterRects.on('click', (e, d: any) => {
+          setShowModal(true);
+          setCurrentWorkout(d.workout as WorkoutType);
+        });
       }
     }
   }, [selectedBarChart, executionsData, barGraph, graphToDisplay]);
@@ -396,10 +415,20 @@ const ExecutionsGraph: React.FC<{
       }
       setHasExecutions(true);
       setExecutionsData(
-        data.map((item: { date: Date; executionRate: number }) => ({
-          date: item.date,
-          rate: item.executionRate,
-        }))
+        data.map(
+          (item: {
+            date: Date;
+            executionRate: number;
+            workoutId?: WorkoutType;
+          }) => {
+            let execution: Execution = {
+              date: item.date,
+              rate: item.executionRate,
+            };
+            if (item.workoutId) execution.workout = item.workoutId;
+            return execution;
+          }
+        )
       );
     } catch (err) {
       handleAxiosError(err, dispatch, 'Fetching Executions Failed');
@@ -407,6 +436,19 @@ const ExecutionsGraph: React.FC<{
   }
   return (
     <div className={classes.ExecutionsGraph}>
+      {showModal && currentWorkout && (
+        <Modal onClose={() => setShowModal(false)}>
+          <DetailedExercise
+            time={`${Math.floor(currentWorkout.time / 60)}:${String(
+              currentWorkout.time % 60
+            ).padStart(2, '0')} (h)`}
+            trainingDayName={currentWorkout.trainingDayName}
+            workoutName={currentWorkout.name}
+            description={currentWorkout.description}
+            exercises={currentWorkout.exercises}
+          />
+        </Modal>
+      )}
       {hasExecutions && (
         <div>
           {!!executionsData.length && date[0] && (
