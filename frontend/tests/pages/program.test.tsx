@@ -217,7 +217,7 @@ describe('Program page tests', () => {
     expect(executionsRow.children[0].textContent).toBe('Executions');
     expect(executionsRow.children[1].textContent).toBe('-');
     expect(executionsRow.children[1]).toHaveStyle({ cursor: 'pointer' });
-    expect(executionsRow.children[2].textContent).toBe('X');
+    expect(executionsRow.children[2].children[0].tagName).toBe('svg');
     expect(executionsRow.children[2]).toHaveStyle({ cursor: 'pointer' });
     expect(executionsRow.children[3].children[0].tagName).toBe('svg');
     expect(executionsRow.children[3]).toHaveStyle({ cursor: 'default' });
