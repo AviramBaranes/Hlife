@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 interface StatsSliceState {
-  rank: "Beginner" | "Intermediate" | "Advanced" | "Pro";
+  rank: ('Beginner' | 'Intermediate' | 'Advanced' | 'Pro') | null;
   weight: number;
   height: number;
   fatPercentage: number;
@@ -10,7 +10,7 @@ interface StatsSliceState {
 }
 
 const initialState: StatsSliceState = {
-  rank: "Beginner",
+  rank: null,
   weight: 0,
   height: 0,
   fatPercentage: 0,
@@ -19,7 +19,7 @@ const initialState: StatsSliceState = {
 };
 
 const statsSlice = createSlice({
-  name: "stats",
+  name: 'stats',
   initialState,
   reducers: {
     resetState(state) {

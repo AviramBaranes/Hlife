@@ -9,7 +9,7 @@ import RequiredFields from '../../../components/Registration/statsFields/Require
 import UploadPhoto from '../../../components/Registration/statsFields/UploadPhoto';
 import { RootState } from '../../../redux/store/reduxStore';
 import protectRouteHandler from '../../../utils/protectedRoutes/protectedRoutes';
-import { createStatsProps } from '../../../utils/registration/stats/setInitialStatsHelpers';
+import { createInitialStatsProps } from '../../../utils/registration/stats/setInitialStatsHelpers';
 
 const SetInitialStats: React.FC = () => {
   //state
@@ -44,7 +44,7 @@ const SetInitialStats: React.FC = () => {
     buttonEventsForFatPercentageField,
     buttonEventsForMuscleMassField,
     buttonEventsForPhotoField,
-  } = createStatsProps(
+  } = createInitialStatsProps(
     setShouldSkipFatPercentage,
     setShouldSkipMusclesMass,
     dispatch,

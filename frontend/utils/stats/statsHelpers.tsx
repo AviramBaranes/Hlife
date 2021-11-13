@@ -1,20 +1,19 @@
 import router from 'next/router';
 import React from 'react';
 import { Dispatch } from 'redux';
-import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
-import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
-import { statsActions } from '../../../redux/slices/stats/statsSlice';
-import axiosInstance from '../../axios/axiosInstance';
-import { handleAxiosError } from '../../errors/handleRequestErrors';
 
-export const createInitialStatsProps = (
+import { loadingAction } from '../../redux/slices/loading/loadingSlice';
+import { messagesActions } from '../../redux/slices/messages/messagesSlice';
+import { statsActions } from '../../redux/slices/stats/statsSlice';
+import axiosInstance from '../axios/axiosInstance';
+import { handleAxiosError } from '../errors/handleRequestErrors';
+
+export const createStatsProps = (
   setShouldSkipFatPercentage: React.Dispatch<React.SetStateAction<boolean>>,
   setShouldSkipMusclesMass: React.Dispatch<React.SetStateAction<boolean>>,
   dispatch: Dispatch<any>,
-  rank: string,
   weight: number,
   musclesMass: number,
-  height: number,
   fatPercentage: number
 ) => {
   const buttonEventsForFatPercentageField = {
@@ -50,26 +49,26 @@ export const createInitialStatsProps = (
 
       formData.append('weight', weight.toString());
       if (musclesMass) formData.append('musclesMass', musclesMass.toString());
-      if (height) formData.append('height', height.toString());
       if (fatPercentage)
         formData.append('fatPercentage', fatPercentage.toString());
       if (photo) formData.append('file', photo);
 
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.post('/stats/set-ranking', { selfRank: rank });
-      await axiosInstance.post('/stats', formData);
+      const { data } = await axiosInstance.post('/stats', formData);
+
+      const message = `You just gain ${data.grade}!`;
 
       dispatch(
         messagesActions.newMessage({
-          messageTitle: 'Initial Stats created!',
-          message: 'Your stats have been successfully uploaded',
+          messageTitle: 'Stats added!',
+          message,
         })
       );
 
-      router.push('/auth/registration/choose-workout');
+      router.push('/stats');
       dispatch(loadingAction.setToFalse());
     } catch (err: any) {
-      handleAxiosError(err, dispatch, 'Creating initial stats failed');
+      handleAxiosError(err, dispatch, 'Adding stats failed');
     }
   };
 

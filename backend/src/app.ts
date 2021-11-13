@@ -49,6 +49,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(cookieParser());
 app.use(helmet()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express.json());
+app.use(express.static('public'));
 app.use(hpp()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
 app.use(
   mongoSanitize({

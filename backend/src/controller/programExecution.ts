@@ -92,12 +92,25 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
 
     const programOfDay = program.program.find((program) => program.day === day);
 
-    const programExecution = await ProgramExecution.findOne({ user: userId });
+    const programExecution = (await ProgramExecution.findOne({
+      user: userId,
+    })) as ProgramExecType;
 
     let modifiedDate: Date | string = date;
     if (!req.params.date) {
       modifiedDate = new Date(new Date(date).setHours(0, 0, 0, 0));
     }
+
+    const isDeclaredAlready = programExecution.executions.find(
+      (program) =>
+        new Date(program.date).getTime() === new Date(modifiedDate).getTime()
+    );
+
+    if (isDeclaredAlready) {
+      res.status(403).send('You already declared the execution at this day');
+      return;
+    }
+
     if (programOfDay!.restDay || isAerobic) {
       const currentExecution = {
         date: modifiedDate,
@@ -138,8 +151,6 @@ export const declareAnExecution: RequestHandler = async (req, res, next) => {
     res.status(201).send('Wonderful! Your execution has been declared');
     return;
   } catch (err: any) {
-    console.log(err);
-
     catchErrorHandler(err, next);
   }
 };
@@ -279,7 +290,6 @@ export const getExecutionsByRange: RequestHandler = async (req, res, next) => {
 
 //     while (counter < 29) {
 //       const date = new Date(dates[counter]);
-//       console.log(date);
 //       let rate = Math.random() * 120;
 //       const executionRate = rate > 100 ? 100 : rate;
 

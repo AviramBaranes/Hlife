@@ -1,16 +1,16 @@
-import mongoose, { Document, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from 'mongoose';
 
 const Schema = mongoose.Schema;
 
 const PhysicalStatsSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 
   age: { type: Number, required: true, min: 16, max: 100 },
 
   rank: {
     type: String,
-    default: "Beginner",
-    enum: ["Beginner", "Intermediate", "Advanced", "Pro"],
+    default: 'Beginner',
+    enum: ['Beginner', 'Intermediate', 'Advanced', 'Pro'],
   },
 
   stats: [
@@ -32,22 +32,22 @@ const PhysicalStatsSchema = new Schema({
   ],
 });
 
-const PhysicalStats = mongoose.model("PhysicalStats", PhysicalStatsSchema);
+const PhysicalStats = mongoose.model('PhysicalStats', PhysicalStatsSchema);
 export default PhysicalStats;
 
 export interface StatsObjType {
   date: Date;
   weight: number;
   deservedGrade: number;
-  height: number | undefined;
-  fatPercentage: number | undefined;
-  musclesMass: number | undefined;
-  bodyImageUrl: string | undefined;
+  height?: number;
+  fatPercentage?: number;
+  musclesMass?: number;
+  bodyImageUrl?: string;
 }
 
 export interface PhysicalStatsType extends Document {
   user: ObjectId;
   age: number;
-  rank: "Beginner" | "Intermediate" | "Advanced" | "Pro";
+  rank: 'Beginner' | 'Intermediate' | 'Advanced' | 'Pro';
   stats: StatsObjType[];
 }

@@ -1,7 +1,7 @@
+refactor executions graph
 1.stats
-    A:page
-    B:styles
-    C:tests
+    A:styles
+    B:tests
 
 2.about
 

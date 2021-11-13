@@ -44,12 +44,14 @@ describe('addStats endpoint general tests', () => {
 
   it('should not add stats more then once in 7 days', async () => {
     stubedGoalsModel.returns(true);
-    stubedStatsModel.returns({ stats: [{ date: new Date() }] });
+    stubedStatsModel.returns({
+      stats: [{ date: new Date(new Date().setHours(0, 0, 0, 0)) }],
+    });
 
     await statsController.addStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal('You can only declare stats change once a day');
+    expect(res.msg).equal('You already declared your progress at this day');
   });
 
   it('should create stats model', async () => {
@@ -80,7 +82,7 @@ describe('addStats endpoint general tests', () => {
     const data = res.jsonObj;
     expect(res.statusCode).equal(201);
     expect(data.messages).eql([]);
-    expect(data.currentGrade).equal(15);
+    expect(data.grade).equal(15);
     expect(data.messages).eql([]);
     expect(data.accomplishments).eql({});
   });
@@ -107,13 +109,6 @@ describe('addStats endpoint deeply tests', () => {
   let stubedUserModel: SinonStub;
   let stubedStatsModel: SinonStub;
   let stubedDate: SinonStub;
-  before(() => {
-    stubedDate = sinon.stub(Date.prototype, 'getTime');
-    stubedDate.returns(Infinity);
-  });
-  after(() => {
-    stubedDate.restore();
-  });
   beforeEach(() => {
     stubedGoalsModel = sinon.stub(Goals, 'findOne');
     stubedUserModel = sinon.stub(User, 'findById');
@@ -125,11 +120,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-12T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 100,
+        height: 180,
+        fatPercentage: 20,
+        musclesMass: 30,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -145,7 +148,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(30);
+    expect(user.grade).equal(15);
     expect(user.save.called).equal(true);
     expect(stats.stats.length).equal(2);
     expect(stats.save.called).equal(true);
@@ -160,11 +163,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages (weight improved)', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 110,
+        height: 1,
+        fatPercentage: 25,
+        musclesMass: 25,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -180,7 +191,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(35);
+    expect(user.grade).equal(20);
     expect(user.save.called).equal(true);
     expect(stats.stats.length).equal(2);
     expect(stats.save.called).equal(true);
@@ -195,11 +206,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages (musclesMass improved)', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 100,
+        height: 1,
+        fatPercentage: 25,
+        musclesMass: 25,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -215,7 +234,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(40);
+    expect(user.grade).equal(25);
     expect(user.save.called).equal(true);
     expect(stats.save.called).equal(true);
     expect(res.jsonObj.messages[0]).equal(
@@ -226,11 +245,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages (all improved)', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 90,
+        height: 1,
+        fatPercentage: 25,
+        musclesMass: 30,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -246,7 +273,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(45);
+    expect(user.grade).equal(30);
     expect(user.save.called).equal(true);
     expect(stats.save.called).equal(true);
     expect(res.jsonObj.messages.length).equal(0);
@@ -254,11 +281,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages (weight reached goal)', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 88,
+        height: 1,
+        fatPercentage: 20,
+        musclesMass: 31,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -274,7 +309,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(50);
+    expect(user.grade).equal(35);
     expect(user.save.called).equal(true);
     expect(stats.save.called).equal(true);
     expect(res.jsonObj.messages.length).equal(0);
@@ -284,11 +319,19 @@ describe('addStats endpoint deeply tests', () => {
   });
 
   it('should add the grade and send messages (fatPercentage reached goal)', async () => {
-    const statsArray = <object>[];
+    const statsArray = <object>[
+      {
+        date: new Date('2001-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 30,
+        height: 1,
+        fatPercentage: 19,
+        musclesMass: 32,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -304,7 +347,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(55);
+    expect(user.grade).equal(40);
     expect(user.save.called).equal(true);
     expect(stats.save.called).equal(true);
     expect(res.jsonObj.messages.length).equal(0);
@@ -313,12 +356,20 @@ describe('addStats endpoint deeply tests', () => {
     expect(res.jsonObj.accomplishments.musclesMass).equal(undefined);
   });
 
-  it('should add the grade and send messages (fatPercentage reached goal)', async () => {
-    const statsArray = <object>[];
+  it('should add the grade and send messages (musclesMass reached goal)', async () => {
+    const statsArray = <object>[
+      {
+        date: new Date('2005-11-13T22:00:00.000Z'),
+        deservedGrade: 15,
+        weight: 29,
+        height: 1,
+        fatPercentage: 5,
+        musclesMass: 33,
+        bodyImageUrl: undefined,
+      },
+    ];
     stubedUserModel.returns({ grade: 0, save: sinon.spy() });
     stubedStatsModel.returns({ stats: statsArray, save: sinon.spy() });
-
-    await statsController.addStats(req as any, res as any, () => {});
 
     req.body = {
       height: 1,
@@ -334,7 +385,7 @@ describe('addStats endpoint deeply tests', () => {
     const stats = PhysicalStats.findOne();
 
     expect(res.statusCode).equal(201);
-    expect(user.grade).equal(60);
+    expect(user.grade).equal(45);
     expect(user.save.called).equal(true);
     expect(stats.save.called).equal(true);
     expect(res.jsonObj.messages.length).equal(0);
@@ -489,16 +540,14 @@ describe('getAllStats endpoint tests', () => {
   it('should send error response if no stats were yet to be created', async () => {
     stubedStatsModel.returns({
       populate() {
-        return {
-          stats: [],
-        };
+        return false;
       },
     });
 
     await statsController.getAllStats(req as any, res as any, () => {});
 
     expect(res.statusCode).equal(403);
-    expect(res.msg).equal('No stats were created yet');
+    expect(res.msg).equal('No stats were found for this user');
   });
 
   it('should send success response with all the stats', async () => {
@@ -510,6 +559,7 @@ describe('getAllStats endpoint tests', () => {
     stubedStatsModel.returns({
       populate() {
         return {
+          user: {},
           stats,
         };
       },

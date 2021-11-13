@@ -1,18 +1,18 @@
-import express from "express";
-import { body, param } from "express-validator";
+import express from 'express';
+import { body, param } from 'express-validator';
 
-import * as statsController from "../controller/stats";
-import authMiddleware from "../middleware/authMiddleware";
-import { validateEnums } from "../utils/helpers/validation/customValidationHelpers";
-import multer from "multer";
+import * as statsController from '../controller/stats';
+import authMiddleware from '../middleware/authMiddleware';
+import { validateEnums } from '../utils/helpers/validation/customValidationHelpers';
+import multer from 'multer';
 
 const router = express.Router();
-const ranksOptionsEnum = ["Beginner", "Intermediate", "Advanced", "Pro"];
+const ranksOptionsEnum = ['Beginner', 'Intermediate', 'Advanced', 'Pro'];
 
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      cb(null, "./images");
+      cb(null, './public/images');
     },
     filename(req, file, cb) {
       cb(null, `${new Date().getTime()}_${file.originalname}`);
@@ -23,36 +23,39 @@ const upload = multer({
   },
   fileFilter(req, file, cb: any) {
     if (!file.originalname.match(/\.(jpeg|jpg|png|svg)$/)) {
-      return cb(new Error("only upload files with jpg, jpeg, png, svg."));
+      return cb(new Error('only upload files with jpg, jpeg, png, svg.'));
     }
     cb(undefined, true); // continue with upload
   },
 });
 
+//fake
+// router.post('/fake', authMiddleware, statsController.createFakeStats);
+
 //add stat
 
 router.post(
-  "/",
+  '/',
   authMiddleware,
-  upload.single("file"),
+  upload.single('file'),
   [
-    body("weight", "Weight needs to be in range 35kg-250kg").isFloat({
+    body('weight', 'Weight needs to be in range 35kg-250kg').isFloat({
       min: 35,
       max: 250,
     }),
-    body("height", "Height needs to be in a range of 100cm-250cm")
+    body('height', 'Height needs to be in a range of 100cm-250cm')
       .optional()
       .isInt({
         min: 100,
         max: 250,
       }),
-    body("fatPercentage", "Fat Percentage needs to be lower than 40%")
+    body('fatPercentage', 'Fat Percentage needs to be lower than 40%')
       .optional()
       .isInt({
         min: 0,
         max: 40,
       }),
-    body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
+    body('musclesMass', 'Muscles mass needs to be in a range of 10kg-200kg')
       .optional()
       .isInt({
         min: 0,
@@ -64,64 +67,64 @@ router.post(
 
 //get all stats dates
 router.get(
-  "/all-stats-dates",
+  '/all-stats-dates',
   authMiddleware,
   statsController.getAllStatsDates
 );
 
 //get a stat
 router.get(
-  "/:date",
+  '/:date',
   authMiddleware,
-  param("date", "invalid date").isDate({ format: "DD-MM-YYYY" }),
+  param('date', 'invalid date').isDate({ format: 'DD-MM-YYYY' }),
   statsController.getStatsByDate
 );
 
 //get all stats
-router.get("/", authMiddleware, statsController.getAllStats);
+router.get('/', authMiddleware, statsController.getAllStats);
 
 //change the last stat
 router.put(
-  "/",
+  '/',
   authMiddleware,
   [
-    body("weight", "Weight needs to be in range 35kg-250kg")
+    body('weight', 'Weight needs to be in range 35kg-250kg')
       .optional()
       .isFloat({
         min: 35,
         max: 250,
       }),
-    body("height", "Height needs to be in a range of 100cm-250cm")
+    body('height', 'Height needs to be in a range of 100cm-250cm')
       .optional()
       .isInt({
         min: 100,
         max: 250,
       }),
-    body("fatPercentage", "Fat Percentage needs to be lower than 80%")
+    body('fatPercentage', 'Fat Percentage needs to be lower than 80%')
       .optional()
       .isInt({
         min: 0,
         max: 80,
       }),
-    body("musclesMass", "Muscles mass needs to be in a range of 10kg-200kg")
+    body('musclesMass', 'Muscles mass needs to be in a range of 10kg-200kg')
       .optional()
       .isInt({
         min: 0,
         max: 120,
       }),
-    body("bodyImageUrl", "Image is invalid").optional().isURL(),
+    body('bodyImageUrl', 'Image is invalid').optional().isURL(),
   ],
   statsController.changeLastStats
 );
 
 //delete the last stat
-router.delete("/", authMiddleware, statsController.deleteLastStats);
+router.delete('/', authMiddleware, statsController.deleteLastStats);
 
 //set a ranking to user
 router.post(
-  "/set-ranking",
+  '/set-ranking',
   authMiddleware,
-  body("selfRank", "Ranking is invalid").custom((value: number) =>
+  body('selfRank', 'Ranking is invalid').custom((value: number) =>
     validateEnums(value, ranksOptionsEnum)
   ),
   statsController.setRanking

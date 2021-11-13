@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { parseCookies } from 'nookies';
 import React, { useEffect, useState } from 'react';
 
 import classes from '../../../styles/pages/schedule-program.module.scss';
@@ -7,6 +6,7 @@ import CustomOrder from '../../../components/Registration/program/CustomOrder';
 import RecommendedOrder from '../../../components/Registration/program/RecommendedOrder';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import protectRouteHandler from '../../../utils/protectedRoutes/protectedRoutes';
+import { getHeaders } from '../../../utils/axios/getHeaders';
 
 export interface Workout {
   name: string;
@@ -48,11 +48,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { destination } = await protectRouteHandler(ctx);
   if (destination === '/auth/registration/schedule-program') {
     try {
-      const cookies = parseCookies(ctx);
+      const headers = getHeaders(ctx);
       const { data } = await axiosInstance.get('/workout/all', {
-        headers: {
-          Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,
-        },
+        headers,
       });
 
       const workouts = data.map(({ name, trainingDayName }: Workout) => {

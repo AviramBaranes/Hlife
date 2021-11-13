@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next';
-import { parseCookies } from 'nookies';
 import React from 'react';
 import ProgramGraph from '../components/program/ProgramGraph';
 import ProgramTable from '../components/program/ProgramTable';
 import { ProgramObj, WorkoutType } from '../types/Program';
 import axiosInstance from '../utils/axios/axiosInstance';
+import { getHeaders } from '../utils/axios/getHeaders';
 import { dateToString } from '../utils/dates/dateToString';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
@@ -37,10 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   if (destination === '/') {
     try {
-      const cookies = parseCookies(ctx);
-      const headers = {
-        Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,
-      };
+      const headers = getHeaders(ctx);
 
       const fullProgram = (await axiosInstance.get('/program/', { headers }))
         .data;

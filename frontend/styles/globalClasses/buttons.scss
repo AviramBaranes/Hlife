@@ -1,16 +1,14 @@
-
-
 .primary-button {
   padding: 0.5rem 2.4rem;
   border-radius: 0.5rem;
-    margin: 1rem;
-    cursor: pointer;
-    position: relative;
+  margin: 1rem;
+  cursor: pointer;
+  position: relative;
   color: var(--text-color);
   font-weight: bold;
   background-color: var(--button-color);
   border: var(--text-color) 2px solid;
-  
+
   &:disabled {
     cursor: not-allowed;
   }
@@ -23,7 +21,7 @@
   }
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: -4px;
     left: -4px;
@@ -37,7 +35,7 @@
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -4px;
     right: -4px;
@@ -64,14 +62,15 @@
     opacity: 1;
   }
 }
-@mixin hoverEffect($shadow-color,$background){
+@mixin hoverEffect($shadow-color, $background) {
   transform: translateY(-2.5px);
-  box-shadow: 0rem 1rem 0.7rem -0.3rem $shadow-color ;
+  box-shadow: 0rem 1rem 0.7rem -0.3rem $shadow-color;
   background-color: $background;
   font-weight: bolder;
-  transition: transform,box-shadow,background-color,font-weight, 300ms ease-in-out;
+  transition: transform, box-shadow, background-color, font-weight,
+    300ms ease-in-out;
 }
-.success-button{
+.success-button {
   padding: 0.5rem 2rem;
   border-radius: 0.5rem;
   margin: 1rem;
@@ -80,17 +79,20 @@
   background-color: var(--secondary-color);
   border: black 2px solid;
 
-  &:hover{
-    @include hoverEffect($shadow-color:rgb(2, 112, 2),$background:var(--primary-color))
+  &:hover {
+    @include hoverEffect(
+      $shadow-color: rgb(2, 112, 2),
+      $background: var(--primary-color)
+    );
   }
 
-  &:disabled{
+  &:disabled {
     color: black;
     cursor: not-allowed;
   }
 }
 
-.danger-button{
+.danger-button {
   padding: 0.5rem 1.8rem;
   border-radius: 0.5rem;
   margin: 1rem;
@@ -99,13 +101,12 @@
   background-color: rgb(247, 57, 36);
   border: black 2px solid;
 
-  &:hover{
-    @include hoverEffect($shadow-color:salmon,$background:rgb(255, 25, 0))
+  &:hover {
+    @include hoverEffect($shadow-color: salmon, $background: rgb(255, 25, 0));
   }
-
 }
 
-.skip-button{
+.skip-button {
   padding: 0.4rem 3.2rem;
   border-radius: 0.5rem;
   margin: 1rem;
@@ -119,38 +120,33 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  span{
+  span {
     position: absolute;
     right: 20px;
     display: none;
-    animation: showIcon 340ms  ease-out;
+    animation: showIcon 340ms ease-out;
   }
 
-  &:hover{
+  &:hover {
     transform: scale(1.05);
-    span{
+    span {
       display: inline;
     }
   }
 
-  &:disabled{
+  &:disabled {
     cursor: not-allowed;
   }
 
-  
-
   @keyframes showIcon {
-    from{
-      right:-20px;
+    from {
+      right: -20px;
       opacity: 0;
     }
 
-    to{
+    to {
       right: 20px;
       opacity: 1;
     }
   }
 }
-
-
-

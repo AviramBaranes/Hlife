@@ -61,10 +61,17 @@ const declareAnExecution = async (req, res, next) => {
         }
         const program = (await Program_1.default.findOne({ user: userId }));
         const programOfDay = program.program.find((program) => program.day === day);
-        const programExecution = await ProgramExecution_1.default.findOne({ user: userId });
+        const programExecution = (await ProgramExecution_1.default.findOne({
+            user: userId,
+        }));
         let modifiedDate = date;
         if (!req.params.date) {
             modifiedDate = new Date(new Date(date).setHours(0, 0, 0, 0));
+        }
+        const isDeclaredAlready = programExecution.executions.find((program) => new Date(program.date).getTime() === new Date(modifiedDate).getTime());
+        if (isDeclaredAlready) {
+            res.status(403).send('You already declared the execution at this day');
+            return;
         }
         if (programOfDay.restDay || isAerobic) {
             const currentExecution = {
@@ -101,7 +108,6 @@ const declareAnExecution = async (req, res, next) => {
         return;
     }
     catch (err) {
-        console.log(err);
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
@@ -216,7 +222,6 @@ exports.getExecutionsByRange = getExecutionsByRange;
 //     const programExecution = await ProgramExecution.findOne({ user: userId });
 //     while (counter < 29) {
 //       const date = new Date(dates[counter]);
-//       console.log(date);
 //       let rate = Math.random() * 120;
 //       const executionRate = rate > 100 ? 100 : rate;
 //       const execution = {

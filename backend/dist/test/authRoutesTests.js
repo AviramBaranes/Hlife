@@ -37,7 +37,6 @@ describe('signup route test', () => {
             .post('/auth/signup')
             .set('Content-type', 'application/json')
             .send(payload);
-        console.log(response);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.data[0].msg).equal('name only allow letters');

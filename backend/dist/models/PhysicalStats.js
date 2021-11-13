@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const Schema = mongoose_1.default.Schema;
 const PhysicalStatsSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     age: { type: Number, required: true, min: 16, max: 100 },
     rank: {
         type: String,
-        default: "Beginner",
-        enum: ["Beginner", "Intermediate", "Advanced", "Pro"],
+        default: 'Beginner',
+        enum: ['Beginner', 'Intermediate', 'Advanced', 'Pro'],
     },
     stats: [
         {
@@ -25,5 +25,5 @@ const PhysicalStatsSchema = new Schema({
         },
     ],
 });
-const PhysicalStats = mongoose_1.default.model("PhysicalStats", PhysicalStatsSchema);
+const PhysicalStats = mongoose_1.default.model('PhysicalStats', PhysicalStatsSchema);
 exports.default = PhysicalStats;

@@ -1,10 +1,12 @@
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies } from 'nookies';
 import axiosInstance from '../axios/axiosInstance';
+import { getHeaders } from '../axios/getHeaders';
 
 const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
   try {
     const cookies = parseCookies(ctx);
+
     const { data } = await axiosInstance.get('/auth/isUser', {
       headers: {
         Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,

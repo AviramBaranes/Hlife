@@ -1,9 +1,9 @@
-import store from "../../redux/store/reduxStore";
+import store from '../../redux/store/reduxStore';
 
-describe("stats slice tests", () => {
-  test("should have the correct initialState", () => {
+describe('stats slice tests', () => {
+  test('should have the correct initialState', () => {
     const expectedInitialState = {
-      rank: "Beginner",
+      rank: null,
       weight: 0,
       height: 0,
       fatPercentage: 0,

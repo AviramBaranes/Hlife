@@ -18,7 +18,7 @@ const addStats = async (req, res, next) => {
         let bodyImageUrl;
         if (req.file) {
             const { path } = req.file;
-            bodyImageUrl = path.replace('\\', '/');
+            bodyImageUrl = path.replace('\\', '/').split('public/')[1];
         }
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
         if (!userGoals) {
@@ -29,6 +29,7 @@ const addStats = async (req, res, next) => {
         const userStats = (await PhysicalStats_1.default.findOne({
             user: userId,
         }));
+        const date = new Date(new Date().setHours(0, 0, 0, 0));
         let grade = 15;
         let messages = [];
         let accomplishments = {};
@@ -36,9 +37,9 @@ const addStats = async (req, res, next) => {
             const lastStatsIndex = userStats.stats.length - 1;
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
-            const currentTime = new Date().getTime();
-            if (lastStatsRecord.date.getTime() + 24 * 60 * 60 * 1000 > currentTime) {
-                res.status(403).send('You can only declare stats change once a day');
+            const isDeclaredAlready = userStats.stats.find((stat) => new Date(stat.date).getTime() === new Date(date).getTime());
+            if (isDeclaredAlready) {
+                res.status(403).send('You already declared your progress at this day');
                 return;
             }
             const { failureMessages, goalsAchieved, calculatedGrade } = (0, statsHelpers_1.calculateGrade)(lastWeightRecord, fatPercentage, lastStatsRecord, musclesMass, userGoals.basicGoal, userGoals.detailGoals, weight, messages);
@@ -47,7 +48,7 @@ const addStats = async (req, res, next) => {
             accomplishments = { ...goalsAchieved };
         }
         const newStatsEntry = {
-            date: new Date(),
+            date,
             deservedGrade: grade,
             weight,
             height,
@@ -60,15 +61,40 @@ const addStats = async (req, res, next) => {
         userStats.stats.push(newStatsEntry);
         await userStats.save();
         await user.save();
-        res
-            .status(201)
-            .json({ messages, currentGrade: user.grade, accomplishments });
+        res.status(201).json({ messages, grade, accomplishments });
     }
     catch (err) {
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);
     }
 };
 exports.addStats = addStats;
+// export const createFakeStats: RequestHandler = async (req, res, next) => {
+//   const data = [
+//     { date: '10-25-2021', weight: 50, fatPercentage: 12, musclesMass: 45 },
+//     { date: '10-26-2021', weight: 60, fatPercentage: 10, musclesMass: 46 },
+//     { date: '10-27-2021', weight: 66, fatPercentage: 9, musclesMass: 47 },
+//     { date: '10-28-2021', weight: 55, fatPercentage: 8, musclesMass: 50 },
+//     { date: '10-29-2021', weight: 58, fatPercentage: 10, musclesMass: 46 },
+//     { date: '10-30-2021', weight: 62, fatPercentage: 13, musclesMass: 48 },
+//   ];
+//   const { userId } = req;
+//   const userStats = (await PhysicalStats.findOne({
+//     user: userId,
+//   })) as PhysicalStatsType;
+//   data.forEach((item) => {
+//     const date = new Date(new Date(item.date).setHours(0, 0, 0, 0));
+//     const newStatsEntry = {
+//       date: date,
+//       deservedGrade: 15,
+//       weight: item.weight,
+//       fatPercentage: item.fatPercentage,
+//       musclesMass: item.musclesMass,
+//     };
+//     userStats.stats.push(newStatsEntry);
+//   });
+//   await userStats.save();
+//   res.end();
+// };
 const getAllStatsDates = async (req, res, next) => {
     try {
         const { userId } = req;
@@ -125,11 +151,13 @@ const getAllStats = async (req, res, next) => {
             res.status(403).send('No stats were found for this user');
             return;
         }
+        const { age, rank, stats, user } = userStats;
+        const { name } = user;
         if (userStats.stats.length === 0) {
-            res.status(403).send('No stats were created yet');
+            res.status(200).send({ age, rank, stats, name });
             return;
         }
-        res.status(200).json(userStats);
+        res.status(200).json({ age, rank, stats, name });
     }
     catch (err) {
         (0, catchErrorsHandler_1.catchErrorHandler)(err, next);

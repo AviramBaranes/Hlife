@@ -11,6 +11,7 @@ import axiosInstance from '../utils/axios/axiosInstance';
 import { dateToString } from '../utils/dates/dateToString';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 import { WorkoutType } from '../types/Program';
+import { getHeaders } from '../utils/axios/getHeaders';
 
 type Execution = { rate: number; date: Date; workout?: WorkoutType };
 
@@ -66,10 +67,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   if (destination === '/') {
     try {
-      const cookies = parseCookies(ctx);
-      const headers = {
-        Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,
-      };
+      const headers = getHeaders(ctx);
       const props: HomeProps = {
         grade,
         trainingDayName: 'X',
@@ -136,7 +134,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
       return { props };
     } catch (err: any) {
-      console.log(err);
       return { redirect: { destination: '/error-occur', permanent: false } };
     }
   } else {
