@@ -6,25 +6,24 @@ import { GoalsType } from '../../types/Stats';
 const UserGoals: React.FC<{ userGoals: GoalsType }> = ({ userGoals }) => {
   return (
     <section className={classes.GoalsSec}>
-      <h3>Your Goals</h3>
       <div>
         <p>
-          <strong>Main: </strong>
+          <strong>Main goal: </strong>
           {userGoals.basicGoal}
         </p>
         <p>
-          <strong>weight: </strong>
+          <strong>Desired weight: </strong>
           {userGoals.detailGoals.weight} Kg
         </p>
         {userGoals.detailGoals.fatPercentage && (
           <p>
-            <strong>Fat Percentage: </strong>
+            <strong>Desired Fat: </strong>
             {userGoals.detailGoals.fatPercentage} %
           </p>
         )}
         {userGoals.detailGoals.musclesMass && (
           <p>
-            <strong>Muscles mass: </strong>
+            <strong>Desired Muscles mass: </strong>
             {userGoals.detailGoals.musclesMass} Kg
           </p>
         )}

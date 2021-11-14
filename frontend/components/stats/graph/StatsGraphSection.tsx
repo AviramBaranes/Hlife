@@ -16,6 +16,11 @@ const StatsGraphSection: React.FC<{
 
   return (
     <div>
+      <StatsGraph
+        basicGoal={basicGoal}
+        stats={stats}
+        dataToDisplay={dataToDisplay}
+      />
       {(hasFatPercentageStats || hasMusclesMassStats) && (
         <GraphButtons
           hasFatPercentageStats={hasFatPercentageStats}
@@ -23,11 +28,6 @@ const StatsGraphSection: React.FC<{
           setDataToDisplay={setDataToDisplay}
         />
       )}
-      <StatsGraph
-        basicGoal={basicGoal}
-        stats={stats}
-        dataToDisplay={dataToDisplay}
-      />
     </div>
   );
 };

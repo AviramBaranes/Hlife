@@ -29,6 +29,7 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
     useState<GraphSelector<SVGSVGElement | null> | null>(null);
   const [graph, setGraph] = useState<GraphSelector<SVGGElement> | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalHeight, setModalHeight] = useState('30vh');
   const [currentStatToDisplay, setCurrentStatToDisplay] =
     useState<StatsObjType | null>(null);
 
@@ -37,6 +38,11 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
     marginBottom: 40,
     marginRight: 15,
   };
+
+  useEffect(() => {
+    if (!window) return;
+    window.innerWidth > 768 ? setModalHeight('10vh') : setModalHeight('30vh');
+  }, [window.innerWidth]);
 
   function getFillColor(d: StatsObjType, i: number) {
     let fillColor = 'var(--primary-color)';
@@ -219,9 +225,9 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
   }, [selector, graph, dataToDisplay]);
 
   return (
-    <div>
+    <div className={classes.StatsGraph}>
       {showModal && currentStatToDisplay && (
-        <Modal onClose={() => setShowModal(false)}>
+        <Modal yPosition={modalHeight} onClose={() => setShowModal(false)}>
           <div className={classes.ProgressModal}>
             <h3>
               Your progress from{' '}
@@ -259,7 +265,9 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
           </div>
         </Modal>
       )}
+      <h3>Progress Graph</h3>
       <svg ref={graphRef} width={320} height={400}></svg>
+      <p>Click the dots for more details.</p>
     </div>
   );
 };

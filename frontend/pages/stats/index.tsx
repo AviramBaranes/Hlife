@@ -1,12 +1,15 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import UserGoals from '../../components/stats/UserGoals';
-import UserStats from '../../components/stats/UserStats';
 
+import classes from '../../styles/pages/stats.module.scss';
+import GeneralStats from '../../components/stats/GeneralStats';
+import StatsGraphSection from '../../components/stats/graph/StatsGraphSection';
+import UserGoals from '../../components/stats/UserGoals';
 import { GoalsType, PhysicalStatsType } from '../../types/Stats';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { getHeaders } from '../../utils/axios/getHeaders';
 import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
+import AddStatsButton from '../../components/stats/AddStatsButton';
 
 interface StatsProps {
   userGoals: GoalsType;
@@ -14,11 +17,29 @@ interface StatsProps {
 }
 
 const Stats: React.FC<StatsProps> = ({ userGoals, userStats }) => {
+  const { age, name, rank, stats } = userStats;
+  const { basicGoal } = userGoals;
+
+  const date = new Date(new Date().setHours(0, 0, 0, 0));
+  const isDeclaredAlready = stats.find(
+    (stat) => new Date(stat.date).getTime() === new Date(date).getTime()
+  );
+
   return (
-    <div>
-      <UserGoals userGoals={userGoals} />
-      <UserStats basicGoal={userGoals.basicGoal} userStats={userStats} />
-    </div>
+    <>
+      <div className={classes.Main}>
+        <div className={classes.InfoSec}>
+          <GeneralStats age={age} name={name} rank={rank} />
+          <UserGoals userGoals={userGoals} />
+        </div>
+        <StatsGraphSection stats={stats} basicGoal={basicGoal} />
+      </div>
+      {!isDeclaredAlready && (
+        <div className={classes.StatsDisplay}>
+          <AddStatsButton basicGoal={basicGoal} />
+        </div>
+      )}
+    </>
   );
 };
 

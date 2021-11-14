@@ -1,35 +1,45 @@
 @import '../breakpoints.scss';
 
-.GoalsSec {
-  width: 80%;
-  margin: auto;
-  h3 {
-    text-align: center;
-    margin: auto;
-    margin-top: 1.3rem;
-    margin-bottom: 1rem;
-    border-bottom: var(--text-color) 1px solid;
-    width: 9rem;
-    font-size: 1.5rem;
-  }
-  p {
-    margin-bottom: 0.5rem;
+@mixin titleStyle($width) {
+  text-align: center;
+  margin: 1.4rem auto;
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--text-color);
+  width: $width;
+  @include media('<desktop', '>tablet') {
+    font-size: 1.7rem;
+    width: $width + 2rem;
   }
 }
-.StatsSec {
-  width: 80%;
-  margin: auto;
+
+.StatsSec,
+.GoalsSec {
+  width: 20rem;
   h3 {
-    text-align: center;
-    margin: auto;
-    margin-top: 1.3rem;
-    margin-bottom: 1rem;
-    border-bottom: var(--text-color) 1px solid;
-    width: 5rem;
-    font-size: 1.5rem;
+    @include titleStyle($width: 15rem);
   }
   p {
-    margin-bottom: 0.5rem;
+    margin: auto;
+    margin-bottom: 0.75rem;
+    width: 75%;
+    font-size: 0.8rem;
+    strong {
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+  }
+}
+
+.StatsGraph {
+  margin-top: 2rem;
+  text-align: center;
+  h3 {
+    @include titleStyle($width: 12rem);
+  }
+  p {
+    text-align: center;
+    font-size: 0.75rem;
+    margin: 1rem;
   }
 }
 
@@ -70,5 +80,129 @@
     margin: auto;
     margin-bottom: 1rem;
     width: 85%;
+  }
+}
+
+.ButtonsSec {
+  h4 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+.Buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  button {
+    min-width: 6rem;
+    padding: 0.6rem 0rem;
+    border-radius: 0.3rem;
+    background: var(--primary-color);
+    border: black;
+    cursor: pointer;
+  }
+}
+
+.ActiveBtn {
+  font-weight: bold;
+  border: var(--text-color) solid 1px !important;
+  box-shadow: 0rem 0.5rem 0.7rem var(--secondary-color);
+}
+
+.WeightField {
+  text-align: center;
+
+  h3 {
+    margin-top: 1.2rem;
+    margin-bottom: 0.7rem;
+    font-size: 1.5rem;
+  }
+  p {
+    font-size: 0.75rem;
+  }
+  svg {
+    font-size: 5rem;
+    margin: 4rem;
+  }
+  button {
+    margin-top: 4rem;
+  }
+}
+
+@include media('<desktop', '>tablet') {
+  .Main {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .InfoSec {
+    margin-bottom: 22.4rem;
+  }
+  .StatsSec,
+  .GoalsSec {
+    p {
+      font-size: 1rem;
+      strong {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .ButtonsSec {
+    margin-top: 2rem;
+    h4 {
+      font-size: 1.2rem;
+    }
+  }
+  .Buttons {
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    button {
+      min-width: 8rem;
+      margin: 0rem 0.5rem;
+      padding: 0.8rem 0rem;
+    }
+  }
+}
+@include media('>desktop') {
+  .Main {
+    margin-top: 1rem;
+    margin-bottom: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .InfoSec {
+    margin-bottom: 22.4rem;
+  }
+  .StatsSec,
+  .GoalsSec {
+    p {
+      font-size: 1rem;
+      strong {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .ButtonsSec {
+    margin-top: 2rem;
+    h4 {
+      font-size: 1.2rem;
+    }
+  }
+  .Buttons {
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+    button {
+      min-width: 8rem;
+      margin: 0rem 0.5rem;
+      padding: 0.8rem 0rem;
+    }
   }
 }
