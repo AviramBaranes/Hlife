@@ -37,14 +37,15 @@ const ExecutionsGraph: React.FC<{
   const [hasExecutions, setHasExecutions] = useState(!!weeklyExecutions.length);
   const [selectElActive, setSelectElActive] = useState(false);
   const [graphToDisplay, setGraphToDisplay] = useState<'pie' | 'bar'>('bar');
+  const [showMonth, setShowMonth] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [currentWorkout, setCurrentWorkout] = useState<WorkoutType | null>(
     null
   );
 
   const dimensions = {
-    height: 200,
-    width: (executionsData.length > 7 ? 10 : 40) * executionsData.length + 26.5,
+    height: 280,
+    width: 320,
     marginLeft: 50,
     marginTop: 10,
     marginRight: 25,
@@ -73,11 +74,19 @@ const ExecutionsGraph: React.FC<{
 
   function getScaleTimeDomain() {
     let domain = d3.extent(executionsData.map((item) => new Date(item.date)));
+
     if (domain[0] === domain[1]) {
       const date = new Date(domain[0]!);
       const date2 = new Date(date.setDate(date.getDate() + 1));
       domain = d3.extent([date, date2]);
+      domain[0] = new Date(domain[0]!.setDate(domain[0]!.getDate() - 2));
+      domain[1] = new Date(domain[1]!.setDate(domain[1]!.getDate() + 2));
+      return domain;
     }
+
+    domain[0] = new Date(domain[0]!.setDate(domain[0]!.getDate() - 1));
+    domain[1] = new Date(domain[1]!.setDate(domain[1]!.getDate() + 1));
+
     return domain;
   }
 
@@ -110,7 +119,7 @@ const ExecutionsGraph: React.FC<{
       selectedBarChart.style('visibility', 'hidden');
     }
     if (hasExecutions && selectedBarChart) {
-      selectedBarChart.style('height', 200);
+      selectedBarChart.style('height', 280);
       selectedBarChart.style('visibility', 'visible');
     }
     if (!hasExecutions && selectedPieChart) {
@@ -157,9 +166,10 @@ const ExecutionsGraph: React.FC<{
           .domain(getScaleTimeDomain() as [Date, Date]);
 
         //axis
+
         const xAxis = d3
           .axisBottom<Date>(x)
-          .ticks(executionsData.length > 7 ? 7 : executionsData.length)
+          .ticks(executionsData.length > 7 ? 8 : executionsData.length + 1)
           .tickFormat(d3.timeFormat('%b %d'));
 
         const yAxis = d3
@@ -170,19 +180,14 @@ const ExecutionsGraph: React.FC<{
         selectedBarChart.select('.xAxis').remove();
         selectedBarChart.select('.yAxis').remove();
 
-        let transformX =
-          dimensions.marginLeft +
-          (dimensions.width - 100) / executionsData.length / 2;
-
-        if (executionsData.length === 1) transformX += 27;
-        else if (executionsData.length === 2) transformX += 10;
-
         selectedBarChart
           .append('g')
           .attr('class', 'xAxis')
           .attr(
             'transform',
-            `translate(${transformX},${graphHeight + dimensions.marginTop + 3})`
+            `translate(${dimensions.marginLeft},${
+              graphHeight + dimensions.marginTop
+            })`
           )
           .call(xAxis)
           .selectAll('text')
@@ -195,7 +200,7 @@ const ExecutionsGraph: React.FC<{
           .attr('class', 'yAxis')
           .attr(
             'transform',
-            `translate(${dimensions.marginLeft - 3},${dimensions.marginTop})`
+            `translate(${dimensions.marginLeft},${dimensions.marginTop})`
           )
           .call(yAxis);
 
@@ -213,8 +218,10 @@ const ExecutionsGraph: React.FC<{
         const updatedRects = rects
           .attr('height', 0)
           .attr('y', graphHeight)
-          .attr('x', (d) => x(new Date(d.date)))
-          .attr('width', dimensions.width / 2 / executionsData.length)
+          .attr('x', (d) =>
+            showMonth ? x(new Date(d.date)) - 2 : x(new Date(d.date)) - 10
+          )
+          .attr('width', showMonth ? 4 : 20)
           .style('cursor', (d: any) => (d.workout ? 'pointer' : 'default'))
           .attr(
             'fill',
@@ -238,14 +245,16 @@ const ExecutionsGraph: React.FC<{
         const enterRects = rects
           .enter()
           .append('rect')
-          .attr('width', dimensions.width / 2 / executionsData.length)
           .style('cursor', (d: any) => (d.workout ? 'pointer' : 'default'))
           .attr(
             'fill',
             (d) =>
               `${d.rate === 100 ? 'var(--primary-color)' : 'var(--text-color)'}`
           )
-          .attr('x', (d) => x(new Date(d.date)))
+          .attr('x', (d) =>
+            showMonth ? x(new Date(d.date)) - 2 : x(new Date(d.date)) - 10
+          )
+          .attr('width', showMonth ? 4 : 20)
           .attr('height', 0)
           .attr('y', graphHeight);
 
@@ -395,6 +404,7 @@ const ExecutionsGraph: React.FC<{
     const { value } = e.target;
 
     const isMonthSelected = +value === 5;
+    isMonthSelected ? setShowMonth(true) : setShowMonth(false);
 
     setSelectElActive(value !== '');
 

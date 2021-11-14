@@ -23,17 +23,17 @@ describe('ExecutionGraphs tests', () => {
       .spyOn(axiosInstance, 'get')
       .mockImplementationOnce(async () => ({
         data: [
-          { executionRate: 100, date: new Date('13-11-2001') },
-          { executionRate: 100, date: new Date('14-11-2001') },
-          { executionRate: 25, date: new Date('15-11-2001') },
+          { executionRate: 100, date: new Date('11-13-2001') },
+          { executionRate: 100, date: new Date('11-14-2001') },
+          { executionRate: 25, date: new Date('11-15-2001') },
         ],
       }))
       .mockImplementationOnce(async () => ({
         data: [
-          { executionRate: 100, date: new Date('13-11-2001') },
-          { executionRate: 100, date: new Date('14-11-2001') },
-          { executionRate: 25, date: new Date('15-11-2001') },
-          { executionRate: 25, date: new Date('16-11-2001') },
+          { executionRate: 100, date: new Date('11-13-2001') },
+          { executionRate: 100, date: new Date('11-14-2001') },
+          { executionRate: 25, date: new Date('11-15-2001') },
+          { executionRate: 25, date: new Date('11-16-2001') },
         ],
       }))
       .mockImplementationOnce(async () => ({
@@ -108,8 +108,8 @@ describe('ExecutionGraphs tests', () => {
       'var(--text-color)'
     );
     await waitFor(() => {
-      expect(barChart.children[0].children[0]).toHaveAttribute('height', '150');
-      expect(barChart.children[0].children[1]).toHaveAttribute('height', '105');
+      expect(barChart.children[0].children[0]).toHaveAttribute('height', '230');
+      expect(barChart.children[0].children[1]).toHaveAttribute('height', '161');
     });
   });
 
@@ -188,11 +188,11 @@ describe('ExecutionGraphs tests', () => {
 
     await waitFor(() => {
       expect(barChart.children[0].children.length).toBe(3);
-      expect(barChart.children[0].children[0]).toHaveAttribute('height', '150');
-      expect(barChart.children[0].children[1]).toHaveAttribute('height', '150');
+      expect(barChart.children[0].children[0]).toHaveAttribute('height', '230');
+      expect(barChart.children[0].children[1]).toHaveAttribute('height', '230');
       expect(
         +barChart.children[0].children[2].getAttribute('height')!
-      ).toBeCloseTo(37.5);
+      ).toBeCloseTo(57.5);
     });
 
     userEvent.click(screen.getByRole('checkbox'));
@@ -233,14 +233,14 @@ describe('ExecutionGraphs tests', () => {
 
     await waitFor(() => {
       expect(barChart.children[0].children.length).toBe(4);
-      expect(barChart.children[0].children[0]).toHaveAttribute('height', '150');
-      expect(barChart.children[0].children[1]).toHaveAttribute('height', '150');
+      expect(barChart.children[0].children[0]).toHaveAttribute('height', '230');
+      expect(barChart.children[0].children[1]).toHaveAttribute('height', '230');
       expect(
         +barChart.children[0].children[2].getAttribute('height')!
-      ).toBeCloseTo(37.5);
+      ).toBeCloseTo(57.5);
       expect(
         +barChart.children[0].children[3].getAttribute('height')!
-      ).toBeCloseTo(37.5);
+      ).toBeCloseTo(57.5);
     });
 
     userEvent.click(screen.getByRole('checkbox'));
