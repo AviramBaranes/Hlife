@@ -35,7 +35,7 @@ const Stats: React.FC<StatsProps> = ({ userGoals, userStats }) => {
         <StatsGraphSection stats={stats} basicGoal={basicGoal} />
       </div>
       {!isDeclaredAlready && (
-        <div className={classes.StatsDisplay}>
+        <div data-testid='add-stats-btn' className={classes.StatsDisplay}>
           <AddStatsButton basicGoal={basicGoal} />
         </div>
       )}

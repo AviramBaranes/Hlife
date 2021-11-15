@@ -39,35 +39,28 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
     marginRight: 15,
   };
 
-  useEffect(() => {
-    if (!window) return;
-    window.innerWidth > 768 ? setModalHeight('10vh') : setModalHeight('30vh');
-  }, [window.innerWidth]);
+  global.window &&
+    useEffect(() => {
+      if (!window) return;
+      window.innerWidth > 768 ? setModalHeight('10vh') : setModalHeight('30vh');
+    }, [window.innerWidth]);
 
   function getFillColor(d: StatsObjType, i: number) {
-    let fillColor = 'var(--primary-color)';
     if (i === 0) return 'var(--text-color)';
+    let fillColor = 'var(--primary-color)';
     const theFormerBigger = stats[i - 1][dataToDisplay]! > d[dataToDisplay]!;
     const theFormerSmaller = stats[i - 1][dataToDisplay]! < d[dataToDisplay]!;
-    if (basicGoal === 'lose fat') {
-      if (dataToDisplay === 'musclesMass') {
-        if (theFormerBigger) return 'red';
-        else return fillColor;
-      }
-      theFormerSmaller && (fillColor = 'red');
-    } else if (basicGoal === 'increase muscles mass') {
-      switch (dataToDisplay) {
-        case 'weight':
-          theFormerSmaller && (fillColor = 'red');
-          break;
-        case 'fatPercentage':
-          theFormerSmaller && (fillColor = 'red');
-          break;
-        case 'musclesMass':
-          theFormerBigger && (fillColor = 'red');
-          break;
-      }
+
+    if (dataToDisplay === 'fatPercentage' && theFormerSmaller)
+      fillColor = 'red';
+    if (dataToDisplay === 'musclesMass' && theFormerBigger) fillColor = 'red';
+    if (dataToDisplay === 'weight') {
+      basicGoal === 'lose fat' && theFormerSmaller && (fillColor = 'red');
+      basicGoal === 'increase muscles mass' &&
+        theFormerBigger &&
+        (fillColor = 'red');
     }
+
     return fillColor;
   }
 
@@ -225,10 +218,10 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
   }, [selector, graph, dataToDisplay]);
 
   return (
-    <div className={classes.StatsGraph}>
+    <div data-testid='graph-container' className={classes.StatsGraph}>
       {showModal && currentStatToDisplay && (
         <Modal yPosition={modalHeight} onClose={() => setShowModal(false)}>
-          <div className={classes.ProgressModal}>
+          <div data-testid='stats-modal' className={classes.ProgressModal}>
             <h3>
               Your progress from{' '}
               {dateToString(new Date(currentStatToDisplay.date))}

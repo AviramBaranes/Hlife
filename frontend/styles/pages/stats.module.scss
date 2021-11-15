@@ -15,6 +15,7 @@
 .StatsSec,
 .GoalsSec {
   width: 20rem;
+  margin: auto;
   h3 {
     @include titleStyle($width: 15rem);
   }
@@ -121,8 +122,8 @@
   p {
     font-size: 0.75rem;
   }
-  svg {
-    font-size: 5rem;
+  img {
+    width: 10rem;
     margin: 4rem;
   }
   button {
@@ -139,7 +140,7 @@
     justify-content: space-between;
   }
   .InfoSec {
-    margin-bottom: 22.4rem;
+    margin-bottom: 20rem;
   }
   .StatsSec,
   .GoalsSec {
@@ -177,7 +178,7 @@
     justify-content: space-around;
   }
   .InfoSec {
-    margin-bottom: 22.4rem;
+    margin-bottom: 20rem;
   }
   .StatsSec,
   .GoalsSec {

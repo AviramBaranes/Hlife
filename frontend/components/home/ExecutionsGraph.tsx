@@ -504,7 +504,7 @@ const ExecutionsGraph: React.FC<{
 
       {!hasExecutions && (
         <p className={classes.NoExecutions}>
-          No execution have been declared during this week... yet
+          No execution have been declared during this week...
         </p>
       )}
       <div className={classes.Input}>

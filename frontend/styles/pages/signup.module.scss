@@ -1,77 +1,73 @@
 @import '../breakpoints.scss';
 
 .Title {
- text-align: center;
+  text-align: center;
 }
 
-.FormTitle{
+.FormTitle {
   text-align: center;
   margin-top: 2rem;
-  svg{
+  svg {
     width: 8rem;
   }
 }
 
-.Main{
+.Main {
   text-align: center;
-  img{
+  img {
     margin: auto;
     width: 60%;
   }
 }
 
-.Footer{
+.Footer {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-@include media('>phone','<=tablet'){
-  .Title{
+@include media('>phone', '<=tablet') {
+  .Title {
     font-size: 1.24rem;
   }
 }
 
-
-@include media("<desktop", ">tablet") {
-  .Title{
-  font-size: 1.5rem;
+@include media('<desktop', '>tablet') {
+  .Title {
+    font-size: 1.5rem;
   }
-  .FormTitle{
-    font-size: 1.2rem; 
+  .FormTitle {
+    font-size: 1.2rem;
   }
 }
 
-
-@include media('>=desktop'){
-  .Title{
+@include media('>=desktop') {
+  .Title {
     font-size: 1.5rem;
     margin-bottom: 3rem;
   }
-  .Main{
+  .Main {
     display: flex;
     align-items: center;
     justify-content: space-around;
     flex-basis: 100%;
-    img{
+    img {
       width: 18rem;
     }
   }
 
-  .FormTitle{
+  .FormTitle {
     font-size: 1.3rem;
-    svg{
+    svg {
       width: 10rem;
     }
   }
-  .FormSection{
-    border-right:1px white solid  ;
-    padding-right:18%;
+  .FormSection {
+    border-right: 1px var(--text-color) solid;
+    padding-right: 18%;
     width: 40%;
   }
 
-  .Footer{
+  .Footer {
     margin: 1rem 0rem;
   }
-  
 }
-

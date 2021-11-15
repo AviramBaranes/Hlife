@@ -1,5 +1,4 @@
 import React from 'react';
-import { PhysicalStatsType } from '../../types/Stats';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard } from '@fortawesome/free-solid-svg-icons';

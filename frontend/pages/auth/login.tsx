@@ -28,7 +28,8 @@ const Login: React.FC = () => {
       <div className={classes.Footer}>
         <div>
           <p>
-            Don't have an account? <Link href='/auth/signup'>signup</Link>
+            Don't have an account?{' '}
+            <Link href='/auth/registration/signup'>signup</Link>
           </p>
           <p>
             Forgot your password?{' '}

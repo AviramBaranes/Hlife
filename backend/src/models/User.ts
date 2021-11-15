@@ -1,22 +1,21 @@
-import mongoose, { Document, ObjectId } from "mongoose";
-import { WorkoutType } from "./Workout";
+import mongoose, { Document, ObjectId } from 'mongoose';
+import { WorkoutType } from './Workout';
 
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   name: { type: String, required: true },
 
-
   email: { type: String, required: true, unique: true },
 
   password: { type: String, required: true, select: false },
 
-  gender: { type: String, enum: ["male", "female"] },
+  gender: { type: String, enum: ['male', 'female'] },
 
   dateOfBirth: {
     type: Date,
-    min: "01/01/1920",
-    max: "01/01/2005",
+    min: '01/01/1920',
+    max: '01/01/2005',
     required: true,
   },
 
@@ -30,7 +29,7 @@ const UserSchema = new Schema({
 
   hasAllWorkouts: { type: Boolean, default: false },
 
-  workouts: [{ type: mongoose.Types.ObjectId, ref: "Workout" }],
+  workouts: [{ type: mongoose.Types.ObjectId, ref: 'Workout' }],
 
   resetToken: { type: String },
 
@@ -39,14 +38,14 @@ const UserSchema = new Schema({
 
 //TODO add goals
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model('User', UserSchema);
 export default User;
 
 export interface UserType extends Document {
   name: string;
   email: string;
   password: string;
-  gender: "male" | "female";
+  gender: 'male' | 'female';
   dateOfBirth: Date;
   grade: number;
   hasProgram: boolean;

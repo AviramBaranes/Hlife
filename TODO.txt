@@ -1,7 +1,12 @@
+hover on stats graph
+display detail goal on graph
 1.stats
-    A:styles
-    B:tests
+    A:tests
 
 2.about
+
+3.change default mode to light 
+
+4. final colors
 
 3.deploy

@@ -12,12 +12,19 @@
   .inValid {
     background-color: salmon;
     border: 2px red solid;
+    + label {
+      color: red;
+    }
   }
 
   .Active {
     transform: translate(0, 5px) scale(0.8);
     color: var(--secondary-color);
     font-weight: bolder;
+    + input {
+      background-color: var(--text-color);
+      color: var(--opposite-text);
+    }
   }
 
   .long-word {
@@ -244,7 +251,7 @@
   content: '';
   width: 1.4rem;
   height: 1.4rem;
-  background-color: #e8f5f7;
+  background-color: var(--text-color);
   position: absolute;
   border-radius: 70px;
   transition: 0.5s;

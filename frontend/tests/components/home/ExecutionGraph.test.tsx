@@ -10,7 +10,7 @@ import { dateToString } from '../../../utils/dates/dateToString';
 
 describe('ExecutionGraphs tests', () => {
   const noExecutionsText =
-    'No execution have been declared during this week... yet';
+    'No execution have been declared during this week...';
   const weeklyExecutions = [
     { rate: 100, date: new Date('11-11-2001') },
     { rate: 70, date: new Date('12-11-2001') },

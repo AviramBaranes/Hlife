@@ -1,9 +1,11 @@
-import { faWeight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faWeight } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../styles/pages/stats.module.scss';
+import weightSvg from '../../assets/svg/weight.svg';
 import { statsActions } from '../../redux/slices/stats/statsSlice';
 import RangeInput from '../UI/RangeInput/RangeInput';
 
@@ -22,7 +24,7 @@ const WeightField: React.FC<{ shouldDisplay: boolean }> = ({
     >
       <h3>Weight Progress</h3>
       <p>Please enter your curren weight.</p>
-      <FontAwesomeIcon icon={faWeight} />
+      {weightSvg && <Image src={weightSvg} />}
 
       <RangeInput
         min='35'

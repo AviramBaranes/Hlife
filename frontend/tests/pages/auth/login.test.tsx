@@ -58,7 +58,7 @@ describe('login page tests', () => {
     expect(svgElement.tagName).toEqual('svg');
     expect(p1Element.textContent).toEqual("Don't have an account? signup");
     expect(p2Element.textContent).toEqual('Forgot your password? go here');
-    expect(links[0]).toHaveAttribute('href', '/auth/signup');
+    expect(links[0]).toHaveAttribute('href', '/auth/registration/signup');
     expect(links[1]).toHaveAttribute('href', '/auth/forgotPassword');
     expect(emailInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();

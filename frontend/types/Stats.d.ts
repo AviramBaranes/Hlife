@@ -13,15 +13,15 @@ interface StatsObjType {
   date: Date;
   weight: number;
   deservedGrade: number;
-  height: number | undefined;
-  fatPercentage: number | undefined;
-  musclesMass: number | undefined;
-  bodyImageUrl: string | undefined;
+  height?: number;
+  fatPercentage?: number;
+  musclesMass?: number;
+  bodyImageUrl?: string;
 }
 
 export interface PhysicalStatsType {
   name: string;
   age: number;
-  rank: 'string';
+  rank: string;
   stats: StatsObjType[];
 }

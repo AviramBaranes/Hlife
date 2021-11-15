@@ -20,7 +20,7 @@ const GraphButtons: React.FC<{
   return (
     <div className={classes.ButtonsSec}>
       <h4>Choose progress to display:</h4>
-      <div className={classes.Buttons}>
+      <div data-testid='graph-buttons' className={classes.Buttons}>
         <button
           name='weight'
           className={classes.ActiveBtn}
