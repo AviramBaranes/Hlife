@@ -35,7 +35,7 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
 
   const dimensions = {
     marginLeft: 40,
-    marginBottom: 40,
+    marginBottom: 45,
     marginRight: 15,
   };
 
@@ -72,13 +72,27 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
         setGraph(
           selector
             .append('g')
-            .attr(
-              'transform',
-              `translate(${dimensions.marginLeft},-${dimensions.marginBottom})`
-            )
+            .attr('transform', `translate(${dimensions.marginLeft},10)`)
         );
       } else {
         const sortedStats = stats.filter((stat) => stat[dataToDisplay]);
+
+        d3.select('.dottedLine').remove();
+        const dottedLines = graph
+          .append('g')
+          .attr('class', 'dottedLine')
+          .style('opacity', '0');
+
+        const xDottedLine = dottedLines
+          .append('line')
+          .attr('stroke', 'var(--text-color)')
+          .attr('stroke-width', 0.5)
+          .attr('stroke-dasharray', 4);
+        const yDottedLine = dottedLines
+          .append('line')
+          .attr('stroke', 'var(--text-color)')
+          .attr('stroke-width', 0.5)
+          .attr('stroke-dasharray', 4);
 
         const line = d3
           .line()
@@ -92,10 +106,10 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
         const xDomain = d3.extent(
           sortedStats.map((stat) => new Date(stat.date))
         ) as [Date, Date];
+
         const yDomain = [
           d3.min(sortedStats.map((stat) => stat[dataToDisplay] as number))!,
-          d3.max(sortedStats.map((stat) => stat[dataToDisplay] as number))! +
-            15,
+          d3.max(sortedStats.map((stat) => stat[dataToDisplay] as number))! + 3,
         ];
 
         const x = d3
@@ -122,18 +136,14 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
         graph
           .append('g')
           .attr('class', 'xAxis')
-          .attr('transform', 'translate(0,400)')
+          .attr('transform', 'translate(0,355)')
           .call(xAxis)
           .selectAll('text')
           .attr('transform', 'rotate(-40)')
           .attr('text-anchor', 'end')
           .attr('font-size', '10px');
 
-        graph
-          .append('g')
-          .attr('class', 'yAxis')
-          .attr('transform', 'translate(0,45)')
-          .call(yAxis);
+        graph.append('g').attr('class', 'yAxis').call(yAxis);
 
         const graphPath = path.data([sortedStats]);
 
@@ -180,6 +190,32 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
           .attr('fill', (d, i) => getFillColor(d, i))
           .style('z-index', '2');
 
+        updatedCircles.on('mouseover', (e, d) => {
+          dottedLines.style('opacity', 1);
+
+          xDottedLine
+            .attr('x1', x(new Date(d.date)))
+            .attr('x2', x(new Date(d.date)))
+            .attr('y2', y(d[dataToDisplay]!))
+            .attr('y1', y(d[dataToDisplay]!))
+            .transition()
+            .duration(350)
+            .attr('y1', 355);
+
+          yDottedLine
+            .attr('y1', y(d[dataToDisplay]!))
+            .attr('y2', y(d[dataToDisplay]!))
+            .attr('x2', x(new Date(d.date)))
+            .attr('x1', x(new Date(d.date)))
+            .transition()
+            .duration(350)
+            .attr('x1', 0);
+        });
+
+        updatedCircles.on('mouseleave', () => {
+          dottedLines.style('opacity', 0);
+        });
+
         updatedCircles.on('click', (e, d) => {
           setCurrentStatToDisplay(d);
           setShowModal(true);
@@ -209,6 +245,32 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
           .attr('fill', (d, i) => getFillColor(d, i))
           .style('z-index', '2');
 
+        enterCircles.on('mouseover', (e, d) => {
+          dottedLines.style('opacity', 1);
+
+          xDottedLine
+            .attr('x1', x(new Date(d.date)))
+            .attr('x2', x(new Date(d.date)))
+            .attr('y2', y(d[dataToDisplay]!))
+            .attr('y1', y(d[dataToDisplay]!))
+            .transition()
+            .duration(350)
+            .attr('y1', 355);
+
+          yDottedLine
+            .attr('y1', y(d[dataToDisplay]!))
+            .attr('y2', y(d[dataToDisplay]!))
+            .attr('x2', x(new Date(d.date)))
+            .attr('x1', x(new Date(d.date)))
+            .transition()
+            .duration(350)
+            .attr('x1', 0);
+        });
+
+        enterCircles.on('mouseleave', () => {
+          dottedLines.style('opacity', 0);
+        });
+
         enterCircles.on('click', (e, d) => {
           setCurrentStatToDisplay(d);
           setShowModal(true);
@@ -234,13 +296,13 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
               {currentStatToDisplay.fatPercentage && (
                 <p>
                   <strong>Fat Percentage: </strong>
-                  {currentStatToDisplay.weight}%
+                  {currentStatToDisplay.fatPercentage}%
                 </p>
               )}
               {currentStatToDisplay.musclesMass && (
                 <p>
                   <strong>Muscles Mass: </strong>
-                  {currentStatToDisplay.weight}(Kg)
+                  {currentStatToDisplay.musclesMass}(Kg)
                 </p>
               )}
               <p>

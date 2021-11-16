@@ -3,11 +3,11 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 
-import Stats, { getServerSideProps } from '../../pages/stats';
-import store from '../../redux/store/reduxStore';
-import { GoalsType, PhysicalStatsType } from '../../types/Stats';
-import axiosInstance from '../../utils/axios/axiosInstance';
-import * as protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
+import Stats, { getServerSideProps } from '../../../pages/stats';
+import store from '../../../redux/store/reduxStore';
+import { GoalsType, PhysicalStatsType } from '../../../types/Stats';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import * as protectRouteHandler from '../../../utils/protectedRoutes/protectedRoutes';
 
 jest.mock('react-dom', () => {
   return {
@@ -149,13 +149,14 @@ describe('stats page tests', () => {
 
     expect(screen.queryByTestId('graph-buttons')).not.toBeInTheDocument();
     expect(svgGraph.tagName).toBe('svg');
-    expect(svgGraph.children[0].children.length).toBe(6);
-    expect(svgGraph.children[0].children[0].tagName).toBe('path');
-    expect(svgGraph.children[0].children[1].tagName).toBe('g');
+    expect(svgGraph.children[0].children.length).toBe(7);
+    expect(svgGraph.children[0].children[0].tagName).toBe('g');
+    expect(svgGraph.children[0].children[1].tagName).toBe('path');
     expect(svgGraph.children[0].children[2].tagName).toBe('g');
-    expect(svgGraph.children[0].children[3].tagName).toBe('circle');
+    expect(svgGraph.children[0].children[3].tagName).toBe('g');
     expect(svgGraph.children[0].children[4].tagName).toBe('circle');
     expect(svgGraph.children[0].children[5].tagName).toBe('circle');
+    expect(svgGraph.children[0].children[6].tagName).toBe('circle');
   });
 
   test('should handle fill colors of the graph dots', async () => {
@@ -169,16 +170,57 @@ describe('stats page tests', () => {
     const svgGraph = graphContainer.children[1].children[0];
 
     await waitFor(() => {
-      expect(svgGraph.children[3].getAttribute('fill')).toBe(
+      expect(svgGraph.children[4].getAttribute('fill')).toBe(
         'var(--text-color)'
       );
-      expect(svgGraph.children[3].getAttribute('r')).toBe('5');
-      expect(svgGraph.children[4].getAttribute('fill')).toBe('rgb(255, 0, 0)'); //red
-      expect(svgGraph.children[4].getAttribute('r')).toBe('3');
-      expect(svgGraph.children[5].getAttribute('fill')).toBe(
+      expect(svgGraph.children[4].getAttribute('r')).toBe('5');
+      expect(svgGraph.children[5].getAttribute('fill')).toBe('rgb(255, 0, 0)'); //red
+      expect(svgGraph.children[5].getAttribute('r')).toBe('3');
+      expect(svgGraph.children[6].getAttribute('fill')).toBe(
         'var(--primary-color)'
       );
-      expect(svgGraph.children[5].getAttribute('r')).toBe('5');
+      expect(svgGraph.children[6].getAttribute('r')).toBe('5');
+    });
+  });
+
+  test('should handle hover events on the graph', async () => {
+    render(
+      <Provider store={store}>
+        <Stats userGoals={userGoals} userStats={userStats} />
+      </Provider>
+    );
+
+    const graphContainer = screen.getByTestId('graph-container');
+    const svgGraph = graphContainer.children[1].children[0];
+    const linesGroup = svgGraph.children[0] as SVGElement;
+    const xDottedLine = linesGroup.children[0];
+    const yDottedLine = linesGroup.children[1];
+
+    expect(linesGroup.style.opacity).toBe('0');
+    expect(xDottedLine.tagName).toBe('line');
+    expect(xDottedLine.getAttribute('x1')).toBe(null);
+    expect(xDottedLine.getAttribute('x2')).toBe(null);
+    expect(xDottedLine.getAttribute('y1')).toBe(null);
+    expect(xDottedLine.getAttribute('y2')).toBe(null);
+    expect(yDottedLine.tagName).toBe('line');
+    expect(yDottedLine.getAttribute('x1')).toBe(null);
+    expect(yDottedLine.getAttribute('x2')).toBe(null);
+    expect(yDottedLine.getAttribute('y1')).toBe(null);
+    expect(yDottedLine.getAttribute('y2')).toBe(null);
+
+    userEvent.hover(svgGraph.children[5]); //second circle
+
+    expect(linesGroup.style.opacity).toBe('1');
+
+    await waitFor(() => {
+      expect(xDottedLine.getAttribute('x1')).toBe('261');
+      expect(xDottedLine.getAttribute('x2')).toBe('261');
+      expect(xDottedLine.getAttribute('y1')).toBe('355');
+      expect(xDottedLine.getAttribute('y2')).toBe('81.9230769230769');
+      expect(yDottedLine.getAttribute('x1')).toBe('0');
+      expect(yDottedLine.getAttribute('x2')).toBe('261');
+      expect(yDottedLine.getAttribute('y1')).toBe('81.9230769230769');
+      expect(yDottedLine.getAttribute('y2')).toBe('81.9230769230769');
     });
   });
 
@@ -194,7 +236,7 @@ describe('stats page tests', () => {
 
     expect(screen.queryByTestId('stats-modal')).not.toBeInTheDocument();
 
-    userEvent.click(svgGraph.children[4]);
+    userEvent.click(svgGraph.children[5]);
 
     const modal = screen.getByTestId('stats-modal');
     const detailedStatDiv = modal.children[1];
@@ -228,31 +270,31 @@ describe('stats page tests', () => {
 
     //show weight by default
     expect(graphButtons).toBeInTheDocument();
-    expect(svgGraph.children.length).toBe(6);
-    expect(svgGraph.children[0].tagName).toBe('path');
-    expect(svgGraph.children[1].tagName).toBe('g');
+    expect(svgGraph.children.length).toBe(7);
+    expect(svgGraph.children[1].tagName).toBe('path');
     expect(svgGraph.children[2].tagName).toBe('g');
-    expect(svgGraph.children[3].tagName).toBe('circle');
+    expect(svgGraph.children[3].tagName).toBe('g');
     expect(svgGraph.children[4].tagName).toBe('circle');
     expect(svgGraph.children[5].tagName).toBe('circle');
+    expect(svgGraph.children[6].tagName).toBe('circle');
     await waitFor(() => {
-      expect(svgGraph.children[3].getAttribute('fill')).toBe(
+      expect(svgGraph.children[4].getAttribute('fill')).toBe(
         'var(--text-color)'
       );
-      expect(svgGraph.children[3].getAttribute('r')).toBe('5');
-      expect(svgGraph.children[4].getAttribute('fill')).toBe('rgb(255, 0, 0)'); //red
-      expect(svgGraph.children[4].getAttribute('r')).toBe('3');
-      expect(svgGraph.children[5].getAttribute('fill')).toBe(
+      expect(svgGraph.children[4].getAttribute('r')).toBe('5');
+      expect(svgGraph.children[5].getAttribute('fill')).toBe('rgb(255, 0, 0)'); //red
+      expect(svgGraph.children[5].getAttribute('r')).toBe('3');
+      expect(svgGraph.children[6].getAttribute('fill')).toBe(
         'var(--primary-color)'
       );
-      expect(svgGraph.children[5].getAttribute('r')).toBe('5');
-      expect(
-        svgGraph.children[3].getAttribute('cy')! >
-          svgGraph.children[4].getAttribute('cy')!
-      ).toBe(true);
+      expect(svgGraph.children[6].getAttribute('r')).toBe('5');
       expect(
         svgGraph.children[4].getAttribute('cy')! <
           svgGraph.children[5].getAttribute('cy')!
+      ).toBe(true);
+      expect(
+        svgGraph.children[5].getAttribute('cy')! >
+          svgGraph.children[6].getAttribute('cy')!
       ).toBe(true);
     });
 
@@ -260,13 +302,14 @@ describe('stats page tests', () => {
 
     //show fatPercentage
     expect(graphButtons).toBeInTheDocument();
-    expect(svgGraph.children.length).toBe(6);
+    expect(svgGraph.children.length).toBe(7);
     expect(svgGraph.children[0].tagName).toBe('circle');
     expect(svgGraph.children[1].tagName).toBe('circle');
     expect(svgGraph.children[2].tagName).toBe('circle');
-    expect(svgGraph.children[3].tagName).toBe('path');
-    expect(svgGraph.children[4].tagName).toBe('g');
+    expect(svgGraph.children[3].tagName).toBe('g'); //-> dotted lines
+    expect(svgGraph.children[4].tagName).toBe('path');
     expect(svgGraph.children[5].tagName).toBe('g');
+    expect(svgGraph.children[6].tagName).toBe('g');
     await waitFor(() => {
       expect(svgGraph.children[0].getAttribute('fill')).toBe(
         'var(--text-color)'
@@ -293,12 +336,13 @@ describe('stats page tests', () => {
 
     //show musclesMass
     expect(graphButtons).toBeInTheDocument();
-    expect(svgGraph.children.length).toBe(5);
+    expect(svgGraph.children.length).toBe(6);
     expect(svgGraph.children[0].tagName).toBe('circle');
     expect(svgGraph.children[1].tagName).toBe('circle');
-    expect(svgGraph.children[2].tagName).toBe('path');
-    expect(svgGraph.children[3].tagName).toBe('g');
+    expect(svgGraph.children[2].tagName).toBe('g');
+    expect(svgGraph.children[3].tagName).toBe('path');
     expect(svgGraph.children[4].tagName).toBe('g');
+    expect(svgGraph.children[5].tagName).toBe('g');
     await waitFor(() => {
       expect(svgGraph.children[0].getAttribute('fill')).toBe(
         'var(--text-color)'

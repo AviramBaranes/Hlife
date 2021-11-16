@@ -56,7 +56,7 @@ export const createStatsProps = (
       dispatch(loadingAction.setToTrue());
       const { data } = await axiosInstance.post('/stats', formData);
 
-      const message = `You just gain ${data.grade}!`;
+      const message = `You just gain ${data.grade} points!`;
 
       dispatch(
         messagesActions.newMessage({

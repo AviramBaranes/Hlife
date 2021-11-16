@@ -27,6 +27,7 @@ const WeightField: React.FC<{ shouldDisplay: boolean }> = ({
       {weightSvg && <Image src={weightSvg} />}
 
       <RangeInput
+        testId='weight-field'
         min='35'
         max='250'
         step='0.5'
