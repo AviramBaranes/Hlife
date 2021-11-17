@@ -1,27 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState: { themeClass: "DarkMode" | "LightMode" } = {
-  themeClass: "DarkMode",
+const initialState: { themeClass: 'DarkMode' | 'LightMode' } = {
+  themeClass: 'LightMode',
 };
 
 const settingsSlice = createSlice({
-  name: "appSetting",
+  name: 'appSetting',
   initialState,
   reducers: {
     getTheme(state) {
       state.themeClass =
-        (localStorage.getItem("theme") as "DarkMode" | "LightMode") ||
-        "DarkMode";
+        (localStorage.getItem('theme') as 'DarkMode' | 'LightMode') ||
+        'LightMode';
     },
     changeTheme(state) {
-      if (state.themeClass === "DarkMode") {
-        localStorage.setItem("theme", "LightMode");
-        state.themeClass = "LightMode";
+      if (state.themeClass === 'DarkMode') {
+        localStorage.setItem('theme', 'LightMode');
+        state.themeClass = 'LightMode';
         return;
       }
-      if (state.themeClass === "LightMode") {
-        localStorage.setItem("theme", "DarkMode");
-        state.themeClass = "DarkMode";
+      if (state.themeClass === 'LightMode') {
+        localStorage.setItem('theme', 'DarkMode');
+        state.themeClass = 'DarkMode';
         return;
       }
     },

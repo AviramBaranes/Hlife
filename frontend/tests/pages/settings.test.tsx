@@ -92,12 +92,12 @@ describe('settings page tests', () => {
       </Provider>
     );
 
-    expect(store.getState().settingsReducer.themeClass).toBe('DarkMode');
+    expect(store.getState().settingsReducer.themeClass).toBe('LightMode');
 
     const input = screen.getByRole('checkbox');
 
     userEvent.click(input);
 
-    expect(store.getState().settingsReducer.themeClass).toBe('LightMode');
+    expect(store.getState().settingsReducer.themeClass).toBe('DarkMode');
   });
 });

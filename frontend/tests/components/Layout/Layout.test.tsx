@@ -59,11 +59,11 @@ describe('Layout component', () => {
       </Provider>
     );
 
-    expect(document.body.className).toBe('DarkMode');
-    userEvent.click(screen.getByRole('checkbox'));
     expect(document.body.className).toBe('LightMode');
     userEvent.click(screen.getByRole('checkbox'));
     expect(document.body.className).toBe('DarkMode');
+    userEvent.click(screen.getByRole('checkbox'));
+    expect(document.body.className).toBe('LightMode');
   });
   test('should not display loading', () => {
     const initialState = {

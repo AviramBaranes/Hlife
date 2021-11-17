@@ -192,7 +192,7 @@ describe('ExecutionGraphs tests', () => {
       expect(barChart.children[0].children[1]).toHaveAttribute('height', '230');
       expect(
         +barChart.children[0].children[2].getAttribute('height')!
-      ).toBeCloseTo(57.5);
+      ).toBeCloseTo(57.5, 0);
     });
 
     userEvent.click(screen.getByRole('checkbox'));
@@ -230,17 +230,16 @@ describe('ExecutionGraphs tests', () => {
     expect(spiedAxios.mock.calls[1][0]).toBe(
       `/program-exec/by-range/month/${date}`
     );
-
     await waitFor(() => {
       expect(barChart.children[0].children.length).toBe(4);
       expect(barChart.children[0].children[0]).toHaveAttribute('height', '230');
       expect(barChart.children[0].children[1]).toHaveAttribute('height', '230');
       expect(
         +barChart.children[0].children[2].getAttribute('height')!
-      ).toBeCloseTo(57.5);
+      ).toBeCloseTo(57.5, 0);
       expect(
         +barChart.children[0].children[3].getAttribute('height')!
-      ).toBeCloseTo(57.5);
+      ).toBeCloseTo(57.5, 0);
     });
 
     userEvent.click(screen.getByRole('checkbox'));
