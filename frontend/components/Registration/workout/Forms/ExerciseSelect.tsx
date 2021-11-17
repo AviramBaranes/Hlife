@@ -36,6 +36,7 @@ const ExerciseSelect: React.FC<ExerciseSelectProps> = ({
     'push ups (negative slope)',
     'pushdown',
     'skull crushers',
+    'dips',
   ];
   const bicepsExercises = ['biceps curl'];
   const backAndBicepsExercises = [
@@ -107,6 +108,7 @@ const ExerciseSelect: React.FC<ExerciseSelectProps> = ({
       <option value='pull up'>pull up</option>
       <option value='bent-over-row'>bent-over-row</option>
 
+      <option value='dips'>dips</option>
       <option value='shoulder press'>shoulder press</option>
       <option value='lateral raise'>lateral raise</option>
 

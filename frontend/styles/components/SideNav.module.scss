@@ -1,7 +1,7 @@
-@import "../variables.scss";
-@import "../breakpoints.scss";
+@import '../variables.scss';
+@import '../breakpoints.scss';
 .SideNav {
-  background: var(--primary-color);
+  background: white;
   color: black;
   height: 50vh;
   width: 70%;
@@ -14,7 +14,7 @@
   font-size: 1.4rem;
   font-weight: bolder;
   animation: slide-down 400ms ease-out forwards;
-  
+
   ul {
     height: 40vh;
     text-align: center;
@@ -24,11 +24,11 @@
     justify-content: space-around;
   }
 
-  @include media(">tablet", "<desktop") {
+  @include media('>tablet', '<desktop') {
     width: 50%;
   }
 
-  @include media(">desktop") {
+  @include media('>desktop') {
     width: 40%;
     height: 60vh;
     ul {

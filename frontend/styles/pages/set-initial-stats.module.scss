@@ -1,144 +1,144 @@
 @import '../breakpoints.scss';
 
-.Main{
-    text-align: center;
+.Main {
+  text-align: center;
 }
-.Title{
-    max-width: 80%;
-    margin: 1.5rem auto;
-    h1{
-        font-size: 1.77rem;
-    }
-}
-
-.RequiredField{
-    h3{
-        margin-bottom: 1rem;
-    }
-    span{
-        color: red;
-        font-weight: lighter;
-    }
-}
-
-.Ranks{
-    margin-block: 2rem;
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-
-.Rank{
-    cursor: pointer;
-    padding: 1rem;
-    min-width:10rem ;
-    border: 1px solid var(--secondary-color);
-    margin: 0.5rem auto;
-    background-color: var(--opposite-text);
-    transition: transform 300ms ease-in-out;
-    &:hover{
-        transform: scale(1.1);
-    }
-}
-
-.Active{
-    transform: scale(1.12);
-    border: 2px solid var(--primary-color);
-    box-shadow: -0.6rem 0rem 1rem var(--secondary-color),0.6rem 0rem 1rem var(--secondary-color);
-    transition: transform, border,box-shadow 300ms ease-in-out;
-}
-
-.ErrorDiv{
-    right: 10%;
-    left: 6%;
-    @include media('>tablet'){
-    transform: translateX(8%);
-    margin-inline:auto ;
+.Title {
+  max-width: 80%;
+  margin: 1.5rem auto;
+  h1 {
+    font-size: 1.77rem;
   }
 }
 
-@include media('<=tablet','>bigPhone'){
-    .Title{
-        h1{
-            font-size: 2.1rem;
-        }
-    }
-    .RequiredField{
-        h3{
-            margin-top: 4rem;
-        }
-    }
-    .Ranks{
-        margin-bottom: 5rem;
-        grid-template-columns: 1fr 1fr;
-        grid-row-gap: 0rem;
-        grid-column-gap: 0rem;
-    }
-    .Rank{
-        margin: 1rem;
-    }
-    .Inputs{
-        margin-bottom: 2rem;
-    }
+.RequiredField {
+  h3 {
+    margin-bottom: 1rem;
+  }
+  span {
+    color: red;
+    font-weight: lighter;
+  }
 }
 
-@include media('>tablet','<desktop'){
-    .Title{
-        h1{
-            font-size: 3rem;
-        }
-        p{
-            font-size: 1.3rem;
-        }
-    }
-    .RequiredField{
-        h3{
-            margin-top: 4rem;
-        }
-    }
-    .Ranks{
-        width: 95%;
-        margin: 4rem auto 7rem auto;
-        grid-template-columns: repeat(4,1fr);
-        grid-row-gap: 0rem;
-        grid-column-gap: 0rem;
-    }
-    .Inputs{
-        margin-bottom: 2rem;
-    }
+.Ranks {
+  margin-block: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
-@include media('>=desktop'){
-    .Title{
-        h1{
-            font-size: 3rem;
-        }
-        p{
-            font-size: 1.3rem;
-        }
-    }
-    .RequiredField{
-        h3{
-            margin-top: 6rem;
-            font-size: 1.4rem;
-        }
-    }
-    .Ranks{
-        width: 95%;
-        max-width: 70rem;
-        margin: 4rem auto 7rem auto;
-        grid-template-columns: repeat(4,1fr);
-        grid-row-gap: 0rem;
-        grid-column-gap: 0rem;
-    }
-    .Rank{
-        padding:1.4rem 2rem;
-    }
-    .Inputs{
-        width: 30%;
-        margin-inline: auto;
-        margin-bottom: 2rem;
-    }
+.Rank {
+  cursor: pointer;
+  padding: 1rem;
+  min-width: 10rem;
+  border: 1px solid var(--text-color);
+  margin: 0.5rem auto;
+  background-color: var(--opposite-text);
+  transition: transform 300ms ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
+.Active {
+  transform: scale(1.12);
+  color: var(--primary-color);
+  background-color: black;
+  border: 2px solid var(--primary-color);
+  box-shadow: -0.6rem 0rem 1rem var(--primary-color),
+    0.6rem 0rem 1rem var(--primary-color);
+  transition: transform, border, box-shadow 300ms ease-in-out;
+}
 
+.ErrorDiv {
+  right: 10%;
+  left: 6%;
+  @include media('>tablet') {
+    transform: translateX(8%);
+    margin-inline: auto;
+  }
+}
+
+@include media('<=tablet', '>bigPhone') {
+  .Title {
+    h1 {
+      font-size: 2.1rem;
+    }
+  }
+  .RequiredField {
+    h3 {
+      margin-top: 4rem;
+    }
+  }
+  .Ranks {
+    margin-bottom: 5rem;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 0rem;
+    grid-column-gap: 0rem;
+  }
+  .Rank {
+    margin: 1rem;
+  }
+  .Inputs {
+    margin-bottom: 2rem;
+  }
+}
+
+@include media('>tablet', '<desktop') {
+  .Title {
+    h1 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 1.3rem;
+    }
+  }
+  .RequiredField {
+    h3 {
+      margin-top: 4rem;
+    }
+  }
+  .Ranks {
+    width: 95%;
+    margin: 4rem auto 7rem auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-row-gap: 0rem;
+    grid-column-gap: 0rem;
+  }
+  .Inputs {
+    margin-bottom: 2rem;
+  }
+}
+
+@include media('>=desktop') {
+  .Title {
+    h1 {
+      font-size: 3rem;
+    }
+    p {
+      font-size: 1.3rem;
+    }
+  }
+  .RequiredField {
+    h3 {
+      margin-top: 6rem;
+      font-size: 1.4rem;
+    }
+  }
+  .Ranks {
+    width: 95%;
+    max-width: 70rem;
+    margin: 4rem auto 7rem auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-row-gap: 0rem;
+    grid-column-gap: 0rem;
+  }
+  .Rank {
+    padding: 1.4rem 2rem;
+  }
+  .Inputs {
+    width: 30%;
+    margin-inline: auto;
+    margin-bottom: 2rem;
+  }
+}

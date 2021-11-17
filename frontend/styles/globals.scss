@@ -18,6 +18,13 @@
   background: rgb(112, 106, 106);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
 body {
   font-family: 'Quicksand', sans-serif;
   letter-spacing: 1px;

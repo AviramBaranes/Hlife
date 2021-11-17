@@ -155,11 +155,14 @@ const RecommendedOrder: React.FC<{
   return (
     <div className={classes.RecommendationSec} data-testid='recommended-order'>
       <div className={classes.Recommendation}>
-        <strong>Recommendation: </strong>
+        <h4>Recommendation: </h4>
         <div className={classes.RecommendationList}>
           {order.split('\n').map((day, i) => (
             <div key={day + i}>
-              <p>{day}</p>
+              <p>
+                <strong>{day.slice(0, 5)}</strong>
+                {day.slice(5)}
+              </p>
             </div>
           ))}
         </div>

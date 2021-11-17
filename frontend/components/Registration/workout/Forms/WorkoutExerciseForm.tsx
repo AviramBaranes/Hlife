@@ -204,13 +204,11 @@ const WorkoutExerciseForm: React.FC<{
               {description}
             </h4>
           )}
-          <button
-            style={{ marginLeft: 'unset' }}
-            className='danger-button'
-            onClick={removeExerciseHandler}
-          >
-            Remove
-          </button>
+          <div className={classes.RemoveBtn}>
+            <button className='danger-button' onClick={removeExerciseHandler}>
+              Remove
+            </button>
+          </div>
         </div>
       )}
     </section>

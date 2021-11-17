@@ -23,9 +23,9 @@ const scheduleProgram: React.FC<{
   }, []);
 
   return (
-    <div>
+    <div className={classes.Page}>
       <section className={classes.Title}>
-        <h2>Schedule Your Program</h2>
+        <h3>Schedule Your Program</h3>
         <p>This is the final step. It will earn you 100 points!</p>
       </section>
       {order && (

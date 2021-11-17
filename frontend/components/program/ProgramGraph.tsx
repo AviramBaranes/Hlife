@@ -176,8 +176,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           .append('text')
           .attr('text-anchor', 'middle')
           .style('font-size', (d) => d.r * 0.3)
-          .style('font-weight', 'bolder')
-          .text((d: any) => d.data.title);
+          .text((d: any) => d.data.title.slice(0, 12));
 
         nodes
           .filter((d: any) => d.data.parent === 'Program')
@@ -186,7 +185,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           .attr('transform', (d: any) => `translate(0,-${d.r - 16})`)
           .style('font-size', 16)
           .style('font-weight', 'bolder')
-          .text((d: any) => d.data.title);
+          .text((d: any) => d.data.title.slice(0, 12));
       }
     }
   }, [regularSelector, regularGraph, currentCircle, programStyle]);
@@ -245,7 +244,7 @@ const ProgramGraph: React.FC<{ allWorkouts: WorkoutType[] }> = ({
           .attr('text-anchor', 'middle')
           .style('font-size', (d: any) => 5 + d.data.time * 0.051)
           .style('font-weight', 'bolder')
-          .text((d: any) => d.data.title);
+          .text((d: any) => d.data.title.slice(0, 12));
       }
     }
   }, [aerobicSelector, aerobicGraph, currentCircle, programStyle]);
