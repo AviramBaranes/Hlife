@@ -1,6 +1,8 @@
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
+
 import FatPercentageField from '../../components/Registration/generalFields/FatPercentageField';
 import MusclesMassField from '../../components/Registration/generalFields/MusclesMassField';
 import UploadPhoto from '../../components/Registration/statsFields/UploadPhoto';
@@ -53,6 +55,10 @@ const addStats: React.FC<{ goal: string }> = ({ goal }) => {
 
   return (
     <div>
+      <Head>
+        <title>Add Stats</title>
+        <meta name='description' content='add new physical stats' />
+      </Head>
       <WeightField shouldDisplay={displayRequiredFields} />
 
       <FatPercentageField

@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
 
 import FatPercentageField from '../../../components/Registration/generalFields/FatPercentageField';
 import MusclesMassField from '../../../components/Registration/generalFields/MusclesMassField';
@@ -47,6 +48,10 @@ const setGoals: React.FC = () => {
   );
   return (
     <>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Set your goals' />
+      </Head>
       <RequiredFields shouldDisplay={shouldDisplayRequiredFields} />
 
       <FatPercentageField

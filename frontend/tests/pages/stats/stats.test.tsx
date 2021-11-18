@@ -81,7 +81,6 @@ describe('stats page tests', () => {
         weight: 60,
         date: new Date('12-11-2001'),
         deservedGrade: 30,
-        bodyImageUrl: 'image/url',
       },
       { weight: 50, date: new Date('13-11-2001'), deservedGrade: 25 },
     ],
@@ -245,9 +244,6 @@ describe('stats page tests', () => {
     expect(detailedStatDiv.children.length).toBe(2);
     expect(detailedStatDiv.children[0].textContent).toBe('Weight: 60(Kg)');
     expect(detailedStatDiv.children[1].textContent).toBe('Grade: 30/45');
-    expect(modal.children[2].children[0].getAttribute('src')).toBe(
-      `${process.env.baseUrl}/image/url`
-    );
   });
 
   test('should handle graph button clicks (integration  test)', async () => {

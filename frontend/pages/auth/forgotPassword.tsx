@@ -2,6 +2,8 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps } from 'next';
 import React from 'react';
+import Head from 'next/head';
+
 import ForgotPasswordForm from '../../components/auth/forms/forgotPassword-form';
 import classes from '../../styles/pages/forgotPassword.module.scss';
 import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
@@ -9,6 +11,10 @@ import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
 function SendEmail() {
   return (
     <>
+      <Head>
+        <title>Reset password</title>
+        <meta name='description' content='Reset your password' />
+      </Head>
       <div className={classes.Title}>
         <h1>Reset Password</h1>
         <h5>

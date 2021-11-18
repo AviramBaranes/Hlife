@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import * as d3 from 'd3';
 
 import classes from '../../../styles/pages/stats.module.scss';
@@ -312,8 +313,13 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
             </div>
             {currentStatToDisplay.bodyImageUrl && (
               <div className={classes.Image}>
-                <img
-                  src={`${process.env.baseURL}/${currentStatToDisplay.bodyImageUrl}`}
+                <Image
+                  alt='user picture'
+                  width={400}
+                  height={400}
+                  src={
+                    `${process.env.baseURL}/${currentStatToDisplay.bodyImageUrl}` as any
+                  }
                 />
               </div>
             )}

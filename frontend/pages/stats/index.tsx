@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
+import Head from 'next/head';
 
 import classes from '../../styles/pages/stats.module.scss';
 import GeneralStats from '../../components/stats/GeneralStats';
@@ -27,6 +28,10 @@ const Stats: React.FC<StatsProps> = ({ userGoals, userStats }) => {
 
   return (
     <>
+      <Head>
+        <title>Stats</title>
+        <meta name='description' content='Displaying stats in a graph' />
+      </Head>
       <div className={classes.Main}>
         <div className={classes.InfoSec}>
           <GeneralStats age={age} name={name} rank={rank} />

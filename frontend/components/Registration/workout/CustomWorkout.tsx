@@ -1,4 +1,5 @@
 import router from 'next/router';
+import Head from 'next/head';
 import React, { SetStateAction, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
@@ -107,6 +108,11 @@ const CustomWorkout: React.FC<{
 
   return (
     <div>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Choose your workout' />
+      </Head>
+
       <section className={classes.Title}>
         <h3>Create a workout program</h3>
         <p>create your own custom workout program</p>

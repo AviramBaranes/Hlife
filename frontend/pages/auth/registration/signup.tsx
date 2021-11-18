@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Head from 'next/head';
 
 import SignupForm from '../../../components/auth/forms/signup-form';
 import Line from '../../../components/UI/SVGs/title-line';
@@ -12,6 +13,9 @@ import { GetServerSideProps } from 'next';
 const Signup: React.FC = () => {
   return (
     <>
+      <Head>
+        <title>Sign Up</title>
+      </Head>
       <div className={classes.Title}>
         <h1>Welcome</h1>
         <h5>Start changing your life today!</h5>
@@ -24,7 +28,7 @@ const Signup: React.FC = () => {
           </div>
           <SignupForm />
         </section>
-        {signupSvg.src && <Image src={signupSvg} />}
+        {signupSvg.src && <Image alt='workout picture' src={signupSvg} />}
       </div>
       <div className={classes.Footer}>
         <p>

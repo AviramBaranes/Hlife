@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Head from 'next/head';
 
 import LoginForm from '../../components/auth/forms/login-form';
 import classes from '../../styles/pages/login.module.scss';
@@ -12,6 +13,9 @@ import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
 const Login: React.FC = () => {
   return (
     <>
+      <Head>
+        <title>Login</title>
+      </Head>
       <div className={classes.Title}>
         <h1>Welcome Back!</h1>
       </div>
@@ -23,7 +27,9 @@ const Login: React.FC = () => {
           </div>
           <LoginForm />
         </section>
-        {dumbbellsPic.src && <Image src={dumbbellsPic} />}
+        {dumbbellsPic.src && (
+          <Image alt='dumbbells picture' src={dumbbellsPic} />
+        )}
       </div>
       <div className={classes.Footer}>
         <div>

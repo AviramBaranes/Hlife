@@ -24,7 +24,7 @@ const WeightField: React.FC<{ shouldDisplay: boolean }> = ({
     >
       <h3>Weight Progress</h3>
       <p>Please enter your curren weight.</p>
-      {weightSvg && <Image src={weightSvg} />}
+      {weightSvg && <Image src={weightSvg} alt='weight icon' />}
 
       <RangeInput
         testId='weight-field'

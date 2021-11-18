@@ -76,7 +76,7 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             onClick={basicGoalChangeHandler}
           >
             <h4>Lose Fat</h4>
-            {slimBody && <Image src={slimBody} />}
+            {slimBody && <Image src={slimBody} alt='slim body illustration' />}
           </div>
           <div
             className={`${classes.Option} ${
@@ -85,7 +85,9 @@ const RequiredFields: React.FC<{ shouldDisplay: boolean }> = ({
             onClick={basicGoalChangeHandler}
           >
             <h4>Gain Muscle</h4>
-            {muscleBody && <Image src={muscleBody} />}
+            {muscleBody && (
+              <Image src={muscleBody} alt='muscular body illustration' />
+            )}
           </div>
         </div>
         <div className={classes.WeightSection}>

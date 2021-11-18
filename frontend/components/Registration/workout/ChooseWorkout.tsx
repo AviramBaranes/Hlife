@@ -1,5 +1,6 @@
 import router from 'next/router';
 import React, { Dispatch } from 'react';
+import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../../styles/pages/choose-workout.module.scss';
@@ -53,6 +54,10 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
 
   return (
     <div>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Choose your workout' />
+      </Head>
       <section className={classes.Title}>
         <h3>Choose a workout program</h3>
         <p>You can follow our recommendations or create a custom program.</p>

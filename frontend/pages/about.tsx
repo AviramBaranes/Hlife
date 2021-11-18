@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Head from 'next/head';
 
 import classes from '../styles/pages/about.module.scss';
 import gitHubIcon from '../assets/images/Links/github.png';
@@ -9,6 +10,9 @@ import myPhoto from '../assets/images/developer/aviram.jpg';
 const About: React.FC = () => {
   return (
     <div>
+      <Head>
+        <title>About</title>
+      </Head>
       <div className={classes.AboutAppSec}>
         <h3>The App</h3>
         <p>
@@ -40,17 +44,22 @@ const About: React.FC = () => {
             typescript. Loves to do sport mainly calisthenics and Karate (black
             belt).
           </p>
-          <Image src={myPhoto} />
+          <Image src={myPhoto} alt='developer photo' />
         </div>
       </div>
       <div className={classes.LinksSec}>
         <h5>Find me here:</h5>
         <div className={classes.Links}>
           <a href='https://github.com/AviramBaranes' target='_blank'>
-            <Image width={50} height={50} src={gitHubIcon} />
+            <Image alt='github icon' width={50} height={50} src={gitHubIcon} />
           </a>
           <a href='https://www.linkedin.com/in/aviram-baranes/' target='_blank'>
-            <Image width={50} height={50} src={linkedinIcon} />
+            <Image
+              alt='flinkedin icon'
+              width={50}
+              height={50}
+              src={linkedinIcon}
+            />
           </a>
         </div>
       </div>

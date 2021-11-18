@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 import classes from '../../../styles/pages/create-workout.module.scss';
 import CreateAerobicWorkout from '../../../components/Registration/workout/CreateAerobicWorkout';
@@ -23,6 +24,10 @@ const CreateWorkout: React.FC = () => {
 
   return (
     <>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Create your workout' />
+      </Head>
       <div className={classes.Title}>
         <h3>Create a workout program</h3>
         <p>Choose your exercises for your workouts</p>

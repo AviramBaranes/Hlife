@@ -1,5 +1,7 @@
 import { GetServerSideProps } from 'next';
 import React from 'react';
+import Head from 'next/head';
+
 import ProgramGraph from '../components/program/ProgramGraph';
 import ProgramTable from '../components/program/ProgramTable';
 import { ProgramObj, WorkoutType } from '../types/Program';
@@ -21,6 +23,13 @@ const Program: React.FC<ProgramProps> = ({
 }) => {
   return (
     <div>
+      <Head>
+        <title>Program</title>
+        <meta
+          name='description'
+          content='Displaying program in a graph and in a table'
+        />
+      </Head>
       <ProgramTable
         fullProgram={fullProgram}
         weeklyExecutions={weeklyExecutions}

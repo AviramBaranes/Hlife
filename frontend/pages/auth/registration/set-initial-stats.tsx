@@ -1,6 +1,7 @@
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
 
 import classes from '../../../styles/pages/set-initial-stats.module.scss';
 import FatPercentageField from '../../../components/Registration/generalFields/FatPercentageField';
@@ -48,7 +49,7 @@ const SetInitialStats: React.FC = () => {
     setShouldSkipFatPercentage,
     setShouldSkipMusclesMass,
     dispatch,
-    rank,
+    rank as string,
     weight,
     musclesMass,
     height,
@@ -57,6 +58,10 @@ const SetInitialStats: React.FC = () => {
 
   return (
     <section className={classes.Main}>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Set your initial stats' />
+      </Head>
       <RequiredFields shouldDisplay={displayRequiredFields} />
 
       <FatPercentageField

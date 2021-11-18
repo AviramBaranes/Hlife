@@ -1,6 +1,9 @@
 @import '../breakpoints.scss';
 
 .ProgramTable {
+  svg {
+    width: 1rem;
+  }
   h3 {
     margin: auto;
     margin-top: 2rem;

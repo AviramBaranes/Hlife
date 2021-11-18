@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -61,7 +62,15 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
       >
         <h4>Image goes here</h4>
         {!photoSrc && <FontAwesomeIcon size='2x' icon={faPlus} />}
-        {photoSrc && <img src={photoSrc as any} />}
+        {photoSrc && (
+          <Image
+            alt='user picture'
+            width={400}
+            height={400}
+            loader={() => photoSrc}
+            src={photoSrc as any}
+          />
+        )}
       </div>
       <input
         data-testid='uploadPhotoInput'

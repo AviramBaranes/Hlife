@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
 
 import Navigation from './MainNav/Navigation';
 import classes from '../../styles/components/Layout.module.scss';
@@ -23,9 +24,6 @@ function Layout({ children }: { children: React.ReactNode[] }) {
     (state: RootState) => state.settingsReducer
   );
 
-  //#30a954
-  //#0d98ba
-  //handle app theme
   const theme = [
     {
       'primary-color': '#30a954',
@@ -81,6 +79,10 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   }
   return (
     <>
+      <Head>
+        <title>Hlife</title>
+        <link rel='icon' href='/H.svg' />
+      </Head>
       {error ? (
         children[0]
       ) : (

@@ -1,9 +1,4 @@
-import {
-  faCheck,
-  faStar,
-  faStarHalfAlt,
-  faXRay,
-} from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 

@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { parseCookies } from 'nookies';
+import Head from 'next/head';
 
 import classes from '../styles/pages/home.module.scss';
 import DailyMission from '../components/home/DailyMission';
@@ -36,6 +36,13 @@ const Home: React.FC<HomeProps> = ({
 }) => {
   return (
     <>
+      <Head>
+        <title>Home</title>
+        <meta
+          name='description'
+          content='Displaying program executions in a graph'
+        />
+      </Head>
       <UserScore grade={grade} />
 
       <section className={classes.ExecutionSection}>

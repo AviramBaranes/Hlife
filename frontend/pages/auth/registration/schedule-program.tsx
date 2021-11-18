@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 
 import classes from '../../../styles/pages/schedule-program.module.scss';
 import CustomOrder from '../../../components/Registration/program/CustomOrder';
@@ -24,6 +25,10 @@ const scheduleProgram: React.FC<{
 
   return (
     <div className={classes.Page}>
+      <Head>
+        <title>Registration</title>
+        <meta name='description' content='Schedule your program' />
+      </Head>
       <section className={classes.Title}>
         <h3>Schedule Your Program</h3>
         <p>This is the final step. It will earn you 100 points!</p>

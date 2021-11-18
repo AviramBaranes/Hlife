@@ -41,7 +41,9 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
       <h3>{title}</h3>
       <p>{instructions}</p>
       <div className={classes.Field}>
-        {currentImage && <Image src={currentImage} />}
+        {currentImage && (
+          <Image src={currentImage} alt='fat percentage illustration' />
+        )}
         <RangeInput
           testId='fatPercentageInput'
           min='5'

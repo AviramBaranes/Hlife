@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Head from 'next/head';
+
 import ChangePassword from '../components/auth/forms/changePassword';
 import { settingsSliceActions } from '../redux/slices/settings/settingsSlice';
 import { RootState } from '../redux/store/reduxStore';
@@ -40,6 +42,9 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
 
   return (
     <section className={classes.Main}>
+      <Head>
+        <title>Settings</title>
+      </Head>
       <h3>Settings</h3>
       <div className={classes.ModeSection}>
         <h4>Light Mode</h4>

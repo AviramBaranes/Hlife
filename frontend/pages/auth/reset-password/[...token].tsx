@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { useDispatch } from 'react-redux';
@@ -104,6 +105,10 @@ function ResetPassword({ token }: { token: string }) {
 
   return (
     <>
+      <Head>
+        <title>Reset password</title>
+        <meta name='description' content='Reset your password' />
+      </Head>
       <section className={classes.Title}>
         <h1>Change Password</h1>
         <h5>Fill the fields with your new strong password</h5>
