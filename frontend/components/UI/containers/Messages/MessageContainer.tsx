@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import classes from '../../../../styles/components/Containers.module.scss';
@@ -17,9 +17,9 @@ function MessageContainer() {
     (state: RootState) => state.messagesReducer
   );
 
-  function closeMessage() {
+  const closeMessage = useCallback(() => {
     dispatch(messagesActions.messageConfirmed());
-  }
+  }, [dispatch]);
 
   useEffect(() => {
     if (newMessage) {
@@ -27,7 +27,7 @@ function MessageContainer() {
         closeMessage();
       }, 4000);
     }
-  }, [newMessage]);
+  }, [newMessage, closeMessage]);
 
   let messageModal = (
     <MessageModal

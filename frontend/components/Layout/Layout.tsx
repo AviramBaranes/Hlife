@@ -29,11 +29,18 @@ function Layout({ children }: { children: React.ReactNode[] }) {
       'primary-color': '#30a954',
       'text-color': 'white',
       'opposite-text': 'black',
+      filter:
+        'invert(50%) sepia(93%) saturate(347%) hue-rotate(86deg) brightness(90%) contrast(88%)',
+      'filter-to-white':
+        'invert(100%) sepia(1%) saturate(1283%) hue-rotate(201deg) brightness(117%) contrast(100%)',
     },
     {
       'primary-color': 'rgb(3, 189, 13)',
       'text-color': 'black',
       'opposite-text': 'white',
+      filter:
+        'invert(46%) sepia(59%) saturate(1545%) hue-rotate(87deg) brightness(96%) contrast(103%)',
+      'filter-to-white': 'none',
     },
   ];
 

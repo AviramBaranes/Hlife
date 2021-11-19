@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import Navigation from '../../../components/Layout/MainNav/Navigation';
 import { Provider } from 'react-redux';
@@ -34,7 +34,6 @@ describe('Navigation', () => {
     expect(logoElement.tagName).toBe('H1');
     expect(logoElement.children[0].tagName).toBe('A');
     expect(barsIconElement.tagName).toBe('DIV');
-    expect(barsIconElement.children[0].tagName).toBe('svg');
     expect(ulElement.tagName).toBe('UL');
     expect(ulElement.children.length).toBe(2);
     expect(ulElement.children[0].tagName).toBe('LI');

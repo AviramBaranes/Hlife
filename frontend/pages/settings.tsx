@@ -1,15 +1,15 @@
-import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GetServerSideProps } from 'next';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
+import Image from 'next/image';
+import { GetServerSideProps } from 'next';
+import { useDispatch, useSelector } from 'react-redux';
 
+import classes from '../styles/pages/settings.module.scss';
+import arrowDown from '../public/icons/arrow-down.png';
+import arrowUp from '../public/icons/arrow-up.png';
 import ChangePassword from '../components/auth/forms/changePassword';
 import { settingsSliceActions } from '../redux/slices/settings/settingsSlice';
 import { RootState } from '../redux/store/reduxStore';
-
-import classes from '../styles/pages/settings.module.scss';
 import protectRouteHandler from '../utils/protectedRoutes/protectedRoutes';
 
 const Settings: React.FC<{ isAuthenticated: boolean }> = ({
@@ -70,20 +70,22 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
         >
           <div className={classes.Title}>
             <h4>Reset Password</h4>
-            {arrowDirection === 'down' && (
-              <FontAwesomeIcon
-                icon={faAngleDown}
-                size='2x'
+            {arrowDirection === 'down' && arrowDown && (
+              <Image
+                src={arrowDown}
+                width={20}
+                height={20}
                 onClick={() => {
                   setShouldDisplayForm(true);
                   setArrowDirection('up');
                 }}
               />
             )}
-            {arrowDirection === 'up' && (
-              <FontAwesomeIcon
-                size='2x'
-                icon={faAngleUp}
+            {arrowDirection === 'up' && arrowUp && (
+              <Image
+                src={arrowUp}
+                width={20}
+                height={20}
                 onClick={() => {
                   formRef.current.className = classes.FormClosing;
                   setTimeout(() => {

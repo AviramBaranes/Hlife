@@ -1,11 +1,11 @@
-import React, { MouseEventHandler } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
+import React, { MouseEventHandler } from 'react';
+import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { errorsActions } from "../../../../redux/slices/errors/errorsSlice";
-import classes from "../../../../styles/components/Containers.module.scss";
-import { RootState } from "../../../../redux/store/reduxStore";
+import classes from '../../../../styles/components/Containers.module.scss';
+import closeIcon from '../../../../public/icons/close.png';
+import { errorsActions } from '../../../../redux/slices/errors/errorsSlice';
+import { RootState } from '../../../../redux/store/reduxStore';
 
 interface ErrorModalProps {
   errorTitle: string;
@@ -42,18 +42,14 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 }) => {
   return (
     <>
-    <div className={classes.Backdrop} onClick={closeMessageHandler}  >
+      <div className={classes.Backdrop} onClick={closeMessageHandler}></div>
+      <div className={classes.ErrorContainer}>
+        <button className={classes.Button} onClick={closeMessageHandler}>
+          {closeIcon && <Image src={closeIcon} width={20} height={20} />}
+        </button>
+        <h3>{errorTitle}</h3>
+        <p>{errorMessage}</p>
       </div>
-    <div className={classes.ErrorContainer}>
-      <button
-        className={classes.Button}
-        onClick={closeMessageHandler}
-        >
-        <FontAwesomeIcon icon={faTimesCircle} />
-      </button>
-      <h3>{errorTitle}</h3>
-      <p>{errorMessage}</p>
-    </div>
     </>
   );
 };

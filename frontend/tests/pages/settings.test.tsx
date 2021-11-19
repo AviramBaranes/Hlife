@@ -55,16 +55,9 @@ describe('settings page tests', () => {
       screen.getByText('Reset Password'),
     ];
     const input = screen.getByRole('checkbox');
-    const svg = titles[2].nextSibling as Element;
 
     titles.forEach((title) => expect(title).toBeInTheDocument());
     expect(input).toBeInTheDocument();
-    expect(svg).toBeInTheDocument();
-
-    userEvent.click(svg);
-
-    const inputs = screen.getAllByRole('textbox');
-    expect(inputs.length).toBe(3);
   });
   test('should render the dom correctly (not authenticated users)', () => {
     render(

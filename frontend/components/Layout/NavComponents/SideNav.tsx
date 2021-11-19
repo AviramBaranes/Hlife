@@ -1,9 +1,9 @@
 import React, { SetStateAction, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 import classes from '../../../styles/components/SideNav.module.scss';
+import closeBtn from '../../../public/icons/close.png';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 import Modal from '../../UI/Modal/Modal';
 import Logout from '../../auth/logout/Logout';
@@ -32,19 +32,19 @@ const SideNav: React.FC<{
     setShowModal(true);
   }
 
+  function closeNavHandler() {
+    setDivClasses((prevState) => `${prevState} ${classes.SideNavClose}`);
+    setTimeout(() => {
+      setShouldDisplay(false);
+    }, 300);
+  }
+
   return (
     <>
-      <Backdrop
-        onClose={() => {
-          setDivClasses((prevState) => `${prevState} ${classes.SideNavClose}`);
-          setTimeout(() => {
-            setShouldDisplay(false);
-          }, 300);
-        }}
-      />
+      <Backdrop onClose={closeNavHandler} />
       <div className={divClasses}>
-        <div className={classes.XBtn} onClick={() => setShouldDisplay(false)}>
-          <FontAwesomeIcon icon={faTimesCircle} />
+        <div className={classes.XBtn} onClick={closeNavHandler}>
+          {closeBtn && <Image src={closeBtn} />}
         </div>
         <ul>
           <li onClick={() => setShouldDisplay(false)}>

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import Image from 'next/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward, faPlus } from '@fortawesome/free-solid-svg-icons';
+import skipIcon from '../../../public/icons/skip.png';
+import plusIcon from '../../../public/icons/plus-icon.svg';
 
 import classes from '../../../styles/components/UploadImage.module.scss';
 
@@ -38,7 +38,6 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
     setPhoto(files![0]);
     setPhotoSrc(URL.createObjectURL(files![0]));
   };
-
   return (
     <div style={{ display: `${shouldDisplay ? 'block' : 'none'}` }}>
       <div className={classes.Title}>
@@ -61,7 +60,11 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         onDrop={dropImageEventHandler}
       >
         <h4>Image goes here</h4>
-        {!photoSrc && <FontAwesomeIcon size='2x' icon={faPlus} />}
+        {!photoSrc && (
+          <div className={classes.PlaceHolderImage}>
+            {plusIcon && <Image src={plusIcon} />}
+          </div>
+        )}
         {photoSrc && (
           <Image
             alt='user picture'
@@ -98,7 +101,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         >
           Skip
           <span>
-            <FontAwesomeIcon icon={faForward} />
+            {skipIcon && <Image src={skipIcon} width={12.5} height={12.5} />}
           </span>
         </button>
       </div>

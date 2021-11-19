@@ -1,5 +1,3 @@
-// import { faWeight } from '@fortawesome/free-solid-svg-icons';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';

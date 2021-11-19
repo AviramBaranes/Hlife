@@ -1,13 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClipboard } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+
+import clipboardIcon from '../../public/icons/clipboard.png';
 
 const AddStatsButton: React.FC<{
   basicGoal: string;
 }> = ({ basicGoal }) => {
   return (
     <Link
+      passHref
       href={{
         pathname: 'stats/add-stats',
         query: {
@@ -18,7 +20,9 @@ const AddStatsButton: React.FC<{
       <button className='skip-button'>
         Add Stats
         <span>
-          <FontAwesomeIcon icon={faClipboard} />
+          {clipboardIcon && (
+            <Image src={clipboardIcon} width={20} height={20} />
+          )}
         </span>
       </button>
     </Link>

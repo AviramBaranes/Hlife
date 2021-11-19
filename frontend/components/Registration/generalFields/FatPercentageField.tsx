@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 import classes from '../../../styles/components/PhysicalGoalsFields.module.scss';
+import skipIcon from '../../../public/icons/skip.png';
 import RangeInput from '../../UI/RangeInput/RangeInput';
 import personFat_15 from '../../../assets/images/fat-percentage-images/fatPercentage15.png';
 import { fatPercentageChangeHandler } from '../../../utils/registration/fields/fatPercentageFieldHelpers';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward } from '@fortawesome/free-solid-svg-icons';
 
 interface FatPercentageFieldProps {
   instructions: string | null;
@@ -77,7 +76,7 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
         >
           Skip
           <span>
-            <FontAwesomeIcon icon={faForward} />
+            {skipIcon && <Image src={skipIcon} width={12.5} height={12.5} />}
           </span>
         </button>
       </div>

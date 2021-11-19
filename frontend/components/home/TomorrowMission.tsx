@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Image from 'next/image';
 
 import classes from '../../styles/pages/home.module.scss';
+import plusIcon from '../../public/icons/plus-icon.svg';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
 import Modal from '../UI/Modal/Modal';
 import DetailedExercise from './DetailedExercise';
@@ -73,7 +73,7 @@ const TomorrowMission: React.FC<TomorrowMissionProps> = ({
         <button className='skip-button' onClick={() => setShowModal(true)}>
           More
           <span>
-            <FontAwesomeIcon icon={faPlus} />
+            {plusIcon && <Image src={plusIcon} width={12.5} height={12.5} />}
           </span>
         </button>
       )}

@@ -19,7 +19,7 @@
       content: '';
       background-color: var(--primary-color);
       display: block;
-      height: 2px;
+      height: 4px;
       width: 9rem;
       margin: auto;
     }
@@ -48,8 +48,9 @@
 }
 
 .PasswordSection {
-  svg {
+  img {
     cursor: pointer;
+    filter: var(--filter-to-white);
     animation: rotateArrow 500ms ease-in-out;
   }
 }

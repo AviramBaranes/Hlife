@@ -50,10 +50,18 @@ const About: React.FC = () => {
       <div className={classes.LinksSec}>
         <h5>Find me here:</h5>
         <div className={classes.Links}>
-          <a href='https://github.com/AviramBaranes' target='_blank'>
+          <a
+            rel='noopener noreferrer'
+            href='https://github.com/AviramBaranes'
+            target='_blank'
+          >
             <Image alt='github icon' width={50} height={50} src={gitHubIcon} />
           </a>
-          <a href='https://www.linkedin.com/in/aviram-baranes/' target='_blank'>
+          <a
+            rel='noopener noreferrer'
+            href='https://www.linkedin.com/in/aviram-baranes/'
+            target='_blank'
+          >
             <Image
               alt='flinkedin icon'
               width={50}

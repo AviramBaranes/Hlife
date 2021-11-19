@@ -6,6 +6,7 @@ import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import router from 'next/router';
 
 interface FieldObj {
   value: string;
@@ -235,6 +236,7 @@ const ChangePassword: React.FC = () => {
         })
       );
       dispatch(loadingAction.setToFalse());
+      router.push('/');
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Change Password Failed');
     }

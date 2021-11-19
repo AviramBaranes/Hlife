@@ -1,36 +1,52 @@
 @import '../breakpoints.scss';
 .Title {
-    text-align: center;
-    margin:4rem 0rem;
-    h5{
-        font-weight: lighter;
-    }
+  text-align: center;
+  margin: 4rem 0rem;
+  h5 {
+    font-weight: lighter;
+  }
 }
 
-.Main{
-    text-align: center;
-    svg{
-        width: 40% !important;
-    }
+.Main {
+  text-align: center;
+  img {
+    width: 8rem;
+  }
 }
 
-.Form{
+.Form {
+  margin-bottom: 5rem;
+}
+
+@include media('<=tablet', '>bigPhone') {
+  .Title {
+    font-size: 1.5rem;
     margin-bottom: 5rem;
+  }
 }
-
-@include media('<tablet','>phone'){
-    .Title{
-        font-size: 1.5rem;
-        margin-bottom: 5rem;
+@include media('>tablet', '<desktop') {
+  .Title {
+    font-size: 1.7rem;
+  }
+  .Main {
+    img {
+      width: 12rem;
     }
+  }
 }
-@include media('>tablet','<desktop'){
-    .Title{
-        font-size: 1.7rem;
+@include media('>=desktop') {
+  .Title {
+    font-size: 1.7rem;
+  }
+  .Main {
+    display: flex;
+    justify-content: space-evenly;
+    img {
+      width: 12rem;
     }
-    .Form{
-        width: 80%;
-        margin: auto;
-        margin-bottom: 3rem;
-    }
+  }
+  .Form {
+    padding-right: 18%;
+    border-right: 1px solid var(--text-color);
+  }
 }

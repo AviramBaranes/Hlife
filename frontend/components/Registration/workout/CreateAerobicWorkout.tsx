@@ -1,15 +1,14 @@
 import router from 'next/router';
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
+import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../../styles/pages/create-workout.module.scss';
-import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import plusIcon from '../../../public/icons/plus-icon.svg';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import Modal from '../../UI/Modal/Modal';
 import WorkoutGeneralInfoForm from './Forms/WorkoutGeneralInfoForm';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 
@@ -184,7 +183,7 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         >
           Add another
           <span>
-            <FontAwesomeIcon icon={faPlus} />
+            {plusIcon && <Image src={plusIcon} width={12.5} height={12.5} />}
           </span>
         </button>
       </form>

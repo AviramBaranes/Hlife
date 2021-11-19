@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 
+import classes from '../../../styles/pages/[...token].module.scss';
+import lockIcon from '../../../public/icons/lock.svg';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { useDispatch } from 'react-redux';
-import classes from '../../../styles/pages/[...token].module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
 import router from 'next/router';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
@@ -154,8 +154,7 @@ function ResetPassword({ token }: { token: string }) {
             </button>
           </div>
         </form>
-
-        <FontAwesomeIcon icon={faLock} className='fa-10x' />
+        <div>{lockIcon && <Image src={lockIcon} />}</div>
       </section>
     </>
   );

@@ -1,10 +1,10 @@
 import React, { SetStateAction, useEffect } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 import classes from '../../../styles/components/Navigation.module.scss';
+import barsIcon from '../../../public/icons/bars-solid.svg';
 import { RootState } from '../../../redux/store/reduxStore';
 import AuthorizedNav from '../NavComponents/AuthorizeNav';
 import AuthenticateNav from '../NavComponents/AuthenticateNav';
@@ -35,7 +35,7 @@ const Navigation: React.FC<{
           className={classes.BarsIcon}
           onClick={() => setDisplaySideNav(true)}
         >
-          <FontAwesomeIcon icon={faBars} />
+          {barsIcon && <Image src={barsIcon} width={100} height={100} />}
         </div>
       </nav>
     </>

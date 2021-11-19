@@ -1,9 +1,6 @@
 @import '../breakpoints.scss';
 
 .ProgramTable {
-  svg {
-    width: 1rem;
-  }
   h3 {
     margin: auto;
     margin-top: 2rem;
@@ -38,6 +35,10 @@
     border-collapse: collapse;
     width: 100%;
     margin: auto;
+  }
+
+  img {
+    filter: var(--filter-to-white);
   }
 
   @include media('>bigPhone', '<=tablet') {

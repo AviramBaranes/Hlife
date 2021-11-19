@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 import classes from '../../../styles/components/PhysicalGoalsFields.module.scss';
+import skipIcon from '../../../public/icons/skip.png';
 import slimBodyImage from '../../../assets/images/fat-percentage-images/fatPercentage5.png';
 import bigBodyImage from '../../../assets/images/muscle-body.png';
 import biggestBodyImage from '../../../assets/images/body-builder-body.png';
-
 import RangeInput from '../../UI/RangeInput/RangeInput';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faForward } from '@fortawesome/free-solid-svg-icons';
 
 interface MusclesMassFieldProps {
   instructions: string | null;
@@ -87,7 +85,7 @@ const MusclesMassField: React.FC<MusclesMassFieldProps> = ({
         >
           Skip
           <span>
-            <FontAwesomeIcon icon={faForward} />
+            {skipIcon && <Image src={skipIcon} width={12.5} height={12.5} />}
           </span>
         </button>
       </div>

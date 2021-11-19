@@ -1,10 +1,10 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import router from 'next/router';
 import React, { SetStateAction, useState } from 'react';
+import Image from 'next/image';
+import router from 'next/router';
 import { useDispatch } from 'react-redux';
 
 import classes from '../../../styles/pages/create-workout.module.scss';
+import plusIcon from '../../../public/icons/plus-icon.svg';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { Exercise } from './Forms/Exercise';
@@ -109,7 +109,7 @@ const CreateSingleWorkout: React.FC<{
           >
             More
             <span>
-              <FontAwesomeIcon icon={faPlus} />
+              {plusIcon && <Image src={plusIcon} width={12.5} height={12.5} />}
             </span>
           </button>
 

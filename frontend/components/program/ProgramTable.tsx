@@ -1,8 +1,9 @@
-import { faStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 import classes from '../../styles/pages/program.module.scss';
+import fullStar from '../../public/icons/full-star.svg';
+import halfStar from '../../public/icons/half-star.svg';
 import { ProgramObj } from '../../types/Program';
 import DetailedExercise from '../home/DetailedExercise';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
@@ -109,12 +110,12 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                   cursor: program.workout?.name ? 'pointer' : 'default',
                 }}
               >
-                {weeklyExecutions[i] === true && (
-                  <FontAwesomeIcon icon={faStar} />
+                {weeklyExecutions[i] === true && fullStar && (
+                  <Image src={fullStar} width={20} height={20} />
                 )}
                 {weeklyExecutions[i] === null && '-'}
-                {weeklyExecutions[i] === false && (
-                  <FontAwesomeIcon icon={faStarHalfAlt} />
+                {weeklyExecutions[i] === false && halfStar && (
+                  <Image src={halfStar} width={20} height={20} />
                 )}
               </td>
             ))}

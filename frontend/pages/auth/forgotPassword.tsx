@@ -1,11 +1,11 @@
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GetServerSideProps } from 'next';
 import React from 'react';
 import Head from 'next/head';
+import { GetServerSideProps } from 'next';
+import Image from 'next/image';
 
-import ForgotPasswordForm from '../../components/auth/forms/forgotPassword-form';
 import classes from '../../styles/pages/forgotPassword.module.scss';
+import envelopIcon from '../../public/icons/email.png';
+import ForgotPasswordForm from '../../components/auth/forms/forgotPassword-form';
 import protectRouteHandler from '../../utils/protectedRoutes/protectedRoutes';
 
 function SendEmail() {
@@ -23,9 +23,7 @@ function SendEmail() {
       </div>
       <section className={classes.Main}>
         <ForgotPasswordForm />
-        <div>
-          <FontAwesomeIcon className='fa-10x' icon={faEnvelope} />
-        </div>
+        <div>{envelopIcon && <Image src={envelopIcon} />}</div>
       </section>
     </>
   );

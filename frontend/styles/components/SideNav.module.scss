@@ -7,7 +7,7 @@
   width: 70%;
   position: absolute;
   top: 0%;
-  right: 0%;
+  right: -5%;
   z-index: 20;
   border-radius: 0rem 0rem 0rem 1rem;
   box-shadow: -1rem 1rem 2rem black;
@@ -25,11 +25,13 @@
   }
 
   @include media('>tablet', '<desktop') {
+    right: 0%;
     width: 50%;
   }
 
   @include media('>desktop') {
-    width: 40%;
+    width: 30%;
+    right: 0%;
     height: 60vh;
     ul {
       height: 50vh;
@@ -37,8 +39,27 @@
   }
 }
 .XBtn {
-  margin: 0.5rem;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
   text-align: right;
+  img {
+    cursor: pointer;
+    width: 15px;
+  }
+  @include media('>tablet', '<desktop') {
+    margin-top: 0.75rem;
+    margin-right: 0.75rem;
+    img {
+      width: 20px;
+    }
+  }
+  @include media('>=desktop') {
+    margin-top: 1rem;
+    margin-right: 1rem;
+    img {
+      width: 20px;
+    }
+  }
 }
 
 .SideNavClose {

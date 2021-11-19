@@ -1,8 +1,8 @@
 @import '../breakpoints.scss';
 
-@mixin scaleAnimation($size :1.2) {
+@mixin scaleAnimation($size: 1.2) {
   transition: all 0.2s ease-in-out;
-  &:hover{
+  &:hover {
     transform: scale($size);
   }
 }
@@ -30,19 +30,24 @@
   cursor: pointer;
   font-size: 1.5rem;
   color: var(--primary-color);
-  @include scaleAnimation()
+  @include scaleAnimation();
 }
 
 .BarsIcon {
   cursor: pointer;
   color: var(--primary-color);
-  font-size: 1.5rem; 
-  @include scaleAnimation($size:1.35)
+  @include scaleAnimation($size: 1.35);
+  display: grid;
+  align-items: center;
+  img {
+    width: 20px;
+    filter: var(--filter);
+  }
 }
 
 .NotActive {
   &::after {
-    content: "";
+    content: '';
     display: block;
     height: 2px;
     background-color: var(--primary-color);
@@ -59,59 +64,65 @@
   border-bottom: 4px solid var(--primary-color);
 }
 
-@include media('>bigPhone','<=tablet'){
-  .Navbar{
-  min-height: 5vh;
-  width: 90%;
-    ul{
+@include media('>bigPhone', '<=tablet') {
+  .Navbar {
+    min-height: 5vh;
+    width: 90%;
+    ul {
       flex-basis: 70%;
     }
-    li{
+    li {
       font-size: 0.75rem;
     }
   }
-  .Logo{
+  .Logo {
     font-size: 1.8rem;
   }
-  .BarsIcon{
-    font-size: 1.8rem;
+  .BarsIcon {
+    img {
+      width: 25px;
+    }
   }
 }
 
-@include media('>tablet','<desktop'){
-  .Navbar{
-  min-height: 7vh;
-  width: 90%;
-    ul{
+@include media('>tablet', '<desktop') {
+  .Navbar {
+    min-height: 7vh;
+    width: 90%;
+    ul {
       flex-basis: 65%;
     }
-    li{
+    li {
       font-size: 1rem;
     }
   }
-  .Logo{
+  .Logo {
     font-size: 2rem;
   }
-  .BarsIcon{
-    font-size: 2rem;
+  .BarsIcon {
+    img {
+      width: 30px;
+    }
   }
 }
 
-@include media('>=desktop'){
-  .Navbar{
+@include media('>=desktop') {
+  .Navbar {
     min-height: 8vh;
     width: 90%;
-    ul{
+    ul {
       flex-basis: 50%;
     }
-    li{
+    li {
       font-size: 1.2rem;
     }
   }
-  .Logo{
+  .Logo {
     font-size: 2.4rem;
   }
-  .BarsIcon{
-    font-size: 2.4rem;
+  .BarsIcon {
+    img {
+      width: 35px;
+    }
   }
 }
