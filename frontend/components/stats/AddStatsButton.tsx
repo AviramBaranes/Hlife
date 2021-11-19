@@ -21,7 +21,12 @@ const AddStatsButton: React.FC<{
         Add Stats
         <span>
           {clipboardIcon && (
-            <Image src={clipboardIcon} width={20} height={20} />
+            <Image
+              src={clipboardIcon}
+              width={20}
+              height={20}
+              alt='clipboard icon'
+            />
           )}
         </span>
       </button>

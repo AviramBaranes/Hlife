@@ -109,7 +109,14 @@ const CreateSingleWorkout: React.FC<{
           >
             More
             <span>
-              {plusIcon && <Image src={plusIcon} width={12.5} height={12.5} />}
+              {plusIcon && (
+                <Image
+                  src={plusIcon}
+                  width={12.5}
+                  height={12.5}
+                  alt='plus icon'
+                />
+              )}
             </span>
           </button>
 

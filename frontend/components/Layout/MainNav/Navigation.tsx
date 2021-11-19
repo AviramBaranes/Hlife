@@ -35,7 +35,9 @@ const Navigation: React.FC<{
           className={classes.BarsIcon}
           onClick={() => setDisplaySideNav(true)}
         >
-          {barsIcon && <Image src={barsIcon} width={100} height={100} />}
+          {barsIcon && (
+            <Image src={barsIcon} width={100} height={100} alt='bars icon' />
+          )}
         </div>
       </nav>
     </>

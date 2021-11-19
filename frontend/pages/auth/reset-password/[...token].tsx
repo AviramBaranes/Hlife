@@ -154,7 +154,7 @@ function ResetPassword({ token }: { token: string }) {
             </button>
           </div>
         </form>
-        <div>{lockIcon && <Image src={lockIcon} />}</div>
+        <div>{lockIcon && <Image src={lockIcon} alt='lock icon' />}</div>
       </section>
     </>
   );

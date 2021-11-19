@@ -111,11 +111,21 @@ const ProgramTable: React.FC<ProgramTableProps> = ({
                 }}
               >
                 {weeklyExecutions[i] === true && fullStar && (
-                  <Image src={fullStar} width={20} height={20} />
+                  <Image
+                    src={fullStar}
+                    width={20}
+                    height={20}
+                    alt='star icon'
+                  />
                 )}
                 {weeklyExecutions[i] === null && '-'}
                 {weeklyExecutions[i] === false && halfStar && (
-                  <Image src={halfStar} width={20} height={20} />
+                  <Image
+                    src={halfStar}
+                    width={20}
+                    height={20}
+                    alt='star icon'
+                  />
                 )}
               </td>
             ))}

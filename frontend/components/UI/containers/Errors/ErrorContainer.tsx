@@ -45,7 +45,9 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       <div className={classes.Backdrop} onClick={closeMessageHandler}></div>
       <div className={classes.ErrorContainer}>
         <button className={classes.Button} onClick={closeMessageHandler}>
-          {closeIcon && <Image src={closeIcon} width={20} height={20} />}
+          {closeIcon && (
+            <Image src={closeIcon} width={20} height={20} alt='close icon' />
+          )}
         </button>
         <h3>{errorTitle}</h3>
         <p>{errorMessage}</p>

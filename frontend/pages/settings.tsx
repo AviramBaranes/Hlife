@@ -72,6 +72,7 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
             <h4>Reset Password</h4>
             {arrowDirection === 'down' && arrowDown && (
               <Image
+                alt='arrow down icon'
                 src={arrowDown}
                 width={20}
                 height={20}
@@ -83,6 +84,7 @@ const Settings: React.FC<{ isAuthenticated: boolean }> = ({
             )}
             {arrowDirection === 'up' && arrowUp && (
               <Image
+                alt='arrow up icon'
                 src={arrowUp}
                 width={20}
                 height={20}

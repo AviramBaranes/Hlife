@@ -62,7 +62,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         <h4>Image goes here</h4>
         {!photoSrc && (
           <div className={classes.PlaceHolderImage}>
-            {plusIcon && <Image src={plusIcon} />}
+            {plusIcon && <Image src={plusIcon} alt='plus icon' />}
           </div>
         )}
         {photoSrc && (
@@ -101,7 +101,14 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         >
           Skip
           <span>
-            {skipIcon && <Image src={skipIcon} width={12.5} height={12.5} />}
+            {skipIcon && (
+              <Image
+                src={skipIcon}
+                width={12.5}
+                height={12.5}
+                alt='skip icon'
+              />
+            )}
           </span>
         </button>
       </div>

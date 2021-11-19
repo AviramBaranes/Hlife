@@ -23,7 +23,9 @@ function SendEmail() {
       </div>
       <section className={classes.Main}>
         <ForgotPasswordForm />
-        <div>{envelopIcon && <Image src={envelopIcon} />}</div>
+        <div>
+          {envelopIcon && <Image src={envelopIcon} alt='envelop icon' />}
+        </div>
       </section>
     </>
   );

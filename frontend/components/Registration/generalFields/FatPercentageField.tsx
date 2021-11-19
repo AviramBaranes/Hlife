@@ -76,7 +76,14 @@ const FatPercentageField: React.FC<FatPercentageFieldProps> = ({
         >
           Skip
           <span>
-            {skipIcon && <Image src={skipIcon} width={12.5} height={12.5} />}
+            {skipIcon && (
+              <Image
+                src={skipIcon}
+                width={12.5}
+                height={12.5}
+                alt='skip icon'
+              />
+            )}
           </span>
         </button>
       </div>

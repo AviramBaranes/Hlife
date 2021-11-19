@@ -44,7 +44,7 @@ const SideNav: React.FC<{
       <Backdrop onClose={closeNavHandler} />
       <div className={divClasses}>
         <div className={classes.XBtn} onClick={closeNavHandler}>
-          {closeBtn && <Image src={closeBtn} />}
+          {closeBtn && <Image src={closeBtn} alt='x btn' />}
         </div>
         <ul>
           <li onClick={() => setShouldDisplay(false)}>

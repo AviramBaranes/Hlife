@@ -63,7 +63,7 @@ const About: React.FC = () => {
             target='_blank'
           >
             <Image
-              alt='flinkedin icon'
+              alt='linkedin icon'
               width={50}
               height={50}
               src={linkedinIcon}
