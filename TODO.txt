@@ -1,5 +1,0 @@
-1.change default mode to light 
-
-2. final colors
-
-3.deploy
