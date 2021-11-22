@@ -1,17 +1,17 @@
-import dotenv from "dotenv";
-dotenv.config({ path: "./config.env" });
+import dotenv from 'dotenv';
+dotenv.config({ path: './config.env' });
 
-import { expect } from "chai";
-import jwt from "jsonwebtoken";
+import { expect } from 'chai';
+import jwt from 'jsonwebtoken';
 
-import authMiddleware from "../middleware/authMiddleware";
-import { CustomError } from "../types/error";
+import authMiddleware from '../middleware/authMiddleware';
+import { CustomError } from '../types/error';
 
-describe("auth middleware tests", function () {
-  it("should throw error if no `jon` cookie", function () {
+describe('auth middleware tests', function () {
+  it('should throw error if no `jon` cookie', function () {
     const req = {
       headers: {
-        cookie: "",
+        cookie: '',
       },
     };
     const error = authMiddleware(
@@ -23,10 +23,10 @@ describe("auth middleware tests", function () {
     expect(error.statusCode).equal(401);
     expect(error.message).equal("Unauthorized Couldn't find cookie");
   });
-  it("should throw error if cookie is invalid", function () {
+  it('should throw error if cookie is invalid', function () {
     const req = {
       headers: {
-        cookie: "jon=fake", //it splits at 'joh='
+        cookie: 'jon=fake', //it splits at 'joh='
       },
     };
     const error = authMiddleware(
@@ -36,14 +36,14 @@ describe("auth middleware tests", function () {
     ) as CustomError;
 
     expect(error.statusCode).equal(401);
-    expect(error.message).equal("Unauthorized cookie is invalid");
+    expect(error.message).equal('Unauthorized cookie is invalid');
   });
 
-  it("should add a userId field to request", function () {
-    const payload = { userId: "123" };
-    const testToken = jwt.sign(payload, process.env.jwtSecret as string);
+  it('should add a userId field to request', function () {
+    const payload = { userId: '123' };
+    const testToken = jwt.sign(payload, process.env.JWT_SECRET as string);
     const req = {
-      userId: "",
+      userId: '',
       headers: {
         cookie: `jon=${testToken}`,
       },
@@ -51,7 +51,7 @@ describe("auth middleware tests", function () {
 
     authMiddleware(req as any, {} as any, () => {});
 
-    expect(req.userId).equal("123");
+    expect(req.userId).equal('123');
   });
 });
 

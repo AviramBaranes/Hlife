@@ -38,7 +38,7 @@ const signup = async (req, res, next) => {
         await newUser.save();
         await (0, createModels_1.default)(newUser);
         const payload = { userId: newUser._id.toString() };
-        const token = jsonwebtoken_1.default.sign(payload, process.env.jwtSecret, {
+        const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '2d',
         });
         const message = `${name} Sign Up Successfully`;

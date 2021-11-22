@@ -184,7 +184,7 @@ describe('signup controller testing respones', () => {
     });
     it('should set the correct token', async () => {
         const userData = stubedUserPrototype.firstCall.thisValue;
-        const tokenTester = jsonwebtoken_1.default.verify(res.cookieToken, process.env.jwtSecret);
+        const tokenTester = jsonwebtoken_1.default.verify(res.cookieToken, process.env.JWT_SECRET);
         (0, chai_1.expect)(tokenTester.userId).equal(userData._id.toString());
     });
     it('should set the correct cookie configs', () => {

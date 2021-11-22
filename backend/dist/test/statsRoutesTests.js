@@ -20,7 +20,7 @@ const user = new User_1.default({
     dateOfBirth: '01/01/2005',
 });
 const payload = { userId: user._id.toString() };
-const token = jsonwebtoken_1.default.sign(payload, process.env.jwtSecret, {
+const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '2d',
 });
 describe('post stats route', () => {

@@ -224,7 +224,7 @@ describe('signup controller testing respones', () => {
     const userData = stubedUserPrototype.firstCall.thisValue;
     const tokenTester = jwt.verify(
       res.cookieToken,
-      process.env.jwtSecret as string
+      process.env.JWT_SECRET as string
     ) as { userId: string };
 
     expect(tokenTester.userId).equal(userData._id.toString());
