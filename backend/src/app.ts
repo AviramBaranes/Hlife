@@ -46,22 +46,31 @@ const limiter = new (RateLimiter as any)({
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
 app.disable('x-powered-by');
+
 app.use(cors({ credentials: true, origin: clientOrigin }));
+
 app.use(cookieParser());
+
 app.use(helmet()); //a collection of middleware functions that improve the security of HTTP headers
+
 app.use(express.json());
+
 app.use(express.static('public'));
+
 app.use(hpp()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
+
 app.use(
   mongoSanitize({
     replaceWith: '_',
   })
 ); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
+
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req: Request, res: any) {
   res.cookie('XSRF-TOKEN', req.csrfToken());
   res.end();
 });
+
 app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
 
 app.get('/chose-workout', (req, res, next) => {
@@ -70,10 +79,15 @@ app.get('/chose-workout', (req, res, next) => {
 });
 
 app.use('/auth', authRoute);
+
 app.use('/goals', goalsRoute);
+
 app.use('/stats', statsRoute);
+
 app.use('/workout', workoutRoute);
+
 app.use('/program', programRoute);
+
 app.use('/program-exec', programExecRoute);
 
 app.use(
