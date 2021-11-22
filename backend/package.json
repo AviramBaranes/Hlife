@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test mocha dist/test",
-    "start": "nodemon dist/app.js"
+    "dev": "nodemon --legacy-watch dist/app.js",
+    "start": "node dist/app.js"
   },
   "author": "Aviram",
   "license": "ISC",

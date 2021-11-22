@@ -32,8 +32,9 @@ const limiter = new express_rate_limit_1.default({
     max: 100,
     windowMs: 15 * 60 * 1000,
 });
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 app.disable('x-powered-by');
-app.use((0, cors_1.default)({ credentials: true, origin: 'http://localhost:3000' }));
+app.use((0, cors_1.default)({ credentials: true, origin: clientOrigin }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, helmet_1.default)()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express_1.default.json());
@@ -69,5 +70,6 @@ app.use((error, req, res, next) => {
         data = null;
     res.status(statusCode).send({ message, data });
 });
-const server = app.listen(8080);
+const PORT = process.env.PORT || 8080;
+const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
 exports.default = server; //for tests

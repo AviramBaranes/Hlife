@@ -19,7 +19,7 @@ const user = new User({
 });
 
 const payload = { userId: user._id.toString() };
-const token = jwt.sign(payload, process.env.jwtSecret as string, {
+const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
   expiresIn: '2d',
 });
 

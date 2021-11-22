@@ -9,7 +9,6 @@ import csrf from 'csurf';
 import mongoSanitize from 'express-mongo-sanitize';
 import RateLimiter from 'express-rate-limit';
 import express, { Request, Response, NextFunction } from 'express';
-import path from 'path';
 
 import connectDb from './utils/database';
 import { CustomError } from './types/error';
@@ -44,8 +43,10 @@ const limiter = new (RateLimiter as any)({
   windowMs: 15 * 60 * 1000,
 });
 
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+
 app.disable('x-powered-by');
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(cors({ credentials: true, origin: clientOrigin }));
 app.use(cookieParser());
 app.use(helmet()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express.json());
@@ -87,5 +88,7 @@ app.use(
   }
 );
 
-const server = app.listen(8080);
+const PORT = process.env.PORT || 8080;
+
+const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
 export default server; //for tests

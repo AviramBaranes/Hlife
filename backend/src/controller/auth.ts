@@ -97,7 +97,7 @@ export const login = async (
     }
 
     const payload = { userId: user._id };
-    const token = jwt.sign(payload, process.env.jwtSecret as string, {
+    const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
       expiresIn: '2d',
     });
 
@@ -198,8 +198,6 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
         pass: process.env.OUTLOOK_PASSWORD,
       },
     });
-
-    // sendGridMail.setApiKey(process.env.sendGrid_api as string);
 
     const link = `http://localhost:3000/auth/reset-password/${token}`;
     const message = {

@@ -25,7 +25,7 @@ const authMiddleware = (
 
     let decodedToken;
     try {
-      decodedToken = jwt.verify(authToken, process.env.jwtSecret);
+      decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
     } catch (err) {
       errorHandler('Unauthorized cookie is invalid');
     }

@@ -73,7 +73,7 @@ const login = async (req, res, next) => {
             return;
         }
         const payload = { userId: user._id };
-        const token = jsonwebtoken_1.default.sign(payload, process.env.jwtSecret, {
+        const token = jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '2d',
         });
         const message = `${user.name} Logged In Successfully!`;
@@ -157,7 +157,6 @@ const sendResetEmail = async (req, res, next) => {
                 pass: process.env.OUTLOOK_PASSWORD,
             },
         });
-        // sendGridMail.setApiKey(process.env.sendGrid_api as string);
         const link = `http://localhost:3000/auth/reset-password/${token}`;
         const message = {
             from: process.env.OUTLOOK_USER,
