@@ -66,6 +66,7 @@ app.use(
 ); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 
 app.use(limiter); // Protect the system against brute force
+
 app.get('/', csrfProtection, function (req: Request, res: any) {
   res.cookie('XSRF-TOKEN', req.csrfToken());
   res.end();

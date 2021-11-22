@@ -8,8 +8,6 @@ RUN  npm install
 
 COPY ./dist ./dist
 
-COPY ./public ./public
-
 ENV NODE_ENV=development
 
 CMD [ "npm", "run", "dev" ]
