@@ -80,5 +80,5 @@ app.use((error, req, res, next) => {
     res.status(statusCode).send({ message, data });
 });
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => console.log('Hlife listening on port ' + PORT));
+const server = app.listen(PORT, () => console.log(`Hlife listening on port ${PORT}`));
 exports.default = server; //for tests

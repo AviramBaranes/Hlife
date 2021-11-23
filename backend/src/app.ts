@@ -116,6 +116,6 @@ app.use(
 const PORT = process.env.PORT || 8080;
 
 const server = app.listen(PORT, () =>
-  console.log('Hlife listening on port ' + PORT)
+  console.log(`Hlife listening on port ${PORT}`)
 );
 export default server; //for tests
