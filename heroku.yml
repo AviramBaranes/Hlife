@@ -1,8 +1,0 @@
-build:
-  config:
-    NODE_ENV: production
-  docker:
-    release:
-      dockerfile: ./backend/Dockerfile
-      target: prod
-    web: ./backend/Dockerfile
