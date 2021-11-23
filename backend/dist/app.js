@@ -55,7 +55,7 @@ app.get('/', csrfProtection, function (req, res) {
     res.end();
 });
 app.use(csrfProtection);
-app.get('/chose-workout', (req, res, next) => {
+app.get('/chose-workout', (_1, res, _2) => {
     res.cookie('choseWorkout', true);
     res.end();
 });
