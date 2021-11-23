@@ -27,6 +27,10 @@ declare global {
   }
 }
 
+console.log('here!!!');
+
+console.log(process.env);
+
 const csrfProtection =
   process.env.NODE_ENV === 'test'
     ? csrf({
@@ -68,11 +72,17 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 
 app.get('/', csrfProtection, function (req: Request, res: any) {
-  res.cookie('XSRF-TOKEN', req.csrfToken());
-  res.end();
+  try {
+    console.log('here1');
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    console.log('here2');
+    res.end();
+  } catch (err) {
+    console.log(err);
+  }
 });
 
-app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
+app.use(csrfProtection);
 
 app.get('/chose-workout', (req, res, next) => {
   res.cookie('choseWorkout', true);
@@ -105,5 +115,7 @@ app.use(
 
 const PORT = process.env.PORT || 8080;
 
-const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
+const server = app.listen(PORT, () =>
+  console.log('hlife listening on port ' + PORT)
+);
 export default server; //for tests

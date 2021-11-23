@@ -20,6 +20,8 @@ const goals_1 = __importDefault(require("./routes/goals"));
 const workout_1 = __importDefault(require("./routes/workout"));
 const program_1 = __importDefault(require("./routes/program"));
 const programExecution_1 = __importDefault(require("./routes/programExecution"));
+console.log('here!!!');
+console.log(process.env);
 const csrfProtection = process.env.NODE_ENV === 'test'
     ? (0, csurf_1.default)({
         cookie: true,
@@ -45,10 +47,17 @@ app.use((0, express_mongo_sanitize_1.default)({
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
-    res.end();
+    try {
+        console.log('here1');
+        res.cookie('XSRF-TOKEN', req.csrfToken());
+        console.log('here2');
+        res.end();
+    }
+    catch (err) {
+        console.log(err);
+    }
 });
-app.use(csrfProtection); //in frontend in the requests body put the token under _csrf
+app.use(csrfProtection);
 app.get('/chose-workout', (req, res, next) => {
     res.cookie('choseWorkout', true);
     res.end();
@@ -71,5 +80,5 @@ app.use((error, req, res, next) => {
     res.status(statusCode).send({ message, data });
 });
 const PORT = process.env.PORT || 8080;
-const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
+const server = app.listen(PORT, () => console.log('hlife listening on port ' + PORT));
 exports.default = server; //for tests

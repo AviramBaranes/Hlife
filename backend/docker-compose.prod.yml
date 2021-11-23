@@ -7,7 +7,7 @@ services:
       target: prod
     restart: unless-stopped
     ports:
-      - ${PORT}:${PORT}
+      - '8080:8080'
     environment:
       - MONGO_URI=${MONGO_URI}
       - MONGO_USER=${MONGO_USER}
