@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  hlife-backend:
+    build:
+      context: .
+      target: dev
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb+srv://Aviram2001:zn300j@cluster0.puixu.mongodb.net/Hlife?retryWrites=true&w=majority
+      - MONGO_USER=Aviram2001
+      - MONGO_PASSWORD=zn300j
+      - JWT_SECRET=thisisalongstringforagoodsecrettoken
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./:/app
+      - /app/node_modules
