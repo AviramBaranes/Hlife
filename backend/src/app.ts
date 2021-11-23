@@ -27,9 +27,7 @@ declare global {
   }
 }
 
-console.log('here!!!');
-
-console.log(process.env);
+const devModeFlag = process.env.NODE_ENV === 'production' ? false : true;
 
 const csrfProtection =
   process.env.NODE_ENV === 'test'
@@ -37,7 +35,12 @@ const csrfProtection =
         cookie: true,
         ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
       })
-    : csrf({ cookie: true });
+    : csrf({
+        cookie: {
+          httpOnly: true,
+          secure: !devModeFlag,
+        },
+      });
 const app = express();
 
 connectDb();
@@ -72,14 +75,8 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 
 app.get('/', csrfProtection, function (req: Request, res: any) {
-  try {
-    console.log('here1');
-    res.cookie('XSRF-TOKEN', req.csrfToken());
-    console.log('here2');
-    res.end();
-  } catch (err) {
-    console.log(err);
-  }
+  res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: !devModeFlag });
+  res.end();
 });
 
 app.use(csrfProtection);
@@ -113,7 +110,7 @@ app.use(
   }
 );
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 const server = app.listen(PORT, () =>
   console.log(`Hlife listening on port ${PORT}`)
