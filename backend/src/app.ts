@@ -52,6 +52,8 @@ const limiter = new (RateLimiter as any)({
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
+app.set('trust proxy', 1);
+
 app.disable('x-powered-by');
 
 app.use(cors({ credentials: true, origin: clientOrigin }));

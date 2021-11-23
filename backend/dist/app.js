@@ -39,6 +39,7 @@ const limiter = new express_rate_limit_1.default({
     windowMs: 15 * 60 * 1000,
 });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use((0, cors_1.default)({ credentials: true, origin: clientOrigin }));
 app.use((0, cookie_parser_1.default)());
