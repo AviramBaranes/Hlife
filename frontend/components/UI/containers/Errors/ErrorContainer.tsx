@@ -23,13 +23,25 @@ const ErrorContainer: React.FC = () => {
     dispatch(errorsActions.errorConfirmed());
   };
 
-  let errorModal = (
-    <ErrorModal
-      errorTitle={errorTitle}
-      errorMessage={errorMessage}
-      closeMessageHandler={closeMessageHandler}
-    />
-  );
+  let errorModal;
+
+  if (typeof errorMessage === 'string' || typeof errorTitle === 'string') {
+    errorModal = (
+      <ErrorModal
+        errorTitle='Something went wrong'
+        errorMessage='Please wait a few minutes and try to refresh'
+        closeMessageHandler={closeMessageHandler}
+      />
+    );
+  } else {
+    errorModal = (
+      <ErrorModal
+        errorTitle={errorTitle}
+        errorMessage={errorMessage}
+        closeMessageHandler={closeMessageHandler}
+      />
+    );
+  }
   return newError ? errorModal : null;
 };
 
