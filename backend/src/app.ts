@@ -41,6 +41,7 @@ const csrfProtection =
           secure: !devModeFlag,
         },
       });
+
 const app = express();
 
 connectDb();
