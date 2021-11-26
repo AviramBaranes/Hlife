@@ -43,16 +43,27 @@ const csrfProtection =
         },
       });
 
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
-
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Origin', clientOrigin);
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET,PUT,POST,DELETE,UPDATE,OPTIONS'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+  );
+  next();
+});
 connectDb();
 
 const limiter = new (RateLimiter as any)({
   max: 100,
   windowMs: 15 * 60 * 1000,
 });
-
-const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 
 app.set('trust proxy', 1);
 
