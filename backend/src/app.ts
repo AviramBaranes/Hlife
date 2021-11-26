@@ -40,6 +40,7 @@ const csrfProtection =
           httpOnly: true,
           secure: !devModeFlag,
           domain: '.herokuapp.com',
+          sameSite: 'none',
         },
       });
 
@@ -93,6 +94,7 @@ app.get('/', csrfProtection, function (req: Request, res: Response) {
   res.cookie('XSRF-TOKEN', req.csrfToken(), {
     secure: !devModeFlag,
     domain: '.herokuapp.com',
+    sameSite: 'none',
   });
   console.log(res.getHeader('set-cookie'));
   res.getHeaders();
