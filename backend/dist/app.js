@@ -53,6 +53,8 @@ app.use((0, express_mongo_sanitize_1.default)({
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
     res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: !devModeFlag });
+    console.log(res.getHeader('set-cookie'));
+    res.getHeaders();
     res.end();
 });
 app.use(csrfProtection);

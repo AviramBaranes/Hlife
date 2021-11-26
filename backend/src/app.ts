@@ -39,6 +39,7 @@ const csrfProtection =
         cookie: {
           httpOnly: true,
           secure: !devModeFlag,
+          domain: '.herokuapp.com',
         },
       });
 
@@ -77,8 +78,13 @@ app.use(
 
 app.use(limiter); // Protect the system against brute force
 
-app.get('/', csrfProtection, function (req: Request, res: any) {
-  res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: !devModeFlag });
+app.get('/', csrfProtection, function (req: Request, res: Response) {
+  res.cookie('XSRF-TOKEN', req.csrfToken(), {
+    secure: !devModeFlag,
+    domain: '.herokuapp.com',
+  });
+  console.log(res.getHeader('set-cookie'));
+  res.getHeaders();
   res.end();
 });
 
