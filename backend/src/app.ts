@@ -40,7 +40,7 @@ const csrfProtection =
           httpOnly: true,
           secure: !devModeFlag,
           domain: '.herokuapp.com',
-          sameSite: 'none',
+          sameSite: 'lax',
         },
       });
 
@@ -55,7 +55,7 @@ app.use(function (req, res, next) {
   );
   res.header(
     'Access-Control-Allow-Headers',
-    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept'
+    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Set-Cookie'
   );
   next();
 });
@@ -94,7 +94,7 @@ app.get('/', csrfProtection, function (req: Request, res: Response) {
   res.cookie('XSRF-TOKEN', req.csrfToken(), {
     secure: !devModeFlag,
     domain: '.herokuapp.com',
-    sameSite: 'none',
+    sameSite: 'lax',
   });
   console.log(res.getHeader('set-cookie'));
   res.getHeaders();

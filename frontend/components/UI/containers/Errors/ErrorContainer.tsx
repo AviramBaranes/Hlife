@@ -25,7 +25,7 @@ const ErrorContainer: React.FC = () => {
 
   let errorModal;
 
-  if (typeof errorMessage === 'string' || typeof errorTitle === 'string') {
+  if (typeof errorMessage !== 'string' || typeof errorTitle !== 'string') {
     errorModal = (
       <ErrorModal
         errorTitle='Something went wrong'

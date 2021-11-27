@@ -30,15 +30,24 @@ const csrfProtection = process.env.NODE_ENV === 'test'
         cookie: {
             httpOnly: true,
             secure: !devModeFlag,
+            domain: '.herokuapp.com',
+            sameSite: 'lax',
         },
     });
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = (0, express_1.default)();
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', clientOrigin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Set-Cookie');
+    next();
+});
 (0, database_1.default)();
 const limiter = new express_rate_limit_1.default({
     max: 100,
     windowMs: 15 * 60 * 1000,
 });
-const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use((0, cors_1.default)({ credentials: true, origin: clientOrigin }));
@@ -52,7 +61,11 @@ app.use((0, express_mongo_sanitize_1.default)({
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), { secure: !devModeFlag });
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        secure: !devModeFlag,
+        domain: '.herokuapp.com',
+        sameSite: 'lax',
+    });
     console.log(res.getHeader('set-cookie'));
     res.getHeaders();
     res.end();
