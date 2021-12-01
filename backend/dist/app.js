@@ -31,7 +31,7 @@ const csrfProtection = process.env.NODE_ENV === 'test'
             httpOnly: true,
             secure: !devModeFlag,
             domain: '.herokuapp.com',
-            sameSite: 'lax',
+            sameSite: 'none',
         },
     });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
@@ -64,7 +64,7 @@ app.get('/', csrfProtection, function (req, res) {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
         secure: !devModeFlag,
         domain: '.herokuapp.com',
-        sameSite: 'lax',
+        sameSite: 'none',
     });
     console.log(res.getHeader('set-cookie'));
     res.getHeaders();
