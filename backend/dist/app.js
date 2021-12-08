@@ -70,6 +70,6 @@ app.use((error, req, res, next) => {
         data = null;
     res.status(statusCode).send({ message, data });
 });
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 const server = app.listen(PORT, () => console.log('listening on port ' + PORT));
 exports.default = server; //for tests
