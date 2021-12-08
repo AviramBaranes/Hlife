@@ -20,7 +20,6 @@ const goals_1 = __importDefault(require("./routes/goals"));
 const workout_1 = __importDefault(require("./routes/workout"));
 const program_1 = __importDefault(require("./routes/program"));
 const programExecution_1 = __importDefault(require("./routes/programExecution"));
-const devModeFlag = process.env.NODE_ENV === 'production' ? false : true;
 const csrfProtection = process.env.NODE_ENV === 'test'
     ? (0, csurf_1.default)({
         cookie: true,
@@ -29,20 +28,10 @@ const csrfProtection = process.env.NODE_ENV === 'test'
     : (0, csurf_1.default)({
         cookie: {
             httpOnly: true,
-            secure: !devModeFlag,
-            domain: '.herokuapp.com',
-            sameSite: 'none',
         },
     });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = (0, express_1.default)();
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Origin', clientOrigin);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Set-Cookie');
-    next();
-});
 (0, database_1.default)();
 const limiter = new express_rate_limit_1.default({
     max: 100,
@@ -61,13 +50,7 @@ app.use((0, express_mongo_sanitize_1.default)({
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        secure: !devModeFlag,
-        domain: '.herokuapp.com',
-        sameSite: 'none',
-    });
-    console.log(res.getHeader('set-cookie'));
-    res.getHeaders();
+    res.cookie('XSRF-TOKEN', req.csrfToken());
     res.end();
 });
 app.use(csrfProtection);

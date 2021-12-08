@@ -46,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (destination === '/auth/registration/choose-workout') {
     const cookies = parseCookies(ctx);
     const recommendation = await calculateRecommendationWorkout(cookies);
-    console.log(recommendation);
 
     return {
       props: { ...recommendation },

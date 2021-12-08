@@ -27,8 +27,6 @@ declare global {
   }
 }
 
-const devModeFlag = process.env.NODE_ENV === 'production' ? false : true;
-
 const csrfProtection =
   process.env.NODE_ENV === 'test'
     ? csrf({
@@ -38,27 +36,12 @@ const csrfProtection =
     : csrf({
         cookie: {
           httpOnly: true,
-          secure: !devModeFlag,
-          domain: '.herokuapp.com',
-          sameSite: 'none',
         },
       });
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Origin', clientOrigin);
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET,PUT,POST,DELETE,UPDATE,OPTIONS'
-  );
-  res.header(
-    'Access-Control-Allow-Headers',
-    'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Set-Cookie'
-  );
-  next();
-});
+
 connectDb();
 
 const limiter = new (RateLimiter as any)({
@@ -91,13 +74,7 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 
 app.get('/', csrfProtection, function (req: Request, res: Response) {
-  res.cookie('XSRF-TOKEN', req.csrfToken(), {
-    secure: !devModeFlag,
-    domain: '.herokuapp.com',
-    sameSite: 'none',
-  });
-  console.log(res.getHeader('set-cookie'));
-  res.getHeaders();
+  res.cookie('XSRF-TOKEN', req.csrfToken());
   res.end();
 });
 

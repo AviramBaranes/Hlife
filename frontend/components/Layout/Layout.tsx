@@ -64,8 +64,7 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   useEffect(() => {
     dispatch(loadingAction.setToTrue());
     const getCsrf = async () => {
-      const res = await axiosInstance.get('/');
-      console.log(res);
+      await axiosInstance.get('/');
     };
     getCsrf()
       .then(() => {
