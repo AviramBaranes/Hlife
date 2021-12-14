@@ -28,6 +28,7 @@ const csrfProtection = process.env.NODE_ENV === 'test'
     : (0, csurf_1.default)({
         cookie: {
             httpOnly: true,
+            sameSite: 'none',
         },
     });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
@@ -50,7 +51,7 @@ app.use((0, express_mongo_sanitize_1.default)({
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
+    res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'none' });
     res.end();
 });
 app.use(csrfProtection);

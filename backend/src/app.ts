@@ -36,6 +36,7 @@ const csrfProtection =
     : csrf({
         cookie: {
           httpOnly: true,
+          sameSite: 'none',
         },
       });
 
@@ -74,7 +75,7 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 
 app.get('/', csrfProtection, function (req: Request, res: Response) {
-  res.cookie('XSRF-TOKEN', req.csrfToken());
+  res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'none' });
   res.end();
 });
 
