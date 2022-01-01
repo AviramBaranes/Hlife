@@ -7,6 +7,7 @@ import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import classes from '../../../styles/pages/choose-workout.module.scss';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface FormState {
   programStyle: string;
@@ -94,7 +95,7 @@ const CustomWorkout: React.FC<{
     if (!formState.isFormValid) return;
     try {
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.get('/chose-workout');
+      await axiosInstance.get('/chose-workout', { headers: getAuthHeader() });
 
       localStorage.setItem('programStyle', formState.programStyle);
       localStorage.setItem('timesPerWeek', formState.timesPerWeek);

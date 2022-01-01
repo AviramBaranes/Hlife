@@ -7,6 +7,7 @@ import classes from '../../../styles/pages/choose-workout.module.scss';
 import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface ChooseWorkoutProps {
   programStyle: string;
@@ -32,7 +33,7 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   const ConfirmBtnHandler = async () => {
     try {
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.get('/chose-workout');
+      await axiosInstance.get('/chose-workout', { headers: getAuthHeader() });
 
       multiProgramStyles && localStorage.setItem('multiProgramStyles', 'true');
       localStorage.setItem('programStyle', programStyle);
