@@ -38,6 +38,7 @@ const csrfProtection =
           httpOnly: true,
           sameSite: 'none',
           secure: true,
+          domain: '.herokuapp.com',
         },
       });
 
@@ -76,7 +77,11 @@ app.use(
 app.use(limiter); // Protect the system against brute force
 
 app.get('/', csrfProtection, function (req: Request, res: Response) {
-  res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'none', secure: true });
+  res.cookie('XSRF-TOKEN', req.csrfToken(), {
+    sameSite: 'none',
+    secure: true,
+    domain: '.herokuapp.com',
+  });
   res.end();
 });
 

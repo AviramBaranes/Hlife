@@ -30,6 +30,7 @@ const csrfProtection = process.env.NODE_ENV === 'test'
             httpOnly: true,
             sameSite: 'none',
             secure: true,
+            domain: '.herokuapp.com',
         },
     });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
@@ -52,7 +53,11 @@ app.use((0, express_mongo_sanitize_1.default)({
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
 app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), { sameSite: 'none', secure: true });
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true,
+        domain: '.herokuapp.com',
+    });
     res.end();
 });
 app.use(csrfProtection);
