@@ -38,7 +38,8 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
       localStorage.setItem('programStyle', programStyle);
       localStorage.setItem('timesPerWeek', workoutDaysPerWeek.toString());
       localStorage.setItem('order', order);
-      document.cookie += 'choseWorkout=true;';
+      document.cookie += ';choseWorkout=true;path=/;';
+
       await router.push('/auth/registration/create-workout');
       dispatch(loadingAction.setToFalse());
     } catch (err) {

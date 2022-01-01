@@ -97,7 +97,7 @@ const CustomWorkout: React.FC<{
       dispatch(loadingAction.setToTrue());
       localStorage.setItem('programStyle', formState.programStyle);
       localStorage.setItem('timesPerWeek', formState.timesPerWeek);
-      document.cookie += 'choseWorkout=true;';
+      document.cookie += ';choseWorkout=true;path=/;';
 
       await router.push('/auth/registration/create-workout');
       dispatch(loadingAction.setToFalse());
