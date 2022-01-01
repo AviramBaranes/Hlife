@@ -41,7 +41,6 @@ declare global {
 //           domain: '.herokuapp.com',
 //         },
 //       });
-
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
 
