@@ -33,13 +33,12 @@ const ChooseWorkout: React.FC<ChooseWorkoutProps> = ({
   const ConfirmBtnHandler = async () => {
     try {
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.get('/chose-workout', { headers: getAuthHeader() });
 
       multiProgramStyles && localStorage.setItem('multiProgramStyles', 'true');
       localStorage.setItem('programStyle', programStyle);
       localStorage.setItem('timesPerWeek', workoutDaysPerWeek.toString());
       localStorage.setItem('order', order);
-
+      document.cookie += 'choseWorkout=true;';
       await router.push('/auth/registration/create-workout');
       dispatch(loadingAction.setToFalse());
     } catch (err) {

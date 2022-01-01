@@ -95,10 +95,9 @@ const CustomWorkout: React.FC<{
     if (!formState.isFormValid) return;
     try {
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.get('/chose-workout', { headers: getAuthHeader() });
-
       localStorage.setItem('programStyle', formState.programStyle);
       localStorage.setItem('timesPerWeek', formState.timesPerWeek);
+      document.cookie += 'choseWorkout=true;';
 
       await router.push('/auth/registration/create-workout');
       dispatch(loadingAction.setToFalse());

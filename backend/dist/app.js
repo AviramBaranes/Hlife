@@ -61,10 +61,6 @@ app.use(limiter); // Protect the system against brute force
 //   res.end();
 // });
 // app.use(csrfProtection);
-app.get('/chose-workout', (_1, res, _2) => {
-    res.cookie('choseWorkout', true);
-    res.end();
-});
 app.use('/auth', auth_1.default);
 app.use('/goals', goals_1.default);
 app.use('/stats', stats_1.default);

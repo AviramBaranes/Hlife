@@ -86,11 +86,6 @@ app.use(limiter); // Protect the system against brute force
 
 // app.use(csrfProtection);
 
-app.get('/chose-workout', (_1, res, _2) => {
-  res.cookie('choseWorkout', true);
-  res.end();
-});
-
 app.use('/auth', authRoute);
 
 app.use('/goals', goalsRoute);
