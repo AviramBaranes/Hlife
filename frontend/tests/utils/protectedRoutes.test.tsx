@@ -56,9 +56,7 @@ describe('protected routes tests', () => {
     const { destination, grade } = await protectRouteHandler('' as any);
 
     expect(mockedAxios.mock.calls[0][0]).toEqual('/auth/isUser');
-    expect(mockedAxios.mock.calls[0][1].headers.Cookie).toEqual(
-      '_csrf=_csrf; jon=jon; XSRF-TOKEN=token;'
-    );
+    expect(mockedAxios.mock.calls[0][1].headers.Cookie).toEqual('jon=jon;');
     expect(destination).toEqual('/auth/login');
     expect(grade).toEqual(null);
   });

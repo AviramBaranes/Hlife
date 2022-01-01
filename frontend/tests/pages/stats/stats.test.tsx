@@ -52,7 +52,7 @@ describe('get serverSideProps tests', () => {
   test('should call axios with the right args', async () => {
     const expectedHeader = {
       headers: {
-        Cookie: `_csrf=_csrf; jon=jon; XSRF-TOKEN=token;`,
+        Cookie: `jon=jon;`,
       },
     };
     await waitFor(() => {

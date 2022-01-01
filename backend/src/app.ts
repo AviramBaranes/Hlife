@@ -27,20 +27,20 @@ declare global {
   }
 }
 
-const csrfProtection =
-  process.env.NODE_ENV === 'test'
-    ? csrf({
-        cookie: true,
-        ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
-      })
-    : csrf({
-        cookie: {
-          httpOnly: true,
-          sameSite: 'none',
-          secure: true,
-          domain: '.herokuapp.com',
-        },
-      });
+// const csrfProtection =
+//   process.env.NODE_ENV === 'test'
+//     ? csrf({
+//         cookie: true,
+//         ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+//       })
+//     : csrf({
+//         cookie: {
+//           httpOnly: true,
+//           sameSite: 'none',
+//           secure: true,
+//           domain: '.herokuapp.com',
+//         },
+//       });
 
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = express();
@@ -76,16 +76,16 @@ app.use(
 
 app.use(limiter); // Protect the system against brute force
 
-app.get('/', csrfProtection, function (req: Request, res: Response) {
-  res.cookie('XSRF-TOKEN', req.csrfToken(), {
-    sameSite: 'none',
-    secure: true,
-    domain: '.herokuapp.com',
-  });
-  res.end();
-});
+// app.get('/', csrfProtection, function (req: Request, res: Response) {
+//   res.cookie('XSRF-TOKEN', req.csrfToken(), {
+//     sameSite: 'none',
+//     secure: true,
+//     domain: '.herokuapp.com',
+//   });
+//   res.end();
+// });
 
-app.use(csrfProtection);
+// app.use(csrfProtection);
 
 app.get('/chose-workout', (_1, res, _2) => {
   res.cookie('choseWorkout', true);

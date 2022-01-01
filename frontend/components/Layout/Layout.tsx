@@ -10,8 +10,8 @@ import SideNav from './NavComponents/SideNav';
 import { settingsSliceActions } from '../../redux/slices/settings/settingsSlice';
 import useTheme from '../../utils/customHook/useTheme';
 import Loading from '../UI/Animations/Loading';
-import axiosInstance from '../../utils/axios/axiosInstance';
-import { loadingAction } from '../../redux/slices/loading/loadingSlice';
+// import axiosInstance from '../../utils/axios/axiosInstance';
+// import { loadingAction } from '../../redux/slices/loading/loadingSlice';
 
 function Layout({ children }: { children: React.ReactNode[] }) {
   const dispatch = useDispatch();
@@ -61,46 +61,46 @@ function Layout({ children }: { children: React.ReactNode[] }) {
   }, [themeClass]);
 
   //handle csrf token
-  useEffect(() => {
-    dispatch(loadingAction.setToTrue());
-    const getCsrf = async () => {
-      const res = await axiosInstance.get('/');
-      console.log(res);
-    };
-    getCsrf()
-      .then(() => {
-        dispatch(loadingAction.setToFalse());
-      })
-      .catch((err) => {
-        dispatch(loadingAction.setToFalse());
-        setError(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   dispatch(loadingAction.setToTrue());
+  //   const getCsrf = async () => {
+  //     const res = await axiosInstance.get('/');
+  //     console.log(res);
+  //   };
+  //   getCsrf()
+  //     .then(() => {
+  //       dispatch(loadingAction.setToFalse());
+  //     })
+  //     .catch((err) => {
+  //       dispatch(loadingAction.setToFalse());
+  //       setError(err);
+  //     });
+  // }, []);
 
-  if (error) {
-    dispatch(
-      errorsActions.newError({
-        errorTitle: 'Server Error',
-        errorMessage: `${error.message}, try to refresh`,
-      })
-    );
-  }
+  // if (error) {
+  //   dispatch(
+  //     errorsActions.newError({
+  //       errorTitle: 'Server Error',
+  //       errorMessage: `${error.message}, try to refresh`,
+  //     })
+  //   );
+  // }
   return (
     <>
       <Head>
         <title>Hlife</title>
         <link rel='icon' href='/H.svg' />
       </Head>
-      {error ? (
+      {/* {error ? (
         children[0]
-      ) : (
-        <div className={`${classes.Layout} Dark`}>
-          <Navigation setDisplaySideNav={setDisplaySideNav} />
-          {displaySideNav && <SideNav setShouldDisplay={setDisplaySideNav} />}
-          {loading && <Loading />}
-          <main>{children}</main>
-        </div>
-      )}
+      ) : ( */}
+      <div className={`${classes.Layout} Dark`}>
+        <Navigation setDisplaySideNav={setDisplaySideNav} />
+        {displaySideNav && <SideNav setShouldDisplay={setDisplaySideNav} />}
+        {loading && <Loading />}
+        <main>{children}</main>
+      </div>
+      {/* )} */}
     </>
   );
 }

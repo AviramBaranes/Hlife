@@ -174,9 +174,10 @@ function signupForm() {
 
       dispatch(loadingAction.setToTrue());
       const {
-        data: { message },
+        data: { message, token },
       } = await axiosInstance.post('/auth/signup', bodyRequest);
 
+      document.cookie = `jon=${token};path=/;`;
       await router.push('/auth/registration/set-goals');
       dispatch(
         messagesActions.newMessage({

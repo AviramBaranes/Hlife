@@ -10,7 +10,7 @@ import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
 
-function loginForm() { 
+function loginForm() {
   const dispatch = useDispatch();
 
   const [errorDiv, setErrorDiv] = useState<JSX.Element | null>(null);
@@ -88,17 +88,20 @@ function loginForm() {
         password: fields.password.value,
       };
       dispatch(loadingAction.setToTrue());
-      const { data } = await axiosInstance.post('/auth/login', bodyRequest);
+      const {
+        data: { token, message },
+      } = await axiosInstance.post('/auth/login', bodyRequest);
 
+      document.cookie = `jon=${token};path=/;`;
       await router.push('/');
       dispatch(
         messagesActions.newMessage({
           messageTitle: 'Logged In!',
-          message: data.message,
+          message: message,
         })
       );
       dispatch(loadingAction.setToFalse());
-      dispatch(validateAuthenticationAction())
+      dispatch(validateAuthenticationAction());
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Login Failed');
     }

@@ -44,13 +44,13 @@ const signup = async (req, res, next) => {
         const message = `${name} Sign Up Successfully`;
         res
             .status(200)
-            .cookie('jon', token, {
-            sameSite: 'strict',
-            path: '/',
-            expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
-            httpOnly: true,
-        })
-            .json({ message });
+            // .cookie('jon', token, {
+            //   sameSite: 'strict',
+            //   path: '/',
+            //   expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
+            //   httpOnly: true,
+            // })
+            .json({ message, token });
         //
     }
     catch (err) {
@@ -79,15 +79,16 @@ const login = async (req, res, next) => {
         const message = `${user.name} Logged In Successfully!`;
         res
             .status(200)
-            .cookie('jon', token, {
-            sameSite: 'strict',
-            path: '/',
-            expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
-            httpOnly: true,
-        })
+            // .cookie('jon', token, {
+            //   sameSite: 'strict',
+            //   path: '/',
+            //   expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
+            //   httpOnly: true,
+            // })
             .json({
             message,
             hasProgram: user.hasProgram,
+            token,
         });
     }
     catch (err) {

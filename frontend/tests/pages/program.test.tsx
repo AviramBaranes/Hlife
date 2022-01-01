@@ -78,11 +78,11 @@ describe('get server side props tests', () => {
   test('test axios calls', () => {
     expect(spiedAxios.mock.calls[0][0]).toBe('/program/');
     expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
-      headers: { Cookie: `_csrf=_csrf; jon=jon; XSRF-TOKEN=token;` },
+      headers: { Cookie: `jon=jon;` },
     });
     expect(spiedAxios.mock.calls[1][0]).toBe('/workout/all');
     expect(spiedAxios.mock.calls[1][1]).toStrictEqual({
-      headers: { Cookie: `_csrf=_csrf; jon=jon; XSRF-TOKEN=token;` },
+      headers: { Cookie: `jon=jon;` },
     });
   });
 });

@@ -57,13 +57,13 @@ export const signup = async (
 
     res
       .status(200)
-      .cookie('jon', token, {
-        sameSite: 'strict',
-        path: '/',
-        expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
-        httpOnly: true,
-      })
-      .json({ message });
+      // .cookie('jon', token, {
+      //   sameSite: 'strict',
+      //   path: '/',
+      //   expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2), //day * hour *second*2 = 2days
+      //   httpOnly: true,
+      // })
+      .json({ message, token });
     //
   } catch (err: any) {
     return catchErrorHandler(err, next);
@@ -105,15 +105,16 @@ export const login = async (
 
     res
       .status(200)
-      .cookie('jon', token, {
-        sameSite: 'strict',
-        path: '/',
-        expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
-        httpOnly: true,
-      })
+      // .cookie('jon', token, {
+      //   sameSite: 'strict',
+      //   path: '/',
+      //   expires: new Date(new Date().getTime() + 24 * 3600 * 1000 * 2),
+      //   httpOnly: true,
+      // })
       .json({
         message,
         hasProgram: user.hasProgram,
+        token,
       });
   } catch (err: any) {
     return catchErrorHandler(err, next);

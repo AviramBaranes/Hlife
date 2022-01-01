@@ -154,7 +154,9 @@ describe('signup Controller creating the correct models', () => {
   it('should create a PhysicalStats model', async () => {
     expect(createdPhysicalStatsArgs._id).to.be.an('object');
     expect(createdPhysicalStatsArgs.user).eql(createdUserArgs._id);
-    expect(createdPhysicalStatsArgs.age).equal(2021 - 2000);
+    expect(createdPhysicalStatsArgs.age).equal(
+      new Date(Date.now()).getFullYear() - 2000
+    );
     expect(createdPhysicalStatsArgs.stats).eql([]);
   });
 
@@ -216,31 +218,27 @@ describe('signup controller testing respones', () => {
     expect(res.statusCode).equal(200);
   });
 
-  it('should set the correct cookie name', () => {
-    expect(res.cookieName).equal('jon');
-  });
-
   it('should set the correct token', async () => {
     const userData = stubedUserPrototype.firstCall.thisValue;
     const tokenTester = jwt.verify(
-      res.cookieToken,
+      res.jsonObj.token,
       process.env.JWT_SECRET as string
     ) as { userId: string };
 
     expect(tokenTester.userId).equal(userData._id.toString());
   });
 
-  it('should set the correct cookie configs', () => {
-    expect(res.cookieConfig.sameSite).equal('strict');
-    expect(res.cookieConfig.path).equal('/');
-    const currentDate = new Date(
-      new Date().getTime() + 24 * 3600 * 1000 * 2 + 100
-    );
-    const currentTime = currentDate.getTime();
-    const cookieExperetionTime = res.cookieConfig.expires.getTime();
-    expect(cookieExperetionTime).below(currentTime);
-    expect(res.cookieConfig.httpOnly).equal(true);
-  });
+  // it('should set the correct cookie configs', () => {
+  //   expect(res.cookieConfig.sameSite).equal('strict');
+  //   expect(res.cookieConfig.path).equal('/');
+  //   const currentDate = new Date(
+  //     new Date().getTime() + 24 * 3600 * 1000 * 2 + 100
+  //   );
+  //   const currentTime = currentDate.getTime();
+  //   const cookieExperetionTime = res.cookieConfig.expires.getTime();
+  //   expect(cookieExperetionTime).below(currentTime);
+  //   expect(res.cookieConfig.httpOnly).equal(true);
+  // });
 
   it('should send the correct message and data', () => {
     expect(res.jsonObj.message).equal('Avirambr Sign Up Successfully');
@@ -346,22 +344,21 @@ describe('login controller testing response', () => {
 
   it('should return the correct cookie', () => {
     const { userId } = jwt.verify(
-      res.cookieToken,
+      res.jsonObj.token,
       process.env.JWT_SECRET as string
     ) as { userId: string };
-    expect(res.cookieName).equal('jon');
     expect(userId).equal(1);
   });
 
-  it('should return the correct cookie settings', function () {
-    expect(res.cookieConfig.sameSite).equal('strict');
-    expect(res.cookieConfig.path).equal('/');
-    const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
-    const currentTime = currentDate.getTime();
-    const cookieExperetionTime = res.cookieConfig.expires.getTime();
-    expect(cookieExperetionTime).below(currentTime);
-    expect(res.cookieConfig.httpOnly).equal(true);
-  });
+  // it('should return the correct cookie settings', function () {
+  //   expect(res.cookieConfig.sameSite).equal('strict');
+  //   expect(res.cookieConfig.path).equal('/');
+  //   const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
+  //   const currentTime = currentDate.getTime();
+  //   const cookieExperetionTime = res.cookieConfig.expires.getTime();
+  //   expect(cookieExperetionTime).below(currentTime);
+  //   expect(res.cookieConfig.httpOnly).equal(true);
+  // });
   it('should send the correct message and data', function () {
     expect(res.jsonObj.message).equal('aviram Logged In Successfully!');
     expect(res.jsonObj.hasProgram).equal(true);

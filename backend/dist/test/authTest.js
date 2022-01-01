@@ -126,7 +126,7 @@ describe('signup Controller creating the correct models', () => {
     it('should create a PhysicalStats model', async () => {
         (0, chai_1.expect)(createdPhysicalStatsArgs._id).to.be.an('object');
         (0, chai_1.expect)(createdPhysicalStatsArgs.user).eql(createdUserArgs._id);
-        (0, chai_1.expect)(createdPhysicalStatsArgs.age).equal(2021 - 2000);
+        (0, chai_1.expect)(createdPhysicalStatsArgs.age).equal(new Date(Date.now()).getFullYear() - 2000);
         (0, chai_1.expect)(createdPhysicalStatsArgs.stats).eql([]);
     });
     // it("should create a Diet model", async () => {
@@ -179,23 +179,22 @@ describe('signup controller testing respones', () => {
     it('should send the correct response', () => {
         (0, chai_1.expect)(res.statusCode).equal(200);
     });
-    it('should set the correct cookie name', () => {
-        (0, chai_1.expect)(res.cookieName).equal('jon');
-    });
     it('should set the correct token', async () => {
         const userData = stubedUserPrototype.firstCall.thisValue;
-        const tokenTester = jsonwebtoken_1.default.verify(res.cookieToken, process.env.JWT_SECRET);
+        const tokenTester = jsonwebtoken_1.default.verify(res.jsonObj.token, process.env.JWT_SECRET);
         (0, chai_1.expect)(tokenTester.userId).equal(userData._id.toString());
     });
-    it('should set the correct cookie configs', () => {
-        (0, chai_1.expect)(res.cookieConfig.sameSite).equal('strict');
-        (0, chai_1.expect)(res.cookieConfig.path).equal('/');
-        const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2 + 100);
-        const currentTime = currentDate.getTime();
-        const cookieExperetionTime = res.cookieConfig.expires.getTime();
-        (0, chai_1.expect)(cookieExperetionTime).below(currentTime);
-        (0, chai_1.expect)(res.cookieConfig.httpOnly).equal(true);
-    });
+    // it('should set the correct cookie configs', () => {
+    //   expect(res.cookieConfig.sameSite).equal('strict');
+    //   expect(res.cookieConfig.path).equal('/');
+    //   const currentDate = new Date(
+    //     new Date().getTime() + 24 * 3600 * 1000 * 2 + 100
+    //   );
+    //   const currentTime = currentDate.getTime();
+    //   const cookieExperetionTime = res.cookieConfig.expires.getTime();
+    //   expect(cookieExperetionTime).below(currentTime);
+    //   expect(res.cookieConfig.httpOnly).equal(true);
+    // });
     it('should send the correct message and data', () => {
         (0, chai_1.expect)(res.jsonObj.message).equal('Avirambr Sign Up Successfully');
     });
@@ -274,19 +273,18 @@ describe('login controller testing response', () => {
         stubedBcrypt.restore();
     });
     it('should return the correct cookie', () => {
-        const { userId } = jsonwebtoken_1.default.verify(res.cookieToken, process.env.JWT_SECRET);
-        (0, chai_1.expect)(res.cookieName).equal('jon');
+        const { userId } = jsonwebtoken_1.default.verify(res.jsonObj.token, process.env.JWT_SECRET);
         (0, chai_1.expect)(userId).equal(1);
     });
-    it('should return the correct cookie settings', function () {
-        (0, chai_1.expect)(res.cookieConfig.sameSite).equal('strict');
-        (0, chai_1.expect)(res.cookieConfig.path).equal('/');
-        const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
-        const currentTime = currentDate.getTime();
-        const cookieExperetionTime = res.cookieConfig.expires.getTime();
-        (0, chai_1.expect)(cookieExperetionTime).below(currentTime);
-        (0, chai_1.expect)(res.cookieConfig.httpOnly).equal(true);
-    });
+    // it('should return the correct cookie settings', function () {
+    //   expect(res.cookieConfig.sameSite).equal('strict');
+    //   expect(res.cookieConfig.path).equal('/');
+    //   const currentDate = new Date(new Date().getTime() + 24 * 3600 * 1000 * 2);
+    //   const currentTime = currentDate.getTime();
+    //   const cookieExperetionTime = res.cookieConfig.expires.getTime();
+    //   expect(cookieExperetionTime).below(currentTime);
+    //   expect(res.cookieConfig.httpOnly).equal(true);
+    // });
     it('should send the correct message and data', function () {
         (0, chai_1.expect)(res.jsonObj.message).equal('aviram Logged In Successfully!');
         (0, chai_1.expect)(res.jsonObj.hasProgram).equal(true);

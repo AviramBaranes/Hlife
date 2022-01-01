@@ -9,7 +9,6 @@ const cors_1 = __importDefault(require("cors"));
 const hpp_1 = __importDefault(require("hpp"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const csurf_1 = __importDefault(require("csurf"));
 const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const express_1 = __importDefault(require("express"));
@@ -20,19 +19,20 @@ const goals_1 = __importDefault(require("./routes/goals"));
 const workout_1 = __importDefault(require("./routes/workout"));
 const program_1 = __importDefault(require("./routes/program"));
 const programExecution_1 = __importDefault(require("./routes/programExecution"));
-const csrfProtection = process.env.NODE_ENV === 'test'
-    ? (0, csurf_1.default)({
-        cookie: true,
-        ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
-    })
-    : (0, csurf_1.default)({
-        cookie: {
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true,
-            domain: '.herokuapp.com',
-        },
-    });
+// const csrfProtection =
+//   process.env.NODE_ENV === 'test'
+//     ? csrf({
+//         cookie: true,
+//         ignoreMethods: ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE'],
+//       })
+//     : csrf({
+//         cookie: {
+//           httpOnly: true,
+//           sameSite: 'none',
+//           secure: true,
+//           domain: '.herokuapp.com',
+//         },
+//       });
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
 const app = (0, express_1.default)();
 (0, database_1.default)();
@@ -52,15 +52,15 @@ app.use((0, express_mongo_sanitize_1.default)({
     replaceWith: '_',
 })); //Express 4.x middleware which sanitizes user-supplied data to prevent MongoDB Operator Injection.
 app.use(limiter); // Protect the system against brute force
-app.get('/', csrfProtection, function (req, res) {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none',
-        secure: true,
-        domain: '.herokuapp.com',
-    });
-    res.end();
-});
-app.use(csrfProtection);
+// app.get('/', csrfProtection, function (req: Request, res: Response) {
+//   res.cookie('XSRF-TOKEN', req.csrfToken(), {
+//     sameSite: 'none',
+//     secure: true,
+//     domain: '.herokuapp.com',
+//   });
+//   res.end();
+// });
+// app.use(csrfProtection);
 app.get('/chose-workout', (_1, res, _2) => {
     res.cookie('choseWorkout', true);
     res.end();

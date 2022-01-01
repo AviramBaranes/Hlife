@@ -9,7 +9,7 @@ const protectRouteHandler = async (ctx: GetServerSidePropsContext) => {
 
     const { data } = await axiosInstance.get('/auth/isUser', {
       headers: {
-        Cookie: `_csrf=${cookies._csrf}; jon=${cookies.jon}; XSRF-TOKEN=${cookies['XSRF_TOKEN']};`,
+        Cookie: `jon=${cookies.jon};`,
       },
     });
 

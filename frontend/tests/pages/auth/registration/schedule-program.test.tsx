@@ -59,7 +59,7 @@ describe('schedule program get server side props tests', () => {
     expect(spiedAxios.mock.calls[0][0]).toBe('/workout/all');
     expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
       headers: {
-        Cookie: `_csrf=_csrf; jon=jon; XSRF-TOKEN=token;`,
+        Cookie: `jon=jon;`,
       },
     });
   });
