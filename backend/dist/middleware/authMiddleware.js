@@ -6,12 +6,12 @@ const errorHandler = (errorMsg) => {
     error.statusCode = 401;
     throw error;
 };
-const authMiddleware = (req, res, next) => {
+const authMiddleware = (req, _, next) => {
     var _a;
     try {
         let authToken;
         try {
-            authToken = (_a = req.headers.cookie) === null || _a === void 0 ? void 0 : _a.split('jon=')[1].split(';')[0];
+            authToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split('Bearer ')[1];
         }
         catch (err) {
             errorHandler("Unauthorized Couldn't find cookie");

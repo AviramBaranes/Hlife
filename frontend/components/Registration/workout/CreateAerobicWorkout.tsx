@@ -11,6 +11,7 @@ import Modal from '../../UI/Modal/Modal';
 import WorkoutGeneralInfoForm from './Forms/WorkoutGeneralInfoForm';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface Workout {
   name: string;
@@ -55,7 +56,9 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
         if (singleWorkout.description)
           requestBody.description = singleWorkout.description;
 
-        await axiosInstance.post('/workout/', requestBody);
+        await axiosInstance.post('/workout/', requestBody, {
+          headers: getAuthHeader(),
+        });
       });
 
       // the last workout is not in the state so I need to post it manually
@@ -76,10 +79,14 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
 
       if (description) requestBody.description = description;
 
-      const { data } = await axiosInstance.post('/workout/', requestBody);
+      const { data } = await axiosInstance.post('/workout/', requestBody, {
+        headers: getAuthHeader(),
+      });
 
       if (!setShouldDisplaySecondForm) {
-        const { data } = await axiosInstance.post('/workout/hasAllWorkout');
+        const { data } = await axiosInstance.post('/workout/hasAllWorkout', {
+          headers: getAuthHeader(),
+        });
 
         dispatch(
           messagesActions.newMessage({

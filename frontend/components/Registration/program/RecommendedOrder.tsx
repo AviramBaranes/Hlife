@@ -10,6 +10,7 @@ import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 const RecommendedOrder: React.FC<{
   order: string;
@@ -93,7 +94,9 @@ const RecommendedOrder: React.FC<{
     let requestBody: { workoutName?: string; trainingDayName?: string } = {};
     if (workoutName) requestBody.workoutName = workoutName;
     if (trainingDayName) requestBody.trainingDayName = trainingDayName;
-    return axiosInstance.post(`/program/${day}`, requestBody);
+    return axiosInstance.post(`/program/${day}`, requestBody, {
+      headers: getAuthHeader(),
+    });
   }
 
   function submitScheduleHandler() {

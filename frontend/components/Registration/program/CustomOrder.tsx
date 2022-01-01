@@ -10,6 +10,7 @@ import axiosInstance from '../../../utils/axios/axiosInstance';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { validateAuthenticationAction } from '../../../redux/slices/auth/authSlice';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface Program {
   day: string;
@@ -91,12 +92,18 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       trainingDayName?: string
     ) => {
       if (trainingDayName && workoutName) {
-        return axiosInstance.post(`/program/${day}`, {
-          workoutName,
-          trainingDayName,
-        });
+        return axiosInstance.post(
+          `/program/${day}`,
+          {
+            workoutName,
+            trainingDayName,
+          },
+          { headers: getAuthHeader() }
+        );
       }
-      return axiosInstance.post(`/program/${day}`);
+      return axiosInstance.post(`/program/${day}`, {
+        headers: getAuthHeader(),
+      });
     };
 
     let p = Promise.resolve(undefined) as Promise<
@@ -127,7 +134,7 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
       localStorage.clear();
       document.cookie =
         'choseWorkout=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-      dispatch(validateAuthenticationAction())
+      dispatch(validateAuthenticationAction());
     }).catch((err: any) => {
       handleAxiosError(err, dispatch, 'Schedule your program failed');
     });
@@ -137,13 +144,13 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
     <section className={classes.CustomOrder}>
       <h3>Make your own schedule:</h3>
       <form onSubmit={scheduleProgramHandler}>
-        {days.map((day,i) => {
+        {days.map((day, i) => {
           return (
-            <div key={day+i} className='input-container'>
+            <div key={day + i} className='input-container'>
               <select onChange={selectWorkoutHandler} id={day}>
                 <option value='' style={{ display: 'none' }}></option>
                 <option value='rest'>rest</option>
-                {workouts.map((workout,i) => (
+                {workouts.map((workout, i) => (
                   <option
                     key={workout.name + workout.trainingDayName + i}
                     value={`${workout.name}trainingDayName:${workout.trainingDayName}`}

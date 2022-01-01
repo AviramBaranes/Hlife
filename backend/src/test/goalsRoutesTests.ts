@@ -39,7 +39,7 @@ describe('post goals route', () => {
 
     const response = await request(server)
       .post('/goals')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -68,7 +68,7 @@ describe('post goals route', () => {
 
     const response = await request(server)
       .post('/goals')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -94,7 +94,7 @@ describe('change basic goal route', () => {
 
     const response = await request(server)
       .put('/goals/basicGoal')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -117,7 +117,7 @@ describe('change basic goal route', () => {
 
     const response = await request(server)
       .put('/goals/basicGoal')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -145,7 +145,7 @@ describe('change goals route', () => {
 
     const response = await request(server)
       .put('/goals')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -171,7 +171,7 @@ describe('change goals route', () => {
 
     const response = await request(server)
       .put('/goals')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -187,7 +187,7 @@ describe('change goals route', () => {
 
     const response = await request(server)
       .put('/goals')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -212,7 +212,7 @@ describe('get goals route', () => {
 
     const response = await request(server)
       .get('/goals')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('Goals have not created yet for this user');

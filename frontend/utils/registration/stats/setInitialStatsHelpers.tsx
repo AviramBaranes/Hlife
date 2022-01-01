@@ -5,6 +5,7 @@ import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import { statsActions } from '../../../redux/slices/stats/statsSlice';
 import axiosInstance from '../../axios/axiosInstance';
+import { getAuthHeader } from '../../axios/getHeaders';
 import { handleAxiosError } from '../../errors/handleRequestErrors';
 
 export const createInitialStatsProps = (
@@ -56,8 +57,14 @@ export const createInitialStatsProps = (
       if (photo) formData.append('file', photo);
 
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.post('/stats/set-ranking', { selfRank: rank });
-      await axiosInstance.post('/stats', formData);
+      await axiosInstance.post(
+        '/stats/set-ranking',
+        { selfRank: rank },
+        { headers: getAuthHeader() }
+      );
+      await axiosInstance.post('/stats', formData, {
+        headers: getAuthHeader(),
+      });
 
       dispatch(
         messagesActions.newMessage({

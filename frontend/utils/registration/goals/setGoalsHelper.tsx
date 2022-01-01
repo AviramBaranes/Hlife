@@ -4,6 +4,7 @@ import { goalsActions } from '../../../redux/slices/goals/goalsSlice';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../axios/axiosInstance';
+import { getAuthHeader } from '../../axios/getHeaders';
 import { handleAxiosError } from '../../errors/handleRequestErrors';
 
 export const getDisplayRequirements = (
@@ -83,7 +84,9 @@ export const createGoalsFieldsProps = (
 
     try {
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.post('/goals', bodyRequest);
+      await axiosInstance.post('/goals', bodyRequest, {
+        headers: getAuthHeader(),
+      });
 
       await router.push('/auth/registration/set-initial-stats');
       dispatch(

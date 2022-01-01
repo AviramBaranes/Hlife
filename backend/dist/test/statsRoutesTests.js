@@ -38,7 +38,7 @@ describe('post stats route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/stats')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -63,7 +63,7 @@ describe('post stats route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/stats')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -82,7 +82,7 @@ describe('get all stats dates route', () => {
         stubedPhysicalStatsModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/stats/all-stats-dates')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No stats were found for this user');
         stubedPhysicalStatsModel.restore();
@@ -97,7 +97,7 @@ describe('get stats by date route', () => {
     it('should send an error response for failing validation ', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/stats/date')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.body.data[0].value).equal('date');
@@ -108,7 +108,7 @@ describe('get stats by date route', () => {
         stubedPhysicalStatsModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/stats/11-11-2001')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No stats were found for this user');
         stubedPhysicalStatsModel.restore();
@@ -129,7 +129,7 @@ describe('get all stats route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/stats')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No stats were found for this user');
         stubedPhysicalStatsModel.restore();
@@ -151,7 +151,7 @@ describe('change stats route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/stats')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -178,7 +178,7 @@ describe('change stats route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/stats')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -197,7 +197,7 @@ describe('delete last stats route', () => {
         stubedPhysicalStatsModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .delete('/stats')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No stats were found for this user');
         stubedPhysicalStatsModel.restore();
@@ -215,7 +215,7 @@ describe('post ranking route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/stats/set-ranking')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -231,7 +231,7 @@ describe('post ranking route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/stats/set-ranking')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);

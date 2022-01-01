@@ -12,6 +12,7 @@ import WorkoutExerciseForm from './Forms/WorkoutExerciseForm';
 import WorkoutGeneralInfoForm from './Forms/WorkoutGeneralInfoForm';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 const CreateSingleWorkout: React.FC<{
   trainingDayName: string;
@@ -50,7 +51,9 @@ const CreateSingleWorkout: React.FC<{
       if (description) bodyRequest.description = description;
 
       dispatch(loadingAction.setToTrue());
-      await axiosInstance.post('/workout', bodyRequest);
+      await axiosInstance.post('/workout', bodyRequest, {
+        headers: getAuthHeader(),
+      });
 
       if (setSubmitCount) {
         window.scrollTo(0, 0);
@@ -58,7 +61,9 @@ const CreateSingleWorkout: React.FC<{
       }
 
       if (trainingDayName === 'FB' || last) {
-        const { data } = await axiosInstance.post('/workout/hasAllWorkout');
+        const { data } = await axiosInstance.post('/workout/hasAllWorkout', {
+          headers: getAuthHeader(),
+        });
         dispatch(
           messagesActions.newMessage({
             messageTitle: 'Created workout successfully',

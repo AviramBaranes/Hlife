@@ -12,13 +12,13 @@ const errorHandler = (errorMsg: string) => {
 
 const authMiddleware = (
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
 ): CustomError | void => {
   try {
     let authToken;
     try {
-      authToken = req.headers.cookie?.split('jon=')[1].split(';')[0];
+      authToken = req.headers.authorization?.split('Bearer ')[1];
     } catch (err) {
       errorHandler("Unauthorized Couldn't find cookie");
     }

@@ -10,19 +10,14 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
 describe('auth middleware tests', function () {
     it('should throw error if no `jon` cookie', function () {
-        const req = {
-            headers: {
-                cookie: '',
-            },
-        };
-        const error = (0, authMiddleware_1.default)(req, {}, () => { });
+        const error = (0, authMiddleware_1.default)({}, {}, () => { });
         (0, chai_1.expect)(error.statusCode).equal(401);
         (0, chai_1.expect)(error.message).equal("Unauthorized Couldn't find cookie");
     });
     it('should throw error if cookie is invalid', function () {
         const req = {
             headers: {
-                cookie: 'jon=fake', //it splits at 'joh='
+                authorization: 'Bearer  fake', //it splits at 'joh='
             },
         };
         const error = (0, authMiddleware_1.default)(req, {}, () => { });
@@ -35,7 +30,7 @@ describe('auth middleware tests', function () {
         const req = {
             userId: '',
             headers: {
-                cookie: `jon=${testToken}`,
+                authorization: `Bearer ${testToken}`,
             },
         };
         (0, authMiddleware_1.default)(req, {}, () => { });

@@ -56,7 +56,9 @@ describe('protected routes tests', () => {
     const { destination, grade } = await protectRouteHandler('' as any);
 
     expect(mockedAxios.mock.calls[0][0]).toEqual('/auth/isUser');
-    expect(mockedAxios.mock.calls[0][1].headers.Cookie).toEqual('jon=jon;');
+    expect(mockedAxios.mock.calls[0][1].headers.authorization).toEqual(
+      'Bearer jon'
+    );
     expect(destination).toEqual('/auth/login');
     expect(grade).toEqual(null);
   });
@@ -79,12 +81,12 @@ describe('protected routes tests', () => {
     expect(grade).toEqual(null);
   });
 
-  test("should return '/auth/registration/choose-workout' user with no stats", async () => {
+  test("should return '/auth/registration/choose-workout' user with no chosen workout", async () => {
     const { destination, grade } = await protectRouteHandler('' as any);
     expect(destination).toEqual('/auth/registration/choose-workout');
     expect(grade).toEqual(null);
   });
-  test("should return '/auth/registration/create-workout' user with no stats", async () => {
+  test("should return '/auth/registration/create-workout' user with no workout", async () => {
     const { destination, grade } = await protectRouteHandler('' as any);
     expect(destination).toEqual('/auth/registration/create-workout');
     expect(grade).toEqual(null);

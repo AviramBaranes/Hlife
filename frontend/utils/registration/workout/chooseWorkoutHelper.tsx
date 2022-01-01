@@ -1,15 +1,15 @@
 import fs from 'fs';
+import { GetServerSidePropsContext } from 'next';
 import path from 'path';
 import axiosInstance from '../../axios/axiosInstance';
+import { getHeaders } from '../../axios/getHeaders';
 
-export const calculateRecommendationWorkout = async (cookies: {
-  [key: string]: string;
-}) => {
+export const calculateRecommendationWorkout = async (
+  ctx: GetServerSidePropsContext
+) => {
   try {
     const { data } = await axiosInstance.get('/program/recommendation', {
-      headers: {
-        Cookie: `jon=${cookies.jon}; _csrf=${cookies._csrf}; XSRF-TOKEN=${cookies['XSRF-TOKEN']}`,
-      },
+      headers: getHeaders(ctx),
     });
 
     if (data.length > 1) {

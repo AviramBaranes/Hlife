@@ -40,7 +40,7 @@ describe('post stats route', () => {
 
     const response = await request(server)
       .post('/stats')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -77,7 +77,7 @@ describe('post stats route', () => {
 
     const response = await request(server)
       .post('/stats')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -102,7 +102,7 @@ describe('get all stats dates route', () => {
 
     const response = await request(server)
       .get('/stats/all-stats-dates')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No stats were found for this user');
@@ -122,7 +122,7 @@ describe('get stats by date route', () => {
   it('should send an error response for failing validation ', async () => {
     const response = await request(server)
       .get('/stats/date')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal('Validation Failed');
@@ -136,7 +136,7 @@ describe('get stats by date route', () => {
 
     const response = await request(server)
       .get('/stats/11-11-2001')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No stats were found for this user');
@@ -163,7 +163,7 @@ describe('get all stats route', () => {
 
     const response = await request(server)
       .get('/stats')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No stats were found for this user');
@@ -191,7 +191,7 @@ describe('change stats route', () => {
 
     const response = await request(server)
       .put('/stats')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -230,7 +230,7 @@ describe('change stats route', () => {
 
     const response = await request(server)
       .put('/stats')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -255,7 +255,7 @@ describe('delete last stats route', () => {
 
     const response = await request(server)
       .delete('/stats')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No stats were found for this user');
@@ -279,7 +279,7 @@ describe('post ranking route', () => {
 
     const response = await request(server)
       .post('/stats/set-ranking')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -299,7 +299,7 @@ describe('post ranking route', () => {
 
     const response = await request(server)
       .post('/stats/set-ranking')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 

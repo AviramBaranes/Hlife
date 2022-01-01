@@ -37,7 +37,7 @@ describe('post goals route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/goals')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -60,7 +60,7 @@ describe('post goals route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/goals')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -81,7 +81,7 @@ describe('change basic goal route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/goals/basicGoal')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -100,7 +100,7 @@ describe('change basic goal route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/goals/basicGoal')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -122,7 +122,7 @@ describe('change goals route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/goals')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -144,7 +144,7 @@ describe('change goals route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/goals')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -156,7 +156,7 @@ describe('change goals route', () => {
         stubedGoalsModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/goals')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -175,7 +175,7 @@ describe('get goals route', () => {
         stubedGoalsModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/goals')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('Goals have not created yet for this user');
         stubedGoalsModel.restore();

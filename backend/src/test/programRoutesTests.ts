@@ -37,7 +37,7 @@ describe('get program recommendation route', () => {
 
     const response = await request(server)
       .get('/program/recommendation')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal(
@@ -63,7 +63,7 @@ describe('post program route', () => {
 
     const response = await request(server)
       .post('/program/invalid-day')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -86,7 +86,7 @@ describe('post program route', () => {
 
     const response = await request(server)
       .post('/program/Sunday')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -117,7 +117,7 @@ describe('get program route', () => {
 
     const response = await request(server)
       .get('/program')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('Something wrong... this user has no program');
@@ -137,7 +137,7 @@ describe('get program by day route', () => {
   it('should send an error response for failing validation ', async () => {
     const response = await request(server)
       .get('/program/invalid-day')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal('Validation Failed');
@@ -151,7 +151,7 @@ describe('get program by day route', () => {
 
     const response = await request(server)
       .get('/program/Sunday')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No program was found for the user');
@@ -176,7 +176,7 @@ describe('post program route', () => {
 
     const response = await request(server)
       .put('/program/invalid-day')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -198,7 +198,7 @@ describe('post program route', () => {
 
     const response = await request(server)
       .put('/program/Sunday')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -216,7 +216,7 @@ describe('post program route', () => {
 
     const response = await request(server)
       .put('/program/Sunday')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 

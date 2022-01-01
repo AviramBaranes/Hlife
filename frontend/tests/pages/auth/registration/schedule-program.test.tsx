@@ -59,7 +59,7 @@ describe('schedule program get server side props tests', () => {
     expect(spiedAxios.mock.calls[0][0]).toBe('/workout/all');
     expect(spiedAxios.mock.calls[0][1]).toStrictEqual({
       headers: {
-        Cookie: `jon=jon;`,
+        authorization: `Bearer jon`,
       },
     });
   });
@@ -248,7 +248,9 @@ describe('schedule program page tests', () => {
       expect(axiosCalls[4][0]).toBe('/program/Thursday');
       expect(axiosCalls[5][0]).toBe('/program/Friday');
       expect(axiosCalls[6][0]).toBe('/program/Saturday');
-      expect(axiosCalls[0][1]).toBe(undefined);
+      expect(axiosCalls[0][1]).toStrictEqual({
+        headers: { authorization: 'Bearer undefined' },
+      });
       expect(axiosCalls[1][1]).toStrictEqual({
         workoutName: 'chest',
         trainingDayName: 'A',
@@ -269,7 +271,9 @@ describe('schedule program page tests', () => {
         workoutName: 'back',
         trainingDayName: 'B',
       });
-      expect(axiosCalls[6][1]).toBe(undefined);
+      expect(axiosCalls[6][1]).toStrictEqual({
+        headers: { authorization: 'Bearer undefined' },
+      });
     });
   });
 });

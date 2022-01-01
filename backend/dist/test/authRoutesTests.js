@@ -119,7 +119,8 @@ describe('logout route', () => {
     it('should send a success response', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/auth/logout')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` })
+            .set('Cookie', [`Bearer ${token}`]);
         (0, chai_1.expect)(response.statusCode).equal(201);
         (0, chai_1.expect)(response.text).equal('success');
     });
@@ -138,7 +139,7 @@ describe('reset password via settings route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/auth/settings/password-reset')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -170,7 +171,7 @@ describe('reset password via settings route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/auth/settings/password-reset')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(401);
@@ -269,7 +270,7 @@ describe('validateUser route', () => {
         stubedUser.returns({ username: '-', hasProgram: '-' });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/auth/isUser')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(200);
         stubedUser.restore();
     });

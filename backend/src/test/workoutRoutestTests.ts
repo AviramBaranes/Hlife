@@ -43,7 +43,7 @@ describe('post workout route', () => {
 
     const response = await request(server)
       .post('/workout')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -80,7 +80,7 @@ describe('post workout route', () => {
 
     const response = await request(server)
       .post('/workout')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -102,7 +102,7 @@ describe('get workout by name route', () => {
   it('should send an error response for failing validation ', async () => {
     const response = await request(server)
       .get('/workout/?trainingDayName=W')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal('Validation Failed');
@@ -116,7 +116,7 @@ describe('get workout by name route', () => {
 
     const response = await request(server)
       .get('/workout/?trainingDayName=A')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal(
@@ -141,7 +141,7 @@ describe('get workout by id route', () => {
 
     const response = await request(server)
       .get('/workout/id')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(403);
     expect(response.text).equal('No workout with this id');
@@ -172,7 +172,7 @@ describe('change workout route', () => {
 
     const response = await request(server)
       .put('/workout')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -207,7 +207,7 @@ describe('change workout route', () => {
 
     const response = await request(server)
       .put('/workout')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -231,7 +231,7 @@ describe('delete workout route', () => {
   it('should send an error response for failing validation ', async () => {
     const response = await request(server)
       .delete('/workout/W')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .send(payload);
 
     expect(response.statusCode).equal(422);
@@ -246,7 +246,7 @@ describe('delete workout route', () => {
 
     const response = await request(server)
       .delete('/workout/A')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .send(payload);
 
     expect(response.statusCode).equal(403);

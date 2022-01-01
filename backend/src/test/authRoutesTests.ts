@@ -149,7 +149,8 @@ describe('logout route', () => {
   it('should send a success response', async () => {
     const response = await request(server)
       .post('/auth/logout')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` })
+      .set('Cookie', [`Bearer ${token}`]);
 
     expect(response.statusCode).equal(201);
     expect(response.text).equal('success');
@@ -175,7 +176,7 @@ describe('reset password via settings route', () => {
 
     const response = await request(server)
       .post('/auth/settings/password-reset')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -223,7 +224,7 @@ describe('reset password via settings route', () => {
 
     const response = await request(server)
       .post('/auth/settings/password-reset')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .set('Content-type', 'application/json')
       .send(payload);
 
@@ -359,7 +360,7 @@ describe('validateUser route', () => {
 
     const response = await request(server)
       .get('/auth/isUser')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(200);
 

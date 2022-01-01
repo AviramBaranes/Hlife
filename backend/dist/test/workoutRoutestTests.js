@@ -41,7 +41,7 @@ describe('post workout route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/workout')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -74,7 +74,7 @@ describe('post workout route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/workout')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -91,7 +91,7 @@ describe('get workout by name route', () => {
     it('should send an error response for failing validation ', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/workout/?trainingDayName=W')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.body.data[0].value).equal('W');
@@ -102,7 +102,7 @@ describe('get workout by name route', () => {
         stubedWorkoutModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/workout/?trainingDayName=A')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");
         stubedWorkoutModel.restore();
@@ -119,7 +119,7 @@ describe('get workout by id route', () => {
         stubedWorkoutModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/workout/id')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No workout with this id');
         stubedWorkoutModel.restore();
@@ -144,7 +144,7 @@ describe('change workout route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/workout')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -175,7 +175,7 @@ describe('change workout route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/workout')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -192,7 +192,7 @@ describe('delete workout route', () => {
     it('should send an error response for failing validation ', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .delete('/workout/W')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
@@ -204,7 +204,7 @@ describe('delete workout route', () => {
         stubedWorkoutModel.returns(false);
         const response = await (0, supertest_1.default)(app_1.default)
             .delete('/workout/A')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal("couldn't find workout, make sure you create a workout with this name first.");

@@ -9,16 +9,7 @@ import { CustomError } from '../types/error';
 
 describe('auth middleware tests', function () {
   it('should throw error if no `jon` cookie', function () {
-    const req = {
-      headers: {
-        cookie: '',
-      },
-    };
-    const error = authMiddleware(
-      req as any,
-      {} as any,
-      () => {}
-    ) as CustomError;
+    const error = authMiddleware({} as any, {} as any, () => {}) as CustomError;
 
     expect(error.statusCode).equal(401);
     expect(error.message).equal("Unauthorized Couldn't find cookie");
@@ -26,7 +17,7 @@ describe('auth middleware tests', function () {
   it('should throw error if cookie is invalid', function () {
     const req = {
       headers: {
-        cookie: 'jon=fake', //it splits at 'joh='
+        authorization: 'Bearer  fake', //it splits at 'joh='
       },
     };
     const error = authMiddleware(
@@ -45,7 +36,7 @@ describe('auth middleware tests', function () {
     const req = {
       userId: '',
       headers: {
-        cookie: `jon=${testToken}`,
+        authorization: `Bearer ${testToken}`,
       },
     };
 

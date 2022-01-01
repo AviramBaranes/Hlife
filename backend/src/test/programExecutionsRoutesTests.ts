@@ -38,7 +38,7 @@ describe('get exercises-to-do route', () => {
   it('should response with an invalid date error', async () => {
     const response = await request(server)
       .get('/program-exec/exercises-to-do/not-a-date')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal('Validation Failed');
@@ -51,7 +51,7 @@ describe('get exercises-to-do route', () => {
   it('should response with an invalid date error', async () => {
     const response = await request(server)
       .get('/program-exec/exercises-to-do/not-a-date')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.statusCode).equal(422);
     expect(response.body.message).equal('Validation Failed');
@@ -66,7 +66,7 @@ describe('get exercises-to-do route', () => {
 
     const response = await request(server)
       .get('/program-exec/exercises-to-do/11-11-2001')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.text).equal(
       'You need to create a full program before you declare about execution'
@@ -79,7 +79,7 @@ describe('get exercises-to-do route', () => {
 
     const response = await request(server)
       .get('/program-exec/exercises-to-do')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.text).equal(
       'You need to create a full program before you declare about execution'
@@ -119,7 +119,7 @@ describe('post declareAnExecution route', () => {
     const response = await request(server)
       .post('/program-exec/not-a-date')
       .set('Content-type', 'application/json')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .send(jsonData);
 
     expect(response.statusCode).equal(422);
@@ -146,7 +146,7 @@ describe('post declareAnExecution route', () => {
     const response = await request(server)
       .post('/program-exec/11-11-2001')
       .set('Content-type', 'application/json')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .send(jsonData);
 
     expect(response.statusCode).equal(403);
@@ -164,7 +164,7 @@ describe('post declareAnExecution route', () => {
     const response = await request(server)
       .post('/program-exec')
       .set('Content-type', 'application/json')
-      .set('Cookie', [`jon=${token}`])
+      .set({ Authorization: `Bearer ${token}` })
       .send(jsonData);
 
     expect(response.statusCode).equal(403);
@@ -197,7 +197,7 @@ describe('get SingleExecution route', () => {
   it('should send an error response for invalid Date', async () => {
     const response = await request(server)
       .get('/program-exec/not-a-date')
-      .set('Cookie', ['jon=' + token]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.body.message).equal('Validation Failed');
     expect(response.statusCode).equal(422);
@@ -210,7 +210,7 @@ describe('get SingleExecution route', () => {
 
     const response = await request(server)
       .get('/program-exec/11-11-2001')
-      .set('Cookie', ['jon=' + token]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.text).equal("User doesn't has any declared executions");
     expect(response.statusCode).equal(403);
@@ -240,7 +240,7 @@ describe('get ExecutionsByRange route', () => {
   it('should send an error response if range and date are invalid', async () => {
     const response = await request(server)
       .get('/program-exec/by-range/not-valid/not-valid')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.body.message).equal('Validation Failed');
     expect(response.statusCode).equal(422);
@@ -257,7 +257,7 @@ describe('get ExecutionsByRange route', () => {
 
     const response = await request(server)
       .get('/program-exec/by-range/year/11-11-2001')
-      .set('Cookie', [`jon=${token}`]);
+      .set({ Authorization: `Bearer ${token}` });
 
     expect(response.text).equal("This user doesn't has a full program yet");
     expect(response.statusCode).equal(403);

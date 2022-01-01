@@ -35,7 +35,7 @@ describe('get program recommendation route', () => {
         stubedGoalsModel.returns({ basicGoal: false });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program/recommendation')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('User need to create goals in order to get a recommendation program');
         stubedGoalsModel.restore();
@@ -53,7 +53,7 @@ describe('post program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/program/invalid-day')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -72,7 +72,7 @@ describe('post program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/program/Sunday')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -95,7 +95,7 @@ describe('get program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('Something wrong... this user has no program');
         stubedProgramModel.restore();
@@ -110,7 +110,7 @@ describe('get program by day route', () => {
     it('should send an error response for failing validation ', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program/invalid-day')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.body.data[0].value).equal('invalid-day');
@@ -121,7 +121,7 @@ describe('get program by day route', () => {
         stubedProgramModel.returns({ program: [] });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program/Sunday')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('No program was found for the user');
         stubedProgramModel.restore();
@@ -140,7 +140,7 @@ describe('post program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/program/invalid-day')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(422);
@@ -159,7 +159,7 @@ describe('post program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/program/Sunday')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);
@@ -173,7 +173,7 @@ describe('post program route', () => {
         });
         const response = await (0, supertest_1.default)(app_1.default)
             .put('/program/Sunday')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .set('Content-type', 'application/json')
             .send(payload);
         (0, chai_1.expect)(response.statusCode).equal(403);

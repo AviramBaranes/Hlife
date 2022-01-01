@@ -36,7 +36,7 @@ describe('get exercises-to-do route', () => {
     it('should response with an invalid date error', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/exercises-to-do/not-a-date')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.body.data[0].value).equal('not-a-date');
@@ -45,7 +45,7 @@ describe('get exercises-to-do route', () => {
     it('should response with an invalid date error', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/exercises-to-do/not-a-date')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.body.data[0].value).equal('not-a-date');
@@ -55,7 +55,7 @@ describe('get exercises-to-do route', () => {
         stubedUserModel.returns({ hasProgram: false });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/exercises-to-do/11-11-2001')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.text).equal('You need to create a full program before you declare about execution');
         (0, chai_1.expect)(response.statusCode).equal(403);
     });
@@ -63,7 +63,7 @@ describe('get exercises-to-do route', () => {
         stubedUserModel.returns({ hasProgram: false });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/exercises-to-do')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.text).equal('You need to create a full program before you declare about execution');
         (0, chai_1.expect)(response.statusCode).equal(403);
     });
@@ -92,7 +92,7 @@ describe('post declareAnExecution route', () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/program-exec/not-a-date')
             .set('Content-type', 'application/json')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .send(jsonData);
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
@@ -112,7 +112,7 @@ describe('post declareAnExecution route', () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/program-exec/11-11-2001')
             .set('Content-type', 'application/json')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .send(jsonData);
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('You need to create a full program before you declare about execution');
@@ -125,7 +125,7 @@ describe('post declareAnExecution route', () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .post('/program-exec')
             .set('Content-type', 'application/json')
-            .set('Cookie', [`jon=${token}`])
+            .set({ Authorization: `Bearer ${token}` })
             .send(jsonData);
         (0, chai_1.expect)(response.statusCode).equal(403);
         (0, chai_1.expect)(response.text).equal('You need to create a full program before you declare about execution');
@@ -149,7 +149,7 @@ describe('get SingleExecution route', () => {
     it('should send an error response for invalid Date', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/not-a-date')
-            .set('Cookie', ['jon=' + token]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.data[0].msg).equal('This date is invalid');
@@ -159,7 +159,7 @@ describe('get SingleExecution route', () => {
         stubedProgramExecModel.returns({ executions: [] });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/11-11-2001')
-            .set('Cookie', ['jon=' + token]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.text).equal("User doesn't has any declared executions");
         (0, chai_1.expect)(response.statusCode).equal(403);
     });
@@ -182,7 +182,7 @@ describe('get ExecutionsByRange route', () => {
     it('should send an error response if range and date are invalid', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/by-range/not-valid/not-valid')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.body.message).equal('Validation Failed');
         (0, chai_1.expect)(response.statusCode).equal(422);
         (0, chai_1.expect)(response.body.data[0].msg).equal('a range can only be a week, a month, a year or all');
@@ -194,7 +194,7 @@ describe('get ExecutionsByRange route', () => {
         stubedUserModel.returns({ hasProgram: false });
         const response = await (0, supertest_1.default)(app_1.default)
             .get('/program-exec/by-range/year/11-11-2001')
-            .set('Cookie', [`jon=${token}`]);
+            .set({ Authorization: `Bearer ${token}` });
         (0, chai_1.expect)(response.text).equal("This user doesn't has a full program yet");
         (0, chai_1.expect)(response.statusCode).equal(403);
     });
