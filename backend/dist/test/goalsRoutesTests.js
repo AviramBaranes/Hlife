@@ -26,7 +26,7 @@ describe('post goals route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/goals');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({
@@ -72,7 +72,7 @@ describe('change basic goal route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).put('/goals/basicGoal');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({
@@ -112,7 +112,7 @@ describe('change goals route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).put('/goals');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({
@@ -168,7 +168,7 @@ describe('get goals route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/goals');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should move from validation middleware successfully', async () => {
         const stubedGoalsModel = sinon_1.default.stub(Goals_1.default, 'findOne');

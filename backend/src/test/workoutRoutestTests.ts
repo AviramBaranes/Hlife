@@ -26,7 +26,9 @@ describe('post workout route', () => {
     const response = await request(server).post('/workout');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -96,7 +98,9 @@ describe('get workout by name route', () => {
     const response = await request(server).get('/workout/?trainingDay=W');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -132,7 +136,9 @@ describe('get workout by id route', () => {
     const response = await request(server).get('/workout/id');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -155,7 +161,9 @@ describe('change workout route', () => {
     const response = await request(server).put('/workout');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -225,7 +233,9 @@ describe('delete workout route', () => {
     const response = await request(server).delete('/workout/trainingDayName');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {

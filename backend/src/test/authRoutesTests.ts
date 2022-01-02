@@ -143,7 +143,9 @@ describe('logout route', () => {
     const response = await request(server).post('/auth/logout');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send a success response', async () => {
@@ -164,7 +166,9 @@ describe('reset password via settings route', () => {
     );
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response if validation failed', async () => {
@@ -351,7 +355,9 @@ describe('validateUser route', () => {
     const response = await request(server).get('/auth/isUser');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send a success response', async () => {

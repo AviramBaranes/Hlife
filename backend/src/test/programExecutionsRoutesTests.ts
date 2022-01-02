@@ -32,7 +32,9 @@ describe('get exercises-to-do route', () => {
     const response = await request(server).get('/program-exec/exercises-to-do');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should response with an invalid date error', async () => {
@@ -108,7 +110,9 @@ describe('post declareAnExecution route', () => {
     const response = await request(server).post('/program-exec/11-11-2001');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for invalid date and exercises', async () => {
@@ -191,7 +195,9 @@ describe('get SingleExecution route', () => {
     const response = await request(server).get('/program-exec/11-11-2001');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for invalid Date', async () => {
@@ -234,7 +240,9 @@ describe('get ExecutionsByRange route', () => {
     const response = await request(server).get('/program-exec/by-range');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response if range and date are invalid', async () => {

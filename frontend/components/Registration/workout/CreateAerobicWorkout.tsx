@@ -84,9 +84,13 @@ const CreateAerobicWorkout: React.FC<CreateAerobicWorkoutProps> = ({
       });
 
       if (!setShouldDisplaySecondForm) {
-        const { data } = await axiosInstance.post('/workout/hasAllWorkout', {
-          headers: getAuthHeader(),
-        });
+        const { data } = await axiosInstance.post(
+          '/workout/hasAllWorkout',
+          null,
+          {
+            headers: getAuthHeader(),
+          }
+        );
 
         dispatch(
           messagesActions.newMessage({

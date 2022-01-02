@@ -28,7 +28,9 @@ describe('get program recommendation route', () => {
     const response = await request(server).get('/program/recommendation');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -53,7 +55,9 @@ describe('post program route', () => {
     const response = await request(server).post('/program/day');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -104,7 +108,9 @@ describe('get program route', () => {
     const response = await request(server).get('/program');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -131,7 +137,9 @@ describe('get program by day route', () => {
     const response = await request(server).get('/program/day');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -165,7 +173,9 @@ describe('post program route', () => {
     const response = await request(server).put('/program/day');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {

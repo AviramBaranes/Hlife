@@ -56,14 +56,19 @@ const CreateSingleWorkout: React.FC<{
       });
 
       if (setSubmitCount) {
+        //if more then one workout
         window.scrollTo(0, 0);
         setSubmitCount((prevState) => ++prevState);
       }
 
       if (trainingDayName === 'FB' || last) {
-        const { data } = await axiosInstance.post('/workout/hasAllWorkout', {
-          headers: getAuthHeader(),
-        });
+        const { data } = await axiosInstance.post(
+          '/workout/hasAllWorkout',
+          null,
+          {
+            headers: getAuthHeader(),
+          }
+        );
         dispatch(
           messagesActions.newMessage({
             messageTitle: 'Created workout successfully',

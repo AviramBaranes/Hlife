@@ -27,7 +27,9 @@ describe('post stats route', () => {
     const response = await request(server).post('/stats');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -93,7 +95,9 @@ describe('get all stats dates route', () => {
     const response = await request(server).get('/stats/all-stats-dates');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -116,7 +120,9 @@ describe('get stats by date route', () => {
     const response = await request(server).get('/stats/date');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -150,7 +156,9 @@ describe('get all stats route', () => {
     const response = await request(server).get('/stats');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -177,7 +185,9 @@ describe('change stats route', () => {
     const response = await request(server).put('/stats');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {
@@ -246,7 +256,9 @@ describe('delete last stats route', () => {
     const response = await request(server).delete('/stats');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should move from validation middleware successfully', async () => {
@@ -269,7 +281,9 @@ describe('post ranking route', () => {
     const response = await request(server).post('/stats/set-ranking');
 
     expect(response.statusCode).equal(401);
-    expect(response.body.message).equal('Unauthorized cookie is invalid');
+    expect(response.body.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
 
   it('should send an error response for failing validation ', async () => {

@@ -27,7 +27,7 @@ describe('post stats route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/stats');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({
@@ -75,7 +75,7 @@ describe('get all stats dates route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/stats/all-stats-dates');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should move from validation middleware successfully', async () => {
         const stubedPhysicalStatsModel = sinon_1.default.stub(PhysicalStats_1.default, 'findOne');
@@ -92,7 +92,7 @@ describe('get stats by date route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/stats/date');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
@@ -118,7 +118,7 @@ describe('get all stats route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/stats');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should move from validation middleware successfully', async () => {
         const stubedPhysicalStatsModel = sinon_1.default.stub(PhysicalStats_1.default, 'findOne');
@@ -139,7 +139,7 @@ describe('change stats route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).put('/stats');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({
@@ -190,7 +190,7 @@ describe('delete last stats route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).delete('/stats');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should move from validation middleware successfully', async () => {
         const stubedPhysicalStatsModel = sinon_1.default.stub(PhysicalStats_1.default, 'findOne');
@@ -207,7 +207,7 @@ describe('post ranking route', () => {
     it('should send an error response if unauthorized', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/stats/set-ranking');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for failing validation ', async () => {
         const payload = JSON.stringify({

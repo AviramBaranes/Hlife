@@ -114,7 +114,7 @@ describe('logout route', () => {
     it('should send an error response for unauthorized user', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/auth/logout');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send a success response', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
@@ -129,7 +129,7 @@ describe('reset password via settings route', () => {
     it('should send an error response for unauthorized user', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/auth/settings/password-reset');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response if validation failed', async () => {
         const payload = JSON.stringify({
@@ -263,7 +263,7 @@ describe('validateUser route', () => {
     it('should send an error response for unauthorized user', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/auth/isUser');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send a success response', async () => {
         const stubedUser = sinon_1.default.stub(User_1.default, 'findById');

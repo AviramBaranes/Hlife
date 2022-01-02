@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
 import { CustomError } from '../types/error';
-
-const jwt = require('jsonwebtoken');
 
 const errorHandler = (errorMsg: string) => {
   const error = new Error(errorMsg) as CustomError;
@@ -16,21 +15,23 @@ const authMiddleware = (
   next: NextFunction
 ): CustomError | void => {
   try {
-    let authToken;
+    let authToken: string | undefined;
     try {
       authToken = req.headers.authorization?.split('Bearer ')[1];
+
+      if (!authToken) throw 'no token';
     } catch (err) {
-      errorHandler("Unauthorized Couldn't find cookie");
+      errorHandler("Unauthorized Couldn't find authorization header");
     }
 
     let decodedToken;
     try {
-      decodedToken = jwt.verify(authToken, process.env.JWT_SECRET);
+      decodedToken = jwt.verify(authToken!, process.env.JWT_SECRET as string);
     } catch (err) {
-      errorHandler('Unauthorized cookie is invalid');
+      errorHandler('Unauthorized authorization header is invalid');
     }
 
-    req.userId = decodedToken.userId;
+    req.userId = (decodedToken as { userId: string }).userId;
 
     next();
   } catch (err: any) {

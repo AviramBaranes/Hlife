@@ -30,7 +30,6 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
     useState<GraphSelector<SVGSVGElement | null> | null>(null);
   const [graph, setGraph] = useState<GraphSelector<SVGGElement> | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [modalHeight, setModalHeight] = useState('30vh');
   const [currentStatToDisplay, setCurrentStatToDisplay] =
     useState<StatsObjType | null>(null);
 
@@ -39,12 +38,6 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
     marginBottom: 45,
     marginRight: 15,
   };
-
-  global.window &&
-    useEffect(() => {
-      if (!window) return;
-      window.innerWidth > 768 ? setModalHeight('10vh') : setModalHeight('30vh');
-    }, [window.innerWidth]);
 
   function getFillColor(d: StatsObjType, i: number) {
     if (i === 0) return 'var(--text-color)';
@@ -220,6 +213,7 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
         updatedCircles.on('click', (e, d) => {
           setCurrentStatToDisplay(d);
           setShowModal(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         const enterCircles = circles
@@ -275,6 +269,7 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
         enterCircles.on('click', (e, d) => {
           setCurrentStatToDisplay(d);
           setShowModal(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         });
       }
     }
@@ -283,7 +278,7 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
   return (
     <div data-testid='graph-container' className={classes.StatsGraph}>
       {showModal && currentStatToDisplay && (
-        <Modal yPosition={modalHeight} onClose={() => setShowModal(false)}>
+        <Modal yPosition={'10vh'} onClose={() => setShowModal(false)}>
           <div data-testid='stats-modal' className={classes.ProgressModal}>
             <h3>
               Your progress from{' '}

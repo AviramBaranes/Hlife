@@ -9,6 +9,7 @@ import axiosInstance from '../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../utils/errors/handleRequestErrors';
 import { Exercise } from '../Registration/workout/Forms/Exercise';
 import Modal from '../UI/Modal/Modal';
+import { getAuthHeader } from '../../utils/axios/getHeaders';
 
 interface DailyMissionProps {
   trainingDayName: string;
@@ -43,9 +44,13 @@ const DailyMission: React.FC<DailyMissionProps> = ({
     if (trainingDayName === 'aerobic' || trainingDayName === 'X') {
       dispatch(loadingAction.setToTrue());
       try {
-        const { data } = await axiosInstance.post('/program-exec/', {
-          isAerobic: trainingDayName === 'aerobic',
-        });
+        const { data } = await axiosInstance.post(
+          '/program-exec/',
+          {
+            isAerobic: trainingDayName === 'aerobic',
+          },
+          { headers: getAuthHeader() }
+        );
         dispatch(loadingAction.setToFalse());
         dispatch(
           messagesActions.newMessage({
@@ -71,9 +76,13 @@ const DailyMission: React.FC<DailyMissionProps> = ({
   async function submitFormHandler(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const { data } = await axiosInstance.post('/program-exec/', {
-        exercises: completedExercises,
-      });
+      const { data } = await axiosInstance.post(
+        '/program-exec/',
+        {
+          exercises: completedExercises,
+        },
+        { headers: getAuthHeader() }
+      );
       dispatch(loadingAction.setToFalse());
       dispatch(
         messagesActions.newMessage({

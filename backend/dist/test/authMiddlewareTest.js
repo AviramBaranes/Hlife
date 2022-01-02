@@ -12,7 +12,7 @@ describe('auth middleware tests', function () {
     it('should throw error if no `jon` cookie', function () {
         const error = (0, authMiddleware_1.default)({}, {}, () => { });
         (0, chai_1.expect)(error.statusCode).equal(401);
-        (0, chai_1.expect)(error.message).equal("Unauthorized Couldn't find cookie");
+        (0, chai_1.expect)(error.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should throw error if cookie is invalid', function () {
         const req = {
@@ -22,7 +22,7 @@ describe('auth middleware tests', function () {
         };
         const error = (0, authMiddleware_1.default)(req, {}, () => { });
         (0, chai_1.expect)(error.statusCode).equal(401);
-        (0, chai_1.expect)(error.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(error.message).equal('Unauthorized authorization header is invalid');
     });
     it('should add a userId field to request', function () {
         const payload = { userId: '123' };

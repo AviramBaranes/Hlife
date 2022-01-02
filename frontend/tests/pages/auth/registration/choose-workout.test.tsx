@@ -112,7 +112,6 @@ describe('choose workout tests', () => {
     const confirmBtn = screen.getByText('Confirm');
     userEvent.click(confirmBtn);
 
-    expect(spiedAxios.mock.calls[0][0]).toBe('/chose-workout');
     await waitFor(() => {
       expect(localStorage.getItem('programStyle')).toBe('programStyle');
       expect(localStorage.getItem('timesPerWeek')).toBe('5');
@@ -160,7 +159,6 @@ describe('choose workout tests', () => {
     userEvent.type(screen.getByLabelText('Times per week') as Element, '4');
     userEvent.click(screen.getByText('Continue'));
 
-    expect(spiedAxios.mock.calls[0][0]).toBe('/chose-workout');
     await waitFor(() => {
       expect(localStorage.getItem('programStyle')).toBe('AB');
       expect(localStorage.getItem('timesPerWeek')).toBe('4');

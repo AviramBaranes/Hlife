@@ -31,7 +31,7 @@ describe('get exercises-to-do route', () => {
     it('responds with an unauthorized error', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/program-exec/exercises-to-do');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should response with an invalid date error', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
@@ -83,7 +83,7 @@ describe('post declareAnExecution route', () => {
     it('responds with an unauthorized error', async () => {
         const response = await (0, supertest_1.default)(app_1.default).post('/program-exec/11-11-2001');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for invalid date and exercises', async () => {
         const jsonData = JSON.stringify({
@@ -144,7 +144,7 @@ describe('get SingleExecution route', () => {
     it('responds with an unauthorized error', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/program-exec/11-11-2001');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response for invalid Date', async () => {
         const response = await (0, supertest_1.default)(app_1.default)
@@ -177,7 +177,7 @@ describe('get ExecutionsByRange route', () => {
     it('responds with an unauthorized error', async () => {
         const response = await (0, supertest_1.default)(app_1.default).get('/program-exec/by-range');
         (0, chai_1.expect)(response.statusCode).equal(401);
-        (0, chai_1.expect)(response.body.message).equal('Unauthorized cookie is invalid');
+        (0, chai_1.expect)(response.body.message).equal("Unauthorized Couldn't find authorization header");
     });
     it('should send an error response if range and date are invalid', async () => {
         const response = await (0, supertest_1.default)(app_1.default)

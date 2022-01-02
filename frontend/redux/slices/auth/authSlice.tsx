@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../../utils/axios/axiosInstance";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosInstance from '../../../utils/axios/axiosInstance';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface AuthSliceState {
   hasProgram: null | boolean;
@@ -12,10 +13,12 @@ const initialState: AuthSliceState = {
 };
 
 export const validateAuthenticationAction = createAsyncThunk(
-  "authentication/validateAuthenticationAction",
+  'authentication/validateAuthenticationAction',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get("/auth/isUser");
+      const res = await axiosInstance.get('/auth/isUser', {
+        headers: getAuthHeader(),
+      });
       return res.data;
     } catch (err: any) {
       const { data, status } = err.response;
@@ -26,10 +29,10 @@ export const validateAuthenticationAction = createAsyncThunk(
 );
 
 export const logoutAction = createAsyncThunk(
-  "logout/logoutAction",
+  'logout/logoutAction',
   async (_, { rejectWithValue }) => {
     try {
-      await axiosInstance.post("/auth/logout");
+      await axiosInstance.post('/auth/logout');
     } catch (err: any) {
       const { data, status } = err.response;
       const customError = { data, status };
@@ -39,7 +42,7 @@ export const logoutAction = createAsyncThunk(
 );
 
 const usersSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

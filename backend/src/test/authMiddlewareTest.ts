@@ -12,7 +12,9 @@ describe('auth middleware tests', function () {
     const error = authMiddleware({} as any, {} as any, () => {}) as CustomError;
 
     expect(error.statusCode).equal(401);
-    expect(error.message).equal("Unauthorized Couldn't find cookie");
+    expect(error.message).equal(
+      "Unauthorized Couldn't find authorization header"
+    );
   });
   it('should throw error if cookie is invalid', function () {
     const req = {
@@ -27,7 +29,7 @@ describe('auth middleware tests', function () {
     ) as CustomError;
 
     expect(error.statusCode).equal(401);
-    expect(error.message).equal('Unauthorized cookie is invalid');
+    expect(error.message).equal('Unauthorized authorization header is invalid');
   });
 
   it('should add a userId field to request', function () {

@@ -6,6 +6,7 @@ import { loadingAction } from '../../redux/slices/loading/loadingSlice';
 import { messagesActions } from '../../redux/slices/messages/messagesSlice';
 import { statsActions } from '../../redux/slices/stats/statsSlice';
 import axiosInstance from '../axios/axiosInstance';
+import { getAuthHeader } from '../axios/getHeaders';
 import { handleAxiosError } from '../errors/handleRequestErrors';
 
 export const createStatsProps = (
@@ -54,7 +55,9 @@ export const createStatsProps = (
       if (photo) formData.append('file', photo);
 
       dispatch(loadingAction.setToTrue());
-      const { data } = await axiosInstance.post('/stats', formData);
+      const { data } = await axiosInstance.post('/stats', formData, {
+        headers: getAuthHeader(),
+      });
 
       const message = `You just gain ${data.grade} points!`;
 
