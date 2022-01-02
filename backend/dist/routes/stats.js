@@ -34,7 +34,7 @@ const ranksOptionsEnum = ['Beginner', 'Intermediate', 'Advanced', 'Pro'];
 const upload = (0, multer_1.default)({
     storage: multer_1.default.diskStorage({
         destination(req, file, cb) {
-            cb(null, path_1.default.join(__dirname, '../../', 'public/images'));
+            cb(null, path_1.default.join(__dirname, '../public/images'));
         },
         filename(req, file, cb) {
             cb(null, `${new Date().getTime()}_${file.originalname}`);

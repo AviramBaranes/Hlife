@@ -28,6 +28,8 @@ export const addStats: RequestHandler = async (req, res, next) => {
       bodyImageUrl = path.replace('\\', '/').split('public')[1];
     }
 
+    console.log(req.file, bodyImageUrl);
+
     const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
 
     if (!userGoals) {

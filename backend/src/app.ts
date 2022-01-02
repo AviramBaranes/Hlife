@@ -64,7 +64,7 @@ app.use(helmet()); //a collection of middleware functions that improve the secur
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(hpp()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
 

@@ -20,6 +20,7 @@ const addStats = async (req, res, next) => {
             const { path } = req.file;
             bodyImageUrl = path.replace('\\', '/').split('public')[1];
         }
+        console.log(req.file, bodyImageUrl);
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
         if (!userGoals) {
             res.status(403).send("User's goals not found");
