@@ -1,12 +1,12 @@
-import React, { SetStateAction } from "react";
-import { useDispatch } from "react-redux";
+import React, { SetStateAction } from 'react';
+import { useDispatch } from 'react-redux';
 
-import classes from "../../../styles/components/Logout.module.scss";
-import router from "next/router";
-import { logoutAction } from "../../../redux/slices/auth/authSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { CustomError } from "../../../types/CustomErrors";
-import { errorsActions } from "../../../redux/slices/errors/errorsSlice";
+import classes from '../../../styles/components/Logout.module.scss';
+import router from 'next/router';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { CustomError } from '../../../types/CustomErrors';
+import { errorsActions } from '../../../redux/slices/errors/errorsSlice';
+import { usersActions } from '../../../redux/slices/auth/authSlice';
 
 interface LogoutProps {
   setShowModal: React.Dispatch<SetStateAction<boolean>>;
@@ -17,22 +17,19 @@ const Logout: React.FC<LogoutProps> = ({ setShowModal, setShowNav }) => {
   const dispatch = useDispatch();
 
   function logoutHandler() {
-    router.push("/auth/login");
-    dispatch(logoutAction() as any)
-      .then(unwrapResult)
-      .then(() => {
-        setShowModal(false);
-      })
-      .catch((err: CustomError) => {
-        router.push("/");
-        dispatch(
-          errorsActions.newError({
-            errorTitle: "Logout failed",
-            errorMessage: err.data,
-            errorStatusCode: err.status,
-          })
-        );
-      });
+    router.push('/auth/login');
+    try {
+      dispatch(usersActions.logout());
+      setShowModal(false);
+    } catch (err) {
+      router.push('/');
+      dispatch(
+        errorsActions.newError({
+          errorTitle: 'Logout failed',
+          errorMessage: '',
+        })
+      );
+    }
   }
 
   return (

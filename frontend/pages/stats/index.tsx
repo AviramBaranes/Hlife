@@ -22,9 +22,12 @@ const Stats: React.FC<StatsProps> = ({ userGoals, userStats }) => {
   const { basicGoal } = userGoals;
 
   const date = new Date(new Date().setHours(0, 0, 0, 0));
+
   const isDeclaredAlready = stats.find(
     (stat) => new Date(stat.date).getTime() === new Date(date).getTime()
   );
+
+  console.table({ stats, date, isDeclaredAlready });
 
   return (
     <>

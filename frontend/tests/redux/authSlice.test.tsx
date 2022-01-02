@@ -1,16 +1,16 @@
-import { waitFor } from "@testing-library/react";
+import { waitFor } from '@testing-library/react';
 
-import store from "../../redux/store/reduxStore";
+import store from '../../redux/store/reduxStore';
 import {
   validateAuthenticationAction,
-  logoutAction,
-} from "../../redux/slices/auth/authSlice";
+  usersActions,
+} from '../../redux/slices/auth/authSlice';
 
-jest.mock("../../utils/axios/axiosInstance", () => {
+jest.mock('../../utils/axios/axiosInstance', () => {
   const get = jest.fn();
   const post = jest.fn();
   get.mockImplementationOnce(async () => {
-    return { data: { hasProgram: false, username: "avi1234" } };
+    return { data: { hasProgram: false, username: 'avi1234' } };
   });
   post
     .mockImplementationOnce(async (url, payload) => {
@@ -30,8 +30,8 @@ jest.mock("../../utils/axios/axiosInstance", () => {
   return { post, get };
 });
 
-describe("Auth slice tests", () => {
-  test("should have the right initialState", () => {
+describe('Auth slice tests', () => {
+  test('should have the right initialState', () => {
     const initialState = store.getState().usersReducer;
     const expectedInitialState = {
       hasProgram: null,
@@ -39,7 +39,7 @@ describe("Auth slice tests", () => {
     };
     expect(initialState).toStrictEqual(expectedInitialState);
   });
-  test("should change the state when validateAuthenticationAction is called", async () => {
+  test('should change the state when validateAuthenticationAction is called', async () => {
     store.dispatch(validateAuthenticationAction());
 
     const expectedState = {
@@ -51,8 +51,8 @@ describe("Auth slice tests", () => {
       expect(store.getState().usersReducer).toStrictEqual(expectedState);
     });
   });
-  test("should change the state when logout", async () => {
-    store.dispatch(logoutAction());
+  test('should change the state when logout', async () => {
+    store.dispatch(usersActions.logout());
 
     const expectedState = {
       hasProgram: null,

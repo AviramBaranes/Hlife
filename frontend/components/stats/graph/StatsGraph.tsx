@@ -316,6 +316,8 @@ const StatsGraph: React.FC<StatsGraphProps> = ({
                     `${process.env.baseURL}/${currentStatToDisplay.bodyImageUrl}` as any
                   }
                 />
+                <p>{process.env.baseURL}</p>
+                <p>{`${process.env.baseURL}/${currentStatToDisplay.bodyImageUrl}`}</p>
               </div>
             )}
           </div>

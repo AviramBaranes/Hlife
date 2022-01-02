@@ -248,7 +248,7 @@ describe('schedule program page tests', () => {
       expect(axiosCalls[4][0]).toBe('/program/Thursday');
       expect(axiosCalls[5][0]).toBe('/program/Friday');
       expect(axiosCalls[6][0]).toBe('/program/Saturday');
-      expect(axiosCalls[0][1]).toStrictEqual({
+      expect(axiosCalls[0][2]).toStrictEqual({
         headers: { authorization: 'Bearer undefined' },
       });
       expect(axiosCalls[1][1]).toStrictEqual({
@@ -271,7 +271,7 @@ describe('schedule program page tests', () => {
         workoutName: 'back',
         trainingDayName: 'B',
       });
-      expect(axiosCalls[6][1]).toStrictEqual({
+      expect(axiosCalls[6][2]).toStrictEqual({
         headers: { authorization: 'Bearer undefined' },
       });
     });

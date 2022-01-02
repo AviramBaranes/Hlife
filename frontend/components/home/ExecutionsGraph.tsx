@@ -9,6 +9,7 @@ import { handleAxiosError } from '../../utils/errors/handleRequestErrors';
 import { WorkoutType } from '../../types/Program';
 import Modal from '../UI/Modal/Modal';
 import DetailedExercise from './DetailedExercise';
+import { getAuthHeader } from '../../utils/axios/getHeaders';
 
 type D3Select = null | d3.Selection<
   SVGSVGElement | null,
@@ -415,7 +416,8 @@ const ExecutionsGraph: React.FC<{
         : dateToString(getDateForWeek(+value));
 
       const { data, status } = await axiosInstance.get(
-        `/program-exec/by-range/${range}/${date}`
+        `/program-exec/by-range/${range}/${date}`,
+        { headers: getAuthHeader() }
       );
 
       if (status === 204) {
