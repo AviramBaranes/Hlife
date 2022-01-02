@@ -5,11 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: './config.env' });
+const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const hpp_1 = __importDefault(require("hpp"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+// import csrf from 'csurf';
 const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 const express_1 = __importDefault(require("express"));
@@ -47,6 +49,14 @@ app.use((0, cors_1.default)({ credentials: true, origin: clientOrigin }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, helmet_1.default)()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express_1.default.json());
+const publicDirPath = path_1.default.join(__dirname, 'public');
+const imagesDirPath = path_1.default.join(__dirname, 'public/images');
+if (!fs_1.default.existsSync(publicDirPath)) {
+    fs_1.default.mkdirSync(publicDirPath);
+}
+if (!fs_1.default.existsSync(imagesDirPath)) {
+    fs_1.default.mkdirSync(imagesDirPath);
+}
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use((0, hpp_1.default)()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
 app.use((0, express_mongo_sanitize_1.default)({

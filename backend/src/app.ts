@@ -1,12 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
+import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import hpp from 'hpp';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-import csrf from 'csurf';
+// import csrf from 'csurf';
 import mongoSanitize from 'express-mongo-sanitize';
 import RateLimiter from 'express-rate-limit';
 import express, { Request, Response, NextFunction } from 'express';
@@ -63,6 +64,16 @@ app.use(cookieParser());
 app.use(helmet()); //a collection of middleware functions that improve the security of HTTP headers
 
 app.use(express.json());
+
+const publicDirPath = path.join(__dirname, 'public');
+const imagesDirPath = path.join(__dirname, 'public/images');
+
+if (!fs.existsSync(publicDirPath)) {
+  fs.mkdirSync(publicDirPath);
+}
+if (!fs.existsSync(imagesDirPath)) {
+  fs.mkdirSync(imagesDirPath);
+}
 
 app.use(express.static(path.join(__dirname, 'public')));
 
