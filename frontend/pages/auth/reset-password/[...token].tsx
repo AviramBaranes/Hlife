@@ -12,6 +12,7 @@ import router from 'next/router';
 import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { getAuthHeader, getHeaders } from '../../../utils/axios/getHeaders';
 
 function ResetPassword({ token }: { token: string }) {
   const dispatch = useDispatch();
@@ -87,7 +88,8 @@ function ResetPassword({ token }: { token: string }) {
       dispatch(loadingAction.setToTrue());
       const { data } = await axiosInstance.put(
         '/auth/reset/password-reset',
-        bodyRequest
+        bodyRequest,
+        { headers: getAuthHeader() }
       );
 
       await router.push('/auth/login');
@@ -168,7 +170,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
     const token = params!.token![0];
 
-    await axiosInstance.get(`/auth/reset/validate-token/${token}`);
+    await axiosInstance.get(`/auth/reset/validate-token/${token}`, {
+      headers: getHeaders(ctx),
+    });
 
     return { props: { token } };
   } catch (err) {

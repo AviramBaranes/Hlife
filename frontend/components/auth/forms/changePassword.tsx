@@ -7,6 +7,7 @@ import axiosInstance from '../../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
 import router from 'next/router';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 interface FieldObj {
   value: string;
@@ -226,7 +227,8 @@ const ChangePassword: React.FC = () => {
       dispatch(loadingAction.setToTrue());
       const { data } = await axiosInstance.post(
         '/auth/settings/password-reset',
-        requestBody
+        requestBody,
+        { headers: getAuthHeader() }
       );
 
       dispatch(

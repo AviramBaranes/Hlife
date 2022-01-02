@@ -200,7 +200,7 @@ export const sendResetEmail: RequestHandler = async (req, res, next) => {
       },
     });
 
-    const link = `http://localhost:3000/auth/reset-password/${token}`;
+    const link = `${process.env.CLIENT_ORIGIN}/auth/reset-password/${token}`;
     const message = {
       from: process.env.OUTLOOK_USER,
       to: email,

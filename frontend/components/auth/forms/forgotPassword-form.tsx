@@ -8,6 +8,7 @@ import { messagesActions } from '../../../redux/slices/messages/messagesSlice';
 import axiosInstance from '../../../utils/axios/axiosInstance';
 import { handleAxiosError } from '../../../utils/errors/handleRequestErrors';
 import { loadingAction } from '../../../redux/slices/loading/loadingSlice';
+import { getAuthHeader } from '../../../utils/axios/getHeaders';
 
 function forgotPasswordForm() {
   const dispatch = useDispatch();
@@ -53,14 +54,18 @@ function forgotPasswordForm() {
       dispatch(loadingAction.setToTrue());
       const {
         data: { message },
-      } = await axiosInstance.post('/auth/password/send-token', {
-        email: email.value,
-      });
+      } = await axiosInstance.post(
+        '/auth/password/send-token',
+        {
+          email: email.value,
+        },
+        { headers: getAuthHeader() }
+      );
 
       await router.push('/auth/login');
       dispatch(
         messagesActions.newMessage({ messageTitle: 'Email Sent!', message })
-        );
+      );
       dispatch(loadingAction.setToFalse());
     } catch (err: any) {
       handleAxiosError(err, dispatch, 'Sending Email Failed');
