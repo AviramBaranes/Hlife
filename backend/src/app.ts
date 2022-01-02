@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
+import path from 'path';
 import cors from 'cors';
 import hpp from 'hpp';
 import helmet from 'helmet';
@@ -63,7 +64,7 @@ app.use(helmet()); //a collection of middleware functions that improve the secur
 
 app.use(express.json());
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(hpp()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
 

@@ -1,7 +1,6 @@
 import Axios from 'axios';
 
 const baseURL = process.env.baseURL;
-console.log({ baseURL });
 
 const axiosInstance = Axios.create({
   baseURL,

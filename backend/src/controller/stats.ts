@@ -25,7 +25,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
 
     if (req.file) {
       const { path } = req.file as Express.Multer.File;
-      bodyImageUrl = path.replace('\\', '/').split('public/')[1];
+      bodyImageUrl = path.replace('\\', '/').split('public')[1];
     }
 
     const userGoals = (await Goals.findOne({ user: userId })) as GoalsType;
@@ -51,7 +51,7 @@ export const addStats: RequestHandler = async (req, res, next) => {
       const lastWeightRecord = lastStatsRecord.weight;
 
       const isDeclaredAlready = userStats.stats.find(
-        (stat) => new Date(stat.date).getTime() === new Date(date).getTime()
+        (stat) => new Date(stat.date).getDay() === new Date(date).getDay()
       );
 
       if (isDeclaredAlready) {

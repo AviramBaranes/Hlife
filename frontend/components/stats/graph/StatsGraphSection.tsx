@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StatsObjType } from '../../../types/Stats';
-import axiosInstance from '../../../utils/axios/axiosInstance';
 import GraphButtons from './GraphButtons';
 import StatsGraph from './StatsGraph';
 

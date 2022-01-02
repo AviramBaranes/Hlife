@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config({ path: './config.env' });
+const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const hpp_1 = __importDefault(require("hpp"));
 const helmet_1 = __importDefault(require("helmet"));
@@ -46,7 +47,7 @@ app.use((0, cors_1.default)({ credentials: true, origin: clientOrigin }));
 app.use((0, cookie_parser_1.default)());
 app.use((0, helmet_1.default)()); //a collection of middleware functions that improve the security of HTTP headers
 app.use(express_1.default.json());
-app.use(express_1.default.static('public'));
+app.use(express_1.default.static(path_1.default.join(__dirname, '../public')));
 app.use((0, hpp_1.default)()); //HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value.
 app.use((0, express_mongo_sanitize_1.default)({
     replaceWith: '_',

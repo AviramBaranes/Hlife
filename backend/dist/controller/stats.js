@@ -18,7 +18,7 @@ const addStats = async (req, res, next) => {
         let bodyImageUrl;
         if (req.file) {
             const { path } = req.file;
-            bodyImageUrl = path.replace('\\', '/').split('public/')[1];
+            bodyImageUrl = path.replace('\\', '/').split('public')[1];
         }
         const userGoals = (await Goals_1.default.findOne({ user: userId }));
         if (!userGoals) {
@@ -37,7 +37,7 @@ const addStats = async (req, res, next) => {
             const lastStatsIndex = userStats.stats.length - 1;
             const lastStatsRecord = userStats.stats[lastStatsIndex];
             const lastWeightRecord = lastStatsRecord.weight;
-            const isDeclaredAlready = userStats.stats.find((stat) => new Date(stat.date).getTime() === new Date(date).getTime());
+            const isDeclaredAlready = userStats.stats.find((stat) => new Date(stat.date).getDay() === new Date(date).getDay());
             if (isDeclaredAlready) {
                 res.status(403).send('You already declared your progress at this day');
                 return;

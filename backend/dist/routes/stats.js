@@ -23,6 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const path_1 = __importDefault(require("path"));
 const express_validator_1 = require("express-validator");
 const statsController = __importStar(require("../controller/stats"));
 const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
@@ -33,7 +34,7 @@ const ranksOptionsEnum = ['Beginner', 'Intermediate', 'Advanced', 'Pro'];
 const upload = (0, multer_1.default)({
     storage: multer_1.default.diskStorage({
         destination(req, file, cb) {
-            cb(null, './public/images');
+            cb(null, path_1.default.join(__dirname, '../../', 'public/images'));
         },
         filename(req, file, cb) {
             cb(null, `${new Date().getTime()}_${file.originalname}`);

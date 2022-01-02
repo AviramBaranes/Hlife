@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import { body, param } from 'express-validator';
 
 import * as statsController from '../controller/stats';
@@ -12,7 +13,7 @@ const ranksOptionsEnum = ['Beginner', 'Intermediate', 'Advanced', 'Pro'];
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      cb(null, './public/images');
+      cb(null, path.join(__dirname, '../../', 'public/images'));
     },
     filename(req, file, cb) {
       cb(null, `${new Date().getTime()}_${file.originalname}`);
