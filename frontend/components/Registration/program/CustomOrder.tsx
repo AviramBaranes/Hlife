@@ -101,7 +101,7 @@ const CustomOrder: React.FC<{ workouts: Workout[] }> = ({ workouts }) => {
           { headers: getAuthHeader() }
         );
       }
-      return axiosInstance.post(`/program/${day}`, {
+      return axiosInstance.post(`/program/${day}`, null, {
         headers: getAuthHeader(),
       });
     };
